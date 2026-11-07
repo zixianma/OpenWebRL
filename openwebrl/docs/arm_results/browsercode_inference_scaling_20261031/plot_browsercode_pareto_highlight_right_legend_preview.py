@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Separate fourteen-setting Pareto preview with right legends and shaded caches.
+"""Separate sixteen-setting Pareto preview with right legends and shaded caches.
 
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
 ranges, colors and observed frontiers. Cached markers use shaded circles. No experiment calls.
@@ -7,6 +7,9 @@ ranges, colors and observed frontiers. Cached markers use shaded circles. No exp
 import copy
 import importlib.util
 import json
+import os
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-sol-right-legend-mpl")
+os.environ.setdefault("XDG_CACHE_HOME", "/tmp/openwebrl-sol-right-legend-cache")
 from pathlib import Path
 
 import matplotlib
@@ -36,16 +39,16 @@ def legend_circle(legend, orig_handle, xdescent, ydescent, width, height, fontsi
                   radius=min(width, height) * .46)
 
 
-def right_layout(fig):
-    previous = list(fig.legends)
+def right_layout(fig, previous=None, height=2.25):
+    previous = list(fig.legends) if previous is None else previous
     assert len(previous) == 3
-    for legend in previous:
+    for legend in list(fig.legends):
         legend.remove()
     for text in list(fig.texts):
         text.remove()
-    fig.set_size_inches(8.8, 2.25)
+    fig.set_size_inches(8.8, height)
     fig.subplots_adjust(left=.065, right=.68, top=.95, bottom=.22, wspace=.10)
-    fig.axes[0].yaxis.set_label_coords(-.25, .5)
+    fig.axes[0].set_ylabel("")
     sidebar_x, top = .72, .95
     handlers = {Circle: HandlerPatch(patch_func=legend_circle)}
     cached_labels = {style[0]: style[2] for style in ORIGINAL.CACHED.values()}
@@ -61,7 +64,7 @@ def right_layout(fig):
                             handletextpad=.4, columnspacing=.8, labelspacing=.25,
                             borderaxespad=0, alignment="left", handler_map=handlers)
         fig.canvas.draw()
-        top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .055 / fig.get_figheight()
+        top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     frontier = copy.copy(previous[2].get_lines()[0])
     encoding = fig.legend([frontier, cache_handle()], ["Observed frontier", "Cached context"],
                           loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=2,
@@ -69,10 +72,20 @@ def right_layout(fig):
                           columnspacing=.7, labelspacing=.25, borderaxespad=0,
                           handler_map=handlers)
     fig.canvas.draw()
-    footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .065 / fig.get_figheight()
+    footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
-             "GPT-6 Luna & Sol.\nLuna baseline: high effort · 12,288 max tokens\n30 steps. N=candidates.",
+             "GPT-6 Luna & Sol: high unless xhigh.\nLuna baseline: 12,288 max tokens · 30 steps.\nN=candidates.",
              fontsize=7.2, color="#555555", va="top")
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    footer_box = fig.texts[0].get_window_extent(renderer)
+    # Fit the added model row while retaining all original font sizes.
+    if footer_box.y0 < 3:
+        extra = (3 - footer_box.y0) / fig.dpi / .95 + .02
+        assert height + extra < 3.5, "Sidebar unexpectedly exceeds compact figure height"
+        return right_layout(fig, previous, height + extra)
+    fig.text(.016, (.22 + .95) / 2, "Valid-only success (%)", rotation=90,
+             fontsize=9, ha="center", va="center")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legends = [legend.get_window_extent(renderer) for legend in fig.legends]
@@ -92,14 +105,14 @@ def right_layout(fig):
     for text in labels:
         if text.get_visible() and text.get_text():
             box = text.get_window_extent(renderer)
-            assert fig.bbox.contains(*box.p0) and fig.bbox.contains(*box.p1), text.get_text()
-    assert [len(legend.texts) for legend in fig.legends] == [8, 6, 2]
+            assert fig.bbox.contains(*box.p0) and fig.bbox.contains(*box.p1), (text.get_text(), tuple(box.bounds), tuple(fig.bbox.bounds))
+    assert [len(legend.texts) for legend in fig.legends] == [10, 6, 2]
 
 
 def build():
     fig, frontier, rows = ORIGINAL.build()
     matplotlib.rcParams["hatch.linewidth"] = .5
-    assert len(rows) == 14
+    assert len(rows) == 16
     circle = MarkerStyle("o")
     circle_path = circle.get_path().transformed(circle.get_transform())
     for ax in fig.axes:
@@ -123,7 +136,7 @@ def main():
                   population=original_report["population"],
                   comparison_caveats=original_report["comparison_caveats"], points=rows,
                   frontier=frontier,
-                  styles=dict(layout="8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
+                  styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; wider panels; legends and footer on the right; no gridlines",
                               cached="Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Original gray solid rings and dashed links, unchanged",

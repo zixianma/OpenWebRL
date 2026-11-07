@@ -1,0 +1,204 @@
+{
+  "schema": "sol-high120-xhigh30-complete-own-valid-aggregate-v1",
+  "status": "VERIFIED_COMPLETE_WITH_PRESERVED_INVALIDS",
+  "methods": [
+    "sol_single_high120",
+    "sol_single_xhigh30"
+  ],
+  "protocols": {
+    "sol_single_high120": {
+      "actor_model": "gpt-6-sol",
+      "candidates": 1,
+      "max_output_tokens": 12288,
+      "actor_deadline_seconds": 900,
+      "harness": "browsercode",
+      "judge_model": "gpt-5.6-terra",
+      "judge_effort": "medium",
+      "judge_max_output_tokens": 4096,
+      "judge_seed": 42,
+      "reasoning_effort": "high",
+      "maximum_decisions_advertised": 120,
+      "maximum_decisions_enforced": 120
+    },
+    "sol_single_xhigh30": {
+      "actor_model": "gpt-6-sol",
+      "candidates": 1,
+      "max_output_tokens": 12288,
+      "actor_deadline_seconds": 900,
+      "harness": "browsercode",
+      "judge_model": "gpt-5.6-terra",
+      "judge_effort": "medium",
+      "judge_max_output_tokens": 4096,
+      "judge_seed": 42,
+      "reasoning_effort": "xhigh",
+      "maximum_decisions_advertised": 30,
+      "maximum_decisions_enforced": 30
+    }
+  },
+  "benchmarks": {
+    "sol_single_high120": {
+      "online_mind2web": {
+        "planned": 300,
+        "recorded": 300,
+        "valid": 259,
+        "invalid": 41,
+        "successes": 184,
+        "success_rate": 0.7104247104247104,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.23035836795366796,
+            "observed_tasks": 259,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 15.702702702702704,
+            "observed_tasks": 259,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 106.07923949024826,
+            "observed_tasks": 259,
+            "missing_valid_tasks": 0
+          }
+        }
+      },
+      "webvoyager": {
+        "planned": 595,
+        "recorded": 595,
+        "valid": 562,
+        "invalid": 33,
+        "successes": 516,
+        "success_rate": 0.9181494661921709,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.23011711637010676,
+            "observed_tasks": 562,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 15.395017793594306,
+            "observed_tasks": 562,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 103.26535386188891,
+            "observed_tasks": 562,
+            "missing_valid_tasks": 0
+          }
+        }
+      },
+      "deepshop": {
+        "planned": 150,
+        "recorded": 150,
+        "valid": 147,
+        "invalid": 3,
+        "successes": 138,
+        "success_rate": 0.9387755102040817,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.6153045136054422,
+            "observed_tasks": 147,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 30.5578231292517,
+            "observed_tasks": 147,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 228.75290138175578,
+            "observed_tasks": 147,
+            "missing_valid_tasks": 0
+          }
+        }
+      }
+    },
+    "sol_single_xhigh30": {
+      "online_mind2web": {
+        "planned": 300,
+        "recorded": 300,
+        "valid": 272,
+        "invalid": 28,
+        "successes": 188,
+        "success_rate": 0.6911764705882353,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.2367445731617647,
+            "observed_tasks": 272,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 15.224264705882353,
+            "observed_tasks": 272,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 108.24378754536455,
+            "observed_tasks": 272,
+            "missing_valid_tasks": 0
+          }
+        }
+      },
+      "webvoyager": {
+        "planned": 595,
+        "recorded": 595,
+        "valid": 572,
+        "invalid": 23,
+        "successes": 504,
+        "success_rate": 0.8811188811188811,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.20851823513986015,
+            "observed_tasks": 572,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 13.573426573426573,
+            "observed_tasks": 572,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 94.31077387071906,
+            "observed_tasks": 572,
+            "missing_valid_tasks": 0
+          }
+        }
+      },
+      "deepshop": {
+        "planned": 150,
+        "recorded": 150,
+        "valid": 149,
+        "invalid": 1,
+        "successes": 116,
+        "success_rate": 0.7785234899328859,
+        "metrics": {
+          "actor_usd": {
+            "mean": 0.46591285302013424,
+            "observed_tasks": 149,
+            "missing_valid_tasks": 0
+          },
+          "browser_commands": {
+            "mean": 22.76510067114094,
+            "observed_tasks": 149,
+            "missing_valid_tasks": 0
+          },
+          "actor_seconds": {
+            "mean": 177.37101822834612,
+            "observed_tasks": 149,
+            "missing_valid_tasks": 0
+          }
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "high120_native_endpoint": "ee62c752691999197183eda5fec94053a3f44c93e9f43f64bec670cf88d65cac",
+    "xhigh30_native_endpoint": "6157b955b19285b61c75735d856f60080b9bac939d92d0a0859f28c75b650cf7",
+    "private_projection_inputs": "f3835a32efce0620307c2a70e53e0333881d63276a75611041115977b0c98c73"
+  },
+  "comparison_caveats": [
+    "Own-valid cohorts and live collection windows differ; no paired, causal or significance claim is inferred.",
+    "Fixed planned weights300/1045,595/1045,150/1045 apply to benchmark success and actor means; success is not pooled across valid tasks.",
+    "Actor means include valid failures and exclude Terra, hosting and invalid-outcome spending; latency is measured actor-loop elapsed time."
+  ]
+}

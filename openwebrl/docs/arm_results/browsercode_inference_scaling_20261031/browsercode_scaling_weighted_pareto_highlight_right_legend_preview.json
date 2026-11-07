@@ -1,9 +1,10 @@
 {
   "schema": "browsercode-weighted-pareto-highlight-right-legend-v1",
-  "population": "Original twelve own-valid settings plus two completed cached-context own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
+  "population": "Original twelve own-valid settings plus two completed cached-context and two completed Sol own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
   "comparison_caveats": [
     "Own-valid tasks and live collection windows differ; no paired or causal cache effect is inferred.",
     "Cached selection uses full native context; cached N5/60 advertises 60 while historical N5/60 advertised 30 and enforced 60.",
+    "All four Sol settings use GPT-6 Sol; high/30, high/60, high/120 and xhigh/30 retain their stated effort and advertised/enforced decision limits.",
     "Actor means exclude Terra, hosting and invalid-outcome spending. Latency is elapsed per task, not summed parallel call time.",
     "Selected browser-code batches may contain multiple browser operations and are not browser resource or fee measurements."
   ],
@@ -511,13 +512,85 @@
           "missing_native": 0
         }
       }
+    },
+    {
+      "method": "sol_single_high120",
+      "benchmark_count": 3,
+      "success_rate": 0.861476241188868,
+      "metrics": {
+        "actor_usd": 0.28547643221734953,
+        "browser_commands": 17.65982762429395,
+        "actor_seconds": 122.0857345475232
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 562,
+          "invalid": 33,
+          "successes": 516,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 138,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "sol_single_xhigh30",
+      "benchmark_count": 3,
+      "success_rate": 0.8118633482604188,
+      "metrics": {
+        "actor_usd": 0.25356808594236013,
+        "browser_commands": 15.366730453229337,
+        "actor_seconds": 110.23320521620968
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 272,
+          "invalid": 28,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 572,
+          "invalid": 23,
+          "successes": 504,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 149,
+          "invalid": 1,
+          "successes": 116,
+          "missing_native": 0
+        }
+      }
     }
   ],
   "frontier": [
     {
       "population": "weighted_own_valid",
       "metric": "actor_usd",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "luna_single_high_24576",
@@ -554,13 +627,15 @@
         "parallel3_select_high",
         "parallel5_select_high",
         "serial_high",
-        "sol_single_high60"
+        "sol_single_high120",
+        "sol_single_high60",
+        "sol_single_xhigh30"
       ]
     },
     {
       "population": "weighted_own_valid",
       "metric": "browser_commands",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "luna_n5_cached_high60",
@@ -585,13 +660,15 @@
         "parallel3_select_high",
         "parallel5_select_high",
         "serial_high",
-        "sol_single_high60"
+        "sol_single_high120",
+        "sol_single_high60",
+        "sol_single_xhigh30"
       ]
     },
     {
       "population": "weighted_own_valid",
       "metric": "actor_seconds",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "serial_high",
@@ -599,14 +676,14 @@
           "success_rate": 0.7847511154755811
         },
         {
-          "method": "luna_single_high_24576",
-          "x": 114.99494830138731,
-          "success_rate": 0.7903406534985482
+          "method": "sol_single_xhigh30",
+          "x": 110.23320521620968,
+          "success_rate": 0.8118633482604188
         },
         {
-          "method": "sol_single_high60",
-          "x": 128.7558526978636,
-          "success_rate": 0.8516807984806157
+          "method": "sol_single_high120",
+          "x": 122.0857345475232,
+          "success_rate": 0.861476241188868
         },
         {
           "method": "parallel5_select_high_60steps",
@@ -619,17 +696,19 @@
         "luna_n5_cached_high60",
         "luna_single_high",
         "luna_single_high_120steps",
+        "luna_single_high_24576",
         "luna_single_high_60steps",
         "luna_single_high_6144",
         "luna_single_xhigh_12288",
         "parallel2_select_high",
         "parallel3_select_high",
-        "parallel5_select_high"
+        "parallel5_select_high",
+        "sol_single_high60"
       ]
     }
   ],
   "styles": {
-    "layout": "8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
+    "layout": "8.8 x 2.712 inches; wider panels; legends and footer on the right; no gridlines",
     "cached": "Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
       "marker": "o",
@@ -650,13 +729,14 @@
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0",
     "../browsercode_cached_selection_20261105/aggregate.json": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
     "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1",
-    "plot_browsercode_pareto_highlight_preview.py": "c1f8a844d36bbee9feeedc2ab0be6a30f94e862d48c992144ec8b4fb60f8a7ff",
-    "browsercode_scaling_weighted_pareto_highlight_preview.json": "bc36e53654db0ae8c147c30a9b2d328aa499e36605bdec39d5750a8c57340b76"
+    "sol_high120_xhigh30_aggregate.json": "ff09a48d8aea21d182bb7be8efe7a7313923b6af757e2f6e78fa5c72f6cc5629",
+    "plot_browsercode_pareto_highlight_preview.py": "6aa6419abb0162acac7d831865943682dedd11687e2d9da24acf1c404e7b38d7",
+    "browsercode_scaling_weighted_pareto_highlight_preview.json": "d1a4e77a7d7b1acec031a7d91a39f4ddf313000d0ea7cc13ff9dc0c3e9851f85"
   },
-  "renderer_sha256": "2d96d0ee316536dc7b8de1c122c5214050eb51a1a4ea87c2512fb8953bcc0d8a",
+  "renderer_sha256": "55b5231bfb5a1a8ae71a84667ddaed99e8b498bbad95f344079c7222a79928a2",
   "output_sha256": {
-    "png": "b5c10bb185c4544995e1c45f73e4b92861dc56510232b30a09dfc27f4a69d4c4",
-    "pdf": "73a69a27c9a9117509267fb66eb832b44e29153c8822e0bc902d9db948033e74",
-    "svg": "06c2c9b86d85565b2e0a632d9fd7f66e60ded160c4c137af0729b3d7e81983d1"
+    "png": "a40855b2c10d81be025790c4c509a5e89934f0ea44154ee047b4122e9cdc3225",
+    "pdf": "c64ade38ec07cdd725026411fb704458de54835500c3ce8999479bead00cc020",
+    "svg": "4d34d60c6fc371e6a9a2baec87b816f16a5035613fc9c9076ab8795562ab8f41"
   }
 }

@@ -82,9 +82,9 @@ The completed cohort has **1,045 recorded outcomes, 978 valid and 67 invalid**, 
 
 
 <a id="sol-high120"></a>
-### Prospective Sol high single at 120 decisions
+### Sol high single at 120 decisions
 
-`sol-high120` raises both the enforced and advertised decision limit to **120**. It retains GPT-6 Sol high, the 12,288-output-token ceiling, one candidate, no selector, the 900-second actor deadline and the same Terra judging protocol. Its canonical 1,045-task roster is identical to Sol/60; benchmark outputs remain separate. This is a fresh experiment recipe, with no completed results implied.
+`sol-high120` raises both the enforced and advertised decision limit to **120**. It retains GPT-6 Sol high, the 12,288-output-token ceiling, one candidate, no selector, the 900-second actor deadline and the same Terra judging protocol. Its canonical 1,045-task roster is identical to Sol/60; benchmark outputs remain separate. The [completed results and compact comparison](ARM_FINAL_RESULTS.md#browsercode-pareto-highlight-preview) retain all outcomes and plot each method's own valid tasks. The commands below prepare a fresh reproduction.
 
 New Sol/60, Sol/120 and Sol xhigh/30 setups share one HTTP gate across actor calls, input counters and Terra judging. Terra keeps its native `judge-UUID` identifier in request and budget receipts; only the gate slot key is normalized to UUID form. After updating the package, prepare a fresh runtime rather than editing source hashes in an existing run.
 
@@ -105,7 +105,7 @@ The final command is a zero-call dry plan; add `--execute` only for a separately
 <a id="sol-xhigh30"></a>
 ### Sol xhigh single at 30 decisions
 
-`sol-xhigh30` uses **GPT-6 Sol xhigh, 12,288 output tokens and 30 enforced and advertised decisions** on the same 300 / 595 / 150 task roster. It retains one candidate, no selector, the 900-second actor deadline, and Terra medium/4,096/seed 42. This prepares a fresh reproduction; it implies no completed results.
+`sol-xhigh30` uses **GPT-6 Sol xhigh, 12,288 output tokens and 30 enforced and advertised decisions** on the same 300 / 595 / 150 task roster. It retains one candidate, no selector, the 900-second actor deadline, and Terra medium/4,096/seed 42. See the [completed results and compact comparison](ARM_FINAL_RESULTS.md#browsercode-pareto-highlight-preview); the commands below prepare a fresh reproduction.
 
 ```bash
 python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \

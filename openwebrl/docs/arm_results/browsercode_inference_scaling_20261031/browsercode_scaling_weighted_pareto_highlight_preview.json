@@ -1,9 +1,10 @@
 {
-  "schema": "browsercode-weighted-pareto-highlight-preview-v2",
-  "population": "Original twelve own-valid settings plus two completed cached-context own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
+  "schema": "browsercode-weighted-pareto-highlight-preview-v3",
+  "population": "Original twelve own-valid settings plus two completed cached-context and two completed Sol own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
   "comparison_caveats": [
     "Own-valid tasks and live collection windows differ; no paired or causal cache effect is inferred.",
     "Cached selection uses full native context; cached N5/60 advertises 60 while historical N5/60 advertised 30 and enforced 60.",
+    "All four Sol settings use GPT-6 Sol; high/30, high/60, high/120 and xhigh/30 retain their stated effort and advertised/enforced decision limits.",
     "Actor means exclude Terra, hosting and invalid-outcome spending. Latency is elapsed per task, not summed parallel call time.",
     "Selected browser-code batches may contain multiple browser operations and are not browser resource or fee measurements."
   ],
@@ -511,17 +512,89 @@
           "missing_native": 0
         }
       }
+    },
+    {
+      "method": "sol_single_high120",
+      "benchmark_count": 3,
+      "success_rate": 0.861476241188868,
+      "metrics": {
+        "actor_usd": 0.28547643221734953,
+        "browser_commands": 17.65982762429395,
+        "actor_seconds": 122.0857345475232
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 562,
+          "invalid": 33,
+          "successes": 516,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 138,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "sol_single_xhigh30",
+      "benchmark_count": 3,
+      "success_rate": 0.8118633482604188,
+      "metrics": {
+        "actor_usd": 0.25356808594236013,
+        "browser_commands": 15.366730453229337,
+        "actor_seconds": 110.23320521620968
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 272,
+          "invalid": 28,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 572,
+          "invalid": 23,
+          "successes": 504,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 149,
+          "invalid": 1,
+          "successes": 116,
+          "missing_native": 0
+        }
+      }
     }
   ],
   "styles": {
-    "hollow": "Historical 30-decision limit",
-    "filled": "Historical 60/120 plus both cached settings; cached N3 is solid light red",
+    "hollow": "30-decision limit, including Sol xhigh/30",
+    "filled": "Historical 60/120, Sol high/120 and both cached settings; cached N3 is solid light red; Sol xhigh/30 is hollow",
     "highlight": "parallel5_select_high_60steps",
     "highlight_size_points_squared": 27,
     "baseline_size_points_squared": 27,
     "highlight_label": "Luna ADM",
     "highlight_legend_label": "Luna ADM; N=5, 60 steps",
-    "layout": "5.8 x 2.55 inches; wspace 0.08; two-column legend groups; wrapped footer; no gridlines",
+    "layout": "5.8 x 2.75 inches; wspace 0.08; two-column legend groups; wrapped footer; no gridlines",
     "typography": "9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer",
     "selection_title": "Best-of-N action decision scaling",
     "actor_family": "GPT-6 (Luna and Sol)",
@@ -535,14 +608,15 @@
     "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0",
     "../browsercode_cached_selection_20261105/aggregate.json": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
-    "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1"
+    "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1",
+    "sol_high120_xhigh30_aggregate.json": "ff09a48d8aea21d182bb7be8efe7a7313923b6af757e2f6e78fa5c72f6cc5629"
   },
-  "renderer_sha256": "c1f8a844d36bbee9feeedc2ab0be6a30f94e862d48c992144ec8b4fb60f8a7ff",
+  "renderer_sha256": "6aa6419abb0162acac7d831865943682dedd11687e2d9da24acf1c404e7b38d7",
   "frontier": [
     {
       "population": "weighted_own_valid",
       "metric": "actor_usd",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "luna_single_high_24576",
@@ -579,13 +653,15 @@
         "parallel3_select_high",
         "parallel5_select_high",
         "serial_high",
-        "sol_single_high60"
+        "sol_single_high120",
+        "sol_single_high60",
+        "sol_single_xhigh30"
       ]
     },
     {
       "population": "weighted_own_valid",
       "metric": "browser_commands",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "luna_n5_cached_high60",
@@ -610,13 +686,15 @@
         "parallel3_select_high",
         "parallel5_select_high",
         "serial_high",
-        "sol_single_high60"
+        "sol_single_high120",
+        "sol_single_high60",
+        "sol_single_xhigh30"
       ]
     },
     {
       "population": "weighted_own_valid",
       "metric": "actor_seconds",
-      "method_count": 14,
+      "method_count": 16,
       "frontier": [
         {
           "method": "serial_high",
@@ -624,14 +702,14 @@
           "success_rate": 0.7847511154755811
         },
         {
-          "method": "luna_single_high_24576",
-          "x": 114.99494830138731,
-          "success_rate": 0.7903406534985482
+          "method": "sol_single_xhigh30",
+          "x": 110.23320521620968,
+          "success_rate": 0.8118633482604188
         },
         {
-          "method": "sol_single_high60",
-          "x": 128.7558526978636,
-          "success_rate": 0.8516807984806157
+          "method": "sol_single_high120",
+          "x": 122.0857345475232,
+          "success_rate": 0.861476241188868
         },
         {
           "method": "parallel5_select_high_60steps",
@@ -644,18 +722,20 @@
         "luna_n5_cached_high60",
         "luna_single_high",
         "luna_single_high_120steps",
+        "luna_single_high_24576",
         "luna_single_high_60steps",
         "luna_single_high_6144",
         "luna_single_xhigh_12288",
         "parallel2_select_high",
         "parallel3_select_high",
-        "parallel5_select_high"
+        "parallel5_select_high",
+        "sol_single_high60"
       ]
     }
   ],
   "output_sha256": {
-    "png": "b389a0aa1eb415b34788b30402739d369886651448e882f91e31e7f8ccd425ce",
-    "svg": "eac084e2424e04ea9c49e82259847587966f52695fe48f59457f7f6ebeea01a8",
-    "pdf": "14ee7fd721b3b74cc0ad72b059a58363b2a595ad4d311cbefdfa60bf4f151b41"
+    "png": "f16f4b0b3705b3e1d57bfb2bba785a969d480cca7f2af41dfea6b345803c8468",
+    "svg": "6901fc4bba6fbd87b3da7af3b6d6fb7adf858f176352914ee2d84048c771f477",
+    "pdf": "ff42beafff929ffc715837817f49b140f7684344e49ba7933d2bf212542a490a"
   }
 }
