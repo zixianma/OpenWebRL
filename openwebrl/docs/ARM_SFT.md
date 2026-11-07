@@ -19,15 +19,14 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 <a id="arm-sft-soft-mtp-20261030"></a>
 ## Soft-MTP for the OpenWebRL SFT actor — 2026-10-30
 
-**A matched NTP-only SFT control and Soft-MTP SFT pilot are prepared, pending
-exact compute/API approval.** The [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
+**Matched NTP-only and Soft-MTP training jobs were submitted on 2026-11-07;
+judged evaluation is on hold.** The [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
 gradient routing for an existing MTP architecture with a shared linear output
 head. Its math/code fine-tuning results **discard the MTP heads and use NTP
 only**. Training MTP during our multimodal SFT and keeping the heads for action
 drafting are therefore untested extensions, not reproduced paper results. The
 official OpenWebRL-SFT Qwen3-VL-4B checkpoint has no MTP modules, and our
-released SFT workflow delegates optimization to LLaMAFactory. No GPU run or
-new resource allocation is authorized by this plan.
+released SFT workflow delegates optimization to LLaMAFactory.
 
 Reuse the released SFT data conversion, Qwen3-VL chat template, per-turn
 examples, current screenshot, `mask_history: true`, 36,864-token cutoff,
@@ -57,6 +56,15 @@ training path is in [`sft/qwen3vl_mtp.py`](../../sft/qwen3vl_mtp.py) and
 [`sft/train_soft_mtp_with_llamafactory.py`](../../sft/train_soft_mtp_with_llamafactory.py).
 Serving and exact speculative verification are not implemented.
 
+The exact training allocation was approved on 2026-11-07. Slurm jobs
+`430260` (NTP-only) and `430261` (Soft-MTP) were submitted for eight H200s,
+64 CPUs, 960 GiB and at most eight hours each, including their GPU gates.
+Both were pending for scheduler priority at first check; no training result is
+yet verified. The user then instructed us to **hold off from the judge**.
+No judged evaluation was submitted, its approval gate remains closed, and no
+judge API calls were made for this pilot. The paired evaluation protocol below
+is a prepared plan, not active work.
+
 The first controlled pilot trains **two fresh actors**, ordinary NTP-only SFT
 and Soft-MTP SFT, from the same base and 3,085 prepared records. Their YAML
 recipes differ only in output directory and run name; both use the pinned
@@ -84,21 +92,20 @@ causality and API-budget tests pass. The isolated
 trainer environment has PyTorch 2.11, LLaMAFactory and DeepSpeed; the actual
 training configurations are stored at
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/{ntp,soft-mtp}-full.yaml`.
-Each approved GPU allocation must gate full training on an image-bearing
+Each training allocation gates full training on an image-bearing
 backward, checkpoint save/reload and long-context memory check, charging that
-work to that allocation. The two prepared 8-H200 training jobs are capped at
-eight hours **each**, including gates and retries (128 H200-hours total), and
-may run concurrently. They preserve the released effective batch size of 16
-with per-GPU batch size one and accumulation two. Two separately capped
-one-H200, seven-hour jobs (14 H200-hours total) then run the fresh NTP and
-Soft-MTP actors on the same 300 Online-Mind2Web tasks with local
+work to that allocation. The two 8-H200 training jobs are capped at eight
+hours **each**, including gates and retries (128 H200-hours total), and may
+run concurrently. They preserve the released effective batch size of 16 with
+per-GPU batch size one and accumulation two. Two prepared, but currently held,
+one-H200, seven-hour jobs (14 H200-hours total) would evaluate the fresh NTP
+and Soft-MTP actors on the same 300 Online-Mind2Web tasks with local
 browsers, T0.6/p0.95/k20, 4,096 response tokens, 30 turns and the
 o4-mini/AgentTrek judge. The pair is bounded by 620 browser sessions, 2,480
 judge attempts and a $20 shared judge-usage ledger. The evaluation code saves
 every task result and judge verdict; separate runs log to `openwebrl-evals`.
-The revised combined cap is **142 H200-hours** plus at most **$20** of judge
-API usage. No job has been submitted; approval of this revised exact request is
-pending. The earlier one-training-job proposal is superseded.
+The held evaluations would add at most $20 of judge API usage. The earlier
+one-training-job proposal is superseded.
 
 ---
 
