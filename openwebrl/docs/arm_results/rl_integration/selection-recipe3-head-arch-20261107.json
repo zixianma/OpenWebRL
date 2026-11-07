@@ -1,0 +1,451 @@
+{
+ "note": "Recipe 3 GPT-5.5 K=3 selection heads, second round (2026-11-07): 2 x 2 of attention (joint / independent) x scorer (transformer /\nMLP), all soft CE, 2 live runs each. Run 1 of joint-MLP, independent-transformer and independent-MLP is 2026-11-06; their run 2 and both\nruns of the retrained default (joint transformer soft CE, source-arch/train_arch.sbatch, byte-identical to heads/full-seed0-repro) are\n2026-11-07. Also: the original default head (heads-all2/k3-best/seed0, run 1 only, 11-06) and same-window SFT 4B (eval-ctrl, 3 runs,\n11-06). All rolled out judge-deferred and judged afterwards with the native judges (OM2W gpt-5.6-terra, WV/DS gpt-4o). SFT actor, N=5,\nT1.0/p0.9, 30 steps, OM2W 300 / WV 595 / DS 150 tasks. Per-task success averaged over runs; mean overall = unweighted mean of the\nbenchmark overall rates. Paired bootstrap over tasks (10,000, seed 20261029), benchmarks resampled independently.",
+ "sources": {
+  "sft": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run1/{b}/sft1",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run2/{b}/sft1",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run3/{b}/sft1"
+  ],
+  "original-default": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run1/{b}/head5-91e7a5a67417"
+  ],
+  "joint-transformer": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run1/{b}/head5-ed45fbb04faf",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run2/{b}/head5-ed45fbb04faf"
+  ],
+  "joint-mlp": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run1/{b}/head5-12728decaff1",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run2/{b}/head5-12728decaff1"
+  ],
+  "independent-transformer": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run1/{b}/head5-617a5c1d09e7",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run2/{b}/head5-617a5c1d09e7"
+  ],
+  "independent-mlp": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run1/{b}/head5-550462c9eca6",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-arch/run2/{b}/head5-550462c9eca6"
+  ]
+ },
+ "rates": {
+  "sft": {
+   "online_mind2web": {
+    "successes": 267,
+    "valid": 811,
+    "episodes": 900,
+    "overall": 29.7,
+    "valid_only": 32.9
+   },
+   "webvoyager": {
+    "successes": 780,
+    "valid": 1744,
+    "episodes": 1785,
+    "overall": 43.7,
+    "valid_only": 44.7
+   },
+   "deepshop": {
+    "successes": 202,
+    "valid": 447,
+    "episodes": 450,
+    "overall": 44.9,
+    "valid_only": 45.2
+   },
+   "mean_overall": 39.4,
+   "mean_valid_only": 40.9
+  },
+  "original-default": {
+   "online_mind2web": {
+    "successes": 99,
+    "valid": 264,
+    "episodes": 300,
+    "overall": 33.0,
+    "valid_only": 37.5
+   },
+   "webvoyager": {
+    "successes": 272,
+    "valid": 554,
+    "episodes": 595,
+    "overall": 45.7,
+    "valid_only": 49.1
+   },
+   "deepshop": {
+    "successes": 68,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 45.3,
+    "valid_only": 45.6
+   },
+   "mean_overall": 41.3,
+   "mean_valid_only": 44.1
+  },
+  "joint-transformer": {
+   "online_mind2web": {
+    "successes": 198,
+    "valid": 511,
+    "episodes": 600,
+    "overall": 33.0,
+    "valid_only": 38.7
+   },
+   "webvoyager": {
+    "successes": 555,
+    "valid": 1074,
+    "episodes": 1190,
+    "overall": 46.6,
+    "valid_only": 51.7
+   },
+   "deepshop": {
+    "successes": 154,
+    "valid": 297,
+    "episodes": 300,
+    "overall": 51.3,
+    "valid_only": 51.9
+   },
+   "mean_overall": 43.6,
+   "mean_valid_only": 47.4
+  },
+  "joint-mlp": {
+   "online_mind2web": {
+    "successes": 202,
+    "valid": 523,
+    "episodes": 600,
+    "overall": 33.7,
+    "valid_only": 38.6
+   },
+   "webvoyager": {
+    "successes": 552,
+    "valid": 1109,
+    "episodes": 1190,
+    "overall": 46.4,
+    "valid_only": 49.8
+   },
+   "deepshop": {
+    "successes": 152,
+    "valid": 296,
+    "episodes": 300,
+    "overall": 50.7,
+    "valid_only": 51.4
+   },
+   "mean_overall": 43.6,
+   "mean_valid_only": 46.6
+  },
+  "independent-transformer": {
+   "online_mind2web": {
+    "successes": 205,
+    "valid": 513,
+    "episodes": 600,
+    "overall": 34.2,
+    "valid_only": 40.0
+   },
+   "webvoyager": {
+    "successes": 580,
+    "valid": 1101,
+    "episodes": 1190,
+    "overall": 48.7,
+    "valid_only": 52.7
+   },
+   "deepshop": {
+    "successes": 144,
+    "valid": 292,
+    "episodes": 300,
+    "overall": 48.0,
+    "valid_only": 49.3
+   },
+   "mean_overall": 43.6,
+   "mean_valid_only": 47.3
+  },
+  "independent-mlp": {
+   "online_mind2web": {
+    "successes": 195,
+    "valid": 518,
+    "episodes": 600,
+    "overall": 32.5,
+    "valid_only": 37.6
+   },
+   "webvoyager": {
+    "successes": 568,
+    "valid": 1089,
+    "episodes": 1190,
+    "overall": 47.7,
+    "valid_only": 52.2
+   },
+   "deepshop": {
+    "successes": 149,
+    "valid": 294,
+    "episodes": 300,
+    "overall": 49.7,
+    "valid_only": 50.7
+   },
+   "mean_overall": 43.3,
+   "mean_valid_only": 46.8
+  }
+ },
+ "per_run": {
+  "sft": [
+   39.5,
+   39.5,
+   39.2
+  ],
+  "original-default": [
+   41.3
+  ],
+  "joint-transformer": [
+   42.2,
+   45.1
+  ],
+  "joint-mlp": [
+   44.5,
+   42.6
+  ],
+  "independent-transformer": [
+   43.7,
+   43.6
+  ],
+  "independent-mlp": [
+   44.2,
+   42.4
+  ]
+ },
+ "effects": {
+  "mlp - transformer": {
+   "online_mind2web": [
+    -0.5,
+    -3.1,
+    2.0
+   ],
+   "webvoyager": [
+    -0.6,
+    -2.4,
+    1.2
+   ],
+   "deepshop": [
+    0.5,
+    -3.3,
+    4.3
+   ],
+   "mean": [
+    -0.2,
+    -1.9,
+    1.4
+   ]
+  },
+  "joint - independent": {
+   "online_mind2web": [
+    0.0,
+    -2.7,
+    2.8
+   ],
+   "webvoyager": [
+    -1.7,
+    -3.8,
+    0.3
+   ],
+   "deepshop": [
+    2.2,
+    -2.2,
+    6.3
+   ],
+   "mean": [
+    0.1,
+    -1.7,
+    2.0
+   ]
+  },
+  "interaction (jm - jt) - (im - it)": {
+   "online_mind2web": [
+    1.2,
+    -1.5,
+    4.0
+   ],
+   "webvoyager": [
+    0.4,
+    -1.6,
+    2.4
+   ],
+   "deepshop": [
+    -1.2,
+    -4.8,
+    2.5
+   ],
+   "mean": [
+    0.1,
+    -1.6,
+    1.8
+   ]
+  },
+  "retrained default - original default": {
+   "online_mind2web": [
+    0.0,
+    -4.5,
+    4.5
+   ],
+   "webvoyager": [
+    0.9,
+    -2.6,
+    4.5
+   ],
+   "deepshop": [
+    6.0,
+    -1.7,
+    13.7
+   ],
+   "mean": [
+    2.3,
+    -0.9,
+    5.5
+   ]
+  },
+  "joint-transformer - sft": {
+   "online_mind2web": [
+    3.3,
+    -0.1,
+    6.8
+   ],
+   "webvoyager": [
+    2.9,
+    0.3,
+    5.6
+   ],
+   "deepshop": [
+    6.4,
+    1.2,
+    11.9
+   ],
+   "mean": [
+    4.2,
+    1.9,
+    6.5
+   ]
+  },
+  "joint-mlp - sft": {
+   "online_mind2web": [
+    4.0,
+    0.7,
+    7.4
+   ],
+   "webvoyager": [
+    2.7,
+    -0.3,
+    5.7
+   ],
+   "deepshop": [
+    5.8,
+    -0.1,
+    11.7
+   ],
+   "mean": [
+    4.2,
+    1.8,
+    6.6
+   ]
+  },
+  "independent-transformer - sft": {
+   "online_mind2web": [
+    4.5,
+    1.1,
+    7.9
+   ],
+   "webvoyager": [
+    5.0,
+    2.4,
+    7.7
+   ],
+   "deepshop": [
+    3.1,
+    -2.3,
+    8.7
+   ],
+   "mean": [
+    4.2,
+    1.9,
+    6.6
+   ]
+  },
+  "independent-mlp - sft": {
+   "online_mind2web": [
+    2.8,
+    -0.7,
+    6.4
+   ],
+   "webvoyager": [
+    4.0,
+    1.5,
+    6.6
+   ],
+   "deepshop": [
+    4.8,
+    -0.4,
+    10.2
+   ],
+   "mean": [
+    3.9,
+    1.6,
+    6.2
+   ]
+  },
+  "joint-mlp - joint-transformer": {
+   "online_mind2web": [
+    0.7,
+    -3.0,
+    4.2
+   ],
+   "webvoyager": [
+    -0.3,
+    -3.1,
+    2.7
+   ],
+   "deepshop": [
+    -0.7,
+    -6.0,
+    4.3
+   ],
+   "mean": [
+    -0.1,
+    -2.5,
+    2.2
+   ]
+  },
+  "independent-transformer - joint-transformer": {
+   "online_mind2web": [
+    1.2,
+    -2.7,
+    5.2
+   ],
+   "webvoyager": [
+    2.1,
+    -0.7,
+    4.9
+   ],
+   "deepshop": [
+    -3.3,
+    -8.7,
+    2.3
+   ],
+   "mean": [
+    -0.0,
+    -2.4,
+    2.4
+   ]
+  },
+  "independent-mlp - joint-transformer": {
+   "online_mind2web": [
+    -0.5,
+    -4.5,
+    3.3
+   ],
+   "webvoyager": [
+    1.1,
+    -1.8,
+    3.9
+   ],
+   "deepshop": [
+    -1.7,
+    -8.0,
+    4.3
+   ],
+   "mean": [
+    -0.4,
+    -2.9,
+    2.2
+   ]
+  }
+ }
+}

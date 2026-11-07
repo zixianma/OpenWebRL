@@ -1153,10 +1153,47 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 *Equal-weight 3-benchmark mean of valid-only success, runs pooled; filled diamonds are 3 runs, hollow diamonds 1 run (500 states, 2 panels per state). Dashed: SFT 4B alone (3 runs, November 6). Log x axis.* States: [PDF](arm_results/rl_integration/selection-recipe3-data-states-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-states-20261105.svg) · panels: [PDF](arm_results/rl_integration/selection-recipe3-data-panels-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-panels-20261105.svg) · [data](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.json) · [analysis script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105-analysis.py) · [plot script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/` (subset builder `build_lora_subsets.py`, LoRAs `lora/<subset>/{adapter,merged}`, evals `eval/run<k>/`, same-window references `eval-ctrl/run<k>/`, deferred judging `deferjudge/`).
 
+<a id="final-selection-recipe3-head-arch-20261107"></a>
+
+#### Head architecture with Recipe 3 labels (November 6–7)
+
+**Architecture still does not matter. Crossing attention (joint / independent) with the scorer (transformer / MLP), all four GPT-5.5 K = 3 heads score 43.3–43.6% mean overall over two runs, each about +4 pp over one SFT sample. MLP − transformer is −0.2 [−1.9, +1.4] pp and joint − independent +0.1 [−1.7, +2.0].** This matches the [K = 1](ARM_SELECTION_HEAD.md#selection-head-arch-full-20261022) and [October 29 K = 3](#final-selection-arch-k3-20261029) rounds. Heads are trained as the [GPT-5.5 K = 3 head](#final-selection-recipe3) (same 18,781 training panels, split, batch 256, 20 epochs, seed 0, best validation epoch, ≈22.6 M parameters), soft CE loss; only attention and scorer change. MLP: depth 2, width-matched (1,686 joint / 1,856 independent); its joint variant adds each candidate minus the mean of the other four. SFT 4B actor, N = 5, T 1.0 / top-p 0.9, all 1,045 tasks.
+
+| Attention | Scorer | Runs | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean overall per run | Mean valid-only | − SFT alone, pp [95% CI] | − joint transformer, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| *SFT 4B alone (1 sample)* | | 3 | 32.9% | 44.7% | 45.2% | 39.4% | 39.5 / 39.5 / 39.2 | 40.9% | — | — |
+| **Joint** | **Transformer** | 2 | 38.7% | 51.7% | **51.9%** | **43.6%** | 42.2 / 45.1 | **47.4%** | +4.2 [+1.9, +6.5] | — |
+| Joint | MLP | 2 | 38.6% | 49.8% | 51.4% | **43.6%** | 44.5 / 42.6 | 46.6% | +4.2 [+1.8, +6.6] | −0.1 [−2.5, +2.2] |
+| Independent | Transformer | 2 | **40.0%** | **52.7%** | 49.3% | **43.6%** | 43.7 / 43.6 | 47.3% | +4.2 [+1.9, +6.6] | −0.0 [−2.4, +2.4] |
+| Independent | MLP | 2 | 37.6% | 52.2% | 50.7% | 43.3% | 44.2 / 42.4 | 46.8% | +3.9 [+1.6, +6.2] | −0.4 [−2.9, +2.2] |
+| *Joint transformer, original training run* | | 1 | 37.5% | 49.1% | 45.6% | 41.3% | 41.3 | 44.1% | +1.9 [−1.1, +5.0] | −2.3 [−5.5, +0.9] |
+
+*Per-benchmark columns are valid-only success (successes / valid episodes), runs pooled; bold marks the best head per column. Mean overall is the equal-weight 3-benchmark mean of overall success; differences are on it, paired bootstrap over tasks (10,000 resamples, seed 20261029), per-task success averaged over a row's runs; intervals reflect task sampling, not training seeds (one seed per head). Main effects, each the average of two matched contrasts: MLP − transformer −0.2 [−1.9, +1.4] (Online-Mind2Web −0.5, WebVoyager −0.6, DeepShop +0.5); joint − independent +0.1 [−1.7, +2.0]; interaction +0.1 [−1.6, +1.8]. Dates: run 1 of the three non-default heads, the original default and SFT ran November 6; their run 2 and both runs of the retrained joint transformer ran November 7. The joint transformer row is the default recipe retrained with the same code as the other heads (byte-identical across two retrains); the original default `heads-all2/k3-best/seed0/head.pt` came from an earlier training run of the same recipe and is not byte-identical. Its one-run deficit (−2.3, interval crosses 0) is about the size of the retrained head's own run-to-run spread (42.2 vs 45.1). Rollouts ran with judging deferred and were judged afterwards from their saved final-turn inputs by the native judges (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o). Episodes: 600 / 1,190 / 300 per two-run head.* Evidence: [rates, per-run means and contrasts](arm_results/rl_integration/selection-recipe3-head-arch-20261107.json) · [script](arm_results/rl_integration/selection-recipe3-head-arch-20261107.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/` (training `train_arch.sbatch` and `source-arch/`, heads `heads-arch/<name>/head.pt`, evals `eval-arch/run<k>/`, job log `eval-arch/jobs.txt`).
+
+<details><summary id="final-selection-recipe3-head-arch-run1-20261106">One-day screen (November 6): nine heads, run 1 only</summary>
+
+All four attention × scorer × loss combinations plus causal attention, one run each, same window as the SFT row above. The first-run ranking did not hold: the original default came last here, while its retrained copy ties the best heads over two runs.
+
+| Attention | Scorer | Loss | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − original default, pp [95% CI] |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Independent | MLP | BCE | 41.3% | 50.5% | 51.3% | 44.6% | 47.7% | +5.2 [+2.2, +8.4] | +3.3 [−0.2, +6.7] |
+| Joint | MLP | Soft CE | 40.2% | 47.6% | 53.0% | 44.5% | 46.9% | +5.1 [+2.2, +8.0] | +3.2 [−0.2, +6.6] |
+| Joint | MLP | BCE | 41.8% | 53.1% | 47.3% | 44.2% | 47.4% | +4.8 [+1.7, +8.0] | +2.9 [−0.9, +6.7] |
+| Independent | MLP | Soft CE | 39.0% | 52.5% | 51.0% | 44.2% | 47.5% | +4.8 [+2.0, +7.6] | +2.8 [−0.6, +6.4] |
+| Independent | Transformer | Soft CE | 40.1% | 52.4% | 48.6% | 43.7% | 47.0% | +4.3 [+1.4, +7.2] | +2.3 [−1.1, +5.8] |
+| Joint | Transformer | BCE | 39.7% | 52.7% | 47.7% | 43.5% | 46.7% | +4.1 [+0.9, +7.2] | +2.1 [−1.4, +5.5] |
+| Causal ¹ | Transformer | Soft CE | 40.1% | 51.9% | 48.6% | 43.5% | 46.9% | +4.1 [+1.3, +7.0] | +2.2 [−1.2, +5.5] |
+| Independent | Transformer | BCE | 36.3% | 51.9% | 50.0% | 43.4% | 46.1% | +3.9 [+0.9, +7.1] | +2.0 [−1.5, +5.5] |
+| Joint (original default) | Transformer | Soft CE | 37.5% | 49.1% | 45.6% | 41.3% | 44.1% | +1.9 [−1.1, +5.0] | — |
+
+*Same definitions as above. ¹ Candidate i attends to the state and candidates 1..i in sampling order. The OpenAI key failed during these rollouts; 1,298 affected episodes were judged afterwards from their saved inputs (requests verified identical to live ones on 15 tasks per benchmark).* Evidence: [rates and contrasts](arm_results/rl_integration/selection-recipe3-head-arch-run1-20261106.json) · [script](arm_results/rl_integration/selection-recipe3-head-arch-run1-20261106.py)
+
+</details>
+
 - **One path for everything:** runtime `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3/` (panels, all four label sets, LoRA SFT data, head training data and checkpoints, as symlinks; see its README.md).
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 K = 3), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
-- **Not yet:** more than one training seed per selector, and an epoch- or step-matched full-data control for the [data ablations](#final-selection-recipe3-data-ablations-20261105).
+- **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds), and an epoch- or step-matched full-data control for the [data ablations](#final-selection-recipe3-data-ablations-20261105).
 
 <a id="final-selection-head-ablations-20261021"></a>
 
