@@ -2,7 +2,7 @@
   selection-recipe3-data-states-20261105.*  fewer states: whole tasks until 250 / 500 / 1,000 states, all their panels
   selection-recipe3-data-panels-20261105.*  fewer panels: 1 / 2 / 4 panels sampled per state, all 2,112 states
 Both end at the full data (2,112 states, 8.9 panels per state). y = equal-weight 3-benchmark mean of valid-only success, runs pooled
-(3 runs; s500 and pps2 1 run, drawn hollow). Gray dashed line: SFT 4B alone (3 runs).
+(3 runs; s500 and pps2 1 run, drawn hollow). Gray dashed line: SFT 4B alone (3 runs, November 6 same-window reference).
 Data: selection-recipe3-data-ablations-20261105.json (selection-recipe3-data-ablations-20261105-analysis.py)."""
 import json
 import os

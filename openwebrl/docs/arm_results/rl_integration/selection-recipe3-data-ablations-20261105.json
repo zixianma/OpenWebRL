@@ -1,20 +1,25 @@
 {
- "note": "Recipe 3 (GPT-5.5 K=3) 4B decoder LoRA data ablations, live 3 runs for pps1/pps4/s250/s1000 and 1 run for s500/pps2 (2026-11-04/05) vs reused 3-run references:\nSFT 4B (controls-sameday-20261103), full-data LoRA and SelectionARM piotr5 (sameday-lora-20261104). SFT actor, N=5, T1.0/p0.9,\n30 steps, all tasks (OM2W 300, WV 595, DS 150). Per-task success averaged over a condition's runs. Valid-only = successes/valid;\nmean overall = unweighted mean of benchmark overall rates. Paired bootstrap over tasks (10,000, seed 20261029), benchmarks resampled\nindependently. Task-weighted: weights 300/595/150 of 1,045. References 3 runs (SFT from the previous day).",
+ "note": "Recipe 3 (GPT-5.5 K=3) 4B decoder LoRA data ablations, live 3 runs for pps1/pps4/s250/s1000 and 1 run for s500/pps2 (2026-11-04/05) vs same-window 3-run references\n(eval-ctrl, 2026-11-06; judged late via deferjudge/ after the API key died at 11:26; earlier SFT 11-03 / full 11-04 kept for drift). SFT actor, N=5, T1.0/p0.9,\n30 steps, all tasks (OM2W 300, WV 595, DS 150). Per-task success averaged over a condition's runs. Valid-only = successes/valid;\nmean overall = unweighted mean of benchmark overall rates. Paired bootstrap over tasks (10,000, seed 20261029), benchmarks resampled\nindependently. Task-weighted: weights 300/595/150 of 1,045. ",
  "sources": {
   "sft": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run1/{b}/sft1",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run2/{b}/sft1",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run3/{b}/sft1"
+  ],
+  "full": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run1/{b}/arm5-9fadc8dc4655",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run2/{b}/arm5-9fadc8dc4655",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run3/{b}/arm5-9fadc8dc4655"
+  ],
+  "sft_1103": [
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/controls-sameday-20261103/run1/{b}/sft1",
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/controls-sameday-20261103/run2/{b}/sft1",
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/controls-sameday-20261103/run3/{b}/sft1"
   ],
-  "full": [
+  "full_1104": [
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run1/{b}/arm5-9fadc8dc4655",
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run2/{b}/arm5-9fadc8dc4655",
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run3/{b}/arm5-9fadc8dc4655"
-  ],
-  "sarm": [
-   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run1/{b}/piotr5",
-   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run2/{b}/piotr5",
-   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sameday-lora-20261104/run3/{b}/piotr5"
   ],
   "s250": [
    "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval/run1/{b}/arm5-d6c492ad4c40",
@@ -46,6 +51,56 @@
  "rates": {
   "sft": {
    "online_mind2web": {
+    "successes": 267,
+    "valid": 811,
+    "episodes": 900,
+    "overall": 29.7,
+    "valid_only": 32.9
+   },
+   "webvoyager": {
+    "successes": 780,
+    "valid": 1744,
+    "episodes": 1785,
+    "overall": 43.7,
+    "valid_only": 44.7
+   },
+   "deepshop": {
+    "successes": 202,
+    "valid": 447,
+    "episodes": 450,
+    "overall": 44.9,
+    "valid_only": 45.2
+   },
+   "mean_overall": 39.4,
+   "mean_valid_only": 40.9
+  },
+  "full": {
+   "online_mind2web": {
+    "successes": 317,
+    "valid": 790,
+    "episodes": 900,
+    "overall": 35.2,
+    "valid_only": 40.1
+   },
+   "webvoyager": {
+    "successes": 913,
+    "valid": 1702,
+    "episodes": 1785,
+    "overall": 51.1,
+    "valid_only": 53.6
+   },
+   "deepshop": {
+    "successes": 222,
+    "valid": 444,
+    "episodes": 450,
+    "overall": 49.3,
+    "valid_only": 50.0
+   },
+   "mean_overall": 45.2,
+   "mean_valid_only": 47.9
+  },
+  "sft_1103": {
+   "online_mind2web": {
     "successes": 276,
     "valid": 797,
     "episodes": 900,
@@ -69,7 +124,7 @@
    "mean_overall": 39.6,
    "mean_valid_only": 41.1
   },
-  "full": {
+  "full_1104": {
    "online_mind2web": {
     "successes": 321,
     "valid": 781,
@@ -93,31 +148,6 @@
    },
    "mean_overall": 44.7,
    "mean_valid_only": 47.0
-  },
-  "sarm": {
-   "online_mind2web": {
-    "successes": 327,
-    "valid": 765,
-    "episodes": 900,
-    "overall": 36.3,
-    "valid_only": 42.7
-   },
-   "webvoyager": {
-    "successes": 903,
-    "valid": 1728,
-    "episodes": 1785,
-    "overall": 50.6,
-    "valid_only": 52.3
-   },
-   "deepshop": {
-    "successes": 219,
-    "valid": 439,
-    "episodes": 450,
-    "overall": 48.7,
-    "valid_only": 49.9
-   },
-   "mean_overall": 45.2,
-   "mean_valid_only": 48.3
   },
   "s250": {
    "online_mind2web": {
@@ -273,332 +303,376 @@
  "paired": {
   "s250 - sft": {
    "online_mind2web": [
-    3.9,
-    0.6,
-    7.3
+    4.9,
+    1.9,
+    8.0
    ],
    "webvoyager": [
-    7.4,
-    5.1,
-    9.8
+    8.8,
+    6.3,
+    11.3
    ],
    "deepshop": [
-    6.4,
-    1.3,
-    11.6
+    4.4,
+    -0.9,
+    9.8
    ],
    "mean": [
-    5.9,
-    3.8,
-    8.1
+    6.0,
+    3.9,
+    8.3
    ]
   },
   "s250 - full": {
    "online_mind2web": [
-    -1.1,
-    -4.2,
-    2.0
+    -0.7,
+    -3.7,
+    2.4
    ],
    "webvoyager": [
-    1.0,
-    -1.5,
-    3.3
+    1.3,
+    -1.0,
+    3.7
    ],
    "deepshop": [
-    2.4,
-    -2.4,
-    7.3
+    0.0,
+    -4.9,
+    5.1
    ],
    "mean": [
-    0.8,
-    -1.3,
-    2.8
+    0.2,
+    -1.9,
+    2.3
    ]
   },
   "s500 - sft": {
    "online_mind2web": [
-    4.7,
-    0.1,
-    9.3
+    5.7,
+    1.2,
+    10.2
    ],
    "webvoyager": [
-    5.5,
-    2.1,
-    8.9
+    6.9,
+    3.5,
+    10.2
    ],
    "deepshop": [
-    3.1,
-    -3.1,
-    9.3
+    1.1,
+    -4.7,
+    7.1
    ],
    "mean": [
-    4.4,
-    1.7,
+    4.6,
+    1.9,
     7.3
    ]
   },
   "s500 - full": {
    "online_mind2web": [
-    -0.3,
-    -5.0,
-    4.3
+    0.1,
+    -4.3,
+    4.7
    ],
    "webvoyager": [
-    -1.0,
-    -4.3,
-    2.4
+    -0.6,
+    -3.9,
+    2.7
    ],
    "deepshop": [
-    -0.9,
-    -7.1,
-    5.3
+    -3.3,
+    -10.2,
+    3.6
    ],
    "mean": [
-    -0.7,
-    -3.5,
-    2.1
+    -1.3,
+    -4.2,
+    1.7
    ]
   },
   "s1000 - sft": {
    "online_mind2web": [
-    6.9,
-    3.7,
-    10.2
+    7.9,
+    4.8,
+    11.0
    ],
    "webvoyager": [
-    6.7,
-    4.1,
-    9.2
+    8.1,
+    5.5,
+    10.6
    ],
    "deepshop": [
-    8.2,
-    3.1,
-    13.6
+    6.2,
+    1.1,
+    11.6
    ],
    "mean": [
-    7.3,
-    5.0,
-    9.5
+    7.4,
+    5.2,
+    9.6
    ]
   },
   "s1000 - full": {
    "online_mind2web": [
-    1.9,
-    -1.1,
-    4.8
+    2.3,
+    -0.7,
+    5.3
    ],
    "webvoyager": [
-    0.2,
-    -2.2,
-    2.7
+    0.6,
+    -1.8,
+    3.0
    ],
    "deepshop": [
-    4.2,
-    -1.1,
-    9.6
+    1.8,
+    -2.9,
+    6.4
    ],
    "mean": [
-    2.1,
-    -0.1,
-    4.3
+    1.6,
+    -0.4,
+    3.6
    ]
   },
   "pps1 - sft": {
    "online_mind2web": [
-    3.7,
-    0.3,
-    7.0
+    4.7,
+    1.4,
+    7.8
    ],
    "webvoyager": [
-    8.2,
-    5.8,
-    10.8
+    9.6,
+    7.1,
+    12.1
    ],
    "deepshop": [
-    9.8,
-    4.7,
-    14.9
+    7.8,
+    2.0,
+    13.3
    ],
    "mean": [
-    7.2,
-    5.0,
-    9.4
+    7.4,
+    5.1,
+    9.6
    ]
   },
   "pps1 - full": {
    "online_mind2web": [
-    -1.3,
-    -4.4,
-    1.7
+    -0.9,
+    -3.8,
+    2.0
    ],
    "webvoyager": [
-    1.8,
-    -0.6,
-    4.3
+    2.2,
+    -0.3,
+    4.8
    ],
    "deepshop": [
-    5.8,
-    0.4,
-    11.1
+    3.3,
+    -1.8,
+    8.2
    ],
    "mean": [
-    2.1,
-    -0.1,
-    4.3
+    1.5,
+    -0.6,
+    3.7
    ]
   },
   "pps2 - sft": {
    "online_mind2web": [
-    -0.3,
-    -4.6,
-    3.9
+    0.7,
+    -3.6,
+    4.9
    ],
    "webvoyager": [
-    8.2,
-    4.9,
-    11.5
+    9.6,
+    6.3,
+    12.9
    ],
    "deepshop": [
-    7.8,
-    0.7,
-    15.1
+    5.8,
+    -1.3,
+    13.1
    ],
    "mean": [
-    5.2,
-    2.2,
-    8.2
+    5.3,
+    2.3,
+    8.4
    ]
   },
   "pps2 - full": {
    "online_mind2web": [
-    -5.3,
-    -9.7,
-    -1.0
+    -4.9,
+    -9.0,
+    -0.8
    ],
    "webvoyager": [
-    1.7,
-    -1.3,
-    4.8
+    2.1,
+    -1.1,
+    5.2
    ],
    "deepshop": [
-    3.8,
-    -3.3,
-    11.1
+    1.3,
+    -5.6,
+    8.2
    ],
    "mean": [
-    0.1,
-    -2.9,
-    3.1
+    -0.5,
+    -3.4,
+    2.4
    ]
   },
   "pps4 - sft": {
    "online_mind2web": [
-    4.9,
-    1.8,
-    8.1
+    5.9,
+    2.9,
+    9.1
    ],
    "webvoyager": [
-    8.5,
-    6.1,
-    10.9
+    9.9,
+    7.5,
+    12.4
    ],
    "deepshop": [
-    12.7,
-    8.2,
-    17.1
+    10.7,
+    5.8,
+    15.6
    ],
    "mean": [
-    8.7,
+    8.8,
     6.6,
-    10.7
+    10.9
    ]
   },
   "pps4 - full": {
    "online_mind2web": [
-    -0.1,
-    -2.9,
-    2.7
+    0.3,
+    -2.6,
+    3.3
    ],
    "webvoyager": [
-    2.0,
-    -0.4,
-    4.4
+    2.4,
+    -0.1,
+    4.9
    ],
    "deepshop": [
-    8.7,
-    4.0,
-    13.3
+    6.2,
+    2.0,
+    10.4
    ],
    "mean": [
-    3.5,
-    1.6,
-    5.5
+    3.0,
+    1.1,
+    4.9
    ]
   },
   "full - sft": {
    "online_mind2web": [
-    5.0,
-    1.8,
+    5.6,
+    2.8,
     8.3
    ],
    "webvoyager": [
-    6.4,
-    3.9,
-    9.1
-   ],
-   "deepshop": [
-    4.0,
-    -0.7,
-    8.9
-   ],
-   "mean": [
+    7.5,
     5.1,
-    3.1,
-    7.3
-   ]
-  },
-  "sarm - sft": {
-   "online_mind2web": [
-    5.7,
-    2.6,
-    8.9
-   ],
-   "webvoyager": [
-    5.5,
-    3.1,
-    7.8
+    9.9
    ],
    "deepshop": [
-    5.8,
-    1.3,
+    4.4,
+    -1.1,
     10.2
    ],
    "mean": [
-    5.6,
-    3.7,
-    7.7
+    5.8,
+    3.5,
+    8.1
    ]
   },
-  "sarm - full": {
+  "sft_1103 - sft": {
    "online_mind2web": [
-    0.7,
+    1.0,
     -2.0,
+    4.0
+   ],
+   "webvoyager": [
+    1.4,
+    -1.0,
+    3.8
+   ],
+   "deepshop": [
+    -2.0,
+    -6.9,
+    2.9
+   ],
+   "mean": [
+    0.1,
+    -1.9,
+    2.2
+   ]
+  },
+  "sft_1103 - full": {
+   "online_mind2web": [
+    -4.6,
+    -7.9,
+    -1.2
+   ],
+   "webvoyager": [
+    -6.1,
+    -8.7,
+    -3.4
+   ],
+   "deepshop": [
+    -6.4,
+    -11.3,
+    -1.3
+   ],
+   "mean": [
+    -5.7,
+    -7.9,
+    -3.5
+   ]
+  },
+  "full_1104 - sft": {
+   "online_mind2web": [
+    6.0,
+    2.7,
+    9.3
+   ],
+   "webvoyager": [
+    7.8,
+    5.4,
+    10.4
+   ],
+   "deepshop": [
+    2.0,
+    -2.4,
+    6.4
+   ],
+   "mean": [
+    5.3,
+    3.2,
+    7.3
+   ]
+  },
+  "full_1104 - full": {
+   "online_mind2web": [
+    0.4,
+    -2.7,
     3.6
    ],
    "webvoyager": [
-    -1.0,
-    -3.3,
-    1.5
+    0.4,
+    -2.0,
+    2.9
    ],
    "deepshop": [
-    1.8,
     -2.4,
-    6.0
+    -6.7,
+    1.8
    ],
    "mean": [
-    0.5,
-    -1.4,
-    2.4
+    -0.5,
+    -2.5,
+    1.3
    ]
   }
  },
@@ -609,70 +683,84 @@
  },
  "weighted": {
   "sft": {
-   "overall": 40.6,
-   "valid_only": 42.3,
+   "overall": 39.8,
+   "valid_only": 41.6,
    "minus_sft": null,
    "minus_full": null
   },
   "full": {
    "overall": 46.3,
-   "valid_only": 48.9,
+   "valid_only": 49.5,
    "minus_sft": [
-    5.7,
-    3.8,
-    7.6
+    6.5,
+    4.7,
+    8.3
    ],
    "minus_full": null
   },
-  "sarm": {
-   "overall": 46.2,
-   "valid_only": 49.4,
+  "sft_1103": {
+   "overall": 40.6,
+   "valid_only": 42.3,
    "minus_sft": [
-    5.6,
-    3.8,
-    7.3
+    0.8,
+    -1.0,
+    2.6
    ],
    "minus_full": [
-    -0.1,
+    -5.7,
+    -7.6,
+    -3.8
+   ]
+  },
+  "full_1104": {
+   "overall": 46.3,
+   "valid_only": 48.9,
+   "minus_sft": [
+    6.5,
+    4.7,
+    8.3
+   ],
+   "minus_full": [
+    0.0,
     -1.8,
-    1.6
+    1.8
    ]
   },
   "s250": {
    "overall": 46.9,
    "valid_only": 49.7,
    "minus_sft": [
-    6.3,
-    4.5,
-    8.1
+    7.0,
+    5.2,
+    8.9
    ],
    "minus_full": [
     0.6,
     -1.2,
-    2.4
+    2.3
    ]
   },
   "s500": {
    "overall": 45.6,
    "valid_only": 49.1,
    "minus_sft": [
-    4.9,
-    2.4,
-    7.5
+    5.7,
+    3.3,
+    8.1
    ],
    "minus_full": [
     -0.8,
     -3.3,
-    1.7
+    1.8
    ]
   },
   "s1000": {
    "overall": 47.6,
    "valid_only": 50.5,
    "minus_sft": [
-    7.0,
-    5.0,
-    8.9
+    7.8,
+    5.9,
+    9.6
    ],
    "minus_full": [
     1.3,
@@ -684,9 +772,9 @@
    "overall": 47.8,
    "valid_only": 50.7,
    "minus_sft": [
-    7.1,
-    5.2,
-    9.0
+    7.9,
+    6.1,
+    9.8
    ],
    "minus_full": [
     1.5,
@@ -698,9 +786,9 @@
    "overall": 46.3,
    "valid_only": 49.2,
    "minus_sft": [
-    5.7,
-    3.2,
-    8.2
+    6.5,
+    3.9,
+    9.0
    ],
    "minus_full": [
     0.0,
@@ -712,9 +800,9 @@
    "overall": 48.7,
    "valid_only": 51.1,
    "minus_sft": [
-    8.0,
-    6.2,
-    9.9
+    8.8,
+    7.0,
+    10.7
    ],
    "minus_full": [
     2.4,
