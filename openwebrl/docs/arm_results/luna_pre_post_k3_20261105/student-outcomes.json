@@ -1,0 +1,53 @@
+{
+ "note": "Outcomes for both sides of a pre / K = 3 student split, from live eval episodes only (no new rollouts).",
+ "roots": [
+  "p16-lora-lunapre-20261103",
+  "p16-lora-lunak3-20261103",
+  "p16-heads-luna-20261103",
+  "p16-heads-all-20261102",
+  "p16-lora-pre-20261102",
+  "p16-lora-20261101",
+  "controls-sameday-20261103",
+  "sameday-lora-20261104"
+ ],
+ "episodes_scanned": 40755,
+ "split_states": 4612,
+ "judges_in_matches": [
+  "gpt-4o",
+  "gpt-5.6-terra"
+ ],
+ "gpt55": {
+  "split_states": 3338,
+  "both_played": 238,
+  "tasks": 187,
+  "pre_success": 46.3,
+  "k3_success": 48.2,
+  "k3_minus_pre": [
+   2.0,
+   -2.8,
+   6.7
+  ],
+  "pre_episodes": 1112,
+  "k3_episodes": 936
+ },
+ "luna": {
+  "split_states": 2926,
+  "both_played": 173,
+  "tasks": 139,
+  "pre_success": 49.8,
+  "k3_success": 46.6,
+  "k3_minus_pre": [
+   -3.1,
+   -9.1,
+   2.7
+  ],
+  "pre_episodes": 708,
+  "k3_episodes": 528
+ },
+ "consistent_split": {
+  "states": 797,
+  "both_played": 60,
+  "pre_success": 51.5,
+  "k3_success": 50.9
+ }
+}

@@ -154,11 +154,11 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 
 On the same states, the K = 3 students also pick a scroll less often and more often pick an action that only one of the five candidates proposed.
 
-These patterns cut both ways (figure (b)). On eval states only the executed pick was played out, so they show what changes, not which side is right. Live success is in the table above: LoRA K = 3 − pre is +0.3 (Luna) and −1.5 (GPT-5.5) pp, both intervals crossing zero. Outcomes for every candidate exist only on the [branch states](#luna-pre-post-k3-20261105).
+These patterns cut both ways (figure (b)). The replayed eval states show what changes, not which side is right; [below](#luna-pre-k3-student-outcomes-20261107), outcomes from the states where both picks were played out live show no difference. Live success is in the table above: LoRA K = 3 − pre is +0.3 (Luna) and −1.5 (GPT-5.5) pp, both intervals crossing zero. Outcomes for every candidate exist only on the [branch states](#luna-pre-post-k3-20261105).
 
 ![Two replayed eval states. (a) WebVoyager, a quantized Qwen3-8B model card after four alternating scrolls: four of five proposals scroll down, picked by both pre students; one proposes go back, picked by both K = 3 students. (b) Online-Mind2Web 401(k) calculator still on its defaults: two proposals set the starting balance to $0, picked by both pre students; three answer $2,496,238, picked by both K = 3 students.](arm_results/luna_pre_post_k3_20261105/student-examples.png)
 
-*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the K = 3 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the K = 3 students' answer is premature and the pre students' fix is the right next step. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
+*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the K = 3 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the K = 3 students' answer is premature. The pre pick is not shown to succeed either: in the logged GPT-5.5 pre episode, the student set the balance to $0, then answered, and failed. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
 
 | Same 7,999 states | Pre (Luna) | K = 3 (Luna) | Pre (GPT-5.5) | K = 3 (GPT-5.5) | Proposals |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -187,7 +187,73 @@ K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 - **Disagreements are often small:** of the 797 consistent label-split states, 278 change the action type. The rest are mostly clicks on different targets, or the same action type with different arguments (for example scroll 0.5 vs 0.7).
 - **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the K = 3 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 K = 3 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
 - **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a K = 3 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
-- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}`.
+- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`).
+</details>
+
+#### Outcomes where both picks were played out (eval states only)
+
+<a id="luna-pre-k3-student-outcomes-20261107"></a>
+
+**Where both picks have live outcomes, the K = 3 pick does no better than the pre pick.** Every selector evaluated on November 1–4 ran the same SFT 4B actor on the same 1,045 tasks: 40,755 episodes. So the same screen often recurs, and different selectors executed different actions from it. A split state is matched to these episodes by identical screenshot (sha256), task and step, and each matched episode that executed the pre pick or the K = 3 pick contributes its judged outcome (valid episodes only; gpt-4o for WebVoyager and DeepShop, Terra for Online-Mind2Web, the same judge on both sides).
+
+| Split states | Both picks played out | Tasks | After pre pick | After K = 3 pick | K = 3 − pre, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Luna students disagree | 173 | 139 | 49.8% | 46.6% | −3.1 [−9.1, +2.7] |
+| GPT-5.5 students disagree | 238 | 187 | 46.3% | 48.2% | +2.0 [−2.8, +6.7] |
+| Both judges split the same way | 60 | — | 51.5% | 50.9% | — |
+
+*Success is averaged per state over the matched episodes on each side, then over states; intervals are task-clustered bootstraps ([student-outcomes.json](arm_results/luna_pre_post_k3_20261105/student-outcomes.json)). Only 411 of 4,612 split states have both sides played out, mostly early steps (late screens rarely recur exactly), and neither example in the figure above is among them. Each outcome is the whole episode, whose later steps were chosen by different selectors, so this is a rough signal.*
+
+Eight of these states, three where the K = 3 pick did better (W) and three where it did worse (L) plus one alternate each. They show both patterns cutting both ways: going back wins on a rate-limit or blocked page (W1, W3) and loses when the answer is one click or a few scrolls away (L1, L2).
+
+| Sheet | State | Pre students pick | Succeed | K = 3 students pick | Succeed |
+| --- | --- | --- | ---: | --- | ---: |
+| [W1](arm_results/luna_pre_post_k3_20261105/outcome-review-W1-2586.jpg) | WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page | click footer "Documentation" | 0/1 | go back | 2/2 |
+| [W2](arm_results/luna_pre_post_k3_20261105/outcome-review-W2-7262.jpg) | WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers | search box | 0/2 | click the gr-qc listing | 3/3 |
+| [W3](arm_results/luna_pre_post_k3_20261105/outcome-review-W3-5324.jpg) | WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page | go to google.com | 0/1 | new tab, bbcgoodfood.com | 5/9 |
+| [L1](arm_results/luna_pre_post_k3_20261105/outcome-review-L1-2809.jpg) | WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date | click "Files and versions" | 2/2 | go back | 0/2 |
+| [L2](arm_results/luna_pre_post_k3_20261105/outcome-review-L2-677.jpg) | WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down | keep scrolling | 8/13 | go back | 0/1 |
+| [L3](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg) | WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs | click the search icon | 24/24 | click "Entertainment" | 2/8 |
+| [alt-W](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-W-3610.jpg) | WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models | search on the error page | 0/1 | go back | 1/1 |
+| [alt-L](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-L-3000.jpg) | WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog | click footer "General information" | 5/5 | scroll | 0/1 |
+
+<details>
+<summary>Review sheets: the screen, both picks, and one matched episode per side</summary>
+
+Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the K = 3 pick (purple box). Then, per side, one real matched episode (a success and a failure when both exist): the next three screens with the action taken on each (orange box), the final answer and the judged outcome.
+
+**W1.** WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page.
+
+![W1: WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page. Pre pick click footer "Documentation" (0/1 succeed), K = 3 pick go back (2/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W1-2586.jpg)
+
+**W2.** WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers.
+
+![W2: WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers. Pre pick search box (0/2 succeed), K = 3 pick click the gr-qc listing (3/3 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W2-7262.jpg)
+
+**W3.** WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page.
+
+![W3: WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page. Pre pick go to google.com (0/1 succeed), K = 3 pick new tab, bbcgoodfood.com (5/9 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W3-5324.jpg)
+
+**L1.** WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date.
+
+![L1: WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date. Pre pick click "Files and versions" (2/2 succeed), K = 3 pick go back (0/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L1-2809.jpg)
+
+**L2.** WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down.
+
+![L2: WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down. Pre pick keep scrolling (8/13 succeed), K = 3 pick go back (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L2-677.jpg)
+
+**L3.** WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs.
+
+![L3: WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs. Pre pick click the search icon (24/24 succeed), K = 3 pick click "Entertainment" (2/8 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)
+
+**alt-W.** WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models.
+
+![alt-W: WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models. Pre pick search on the error page (0/1 succeed), K = 3 pick go back (1/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-W-3610.jpg)
+
+**alt-L.** WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog.
+
+![alt-L: WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog. Pre pick click footer "General information" (5/5 succeed), K = 3 pick scroll (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-L-3000.jpg)
+
 </details>
 
 ## Setup
