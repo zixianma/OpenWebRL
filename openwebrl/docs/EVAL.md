@@ -10,9 +10,8 @@ The code on `arm` is the exact version those runs used. Each eval plan records s
 - **Software.** `requirements.txt` pins sglang 0.5.6.post2. We ran transformers 4.57.1 and torch 2.9.1+cu129. Neither is pinned there, so install those versions explicitly.
 - **Actor.** [`OpenWebRL/OpenWebRL-4B-SFT`](https://huggingface.co/OpenWebRL/OpenWebRL-4B-SFT), revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`.
 - **Selectors.**
+  - Default: the Recipe 3 GPT-5.5 K=3 decoder, public at [`zixianma/action-selection-heads/decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16). It has merged weights plus `adapter/`. Its weights are byte-identical to the checkpoint behind `arm5-9fadc8dc4655`.
   - Piotr's SelectionARM: revision `81b452d800d9f859687074f82680dd5257e02d89`.
-  - Our Recipe 2 4B LoRA: `zixianma/action-selection-heads/decoder-4b-lora-recipe2-2.6k`.
-  - The default selector (below) and the Recipe 3 heads are not public yet.
 - **Judge API.** An OpenAI key with access to gpt-5.6-terra and gpt-4o, in `JUDGE_API_KEY` or as `OPENAI_API_KEY` in the repository's `.env`. Rollouts run without it, but no episode is judged.
 - **Hardware.** One H200, or another GPU with about 140 GB, per benchmark job. It hosts the actor and any selector on the same GPU.
 
@@ -70,7 +69,9 @@ sbatch scripts/eval/rejudge.sbatch 100 /path/run1/deepshop/sft1/deepshop /path/r
   - `arm5:<merged dir>`: a SelectionARM-style 4B decoder.
   - `piotr5`: Piotr's released SelectionARM.
 - **Default selector.** The Recipe 3 GPT-5.5 K=3 decoder: a LoRA on OpenWebRL-4B-SFT trained on 32,974 examples, Piotr-style panels labelled by GPT-5.5 with three-step lookahead.
-  - Condition: `arm5:/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/lora/lora/merged`, harness slug `arm5-9fadc8dc4655`.
+  - Condition: `arm5:<dir>`, where `<dir>` is the downloaded `decoder-4b-lora-gpt55-k3-p16` folder (ours: `.../p16-k3-20261031/lora/lora/merged`, harness slug `arm5-9fadc8dc4655`).
+  - Public on Hugging Face: [`zixianma/action-selection-heads/decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16).
+  - After downloading, build the sglang directory the harness expects next to it: `python scripts/serve_arm_sglang.py assemble --selection <dir> --out <dir>-sglang`. It links the weights and adds the actor's config and tokenizer; repoint `BASE` in that script to your OpenWebRL-4B-SFT copy.
   - It ran as the November 6 same-window reference: 45.2% mean overall, +5.8 pp [+3.5, +8.1] over SFT ([table](ARM_FINAL_RESULTS.md#final-selection-recipe3-data-ablations-20261105)).
   - Use it as the selector reference unless a comparison needs another.
 - **Resuming.** A job that crashes resumes from its saved records when you resubmit the same `launch-<benchmark>-defer.sbatch`. The usual cause is an intermittent CUDA illegal-address error, in about 1 of 15 jobs.
