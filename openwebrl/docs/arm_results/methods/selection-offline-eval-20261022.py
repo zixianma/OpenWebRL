@@ -102,7 +102,7 @@ held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
-text(0.06, 1.98, "a)  Data collection", size=8.5, weight="bold")
+text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold")
 outcome_header = text(1.65, 0.245, r"Rollout success $R^{i,j}\in\{0,1\}$",
                       color=MUTED, ha="center")
 # Outcome status key only; selected-action check marks remain omitted.
@@ -168,7 +168,7 @@ ax.plot([4.42, 4.42], [0.26, 1.91], color=LINE, linewidth=0.6)
 method_x, evidence_x = 4.52, 5.55
 teacher_x, teacher_w = 6.20, 0.54
 pick_x, pick_w, eval_x = 6.86, 0.32, 7.40
-text(method_x, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
+text(method_x, 1.98, "b)  Action Decision Labeling", size=8.5, weight="bold")
 box(method_x, 1.67, 3.02, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
 shared_label = text(6.03, 1.79,
      r"Shared: task · history · $s_t$ · $\{a_t^{i}\}_{i=1}^{K}$",
