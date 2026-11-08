@@ -151,6 +151,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 | Document | Contents |
 | --- | --- |
+| [arm_final_results.md](arm_final_results.md) | Main-paper ARM RL candidate set (runs trained to ≥ 60 iterations): method table, validation and training-success small multiples, matched iteration-90 comparison, aggregate data and plotting script |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results; presentation figures for the three stages and RL variants; static/interactive plots; collapsed WebVoyager results |
 | [ARM_FORMULATIONS.md](ARM_FORMULATIONS.md) | Branching experiment map; matched pre/post evidence, held-out outcome selection, continuation scaling, teacher-trained heads and planned student controls |
 | [ARM_BRANCH_STATES_COLLECTION.md](ARM_BRANCH_STATES_COLLECTION.md) | How branch states are reached and re-opened: every prefix is the actor checkpoint's own rollout (no SFT-demonstration trajectories); live replay versus the record-and-replay prototype (mitmproxy recording, deterministic browser, live after release); feasibility test and production release rates |
