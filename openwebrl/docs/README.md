@@ -58,6 +58,7 @@
 [Offline selector evaluation: half-height Rollout Collection and Action Decision Labeling schematic, expanded rollout arrows, blue train/eval split, black rollout-1 highlight and joint K=5 action inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
 [Joint versus independent transformer scoring: standalone attention-mask figure (PDF)](arm_results/methods/selection-head-joint-independent-20261026.pdf) · [Caption and architecture](ARM_SELECTION_HEAD.md#selection-head-joint-independent).
+[Selector architectures in one figure: ADM head variants (joint/independent × transformer/MLP) and the ADM-4B decoder (PDF)](arm_results/methods/selection-arch-overview-20261107.pdf) · [Caption](ARM_SELECTION_HEAD.md#selection-arch-overview-20261107).
 
 [Full300 GPT-6 Sol versus Luna N3/N5: 900 audited dispositions; primary new200 paired success, all-call cost, latency, tokens and browser work](ARM_INFERENCE_SCALING.md#sol6-luna-browsercode300-20261018).
 
