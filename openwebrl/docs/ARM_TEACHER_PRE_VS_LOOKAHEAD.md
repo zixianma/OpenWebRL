@@ -220,7 +220,7 @@ Eight of these states, three where the K = 3 pick did better (W) and three where
 <details>
 <summary>Review sheets: the screen, both picks, and one matched episode per side</summary>
 
-Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the K = 3 pick (purple box). Then, per side, one real matched episode (a success and a failure when both exist): the next three screens with the action taken on each (orange box), the final answer and the judged outcome.
+Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the K = 3 pick (purple box). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (orange box), how the episode ended, and the judged outcome.
 
 **W1.** WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page.
 

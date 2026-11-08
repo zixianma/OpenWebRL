@@ -1,82 +1,167 @@
 #!/usr/bin/env python3
 """Review sheets: eval states where the pre and K = 3 students split and both picks were played out live (student_outcomes.py).
 
-Each sheet: the task, earlier actions, the current screen with the pre pick (grey box) and the K = 3 pick (purple box), and
-how many matched episodes succeeded after each. Then, per side, one real matched episode (a success and a failure when
-both exist): the next three screens with the action taken on each (orange box), the final answer and the judged outcome.
-W = the K = 3 pick did better, L = worse.
+Each sheet: the task, the current screen with the pre pick (grey box) and the K = 3 pick (purple box), and how many matched
+episodes succeeded after each. Then, per side, one real matched episode whose outcome matches that side's majority: the
+next three screens with the action taken on each (orange box) and the judged outcome. W = the K = 3 pick did better,
+L = worse. Pick labels are written by hand; later actions are summarised from their tool calls.
 
   student_outcome_examples.py  (CPU only; writes outcome-review-*.jpg next to this file)
 """
-import json, glob, base64, io, sys, textwrap
+import base64
+import glob
+import io
+import json
 from pathlib import Path
+import textwrap
+from urllib.parse import urlparse
+
 from PIL import Image, ImageDraw, ImageFont
-RD = '/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/label-kfold-20261101/pre-post-k3/student-replay/'
+
+RD = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/label-kfold-20261101/pre-post-k3/student-replay")
 HERE = Path(__file__).resolve().parent
-EX = {"W1": 2586, "W2": 7262, "W3": 5324, "L1": 2809, "L2": 677, "L3": 6795, "alt-W": 3610, "alt-L": 3000}
-F = lambda s: ImageFont.truetype("/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf", s) if Path("/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf").exists() else ImageFont.load_default()
-st = [json.loads(l) for l in open(RD + 'states.jsonl')]
-pk = {}
-for r in map(json.loads, open(RD + 'picks.jsonl')):
-    if r.get('student'): pk.setdefault(r['i'], {})[r['student']] = r['pick']
-rows = {r['i']: r for r in map(json.loads, open(RD + 'split-outcomes.jsonl'))}
+EX = [  # name, state, site, pre pick, K = 3 pick
+    ("W1", 2586, "Hugging Face", 'click "Documentation" on the 429 page', "go back"),
+    ("W2", 7262, "arXiv", "type into the search box", 'open the "gr-qc" listing'),
+    ("W3", 5324, "Allrecipes", "go to google.com", "new tab: bbcgoodfood.com"),
+    ("L1", 2809, "Hugging Face", 'click "Files and versions"', "go back"),
+    ("L2", 677, "Apple", "scroll down", "go back"),
+    ("L3", 6795, "Apple", "click the search icon", 'click "Entertainment"'),
+    ("alt-W", 3610, "Hugging Face", "search on the 429 page", "go back"),
+    ("alt-L", 3000, "arXiv", 'click "General information"', "scroll down"),
+]
+FONT = "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans{}.ttf"
+F = lambda n, b=False: ImageFont.truetype(FONT.format("-Bold" if b else ""), n)  # noqa: E731
+INK, MUTED, PRE, K3, NEXT = (25, 25, 25), (110, 110, 110), (75, 85, 99), (98, 80, 190), (230, 120, 0)
+GOOD, BAD = (27, 127, 59), (179, 38, 30)
+W = 1800
 
-def shots(trace):
+
+def images(trace):
     att = Path(trace).parent.parent
-    return json.loads(Path(glob.glob(str(att / 'samples' / 'turn' / '*' / '*.json'))[0]).read_text())['images']
+    return json.loads(Path(glob.glob(str(att / "samples" / "turn" / "*" / "*.json"))[0]).read_text())["images"]
 
-def png(images, t):
-    if t >= len(images) or not images[t]: return None
-    return Image.open(io.BytesIO(base64.b64decode(images[t][0].split(',', 1)[1]))).convert('RGB')
 
-def act(a):
-    a = a.replace('<tool_call>', '').replace('</tool_call>', '').replace('<|im_end|>', '').split('\n')
-    return ' ; '.join(x.strip() for x in a if x.strip())
+def png(ims, t):
+    if t >= len(ims) or not ims[t]:
+        return None
+    return Image.open(io.BytesIO(base64.b64decode(ims[t][0].split(",", 1)[1]))).convert("RGB")
 
-def mark(im, a, col):
-    d = ImageDraw.Draw(im); W, H = im.size
-    for line in act(a).split(' ; '):
-        try: c = json.loads(line)
-        except Exception: continue
-        p = (c.get('arguments') or {}).get('point_2d')
-        if p: X, Y = p[0] * W / 1000, p[1] * H / 1000; d.rectangle([X - 40, Y - 18, X + 40, Y + 18], outline=col, width=6)
+
+def calls(a):
+    out = []
+    for x in a.replace("<|im_end|>", "").split("<tool_call>"):
+        x = x.replace("</tool_call>", "").strip()
+        try:
+            out.append(json.loads(x))
+        except ValueError:
+            pass
+    return out
+
+
+def say(a):
+    """Short readable label for an executed response."""
+    parts = []
+    for c in calls(a):
+        n, g = c.get("name"), c.get("arguments") or {}
+        if n == "click":
+            parts.append("click")
+        elif n == "write":
+            parts.append(f'type "{g.get("message", "")[:28]}"')
+        elif n == "press_keys":
+            parts.append("+".join(g.get("keys", [])))
+        elif n == "scroll":
+            parts.append(f'scroll {g.get("direction", "")}')
+        elif n == "go_back":
+            parts.append("go back")
+        elif n == "goto_url":
+            parts.append("open " + urlparse(g.get("url", "")).netloc.replace("www.", ""))
+        elif n == "done":
+            parts.append('answer: "' + textwrap.shorten(g.get("response", ""), 60, placeholder=" …") + '"')
+        elif n in ("new_tab", "switch_tab", "close_tab"):
+            parts.append(n.replace("_", " "))
+        else:
+            parts.append(str(n))
+    return ", ".join(dict.fromkeys(parts)) or "(no action)"
+
+
+def mark(im, a, col, w=8):
+    d = ImageDraw.Draw(im); X0, Y0 = im.size
+    for c in calls(a):
+        p = (c.get("arguments") or {}).get("point_2d")
+        if c.get("name") == "click" and p:
+            x, y = p[0] * X0 / 1000, p[1] * Y0 / 1000
+            d.rectangle([x - 60, y - 26, x + 60, y + 26], outline=col, width=w)
     return im
 
-TW, TH = 760, 470
-for name, i in EX.items():
-    s = st[i]; r = rows[i]; j = r['judge']; turn = s['turn']
-    steps = {x['turn']: x for x in map(json.loads, open(s['trace']))}; x = steps[turn]
-    task = json.loads((Path(s['trace']).parent.parent / 'result.json').read_text())['intent']
-    cur = png(shots(s['trace']), turn)
-    A = {side: x['candidates'][pk[i][f'{j}-{side}']]['action'] for side in ('pre', 'k3')}
-    cur = mark(mark(cur, A['pre'], (60, 60, 60)), A['k3'], (98, 80, 190))
-    lines = []
-    for side in ('pre', 'k3'):
-        eps = r[side]['episodes']
-        pick = [e for e in eps if e['reward'] == 1][:1] + [e for e in eps if e['reward'] != 1][:1]
-        for e in pick: lines.append((side, e))
-    canvas = Image.new("RGB", (TW * 3 + 40, 260 + 2 * TH + len(lines) * (TH + 130)), "white"); d = ImageDraw.Draw(canvas)
-    hist = [act(steps[t]['candidates'][steps[t]['selected_index']]['action'])[:70] for t in range(turn)][-4:]
-    d.text((10, 8), f"{name}  (state {i}, {r['task']}, step {turn + 1}, students: {'GPT-5.5' if j == 'gpt55' else 'Luna'})", fill='black', font=F(26))
-    for k, t in enumerate(textwrap.wrap('Task: ' + task, 150)[:2]): d.text((10, 45 + 30 * k), t, fill='black', font=F(22))
-    d.text((10, 110), 'Previous actions: ' + ' | '.join(hist), fill=(90, 90, 90), font=F(18))
-    d.text((10, 140), f"PRE pick (grey box):  {act(A['pre'])[:150]}   -> {r['pre']['success']}/{r['pre']['n']} episodes succeed", fill=(60, 60, 60), font=F(20))
-    d.text((10, 170), f"K3 pick (purple box): {act(A['k3'])[:150]}   -> {r['k3']['success']}/{r['k3']['n']} episodes succeed", fill=(98, 80, 190), font=F(20))
-    c = cur.copy(); c.thumbnail((TW * 2, TH * 2)); canvas.paste(c, (10, 210)); y = 220 + c.size[1]
-    for side, e in lines:
-        im = shots(e['trace']); es = {x['turn']: x for x in map(json.loads, open(e['trace']))}
-        col = (60, 60, 60) if side == 'pre' else (98, 80, 190)
-        d.text((10, y + 5), f"{side.upper()} branch, one matched episode ({e['root']} {e['run']} {e['slug']}): {'SUCCESS' if e['reward'] == 1 else 'FAILURE'}, {len(es)} steps total", fill=(27, 127, 59) if e['reward'] == 1 else (179, 38, 30), font=F(22))
-        for k in range(3):
-            t = turn + 1 + k; p = png(im, t)
-            if p is None: continue
-            if t in es: p = mark(p, es[t]['candidates'][es[t]['selected_index']]['action'], (230, 120, 0))
-            p.thumbnail((TW - 10, TH)); canvas.paste(p, (10 + k * TW, y + 40))
-            cap = act(es[t]['candidates'][es[t]['selected_index']]['action'])[:95] if t in es else '(end)'
-            for q, ln in enumerate(textwrap.wrap(f"after +{k + 1}: next action {cap}", 70)[:2]): d.text((10 + k * TW, y + 45 + TH + 22 * q), ln, fill='black', font=F(17))
-        last = es[max(es)]; fin = act(last['candidates'][last['selected_index']]['action'])
-        d.text((10, y + TH + 92), 'final action: ' + fin[:200], fill=(90, 90, 90), font=F(16))
-        y += TH + 120
-    out = canvas.crop((0, 0, canvas.size[0], y + 10)); out.thumbnail((1600, 10000))
-    out.save(HERE / f'outcome-review-{name}-{i}.jpg', quality=82, optimize=True)
-    print(name, i, 'done', flush=True)
+
+def fit(im, w):
+    return im.resize((w, int(im.size[1] * w / im.size[0])))
+
+
+def main():
+    st = [json.loads(l) for l in open(RD / "states.jsonl")]
+    pk = {}
+    for r in map(json.loads, open(RD / "picks.jsonl")):
+        if r.get("student"):
+            pk.setdefault(r["i"], {})[r["student"]] = r["pick"]
+    rows = {r["i"]: r for r in map(json.loads, open(RD / "split-outcomes.jsonl"))}
+    for name, i, site, pre_label, k3_label in EX:
+        s, r = st[i], rows[i]; j, turn = r["judge"], s["turn"]
+        steps = {x["turn"]: x for x in map(json.loads, open(s["trace"]))}
+        task = json.loads((Path(s["trace"]).parent.parent / "result.json").read_text())["intent"]
+        act = {side: steps[turn]["candidates"][pk[i][f"{j}-{side}"]]["action"] for side in ("pre", "k3")}
+        cur = mark(mark(png(images(s["trace"]), turn), act["pre"], PRE), act["k3"], K3)
+        canvas = Image.new("RGB", (W, 4000), "white"); d = ImageDraw.Draw(canvas)
+        who = "GPT-5.5" if j == "gpt55" else "Luna"
+        d.text((24, 18), f"{name}  ·  {site}, step {turn + 1}  ·  {who} students", fill=INK, font=F(44, True))
+        y = 84
+        for ln in textwrap.wrap(f"Task: {task}", 72)[:3]:
+            d.text((24, y), ln, fill=INK, font=F(34)); y += 46
+        y += 14
+        cw = 980; c = fit(cur, cw); canvas.paste(c, (24, y))
+        d.rectangle([24, y, 24 + cw, y + c.size[1]], outline=(160, 160, 160), width=2)
+        x0 = 24 + cw + 40; yy = y + 10
+        for side, label, col in (("pre", pre_label, PRE), ("k3", k3_label, K3)):
+            k, n = r[side]["success"], r[side]["n"]
+            d.text((x0, yy), "Pre-exec students pick" if side == "pre" else "Lookahead students pick", fill=col, font=F(32, True))
+            yy += 46
+            for ln in textwrap.wrap(label, 30):
+                d.text((x0, yy), ln, fill=INK, font=F(38, True)); yy += 50
+            d.text((x0, yy), f"{k} of {n} episodes succeed", fill=GOOD if k / n > 0.5 else BAD, font=F(36, True))
+            yy += 90
+        y += max(c.size[1], yy - y) + 40
+        for side, col in (("pre", PRE), ("k3", K3)):
+            eps = r[side]["episodes"]; good = r[side]["success"] / r[side]["n"] > 0.5
+            e = next((e for e in eps if (e["reward"] == 1) == good), eps[0])
+            ims = images(e["trace"]); es = {x["turn"]: x for x in map(json.loads, open(e["trace"]))}
+            ok = e["reward"] == 1
+            d.line([24, y, W - 24, y], fill=(200, 200, 200), width=2); y += 16
+            d.text((24, y), f"After the {'pre-exec' if side == 'pre' else 'lookahead'} pick, one episode:", fill=col, font=F(34, True))
+            d.text((780, y), "SUCCESS" if ok else "FAILURE", fill=GOOD if ok else BAD, font=F(34, True))
+            y += 56
+            tw, gap, hmax = (W - 48 - 2 * 24) // 3, 24, 0
+            for k in range(3):
+                t = turn + 1 + k; p = png(ims, t)
+                if p is None:
+                    continue
+                a = es[t]["candidates"][es[t]["selected_index"]]["action"] if t in es else ""
+                p = fit(mark(p, a, NEXT, 10), tw); x = 24 + k * (tw + gap)
+                canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=(170, 170, 170), width=2)
+                cap = textwrap.wrap(f"then: {say(a)}" if a else "(episode ended)", 30)[:3]
+                for q, ln in enumerate(cap):
+                    d.text((x, y + p.size[1] + 10 + 40 * q), ln, fill=INK, font=F(30))
+                hmax = max(hmax, p.size[1] + 20 + 40 * len(cap))
+            y += hmax + 10
+            last = es[max(es)]
+            if max(es) > turn + 3:
+                d.text((24, y), f"… {max(es) - turn - 3} more steps, then {say(last['candidates'][last['selected_index']]['action'])}",
+                       fill=MUTED, font=F(28)); y += 50
+            y += 20
+        out = canvas.crop((0, 0, W, y)); out.thumbnail((1400, 10000))
+        out.save(HERE / f"outcome-review-{name}-{i}.jpg", quality=85, optimize=True)
+        print(name, i, flush=True)
+
+
+if __name__ == "__main__":
+    main()
