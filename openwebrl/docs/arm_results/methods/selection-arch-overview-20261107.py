@@ -74,8 +74,8 @@ STATE = [r"$s$"]
 CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
 
 
-def axes_labels(x0, top, n_rows, n_cols, cell, row_name, col_name):
-    text(x0 + n_cols * cell / 2, top + 0.20, col_name, color=MUTED, ha="center")
+def axes_labels(x0, top, n_rows, n_cols, cell, row_name, col_name, col_offset=.20):
+    text(x0 + n_cols * cell / 2, top + col_offset, col_name, color=MUTED, ha="center")
     text(x0 - 0.30, top - n_rows * cell / 2, row_name, color=MUTED, ha="center", rotation=90)
 
 
@@ -163,7 +163,7 @@ DCELL, DX, DTOP = 0.19, 5.02, 2.48
 # full candidate reasoning/action text, never the head's projected c_i vectors.
 TOKENS = [r"$p$"] + [rf"$a_t^{{{i}}}$" for i in range(1, K + 1)] + [r"$y$"]
 matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL)
-axes_labels(DX, DTOP, len(TOKENS), len(TOKENS), DCELL, "Queries", "Keys")
+axes_labels(DX, DTOP, len(TOKENS), len(TOKENS), DCELL, "Queries", "Keys", col_offset=.27)
 mid = DX + len(TOKENS) * DCELL / 2
 arrow(mid, DTOP - len(TOKENS) * DCELL - 0.04, mid, 0.66, color=DECODER)
 box(mid - 0.80, 0.36, 1.60, 0.26, edge=DECODER)
