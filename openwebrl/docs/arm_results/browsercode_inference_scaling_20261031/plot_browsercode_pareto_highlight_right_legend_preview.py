@@ -92,7 +92,7 @@ def right_layout(fig, previous=None, height=2.25):
         extra = (3 - footer_box.y0) / fig.dpi / .95 + .02
         assert height + extra < 3.5, "Sidebar unexpectedly exceeds compact figure height"
         return right_layout(fig, previous, height + extra)
-    fig.text(.016, (.22 + .95) / 2, "Valid-only success (%)", rotation=90,
+    fig.text(.016, (.22 + .95) / 2, "Success (%)", rotation=90,
              fontsize=9, ha="center", va="center")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()

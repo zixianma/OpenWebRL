@@ -134,7 +134,7 @@ def build(population="overall"):
     for _ in range(4):
         RIGHT.right_layout(fig, previous=previous, height=height)
         for text in fig.texts:
-            if text.get_text() == "Valid-only success (%)":
+            if text.get_text() in ("Valid-only success (%)", "Success (%)"):
                 text.set_text("Overall success (%)" if population == "overall" else "Shared-task success (%)")
         footer = fig.texts[0]
         if population == "overall":
