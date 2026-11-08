@@ -48,6 +48,8 @@ def right_layout(fig, previous=None, height=2.25):
         text.remove()
     fig.set_size_inches(8.8, height)
     fig.subplots_adjust(left=.065, right=.68, top=.95, bottom=.22, wspace=.10)
+    for ax in fig.axes:
+        ax.set_box_aspect(1)
     fig.axes[0].set_ylabel("")
     sidebar_x, top = .72, .95
     handlers = {Circle: HandlerPatch(patch_func=legend_circle)}
@@ -67,7 +69,7 @@ def right_layout(fig, previous=None, height=2.25):
         legend = fig.legend(handles, labels, title=title, loc="upper left",
                             bbox_to_anchor=(sidebar_x, top), ncol=2, fontsize=8,
                             title_fontsize=9, frameon=False, handlelength=.9,
-                            handletextpad=.4, columnspacing=.8, labelspacing=.25,
+                            handletextpad=.4, columnspacing=.8, labelspacing=.10,
                             borderaxespad=0, alignment="left", handler_map=handlers)
         fig.canvas.draw()
         top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
@@ -75,12 +77,12 @@ def right_layout(fig, previous=None, height=2.25):
     encoding = fig.legend([frontier, cache_handle()], ["Observed frontier", "Cached context"],
                           loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=2,
                           fontsize=8, frameon=False, handlelength=1.2, handletextpad=.4,
-                          columnspacing=.7, labelspacing=.25, borderaxespad=0,
+                          columnspacing=.7, labelspacing=.10, borderaxespad=0,
                           handler_map=handlers)
     fig.canvas.draw()
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
-             "GPT-6 Luna & Sol: high unless xhigh.\nLuna baseline: 12,288 max tokens · 30 steps.\nN=candidates.",
+             "GPT-6 high unless xhigh. N=candidates.\nLuna baseline: 12,288 tokens · 30 steps.",
              fontsize=7.2, color="#555555", va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -112,6 +114,9 @@ def right_layout(fig, previous=None, height=2.25):
         if text.get_visible() and text.get_text():
             box = text.get_window_extent(renderer)
             assert fig.bbox.contains(*box.p0) and fig.bbox.contains(*box.p1), (text.get_text(), tuple(box.bounds), tuple(fig.bbox.bounds))
+    for ax in fig.axes:
+        box = ax.get_window_extent(renderer)
+        assert abs(box.width - box.height) < .01, "Plotting area must be square"
     assert [len(legend.texts) for legend in fig.legends] == [10, 6, 2]
 
 
@@ -142,7 +147,8 @@ def main():
                   population=original_report["population"],
                   comparison_caveats=original_report["comparison_caveats"], points=rows,
                   frontier=frontier,
-                  styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; wider panels; legends and footer on the right; no gridlines",
+                  styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
+                              axes_box_aspect=1,
                               cached="Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Original gray solid rings and dashed links, unchanged",

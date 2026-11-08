@@ -708,7 +708,8 @@
     }
   ],
   "styles": {
-    "layout": "8.8 x 2.712 inches; wider panels; legends and footer on the right; no gridlines",
+    "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
+    "axes_box_aspect": 1,
     "cached": "Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
       "marker": "o",
@@ -733,10 +734,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "6aa6419abb0162acac7d831865943682dedd11687e2d9da24acf1c404e7b38d7",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "d1a4e77a7d7b1acec031a7d91a39f4ddf313000d0ea7cc13ff9dc0c3e9851f85"
   },
-  "renderer_sha256": "e3a914281b11c56f7f9befdb30c0337a4238f8bbe79e12ebc140c828172dcb7f",
+  "renderer_sha256": "97225ae60fa6f68786d6d9678eb9477d645bb851a458405d4d789ecc538f0913",
   "output_sha256": {
-    "png": "fc323dbbec40c86fa85201de5a7d906889b6092e48fc3c4dec8f7e96923b946e",
-    "pdf": "3b290f6e2977f8fa28d12bec20d23af4aa6d3a823a89bc1cbd56be32642683b5",
-    "svg": "2ba22df0f9e587c99eb4acd2b816b72047fb8a15e338647b9f84025335fe76de"
+    "png": "05a5b0f193d3fab0345d14fbfa0f3b6b33dd7a4bb37e00aa2e4c38eeb58a1ef3",
+    "pdf": "aea33e0d045e869520e2f439f761f36f58a2f19baefd497b9a60a296452ce23c",
+    "svg": "50942150d7875759c32c3d483f3a94c99d724f3511749c4ec92c520d59f83f98"
   }
 }
