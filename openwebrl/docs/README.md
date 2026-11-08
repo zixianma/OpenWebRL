@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Live evaluation protocol and code (Online-Mind2Web, WebVoyager, DeepShop): canonical settings, metrics and how to run them](EVAL.md).
+
 [Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3) · [Compact SFT-only cost figure (PDF)](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf).
 
 [Tinker LoRA port: Qwen3.5-9B SFT matches OpenWebRL-4B-SFT; outcome-only RL at lr 3e-6 reaches OM2W 125/300 and DeepShop 66/150 (Terra judge), while lr 1e-5 collapses](TINKER_LORA.md#tinker-rl-results).
