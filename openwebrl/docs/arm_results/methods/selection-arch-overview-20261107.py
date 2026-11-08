@@ -104,16 +104,9 @@ text(1.35, 3.37, r"$s$: context feature" + "\nlast prompt token", size=6.5,
      ha="center", linespacing=1.05)
 text(3.05, 3.37, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5,
      ha="center", linespacing=1.05)
-# The same state/candidate features feed both scoring architectures in each
-# column. Route the buses outside the matrices, clear of their row labels.
-for bus_x, center in ((0.65, 1.675), (2.55, 3.375)):
-    ax.plot([bus_x, bus_x], [3.21, 1.40], color=SHARED, linewidth=.65, zorder=1)
-    arrow(bus_x, 2.82, center, 2.75)
-arrow(.65, 1.56, .75, 1.56)
-for bus_x, inputs in ((.65, (1.09, 1.48)), (2.55, (3.10, 3.65))):
-    ax.plot([bus_x, inputs[-1]], [1.40, 1.40], color=SHARED, linewidth=.65, zorder=1)
-    for input_x in inputs:
-        arrow(input_x, 1.40, input_x, 1.35)
+# Short shared-input connectors replace the long per-input routing buses.
+for center in (1.675, 3.375):
+    ax.plot([center, center], [3.21, 3.03], color=LINE, linewidth=.65)
 CELL = 0.125
 COLS = {"Joint": 1.30, "Independent": 3.00}
 for name, x0 in COLS.items():
@@ -131,26 +124,18 @@ for name, x0 in COLS.items():
 # MLP: show computation rather than token connectivity. Each column uses the
 # same MLP weights for every candidate. The joint difference excludes c_i from
 # the pooled mean and concatenates c_i and s as separate inputs as well.
-text(1.00, 1.56, r"$\{c_j\}_{j\ne i}$", size=6.5, ha="center")
-arrow(1.27, 1.56, 1.47, 1.56)
-box(1.48, 1.47, .48, .18, edge=SHARED, fill=SHARED_BG)
-text(1.72, 1.56, "Mean", size=6.5, ha="center")
-arrow(1.97, 1.56, 2.10, 1.56)
-text(2.24, 1.56, r"$\bar c_{-i}$", ha="center")
-arrow(2.24, 1.49, 2.12, 1.36)
-for center, inputs in (
-        (1.675, ((1.09, r"$c_i$"), (1.48, r"$s$"), (2.12, r"$c_i-\bar c_{-i}$"))),
-        (3.375, ((3.10, r"$c_i$"), (3.65, r"$s$")))):
-    for input_x, label in inputs:
-        text(input_x, 1.28, label, ha="center")
-        arrow(input_x, 1.22, input_x, 1.19)
-    box(center - .65, 1.00, 1.30, .18, edge=SHARED)
-    text(center, 1.09, "Concat", size=6.5, ha="center")
-    arrow(center, .99, center, .89)
+box(.925, 1.45, 1.50, .20, edge=SHARED, fill=SHARED_BG)
+text(1.675, 1.55, r"$\bar c_{-i}=\mathrm{Mean}_{j\ne i}(c_j)$", size=6.5, ha="center")
+arrow(1.675, 1.44, 1.675, 1.31)
+for center, inputs in ((1.675, r"$[c_i, s, c_i-\bar c_{-i}]$"),
+                       (3.375, r"$[c_i, s]$")):
+    box(center - .65, .98, 1.30, .32, edge=SHARED)
+    text(center, 1.14, "Concat\n" + inputs, size=6.5, ha="center", linespacing=1.1)
+    arrow(center, .97, center, .89)
     box(center - .50, .70, 1.00, .18, edge=SHARED)
     text(center, .79, r"Shared MLP $\rightarrow z_i$", size=6.5, ha="center")
-arrow(1.675, .69, 2.03, .63)
-arrow(3.375, .69, 2.55, .63)
+ax.plot([1.675, 1.675, 3.375, 3.375], [.69, .66, .66, .69], color=SHARED, linewidth=.65)
+ax.plot([2.25, 2.25], [.66, .62], color=SHARED, linewidth=.65)
 box(1.45, 0.36, 1.60, 0.26, edge=HEAD)
 text(2.25, 0.49, r"$z_i \rightarrow i^*=\arg\max_i z_i$", color=HEAD, ha="center")
 
