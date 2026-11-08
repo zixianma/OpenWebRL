@@ -71,52 +71,49 @@ def matrix(x0, top, rows, cols, cell, fill_of, row_color=lambda r: INK, col_colo
 STATE = [r"$s$"]
 CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
 
+
+def axes_labels(x0, top, n_rows, n_cols, cell, row_name, col_name):
+    text(x0 + n_cols * cell / 2, top + 0.20, col_name, color=MUTED, ha="center")
+    text(x0 - 0.30, top - n_rows * cell / 2, row_name, color=MUTED, ha="center", rotation=90)
+
+
 box(0.10, 3.30, 6.85, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.95)
-text(3.525, 3.42, r"Shared: state $s$ · $K=5$ candidates $\{c_i\}$ sampled by the frozen SFT actor · one pick executed",
-     color=SHARED, ha="center")
+text(3.525, 3.42, r"state $s$ · $K=5$ candidates $c_i$ from the frozen actor", color=SHARED, ha="center")
 
 # --- left: ADM head on frozen actor features ---------------------------------------------------------------------
-text(2.15, 3.10, "a)  ADM head on frozen actor features", size=8.5, color=HEAD, weight="bold", ha="center")
+text(2.25, 3.08, "a)  ADM head", size=8.5, color=HEAD, weight="bold", ha="center")
 CELL = 0.125
-COLS = {"Joint": 1.22, "Independent": 2.92}
+COLS = {"Joint": 1.30, "Independent": 3.00}
 for name, x0 in COLS.items():
-    text(x0 + 3 * CELL, 2.88, name, size=7.5, color=HEAD if name == "Joint" else DECODER, weight="bold", ha="center")
-ROW_TOPS = {"Transformer\n(2 layers)": 2.62, "MLP\n(depth 2)": 1.70}
-for (row, top), n_rows in zip(ROW_TOPS.items(), (K + 1, K)):
-    text(0.36, top - n_rows * CELL / 2, row, size=7.5, color=INK, weight="bold", ha="center", rotation=90,
-         multialignment="center")
-cand_color = lambda r: INK
+    text(x0 + 3 * CELL, 2.92, name, size=7.5, color=HEAD if name == "Joint" else DECODER, weight="bold", ha="center")
+TTOP, MTOP = 2.48, 1.40
+text(0.28, TTOP - (K + 1) * CELL / 2, "Transformer", size=7.5, weight="bold", ha="center", rotation=90)
+text(0.28, MTOP - K * CELL / 2, "MLP", size=7.5, weight="bold", ha="center", rotation=90)
 for name, x0 in COLS.items():
     joint = name == "Joint"
     # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
-    matrix(x0, ROW_TOPS["Transformer\n(2 layers)"], STATE + CANDS, STATE + CANDS, CELL,
+    matrix(x0, TTOP, STATE + CANDS, STATE + CANDS, CELL,
            lambda r, c, j=joint: ALLOWED_FILL if j or r == c or (r > 0 and c == 0) else MASKED_FILL)
+    axes_labels(x0, TTOP, K + 1, K + 1, CELL, "Queries", "Keys")
     # MLP: the inputs of candidate i's score; jointly the others enter only through their mean
-    matrix(x0, ROW_TOPS["MLP\n(depth 2)"], CANDS, STATE + CANDS, CELL,
+    matrix(x0, MTOP, CANDS, STATE + CANDS, CELL,
            lambda r, c, j=joint: ALLOWED_FILL if c == 0 or c == r + 1 else (POOLED_FILL if j else MASKED_FILL))
-text(COLS["Joint"] + 3 * CELL, 0.94, r"MLP input $[c_i,\ s,\ c_i-\overline{c}_{-i}]$", color=MUTED, ha="center")
-text(COLS["Independent"] + 3 * CELL, 0.94, r"MLP input $[c_i,\ s]$", color=MUTED, ha="center")
-box(0.62, 0.40, 3.22, 0.36, edge=HEAD)
-text(2.23, 0.635, r"logit $z_i$ per candidate · softmax over $K$ · argmax", color=HEAD, ha="center")
-text(2.23, 0.505, "reads actor hidden states (layers 18/27/36) · 22.6 M trained", color=MUTED, ha="center")
+    axes_labels(x0, MTOP, K, K + 1, CELL, "Scored", "Inputs")
+box(1.45, 0.36, 1.60, 0.26, edge=HEAD)
+text(2.25, 0.49, r"$z_i \rightarrow$ softmax over $K$", color=HEAD, ha="center")
 
 # --- right: ADM-4B decoder ---------------------------------------------------------------------------------------
-ax.plot([4.22, 4.22], [0.40, 3.18], color=LINE, linewidth=0.6)
-text(5.62, 3.10, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
-text(5.62, 2.88, "LoRA on a separate OpenWebRL-4B-SFT copy", size=7, color=MUTED, ha="center")
-DCELL, DX, DTOP = 0.155, 5.08, 2.47
+ax.plot([4.30, 4.30], [0.36, 3.18], color=LINE, linewidth=0.6)
+text(5.68, 3.08, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
+text(5.68, 2.92, "separate 4B (LoRA)", size=7.5, color=DECODER, weight="bold", ha="center")
+DCELL, DX, DTOP = 0.19, 5.02, 2.48
 TOKENS = [r"$p$"] + CANDS + [r"$y$"]
 matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL)
-text(DX - 0.36, DTOP - len(TOKENS) * DCELL / 2, "Queries", color=MUTED, ha="center", rotation=90)
-text(DX + len(TOKENS) * DCELL / 2, DTOP + 0.19, "Keys", color=MUTED, ha="center")
+axes_labels(DX, DTOP, len(TOKENS), len(TOKENS), DCELL, "Queries", "Keys")
 mid = DX + len(TOKENS) * DCELL / 2
-text(mid, 1.21, r"$p$: task, history, URL, screenshot", color=MUTED, ha="center")
-text(mid, 1.08, r"$c_i$: numbered candidate (action + reasoning)", color=MUTED, ha="center")
-text(mid, 0.95, r"causal: $c_i$ reads only earlier candidates", color=MUTED, ha="center")
-arrow(mid, 0.89, mid, 0.78, color=DECODER)
-box(mid - 1.00, 0.40, 2.00, 0.36, edge=DECODER)
-text(mid, 0.635, r'$y$ generates {"selection": $i$} (JSON schema)', color=DECODER, ha="center")
-text(mid, 0.505, "separate 4B pass over prompt + candidates", color=MUTED, ha="center")
+arrow(mid, DTOP - len(TOKENS) * DCELL - 0.04, mid, 0.66, color=DECODER)
+box(mid - 0.80, 0.36, 1.60, 0.26, edge=DECODER)
+text(mid, 0.49, r'$y \rightarrow$ {"selection": $i$}', color=DECODER, ha="center")
 
 # Right-aligned legend; cells encode connectivity, not values.
 legend_right = 6.95
