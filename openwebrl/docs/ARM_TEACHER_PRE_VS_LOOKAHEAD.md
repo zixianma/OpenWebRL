@@ -187,7 +187,7 @@ K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 - **Disagreements are often small:** of the 797 consistent label-split states, 278 change the action type. The rest are mostly clicks on different targets, or the same action type with different arguments (for example scroll 0.5 vs 0.7).
 - **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the K = 3 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 K = 3 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
 - **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a K = 3 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
-- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`).
+- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py) · [student_candidate_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_candidate_outcomes.py) · [student_minority_examples.py](arm_results/luna_pre_post_k3_20261105/student_minority_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`, all candidates: `student-replay/candidate-outcomes.jsonl`).
 </details>
 
 #### Outcomes where both picks were played out (eval states only)
@@ -253,6 +253,89 @@ Each sheet shows the task, earlier actions, and the current screen with the pre 
 **alt-L.** WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog.
 
 ![alt-L: WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog. Pre pick click footer "General information" (5/5 succeed), K = 3 pick scroll (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-L-3000.jpg)
+
+</details>
+
+<a id="luna-pre-k3-minority-picks-20261107"></a>
+
+**All candidates: minority picks that did better.** These examples use the same matching, but for every distinct action among the five candidates, not just the two picks. A minority pick is a student's pick that got fewer of the five proposals than the state's unique most-proposed action. On average, minority picks do no better than the majority action.
+
+| Student | States (both played out) | Minority pick | Majority action | Minority − majority, pp [95% CI] | Better | Worse | Tied |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Any student | 401 | 40.4% | 39.9% | +0.5 [−3.3, +4.4] | 81 | 88 | 232 |
+| Pre Luna | 288 | 38.5% | 39.0% | −0.5 [−4.8, +4.0] | 52 | 60 | 176 |
+| K = 3 Luna | 304 | 37.0% | 38.6% | −1.7 [−6.0, +2.8] | 55 | 67 | 182 |
+| Pre GPT-5.5 | 264 | 36.9% | 36.5% | +0.5 [−4.4, +5.5] | 54 | 57 | 153 |
+| K = 3 GPT-5.5 | 263 | 40.8% | 41.3% | −0.5 [−5.0, +4.2] | 51 | 52 | 160 |
+
+*819 of 7,999 replayed states have two or more distinct candidates played out; [candidate-outcomes.json](arm_results/luna_pre_post_k3_20261105/candidate-outcomes.json). Most minority picks are singletons, proposed by one of the five candidates.*
+
+The sheets below show every state where a minority pick did at least 50 points better than the majority action. The majority action had to be played out in at least two episodes, and the pick could not be a near-copy of it (same calls, clicks within 30/1000, same scroll direction and text). M sheets: the pick was played out in two or more episodes. S sheets: in one episode only, so anecdotal. Each sheet shows every candidate: lettered boxes on the screen, how many of the five proposals each got, which students picked it, and its matched outcomes. Then one episode after the pick and one after the majority action.
+
+| Sheet | State | Minority pick | Proposals | Picked by | Succeed | Majority action | Proposals | Succeed |
+| --- | --- | --- | ---: | --- | ---: | --- | ---: | ---: |
+| [M1](arm_results/luna_pre_post_k3_20261105/minority-review-M1-2634.jpg) | WebVoyager Allrecipes--2, step 1 (blocked page) | new tab, open foodnetwork.com | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 3/3 | new tab | 2 | 0/2 |
+| [M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg) | WebVoyager Huggingface--0, step 6 | click "Files and versions" | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 2/2 | go back | 3 | 0/2 |
+| [M3](arm_results/luna_pre_post_k3_20261105/minority-review-M3-2836.jpg) | WebVoyager Google Flights--16, step 3 | click "Tokyo, Japan" (other spot) | 1 | pre Luna, K3 Luna | 2/2 | click "Tokyo, Japan" | 2 | 2/4 |
+| [M4](arm_results/luna_pre_post_k3_20261105/minority-review-M4-7006.jpg) | WebVoyager ArXiv--13, step 1 | click the search icon (only) | 1 | K3 Luna | 3/3 | click the search box, type "SimCSE" | 2 | 3/12 |
+| [M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg) | WebVoyager ArXiv--23, step 1 | scroll down | 1 | K3 GPT-5.5 | 3/6 | click the search icon | 2 | 0/3 |
+| [S1](arm_results/luna_pre_post_k3_20261105/minority-review-S1-208.jpg) | OM2W 1ab384fb, step 2 | click "Physics" (other spot) | 1 | pre Luna, K3 GPT-5.5 | 1/1 | click "Physics" | 2 | 1/12 |
+| [S2](arm_results/luna_pre_post_k3_20261105/minority-review-S2-1678.jpg) | WebVoyager Huggingface--37, step 1 | click "Datasets" | 1 | pre Luna, K3 Luna, K3 GPT-5.5 | 1/1 | click "Docs" | 4 | 1/2 |
+| [S3](arm_results/luna_pre_post_k3_20261105/minority-review-S3-2844.jpg) | WebVoyager ArXiv--23, step 1 | click the search box, type (no Enter) | 1 | K3 GPT-5.5 | 1/1 | click, type, Enter | 2 | 1/5 |
+| [S4](arm_results/luna_pre_post_k3_20261105/minority-review-S4-2914.jpg) | WebVoyager ArXiv--12, step 6 | scroll down, click | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 1/1 | click "Store" | 2 | 0/3 |
+| [S5](arm_results/luna_pre_post_k3_20261105/minority-review-S5-3036.jpg) | WebVoyager ArXiv--26, step 1 | click the Astrophysics link | 1 | K3 Luna | 1/1 | click the search box, type the query | 3 | 3/15 |
+| [S6](arm_results/luna_pre_post_k3_20261105/minority-review-S6-3088.jpg) | WebVoyager Huggingface--12, step 2 | scroll down | 1 | K3 Luna | 1/1 | go back | 3 | 0/2 |
+| [S7](arm_results/luna_pre_post_k3_20261105/minority-review-S7-3422.jpg) | WebVoyager Allrecipes--1, step 4 | click the sorting dropdown | 1 | pre Luna, pre GPT-5.5 | 1/1 | click | 3 | 1/3 |
+| [S8](arm_results/luna_pre_post_k3_20261105/minority-review-S8-4425.jpg) | OM2W 905cb530, step 1 | click the search field, type "dermatologist" | 1 | K3 Luna, pre GPT-5.5 | 1/1 | click "Accept" | 3 | 2/4 |
+| [S9](arm_results/luna_pre_post_k3_20261105/minority-review-S9-4900.jpg) | WebVoyager Google Flights--14, step 6 | click "London, United Kingdom" | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 1/1 | click the first option | 2 | 0/4 |
+| [S10](arm_results/luna_pre_post_k3_20261105/minority-review-S10-5042.jpg) | WebVoyager ArXiv--29, step 5 (blank page) | open arxiv.org | 1 | all four | 1/1 | go back | 3 | 0/3 |
+| [S11](arm_results/luna_pre_post_k3_20261105/minority-review-S11-5592.jpg) | WebVoyager Allrecipes--15, step 1 | reload (F5) | 1 | all four | 1/1 | go back | 3 | 0/2 |
+| [S12](arm_results/luna_pre_post_k3_20261105/minority-review-S12-6649.jpg) | WebVoyager Wolfram Alpha--29, step 1 | type "cat curve", Enter (no click) | 1 | K3 Luna, K3 GPT-5.5 | 1/1 | click the input, type "cat curve", Enter | 2 | 0/2 |
+| [S13](arm_results/luna_pre_post_k3_20261105/minority-review-S13-7306.jpg) | WebVoyager Huggingface--28, step 4 | answer | 1 | K3 GPT-5.5 | 1/1 | scroll down | 3 | 1/2 |
+| [S14](arm_results/luna_pre_post_k3_20261105/minority-review-S14-7400.jpg) | WebVoyager Google Flights--23, step 1 | click, type "Mumbai", type "Vancouver" | 1 | K3 GPT-5.5 | 1/1 | click | 2 | 2/6 |
+
+<details>
+<summary>Review sheets: all five candidates, with outcomes, where a minority pick did better</summary>
+
+Lettered boxes mark each click candidate's target on the current screen; the right column lists every distinct candidate action (A = most proposed). Below are one matched episode after the minority pick and one after the majority action, with the next three screens (amber box = action taken).
+
+![M1](arm_results/luna_pre_post_k3_20261105/minority-review-M1-2634.jpg)
+
+![M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg)
+
+![M3](arm_results/luna_pre_post_k3_20261105/minority-review-M3-2836.jpg)
+
+![M4](arm_results/luna_pre_post_k3_20261105/minority-review-M4-7006.jpg)
+
+![M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg)
+
+![S1](arm_results/luna_pre_post_k3_20261105/minority-review-S1-208.jpg)
+
+![S2](arm_results/luna_pre_post_k3_20261105/minority-review-S2-1678.jpg)
+
+![S3](arm_results/luna_pre_post_k3_20261105/minority-review-S3-2844.jpg)
+
+![S4](arm_results/luna_pre_post_k3_20261105/minority-review-S4-2914.jpg)
+
+![S5](arm_results/luna_pre_post_k3_20261105/minority-review-S5-3036.jpg)
+
+![S6](arm_results/luna_pre_post_k3_20261105/minority-review-S6-3088.jpg)
+
+![S7](arm_results/luna_pre_post_k3_20261105/minority-review-S7-3422.jpg)
+
+![S8](arm_results/luna_pre_post_k3_20261105/minority-review-S8-4425.jpg)
+
+![S9](arm_results/luna_pre_post_k3_20261105/minority-review-S9-4900.jpg)
+
+![S10](arm_results/luna_pre_post_k3_20261105/minority-review-S10-5042.jpg)
+
+![S11](arm_results/luna_pre_post_k3_20261105/minority-review-S11-5592.jpg)
+
+![S12](arm_results/luna_pre_post_k3_20261105/minority-review-S12-6649.jpg)
+
+![S13](arm_results/luna_pre_post_k3_20261105/minority-review-S13-7306.jpg)
+
+![S14](arm_results/luna_pre_post_k3_20261105/minority-review-S14-7400.jpg)
 
 </details>
 

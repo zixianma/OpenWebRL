@@ -1,0 +1,91 @@
+{
+ "note": "Outcome of every candidate action on replayed eval states, from live eval episodes only (no new rollouts).",
+ "roots": [
+  "p16-lora-lunapre-20261103",
+  "p16-lora-lunak3-20261103",
+  "p16-heads-luna-20261103",
+  "p16-heads-all-20261102",
+  "p16-lora-pre-20261102",
+  "p16-lora-20261101",
+  "controls-sameday-20261103",
+  "sameday-lora-20261104"
+ ],
+ "episodes_scanned": 40755,
+ "states": 7999,
+ "states_two_actions_played": 819,
+ "luna-pre": {
+  "states": 288,
+  "tasks": 204,
+  "singleton_picks": 250,
+  "minority_pick_success": 38.5,
+  "majority_success": 39.0,
+  "minority_minus_majority": [
+   -0.5,
+   -4.8,
+   4.0
+  ],
+  "better": 52,
+  "worse": 60,
+  "tied": 176
+ },
+ "luna-k3": {
+  "states": 304,
+  "tasks": 220,
+  "singleton_picks": 258,
+  "minority_pick_success": 37.0,
+  "majority_success": 38.6,
+  "minority_minus_majority": [
+   -1.7,
+   -6.0,
+   2.8
+  ],
+  "better": 55,
+  "worse": 67,
+  "tied": 182
+ },
+ "gpt55-pre": {
+  "states": 264,
+  "tasks": 192,
+  "singleton_picks": 232,
+  "minority_pick_success": 36.9,
+  "majority_success": 36.5,
+  "minority_minus_majority": [
+   0.5,
+   -4.4,
+   5.5
+  ],
+  "better": 54,
+  "worse": 57,
+  "tied": 153
+ },
+ "gpt55-k3": {
+  "states": 263,
+  "tasks": 203,
+  "singleton_picks": 222,
+  "minority_pick_success": 40.8,
+  "majority_success": 41.3,
+  "minority_minus_majority": [
+   -0.5,
+   -5.0,
+   4.2
+  ],
+  "better": 51,
+  "worse": 52,
+  "tied": 160
+ },
+ "any": {
+  "states": 401,
+  "tasks": 264,
+  "singleton_picks": 339,
+  "minority_pick_success": 40.4,
+  "majority_success": 39.9,
+  "minority_minus_majority": [
+   0.5,
+   -3.3,
+   4.4
+  ],
+  "better": 81,
+  "worse": 88,
+  "tied": 232
+ }
+}
