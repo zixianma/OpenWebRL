@@ -2,6 +2,8 @@
 
 [Live evaluation protocol and code (Online-Mind2Web, WebVoyager, DeepShop): canonical settings, metrics and how to run them](EVAL.md).
 
+[Online RL with ARM turn credit, main-paper set: method and results tables, validation and training-success small multiples, matched iteration-90 comparison](ARM_FINAL_RESULTS.md#final-rl-arm-turn-credit-20261108).
+
 [Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3) · [Compact SFT-only cost figure (PDF)](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf).
 
 [Tinker LoRA port: Qwen3.5-9B SFT matches OpenWebRL-4B-SFT; outcome-only RL at lr 3e-6 reaches OM2W 125/300 and DeepShop 66/150 (Terra judge), while lr 1e-5 collapses](TINKER_LORA.md#tinker-rl-results).
@@ -151,7 +153,6 @@ for the work you are doing, then follow its contents to dated experiment records
 
 | Document | Contents |
 | --- | --- |
-| [arm_final_results.md](arm_final_results.md) | Main-paper ARM RL candidate set (runs trained to ≥ 60 iterations): method table, validation and training-success small multiples, matched iteration-90 comparison, aggregate data and plotting script |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results; presentation figures for the three stages and RL variants; static/interactive plots; collapsed WebVoyager results |
 | [ARM_FORMULATIONS.md](ARM_FORMULATIONS.md) | Branching experiment map; matched pre/post evidence, held-out outcome selection, continuation scaling, teacher-trained heads and planned student controls |
 | [ARM_BRANCH_STATES_COLLECTION.md](ARM_BRANCH_STATES_COLLECTION.md) | How branch states are reached and re-opened: every prefix is the actor checkpoint's own rollout (no SFT-demonstration trajectories); live replay versus the record-and-replay prototype (mitmproxy recording, deterministic browser, live after release); feasibility test and production release rates |

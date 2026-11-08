@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plot the main-paper ARM RL figures from the published aggregate JSON.
 
-Reads openwebrl/docs/arm_final_results/arm_final_results_data.json only (no
+Reads openwebrl/docs/arm_results/rl_final_20261108/arm_final_results_data.json only (no
 runtime paths or trajectories) and writes validation and training-success
 small multiples as PNG and PDF. Each panel holds at most three series, so the
 categorical colors stay distinguishable under color-vision deficiency.
@@ -13,7 +13,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-OUT = Path(__file__).resolve().parents[1] / 'openwebrl/docs/arm_final_results'
+OUT = Path(__file__).resolve().parents[1] / 'openwebrl/docs/arm_results/rl_final_20261108'
 DATA = json.loads((OUT / 'arm_final_results_data.json').read_text())
 RUNS = {r['key']: r for r in DATA['runs']}
 
