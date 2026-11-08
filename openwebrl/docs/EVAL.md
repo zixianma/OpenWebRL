@@ -12,7 +12,7 @@ The code on `arm` is the exact version those runs used. Each eval plan records s
 - **Selectors.**
   - Piotr's SelectionARM: revision `81b452d800d9f859687074f82680dd5257e02d89`.
   - Our Recipe 2 4B LoRA: `zixianma/action-selection-heads/decoder-4b-lora-recipe2-2.6k`.
-  - The Recipe 3 heads and the default ADM (the Recipe 3 + WebArbiter LoRA) are not public yet.
+  - The default selector (below) and the Recipe 3 heads are not public yet.
 - **Judge API.** An OpenAI key with access to gpt-5.6-terra and gpt-4o, in `JUDGE_API_KEY` or as `OPENAI_API_KEY` in the repository's `.env`. Rollouts run without it, but no episode is judged.
 - **Hardware.** One H200, or another GPU with about 140 GB, per benchmark job. It hosts the actor and any selector on the same GPU.
 
@@ -67,8 +67,12 @@ sbatch scripts/eval/rejudge.sbatch 100 /path/run1/deepshop/sft1/deepshop /path/r
   - `sft1`: the actor alone.
   - `head5:<head.pt>`: a selection head that reads the actor's hidden states, captured inside the actor server.
   - `head5x:<head.pt>`: the same head with a separate encoder pass.
-  - `arm5:<merged dir>`: a SelectionARM-style 4B decoder, for example the default ADM.
+  - `arm5:<merged dir>`: a SelectionARM-style 4B decoder.
   - `piotr5`: Piotr's released SelectionARM.
+- **Default selector.** The Recipe 3 GPT-5.5 K=3 decoder: a LoRA on OpenWebRL-4B-SFT trained on 32,974 examples, Piotr-style panels labelled by GPT-5.5 with three-step lookahead.
+  - Condition: `arm5:/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/lora/lora/merged`, harness slug `arm5-9fadc8dc4655`.
+  - It ran as the November 6 same-window reference: 45.2% mean overall, +5.8 pp [+3.5, +8.1] over SFT ([table](ARM_FINAL_RESULTS.md#final-selection-recipe3-data-ablations-20261105)).
+  - Use it as the selector reference unless a comparison needs another.
 - **Resuming.** A job that crashes resumes from its saved records when you resubmit the same `launch-<benchmark>-defer.sbatch`. The usual cause is an intermittent CUDA illegal-address error, in about 1 of 15 jobs.
 - **Analysis.** It must refuse records whose `judge_text` is still `DEFERRED`, or "All judge API retry attempts exhausted.".
 - **Judge credentials.** The judge key comes from `JUDGE_API_KEY` or the repository's `.env`, and is never logged. The daily ledger is shared by every copy of the wrapper.
