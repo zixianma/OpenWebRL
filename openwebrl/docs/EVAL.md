@@ -4,6 +4,18 @@ This is the canonical protocol behind every live selector and actor result since
 
 The code on `arm` is the exact version those runs used. Each eval plan records sha256 digests of 16 source files, and every file on `arm` matches the digests in the November 7 plans.
 
+## What you need
+
+- **Code.** Everything on `arm`. A clean export of `arm` imports the full harness: all 53 repository modules it loads match the tree that ran the November 6-7 evals, except `slime/rollout/sglang_rollout.py`. That file differs only by RL-rescue code that is off unless `OPENWEBRL_ARM_RESCUE_CONFIG` is set.
+- **Software.** `requirements.txt` pins sglang 0.5.6.post2. We ran transformers 4.57.1 and torch 2.9.1+cu129. Neither is pinned there, so install those versions explicitly.
+- **Actor.** [`OpenWebRL/OpenWebRL-4B-SFT`](https://huggingface.co/OpenWebRL/OpenWebRL-4B-SFT), revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`.
+- **Selectors.**
+  - Piotr's SelectionARM: revision `81b452d800d9f859687074f82680dd5257e02d89`.
+  - Our Recipe 2 4B LoRA: `zixianma/action-selection-heads/decoder-4b-lora-recipe2-2.6k`.
+  - The Recipe 3 heads and the default ADM (the Recipe 3 + WebArbiter LoRA) are not public yet.
+- **Judge API.** An OpenAI key with access to gpt-5.6-terra and gpt-4o, in `JUDGE_API_KEY` or as `OPENAI_API_KEY` in the repository's `.env`. Rollouts run without it, but no episode is judged.
+- **Hardware.** One H200, or another GPU with about 140 GB, per benchmark job. It hosts the actor and any selector on the same GPU.
+
 ## Protocol
 
 | | Online-Mind2Web | WebVoyager | DeepShop |
