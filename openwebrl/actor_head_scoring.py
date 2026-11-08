@@ -71,15 +71,18 @@ def candidate_features(gen, tail, tokenizer, layers, pools):
     return state, pool_candidate(hidden, spans, layers, pools), dict(aligned=aligned, tokens=len(ids), approximated=approximated)
 
 
-def score(head, config, states_features):
-    """states_features: list of (state, features) for the five candidates; returns head logits (list of floats)."""
+def score(head, config, states_features, score_head="select"):
+    """Score five candidates with the output trained by the saved objective."""
+    if score_head not in ("select", "value"):
+        raise ValueError(f"Unknown saved head output: {score_head}")
     state = states_features[0][0]
     feats = torch.stack([f for _, f in states_features]).float()
     # offline features were stored as float16 before scoring; round identically
     feats = feats.to(torch.float16).to(torch.float32)
     s = state.float().to(torch.float16).to(torch.float32)
     with torch.no_grad():
-        logits = head(feats.reshape(1, len(states_features), -1), s.reshape(1, -1))[0][0]
+        outputs = head(feats.reshape(1, len(states_features), -1), s.reshape(1, -1))
+        logits = outputs[1 if score_head == "value" else 0][0]
     return [float(x) for x in logits]
 
 
@@ -94,9 +97,13 @@ def bundle(head_path, tokenizer_path):
         from transformers import AutoTokenizer
         from openwebrl.selection_head import CandidateSetHead, HeadConfig
         saved = torch.load(head_path, map_location="cpu")
+        objective = saved.get("objective", "soft_ce")
+        if objective not in ("soft_ce", "pairwise_teacher"):
+            raise ValueError(f"Unsupported saved head objective: {objective}")
         config = HeadConfig.from_json(saved["config"])
         head = CandidateSetHead(config); head.load_state_dict(saved["state_dict"]); head.eval()
-        _BUNDLE[key] = dict(head=head, config=config, tokenizer=AutoTokenizer.from_pretrained(tokenizer_path, local_files_only=True),
+        _BUNDLE[key] = dict(head=head, config=config, score_head="value" if objective == "pairwise_teacher" else "select",
+                            tokenizer=AutoTokenizer.from_pretrained(tokenizer_path, local_files_only=True),
                             head_params=sum(p.numel() for p in head.parameters()),
                             head_sha256=hashlib.sha256(Path(head_path).read_bytes()).hexdigest())
     return _BUNDLE[key]
@@ -138,7 +145,7 @@ async def score_cached(gens, metas, rids, *, head_path, tokenizer_path, capture_
         return [candidate_features(gen, None if meta is None else load_export(capture_dir, rid + "-tail"), tok,
                                    config.layers, config.pools) for gen, meta, rid in zip(gens, metas, rids)]
     cap = await asyncio.to_thread(features)
-    scores = score(b["head"], config, [(s, f) for s, f, _ in cap])
+    scores = score(b["head"], config, [(s, f) for s, f, _ in cap], score_head=b["score_head"])
     tails = [m for m in metas if m is not None]
     uncached = sum(m["prompt_tokens"] - (m.get("cached_tokens") or 0) for m in tails)
     sampled = sum(m.get("completion_tokens", 1) for m in tails) + (len(metas) - len(tails))   # extra decode step each

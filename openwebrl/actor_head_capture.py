@@ -24,6 +24,15 @@ size, the hooks instead record a copy of the residual stream into a fixed per-(b
 graph; the patched `CudaGraphRunner.replay` then turns that buffer into a record for the real batch. sglang captures
 its graphs before it registers forward hooks, so the first decode replay re-captures them once with the hooks active.
 Prefill/extend forwards (never graphed here) keep the eager hook path.
+
+Speculative decoding (sglang NGRAM): each step is a TARGET_VERIFY forward over a tree of draft_token_num tokens per
+request (the last sampled token as root, then guesses). The hooks keep every row of that forward (eager or from the
+graph buffer); after sglang accepts a path, the patched `NgramVerifyInput._fill_requests` keeps only the accepted rows
+(root plus accepted guesses, at positions seq_len + j) and releases the rest. Rejected guesses are never indexed, so
+exported states are exactly those of tokens fed on the accepted path, as in plain decoding.
+A deferred end token that closes an accepted path is held one more step: sglang re-checks finish after the verify
+step without appending a token, which would otherwise end the request before <|im_end|> is fed.
+Parity (2026-10-24, job 386218, T 1.0, CUDA graphs): 39/40 picks, min feature cosine 0.9978, all 200 candidates complete.
 """
 from collections import OrderedDict
 import os
@@ -53,6 +62,8 @@ def _plan(fb):
         return None
     if mode.is_decode():
         return dict(pool=fb.req_pool_indices, req_of=None, positions=[int(n) - 1 for n in fb.seq_lens_cpu.tolist()], index=None)
+    if mode.is_target_verify():                      # positions are attached once sglang accepts a path
+        return dict(pool=fb.req_pool_indices, req_of=None, positions=None, index=None, pending=True)
     keep_all = os.environ.get("ACTORHEAD_EXTEND") == "all"     # parity tests only: keep every extend token
     positions, index, req_of, row = [], [], [], 0
     for k, (prefix, length) in enumerate(zip(fb.extend_prefix_lens_cpu, fb.extend_seq_lens_cpu)):
@@ -93,6 +104,8 @@ def factory(config):
             _state["current"] = None if plan is None else dict(plan, rows={})
             if plan is not None:
                 _append(_state["current"])
+                if plan.get("pending"):
+                    _state["verify"] = _state["current"]
         record = _state["current"]
         if record is None:
             return
@@ -144,6 +157,19 @@ def _patch_graph_runner():
             record["event"] = torch.cuda.Event()
             record["event"].record()
             _append(record)
+        elif forward_batch.forward_mode.is_target_verify():
+            rows = self.bs * self.num_tokens_per_bs
+            if all((rows, l) in _static for l in _state["layers"]):
+                n = self.raw_bs * self.num_tokens_per_bs
+                pool = forward_batch.req_pool_indices
+                pool_cpu = torch.empty(pool.shape, dtype=pool.dtype, pin_memory=True)
+                pool_cpu.copy_(pool, non_blocking=True)
+                record = dict(pool_cpu=pool_cpu, req_of=None, index=None, positions=None, pending=True,
+                              rows={l: _static[(rows, l)][:n].clone() for l in _state["layers"]})
+                record["event"] = torch.cuda.Event()
+                record["event"].record()
+                _append(record)
+                _state["verify"] = record
         return out
 
     CudaGraphRunner.capture = capture_with_buffers
@@ -157,7 +183,7 @@ def _refresh_index(block=False):
         pending = [(i, r) for i, r in _records.items() if i > _state["indexed"]]
     for i, record in pending:
         event = record.get("event")
-        if event is None or not (event.query() or (block and event.synchronize() is None)):
+        if record.get("pending") or event is None or not (event.query() or (block and event.synchronize() is None)):
             break
         pool = record["pool_cpu"].tolist()
         slots = pool if record["req_of"] is None else [pool[k] for k in record["req_of"]]
@@ -194,7 +220,7 @@ def _export(req):
     rows = _gather(req.req_pool_idx, positions)
     complete = n - 1 in rows if tail else len(rows) == len(positions)
     payload = dict(rid=req.rid, layers=_state["layers"], complete=complete, input_len=n, output_ids=list(req.output_ids),
-                   final_fed=getattr(req, "_actorhead_deferred", False),
+                   final_fed=bool(getattr(req, "_actorhead_deferred", False)),
                    input_tail_ids=list(req.origin_input_ids[-TAIL:]), positions=sorted(rows))
     if rows:
         if _state["side"] is None:
@@ -255,13 +281,48 @@ def _patch_scheduler():
     check_finished = Req.check_finished
 
     def check_finished_after_feeding_end(self, *args, **kwargs):
+        if self.to_finish is not None and getattr(self, "_actorhead_deferred", None) == len(self.output_ids):
+            return      # no token appended since the deferral (speculative decoding re-checks after its verify step)
         check_finished(self, *args, **kwargs)
         if (self.finished_reason is not None and not getattr(self, "_actorhead_deferred", False)
                 and self.rid.startswith(PREFIX) and not self.rid.endswith("-tail")
                 and len(self.output_ids) < self.sampling_params.max_new_tokens
                 and type(self.finished_reason).__name__ in ("FINISH_MATCHED_TOKEN", "FINISH_MATCHED_STR")):
             # finish one decode step later so the end token is fed through the model and its hidden state captured
-            self.to_finish, self.finished_reason, self._actorhead_deferred = self.finished_reason, None, True
+            self.to_finish, self.finished_reason, self._actorhead_deferred = self.finished_reason, None, len(self.output_ids)
 
     Req.check_finished = check_finished_after_feeding_end
+    _patch_ngram()
     _state["patched"] = True
+
+
+def _patch_ngram():
+    """Keep only the accepted rows of each TARGET_VERIFY record (see the module docstring)."""
+    try:
+        from sglang.srt.speculative.ngram_info import NgramVerifyInput
+    except ImportError:
+        return
+    fill = NgramVerifyInput._fill_requests
+
+    def fill_and_select(self, batch, logits_output, *args, **kwargs):
+        out = fill(self, batch, logits_output, *args, **kwargs)
+        record, _state["verify"] = _state.get("verify"), None
+        if record is not None:
+            # after fill: accept_index is flat (rows into the bs x draft_token_num forward), accept_length per request;
+            # batch.seq_lens are still the pre-verify lengths, i.e. the root token's position
+            counts = (self.accept_length + 1).tolist()
+            starts = batch.seq_lens_cpu.tolist()
+            req_of, positions = [], []
+            if len(counts) == len(starts) == len(record["pool_cpu"]) and sum(counts) == self.accept_index.numel():
+                for k, (c, s) in enumerate(zip(counts, starts)):
+                    req_of += [k] * c; positions += [s + j for j in range(c)]
+                index = self.accept_index.to(torch.int64)
+            else:                                    # unexpected layout: index nothing (exports report complete=False)
+                index = self.accept_index.new_zeros(0, dtype=torch.int64)
+            record["rows"] = {l: v.index_select(0, index) for l, v in record["rows"].items()}
+            record.update(req_of=req_of, positions=positions, pending=False)
+            record["event"] = torch.cuda.Event()
+            record["event"].record()
+        return out
+
+    NgramVerifyInput._fill_requests = fill_and_select

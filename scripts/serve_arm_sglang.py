@@ -23,11 +23,11 @@ SELECTION = Path("/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection/81b452d8
 SOURCE_ROOT = "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/source"
 
 
-def assemble(out):
+def assemble(out, selection=SELECTION):
     out.mkdir(parents=True, exist_ok=True)
-    for f in SELECTION.glob("model-*.safetensors"):
+    for f in selection.glob("model-*.safetensors"):
         (out / f.name).unlink(missing_ok=True); (out / f.name).symlink_to(f)
-    shutil.copy(SELECTION / "model.safetensors.index.json", out)
+    shutil.copy(selection / "model.safetensors.index.json", out)
     for name in ("config.json", "generation_config.json", "tokenizer.json", "tokenizer_config.json", "chat_template.jinja",
                  "chat_template.json", "merges.txt", "vocab.json", "processor_config.json", "video_preprocessor_config.json"):
         if (BASE / name).exists():
@@ -36,7 +36,7 @@ def assemble(out):
     pre["size"] = {"shortest_edge": 65536, "longest_edge": 262144}      # serve_arm.py: min_pixels / max_pixels
     pre["min_pixels"], pre["max_pixels"] = 65536, 262144
     (out / "preprocessor_config.json").write_text(json.dumps(pre, indent=2))
-    print(json.dumps(dict(assembled=str(out), weights=str(SELECTION), config=str(BASE))))
+    print(json.dumps(dict(assembled=str(out), weights=str(selection), config=str(BASE))))
 
 
 def serve(args):
@@ -53,7 +53,7 @@ def serve(args):
 
     @app.get("/health")
     def health():
-        return {"mode": "selection", "model": str(SELECTION), "base": str(BASE), "adapter": None, "max_pixels": 262144,
+        return {"mode": "selection", "model": str(args.model), "base": str(BASE), "adapter": None, "max_pixels": 262144,
                 "serving": "sglang", "selection_decoding": "canonical_no_cot_json_schema/xgrammar(sglang)"}
 
     @app.post("/select")
@@ -84,10 +84,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     sub = ap.add_subparsers(dest="command", required=True)
     a = sub.add_parser("assemble"); a.add_argument("--out", type=Path, required=True)
+    a.add_argument("--selection", type=Path, default=SELECTION, help="merged SelectionARM weights (default: Piotr's release)")
     s = sub.add_parser("serve"); s.add_argument("--sglang", required=True); s.add_argument("--port", type=int, required=True)
+    s.add_argument("--model", type=Path, default=SELECTION, help="weights the sglang server runs (reported by /health)")
     s.add_argument("--max-new-tokens", type=int, default=128); s.add_argument("--timeout", type=float, default=180)
     args = ap.parse_args()
-    assemble(args.out) if args.command == "assemble" else serve(args)
+    assemble(args.out, args.selection) if args.command == "assemble" else serve(args)
 
 
 if __name__ == "__main__":

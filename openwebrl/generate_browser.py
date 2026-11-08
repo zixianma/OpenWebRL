@@ -364,6 +364,40 @@ def _compress_assistant_history_text(text: str, mode: str, args: Any) -> str:
     )
 
 
+_OBSERVATION_BLOCK_RE = re.compile(r"\s*<observation>.*?(?:</observation>|$)", re.DOTALL)
+
+
+def _window_turn_history_messages(messages: list[dict[str, Any]], full_turns: int, args: Any) -> list[dict[str, Any]]:
+    """
+    ``browser_history_full_turns`` (N > 0): keep the latest N assistant turns and their feedback unchanged; reduce
+    every older assistant turn to its action / tool-call blocks and every older feedback message to its tool result
+    line (the ``<observation>`` block is dropped). The first user message (task and initial observation) is kept.
+    Prompts with at most N past turns are identical to full history.
+    """
+    assistant_indices = [i for i, m in enumerate(messages) if m.get("role") == "assistant" and isinstance(m.get("content"), str)]
+    if len(assistant_indices) <= full_turns:
+        return messages
+    cutoff, first = assistant_indices[-full_turns], assistant_indices[0]
+
+    def shorten(text: str) -> str:
+        return _OBSERVATION_BLOCK_RE.sub("", text)
+
+    out = []
+    for i, m in enumerate(messages):
+        if i < cutoff and m.get("role") == "assistant" and isinstance(m.get("content"), str):
+            out.append({**m, "content": _compress_assistant_history_text(m["content"], "action_only", args)})
+        elif first < i < cutoff and m.get("role") == "user":
+            c = m.get("content")
+            if isinstance(c, str):
+                c = shorten(c)
+            elif isinstance(c, list):
+                c = [{**x, "text": shorten(x["text"])} if x.get("type") == "text" else x for x in c]
+            out.append({**m, "content": c})
+        else:
+            out.append(m)
+    return out
+
+
 def _compress_turn_history_messages(messages: list[dict[str, Any]], mode: str, args: Any) -> list[dict[str, Any]]:
     """
     Apply reasoning compression to historical assistant messages only.
@@ -372,6 +406,9 @@ def _compress_turn_history_messages(messages: list[dict[str, Any]], mode: str, a
     intact while limiting full assistant reasoning to the latest N assistant
     turns. Older assistant turns hide thinking but keep non-thinking text.
     """
+    full_turns = max(int(getattr(args, "browser_history_full_turns", 0) or 0), 0)
+    if full_turns > 0:
+        messages = _window_turn_history_messages(messages, full_turns, args)
     reasoning_max_turns = max(int(getattr(args, "browser_history_reasoning_max_turns", 0) or 0), 0)
     assistant_indices = [
         idx
@@ -1949,7 +1986,29 @@ async def _generate_turn_sample_impl(
                     if serial_variant:
                         turn_sample.metadata["serial_action_executed"] = True
                 except Exception as step_err:
-                    logger.warning(f"Task {task_id} step {step}: env.step() failed, marking as ABORTED: {step_err}")
+                    done_calls = [a for a in actions if isinstance(a, dict) and a.get("name") == "done"]
+                    if done_calls:
+                        # The agent already committed its final answer; the failure is in the
+                        # post-action observation (e.g. a stalled page), which a finished episode
+                        # does not need. Keep the episode instead of discarding it as invalid.
+                        logger.warning(f"Task {task_id} step {step}: env.step() failed after done "
+                                       f"({type(step_err).__name__}: {step_err}); keeping the final answer")
+                        answer = (done_calls[-1].get("args") or {}).get("response", "")
+                        turn_samples[-1].metadata["step_tool_responses"] = [{
+                            "tool_name": "done",
+                            "tool_response": adapter._truncate_tool_response(
+                                f"Succeed: task marked as done. Response: {answer}"),
+                        }]
+                        terminated = True
+                        turn_samples[-1].metadata["is_last_turn"] = True
+                        for ts in turn_samples:
+                            ts.status = Sample.Status.COMPLETED
+                            ts.metadata["terminate_reason"] = "task_completed"
+                            ts.metadata["env_error_after_done"] = type(step_err).__name__
+                            ts.metadata["total_steps"] = step + 1
+                        break
+                    logger.warning(f"Task {task_id} step {step}: env.step() failed, marking as ABORTED: "
+                                   f"{type(step_err).__name__}: {step_err}")
                     # raise ValueError(f"❗  Environment step failed: {step_err}") from step_err
                     turn_samples[-1].metadata["is_last_turn"] = True
                     for ts in turn_samples:
