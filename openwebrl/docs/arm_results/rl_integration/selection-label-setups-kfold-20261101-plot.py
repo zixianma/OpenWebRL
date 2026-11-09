@@ -20,6 +20,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 
 plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42,
@@ -31,13 +32,13 @@ K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())
 LIVE3 = json.loads((HERE / "selection-label-live-3run-20261103.json").read_text())  # same-day 3-run batch
 LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "teacher_k3": "h3",
              "teacher_k5": "h5", "outcome": "oracle"}
-INK, MUTED = "#222222", "#666666"
+INK, MUTED = C["INK"], C["MUTED"]
 ROWS = [  # tick label, colour, source key, live key
-    ("Pre-\nexec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("H=1", "#D8877E", "teacher_post", "Ours post"),
-    ("H=4", "#6250BE", "teacher_k3", "Ours K3"),
-    ("H=6", "#33246E", "teacher_k5", "K5"),
-    ("Oracle", "#397FA3", "outcome", "Ours outcome")]
+    ("Pre-\nexec", C["PRE_EXEC"], "teacher_pre", "Ours pre"),
+    ("H=1", C["LOOKAHEAD_TEACHER"], "teacher_post", "Ours post"),
+    ("H=4", C["LOOKAHEAD_TEACHER"], "teacher_k3", "Ours K3"),
+    ("H=6", C["LOOKAHEAD_TEACHER"], "teacher_k5", "K5"),
+    ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
     ("Offline: held-out rollout success",
@@ -47,7 +48,7 @@ PANELS = [
 
 def point(ax, x, v, color, marker, filled):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor="#555555", capsize=1.5, lw=0.75,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
                 zorder=3, markeredgewidth=1.0, markerfacecolor=color if filled else "white", markeredgecolor=color)
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
@@ -60,10 +61,10 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ADM_STUDENT"], "o", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
+            point(ax, x + 0.17, P[src]["head_minus_sft"], C["ADM_STUDENT"], "o", True)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -73,14 +74,18 @@ for ax, (title, kind, base) in zip(axes, PANELS):
     ax.text((horizon_ticks[0] + horizon_ticks[-1]) / 2, -.24, "Lookahead", transform=ax.get_xaxis_transform(),
             ha="center", va="top", fontsize=6, color=INK)
     ax.tick_params(axis="y", labelsize=6.5)
+    ax.tick_params(colors=INK)
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
-axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7)
-handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=4.1, markeredgewidth=1.0,
-                  markerfacecolor="#555555" if filled else "white") for filled in (False, True)]
+axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
+handles = []
+for filled in (False, True):
+    color = C["ADM_STUDENT"] if filled else C["LOOKAHEAD_TEACHER"]
+    handles.append(Line2D([], [], marker="o", ls="", color=color, ms=4.1,
+                          markeredgewidth=1.0, markerfacecolor=color if filled else "white"))
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.

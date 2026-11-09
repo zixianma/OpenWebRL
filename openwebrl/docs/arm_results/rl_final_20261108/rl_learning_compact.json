@@ -4,11 +4,13 @@
   "source_sha256": "bcd713b2bb925f308efca3810991f813d3420a6a58c53c2e56efecfc25765ef7",
   "validation_source": "rl_results/rl_eval_learning_curves.json",
   "validation_source_sha256": "527156c4faf3894bdf2c948a83f6b118deacac0f9c51cc99795581fde79c56cd",
-  "renderer_sha256": "2185955bfe2044971af1f8f4876b28bc8823597d96e6413627706e0dcc4150d2",
+  "palette_sha256": "a7f1e241b4b791121e86bf44b790dfd03d55a2a0bfe2a302ef3379d7c42a7d8d",
+  "palette_colors_sha256": "e3c98658a44369fdafb8f40db91d7a7178915ddb3ee83d646ee5d4c6e5a4cba5",
+  "renderer_sha256": "d2daac3855b02e51abc4005558fb9a10351e01bb169672a4946fa3735f4369c0",
   "methods": {
     "outcome48": [
       "Outcome only \u00b7 48 groups",
-      "#9AA0A6",
+      "#B0AEB7",
       [
         0,
         [
@@ -19,12 +21,12 @@
     ],
     "outcome56": [
       "Outcome only \u00b7 56 groups",
-      "#555B63",
+      "#7C7887",
       "-"
     ],
     "gate_b": [
       "Outcome + ADM (ours)",
-      "#6250BE",
+      "#9575EE",
       "-"
     ]
   },
@@ -1458,8 +1460,8 @@
     }
   },
   "output_sha256": {
-    "png": "18275028ca6d897e35794771e61ea22dc7948efb4677091237c4ec03d5caa59c",
-    "pdf": "a824c9891f6d85eafbffdf4bf1e6b05f61410ff9ba599f9477d0630b33615b4f",
-    "svg": "6c7d50b4fd14fb1018d46e52cafb475f2c092a6a6b4a16eb21f85c45187346fd"
+    "png": "a7465b27b542fe16c972750afb92b5ad903e95b33f73a1666243d4b5e1e07c72",
+    "pdf": "cc997f492b219ae728d094d415b3ccf953cda06eb587f09f4be71f6a16b3383a",
+    "svg": "c4e4b57d9c83e61e492c3c7e1c79a29490bf6e1991cbcaf13143dbc3bc216798"
   }
 }

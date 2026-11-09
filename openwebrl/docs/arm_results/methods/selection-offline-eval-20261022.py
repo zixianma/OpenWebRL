@@ -21,16 +21,17 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
-INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, IMMEDIATE, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#397FA3", "#173F78"
-ORACLE = OUTCOME
-ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
-SHARED, SHARED_BG = "#737A83", "#F3F4F5"
-SUCCESS, FAILURE = "#31785A", "#8D949B"
-LABEL_BG, HELD_BG = "#EDF6FA", "#EBF0F8"
+INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
+PRE, IMMEDIATE, LOOK, OUTCOME, HELD = (C["PRE_EXEC"], C["LOOKAHEAD_EVIDENCE"], C["LOOKAHEAD_TEACHER"], C["TRAIN"], C["EVAL"])
+ORACLE = C["ORACLE"]
+ROLLOUT, ROLLOUT_BG = C["INK"], tint("BASELINE_LIGHT", .88)
+SHARED, SHARED_BG = C["BASELINE_DARK"], tint("BASELINE_LIGHT", .92)
+SUCCESS, FAILURE = C["SUCCESS"], C["FAILURE"]
+LABEL_BG, HELD_BG = tint("TRAIN", .35), tint("EVAL", .35)
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
     (1, 0, 1, 1, 0, 1, 1, 0),
@@ -119,7 +120,7 @@ for first, last, title, color, fill in (
     ax.add_patch(Rectangle((xs[first] - rollout_pitch / 2, y_low), (last - first + 1) * rollout_pitch,
                            y_high - y_low, facecolor=fill, edgecolor="none", zorder=0))
     rule(xs[first] - rollout_pitch / 2 + .001, xs[last] + rollout_pitch / 2 - .001, 1.69, color, 1.0)
-    text((xs[first] + xs[last]) / 2, 1.79, title, color=color, ha="center")
+    text((xs[first] + xs[last]) / 2, 1.79, title, color=INK, ha="center")
     for j in range(first, last + 1):
         text(xs[j], 1.60, str(j + 1), size=6.5, color=ROLLOUT if j == 0 else MUTED,
              weight="bold" if j == 0 else "normal", ha="center")
@@ -132,8 +133,8 @@ for k in range(1, 4):
 for x, title, split, color, fill, width in (
         (3.82, "Train %", "1–3", OUTCOME, LABEL_BG, 0.34),
         (4.20, "Eval %", "4–8", HELD, HELD_BG, 0.28)):
-    text(x, 1.79, title, size=6.5, color=color, ha="center")
-    text(x, 1.60, split, size=6.5, color=color, ha="center")
+    text(x, 1.79, title, size=6.5, color=INK, ha="center")
+    text(x, 1.60, split, size=6.5, color=INK, ha="center")
     ax.add_patch(Rectangle((x - width / 2, y_low), width, y_high - y_low,
                            facecolor=fill, edgecolor="none", zorder=0))
 mid = sum(ys) / len(ys)
@@ -159,9 +160,9 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
         text(1.73, y, r"$\cdots$", size=10, color=MUTED, ha="center")
     for j, success in enumerate(outcomes):
         outcome_marker(xs[j], y, success)
-    text(3.82, y, percent(label_rates[i]), color=OUTCOME, ha="center",
+    text(3.82, y, percent(label_rates[i]), color=INK, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
-    text(4.20, y, f"{100 * held_rates[i]:.0f}", color=HELD, weight="bold", ha="center")
+    text(4.20, y, f"{100 * held_rates[i]:.0f}", color=INK, weight="bold", ha="center")
 
 # (b) Shared context explicitly feeds each joint candidate-comparison call.
 ax.plot([4.42, 4.42], [0.26, 1.91], color=LINE, linewidth=0.6)
@@ -175,7 +176,7 @@ shared_label = text(6.03, 1.79,
      color=SHARED, ha="center")
 text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center")
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
-eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=HELD, ha="center")
+eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=INK, ha="center")
 shared_x = 6.08
 ax.plot([shared_x, shared_x], [1.67, 0.83], color=SHARED, linewidth=0.9, zorder=1)
 ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.23,
@@ -199,21 +200,21 @@ for y, key, label, color, evidence in lanes:
     pick = PICKS[key]
     text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=color, ha="center")
     arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
-    text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=HELD,
+    text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=INK,
          weight="bold", ha="center")
-# Lighter-blue rate labels refer to the complete five-action Train % column in (a).
+# The yellow input box refers to the complete five-action Train % column in (a).
 y = 0.32
-text(method_x, y, "Oracle", color=ORACLE)
+text(method_x, y, "Oracle", color=INK)
 box(5.15, y - 0.105, 0.80, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
-text(evidence_x, y, "Train %", color=OUTCOME, ha="center")
+text(evidence_x, y, "Train %", color=INK, ha="center")
 arrow(5.97, y, teacher_x - 0.01, y, color=ORACLE)
 box(teacher_x, y - 0.115, teacher_w, 0.23, edge=ORACLE)
-text(teacher_x + teacher_w / 2, y, "Argmax", color=ORACLE, ha="center")
+text(teacher_x + teacher_w / 2, y, "Argmax", color=INK, ha="center")
 arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
 box(pick_x, y - 0.115, pick_w, 0.23, edge=ORACLE)
-text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=ORACLE, ha="center")
+text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=INK, ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
-text(eval_x, y, "80", color=HELD, weight="bold", ha="center")
+text(eval_x, y, "80", color=INK, weight="bold", ha="center")
 
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()

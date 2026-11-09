@@ -23,14 +23,15 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style  # noqa: F401
+from paper_plot_palette import COLORS as C
 
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
-INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-HEAD, DECODER = INK, "#4B5563"
-SHARED, SHARED_BG = "#737A83", "white"
-ALLOWED_FILL, MASKED_FILL = "#81CCD7", "#F5F6F7"
+INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
+HEAD, DECODER = C["ADM_22M"], C["ADM_4B"]
+SHARED, SHARED_BG = C["BASELINE_DARK"], "white"
+ALLOWED_FILL, MASKED_FILL = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
 K = 5
 plt.rcParams.update({
     "font.family": "Albert Sans", "font.size": 7,
@@ -91,9 +92,9 @@ text(5.105, 2.99, r"Prompt $p$ + candidates", color=DECODER, ha="center")
 arrow(5.105, 2.90, 5.105, 2.80, color=DECODER)
 
 # --- left: ADM head on frozen actor features ---------------------------------------------------------------------
-actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01)
+actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01, color=HEAD)
 box(.50, 2.58, 3.28, .42, edge=SHARED, fill=SHARED_BG)
-text(2.14, 2.91, "a)  ADM head", size=8,
+text(2.14, 2.91, "a)  ADM head", size=8, color=HEAD,
      weight="medium", ha="center")
 text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5,
      ha="center", linespacing=1.05)
@@ -105,7 +106,7 @@ for center in (1.285, 2.875):
 CELL = .115
 COLS = {"Joint": .94, "Independent": 2.53}
 for name, x0 in COLS.items():
-    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD if name == "Joint" else DECODER, ha="center")
+    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD, ha="center")
 # Neutral row enclosures separate attention from MLP computation.
 for y, height, fill in ((1.40, .92, "white"), (.33, .98, "white")):
     ax.add_patch(FancyBboxPatch((.06, y), 3.75, height,

@@ -7,7 +7,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders five 
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
-rings mark frontier points. No smoothing or statistical superiority is implied. ADM colors identify label teachers: dark purple for GPT-5.5, light purple for GPT-6 Luna. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+rings mark frontier points. No smoothing or statistical superiority is implied. ADM colors identify model size: light purple for ADM-22M, dark purple for ADM-4B. On SFT actors, GPT-5.5 versus GPT-6 Luna label teachers use diamond versus plus-filled markers for ADM-4B, and circle versus square markers for ADM-22M. RL base actors retain up/down triangles, with hollow markers for ADM-22M. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -21,6 +21,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
@@ -28,20 +29,19 @@ from matplotlib.ticker import MaxNLocator
 HERE = Path(__file__).parent
 rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text())["rows"]
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
-FRONTIER = "#596675"
-ADM_GPT55, ADM_LUNA = "#6250BE", "#A99BE3"
+FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
-    ("sft1", "SFT 4B", SFT, "#898781", "s", False),
-    ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
-    ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
-    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, ADM_GPT55, "^", False),
-    ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, ADM_GPT55, "^", True),
-    ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
-    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, ADM_GPT55, "v", False),
-    ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, ADM_GPT55, "D", False),
-    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, ADM_LUNA, "D", False),
-    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, ADM_GPT55, "o", False),
-    ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, ADM_LUNA, "o", False),
+    ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
+    ("sft8b", "SFT 8B", 8.77e9, C["BASELINE_DARK"], "s", False),
+    ("rl4b", "RL 4B ²", SFT, C["BASELINE_DARK"], "^", False),
+    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, C["ADM_4B"], "^", False),
+    ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, C["ADM_22M"], "^", True),
+    ("rl8b", "RL 8B ³", 8.77e9, C["BASELINE_DARK"], "v", False),
+    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, C["ADM_4B"], "v", False),
+    ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, C["ADM_4B"], "D", False),
+    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, C["ADM_4B"], "P", False),
+    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, C["ADM_22M"], "o", False),
+    ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, C["ADM_22M"], "s", False),
 ]
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
 NAMES = {"mean": "3-benchmark mean", "online_mind2web": "OM2W", "webvoyager": "WebVoyager", "deepshop": "DeepShop"}
@@ -73,12 +73,12 @@ def panel(ax, bench, k, methods):
     if len(fr) > 1:
         ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER, linewidth=0.95, zorder=1.8)
     ax.scatter([x for x, _ in fr], [y for _, y in fr], s=57, facecolors="none", edgecolors=FRONTIER, linewidths=0.6, zorder=2.4)
-    ax.grid(axis="y", color="#e6e6e6", linewidth=0.6, zorder=0)
+    ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
     ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=3, integer=True))
-    ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+    ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
     for spine in ax.spines.values():
-        spine.set_color("#555555"); spine.set_linewidth(0.6)
+        spine.set_color(C["MUTED"]); spine.set_linewidth(0.6)
     if k == "params":
         wide = any(m[2] > 9e9 for m in methods)
         ax.set_xlim(3.5, 14.2 if wide else 9.5)
@@ -101,6 +101,7 @@ def render(benches, name, height, methods=methods):
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
     plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
+                         "text.color": C["INK"], "axes.labelcolor": C["INK"], "axes.titlecolor": C["INK"],
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
     fig, axes = plt.subplots(len(benches), 3, figsize=(7, height), sharey="row", squeeze=False)

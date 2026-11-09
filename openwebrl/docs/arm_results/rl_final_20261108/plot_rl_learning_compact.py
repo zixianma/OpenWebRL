@@ -22,6 +22,7 @@ HERE = Path(__file__).resolve().parent
 DOCS = next(p for p in HERE.parents if (p / "paper_plot_style.py").is_file())
 sys.path.insert(0, str(DOCS))
 import paper_plot_style  # noqa: E402,F401
+from paper_plot_palette import COLORS as C  # noqa: E402
 
 DATA_PATH = HERE / "arm_final_results_data.json"
 DATA = json.loads(DATA_PATH.read_text())
@@ -30,11 +31,11 @@ VALIDATION = json.loads(VALIDATION_PATH.read_text())
 RUNS = {r["key"]: r for r in DATA["runs"]}
 STEM = "rl_learning_compact"
 WINDOW = 5
-INK, MUTED = "#30343B", "#626972"
+INK, MUTED = C["INK"], C["MUTED"]
 METHODS = {
-    "outcome48": ("Outcome only · 48 groups", "#9AA0A6", (0, (3, 2))),
-    "outcome56": ("Outcome only · 56 groups", "#555B63", "-"),
-    "gate_b": ("Outcome + ADM (ours)", "#6250BE", "-"),
+    "outcome48": ("Outcome only · 48 groups", C["BASELINE_LIGHT"], (0, (3, 2))),
+    "outcome56": ("Outcome only · 56 groups", C["BASELINE_DARK"], "-"),
+    "gate_b": ("Outcome + ADM (ours)", C["ADM_DEFAULT"], "-"),
 }
 
 
@@ -81,7 +82,7 @@ def style(ax, title):
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#A5ABB2")
+        ax.spines[side].set_color(C["BORDER"])
         ax.spines[side].set_linewidth(.65)
     ax.tick_params(labelsize=8, colors=MUTED, width=.65, length=3)
     ax.xaxis.label.set_color(MUTED)
@@ -138,7 +139,7 @@ def build(overall=False):
                       linewidth=1.8 if key == "gate_b" else 1.2,
                       label=label) for key, (label, color, ls) in METHODS.items()]
     legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(.53, .005),
-                        ncol=2, frameon=False, fontsize=7.5, handlelength=1.6,
+                        ncol=2, frameon=False, fontsize=7.5, labelcolor=INK, handlelength=1.6,
                         handletextpad=.5, columnspacing=1.1, labelspacing=.25)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -171,6 +172,8 @@ def main(overall=False):
                   population="All completed attempts; invalid attempts count as non-success" if overall else "Valid attempts only; invalid attempts excluded", source_sha256=sha(DATA_PATH),
                   validation_source=str(VALIDATION_PATH.relative_to(DOCS)),
                   validation_source_sha256=sha(VALIDATION_PATH),
+                  palette_sha256=sha(DOCS / "paper_plot_palette.py"),
+                  palette_colors_sha256=hashlib.sha256(json.dumps(C, sort_keys=True).encode()).hexdigest(),
                   renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 field="training_success" if overall else "training_success_valid",

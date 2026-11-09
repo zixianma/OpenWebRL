@@ -1,6 +1,6 @@
 {
   "schema": "paper-plot-palette-roles-v1",
-  "status": "ADM and salmon lookahead roles selected; remaining palette roles proposed; main renderers not yet migrated",
+  "status": "Selected palette under trial in the listed first-batch renderers; other figures retain their earlier palette",
   "base_color_count": 7,
   "families": {
     "adm": {
@@ -166,7 +166,7 @@
   },
   "notes": [
     "Role variables remain distinct even when a chosen palette intentionally shares a family.",
-    "ADM and salmon lookahead colors are selected in approved_roles; other families remain proposals. Main figures have not yet been migrated.",
+    "The selected palette is applied to the first batch listed in trial.renderers for visual review; other figures retain their earlier palette.",
     "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the teacher/student horizon comparison explicitly restoring H=1.",
     "The seven base colors are user choices; light/dark tones are derived, not independent choices."
   ],
@@ -175,7 +175,7 @@
     "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
   },
   "proposal": {
-    "status": "ADM and salmon teacher/evidence roles selected; remaining colors for review; existing main figures unchanged",
+    "status": "Selected palette applied to first-batch figures for visual review",
     "source_images": [
       "AdobeColor-My Color Theme (1).jpeg",
       "AdobeColor-My Color Theme (2).jpeg",
@@ -263,5 +263,50 @@
     "LOOKAHEAD_TEACHER": "#ED8B74",
     "LOOKAHEAD_EVIDENCE": "#ED8B74",
     "ADM_STUDENT": "#9575EE"
+  },
+  "trial": {
+    "status": "Applied to a first batch for visual review; no numerical or scientific changes",
+    "colors": {
+      "ADM_MAIN": "#9575EE",
+      "ADM_LIGHT": "#9575EE",
+      "ADM_INTERMEDIATE": "#7E63C9",
+      "ADM_DARK": "#654FA1",
+      "LOOKAHEAD_H1": "#ED8B74",
+      "LOOKAHEAD_H2": "#ED8B74",
+      "LOOKAHEAD_H3": "#ED8B74",
+      "LOOKAHEAD_H4": "#ED8B74",
+      "LOOKAHEAD_H6": "#ED8B74",
+      "ORACLE": "#EDB774",
+      "ORACLE_FILL": "#EDB774",
+      "TRAIN": "#EDE374",
+      "EVAL": "#EDB774",
+      "SINGLE_CALL_MAIN": "#847D98",
+      "BASELINE_DARK": "#7C7887",
+      "BASELINE_LIGHT": "#B0AEB7",
+      "PRE_EXEC": "#7C7887",
+      "SUCCESS": "#489379",
+      "SUCCESS_FILL": "#74EDC3",
+      "FAILURE": "#7C7887",
+      "ATTENTION_ALLOWED": "#74EDC3",
+      "INK": "#211A33",
+      "MUTED": "#423C54",
+      "BORDER": "#CBC9CF",
+      "BACKGROUND": "#FFFFFF",
+      "ATTENTION_MASKED": "#F1EFF4",
+      "FRONTIER": "#7C7887",
+      "ADM_DEFAULT": "#9575EE",
+      "ADM_22M": "#9575EE",
+      "ADM_4B": "#654FA1",
+      "LOOKAHEAD_TEACHER": "#ED8B74",
+      "LOOKAHEAD_EVIDENCE": "#ED8B74",
+      "ADM_STUDENT": "#9575EE"
+    },
+    "renderers": [
+      "arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py",
+      "arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py",
+      "arm_results/rl_final_20261108/plot_rl_learning_compact.py",
+      "arm_results/methods/selection-offline-eval-20261022.py",
+      "arm_results/methods/selection-arch-overview-20261107.py"
+    ]
   }
 }

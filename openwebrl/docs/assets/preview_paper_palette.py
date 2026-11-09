@@ -1,7 +1,7 @@
 """Render the proposed palette and a copy of the label comparison for review.
 
-Reads only public aggregate results. The main result figures and the active
-palette are not changed; output names explicitly identify these as previews.
+Reads only public aggregate results and writes separately named previews.
+The first-batch main figures opt into the same selected palette independently.
 """
 import json
 from pathlib import Path
@@ -87,27 +87,9 @@ def palette_board():
 def label_comparison():
     source = DOCS / "arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py"
     code = source.read_text()
-    changes = {"#4B5563": ROLE["PRE_EXEC"], "#D8877E": ROLE["LOOKAHEAD_H1"],
-               "#6250BE": ROLE["LOOKAHEAD_H4"], "#33246E": ROLE["LOOKAHEAD_H6"],
-               "#397FA3": ROLE["ORACLE"], "#222222": ROLE["INK"],
-               "#666666": ROLE["MUTED"], "#555555": ROLE["BASELINE_DARK"]}
-    for old, new in changes.items():
-        code = code.replace(old, new)
-    # Colors identify teacher evidence versus the learned model. Horizon identity
-    # stays on the x-axis, and all student heads here are the same 22M architecture.
-    offline_student = 'point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)'
-    online_student = 'point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)'
-    assert code.count(offline_student) == code.count(online_student) == 1
-    code = code.replace(offline_student, offline_student.replace('color, "o", True', '_PALETTE_ROLE["ADM_STUDENT"], "o", True'))
-    code = code.replace(online_student, online_student.replace('color, "o", True', '_PALETTE_ROLE["ADM_STUDENT"], "o", True'))
-    start = code.index("handles = [")
-    end = code.index("fig.legend(", start)
-    code = code[:start] + '''handles = []
-for filled in (False, True):
-    color = _PALETTE_ROLE["ADM_STUDENT"] if filled else _PALETTE_ROLE["LOOKAHEAD_TEACHER"]
-    handles.append(Line2D([], [], marker="o", ls="", color=color, ms=4.1,
-                          markeredgewidth=1.0, markerfacecolor=color if filled else "white"))
-''' + code[end:]
+    palette_import = "from paper_plot_palette import COLORS as C"
+    assert code.count(palette_import) == 1
+    code = code.replace(palette_import, "C = _PALETTE_ROLE")
     old_output = 'output = HERE / "selection-label-setups-kfold-20261101"'
     assert code.count(old_output) == 1
     code = code.replace(old_output, f"output = Path({str(HERE / 'selection_label_palette_preview')!r})")
