@@ -188,10 +188,10 @@
       "LOOKAHEAD_H3": "#C57360",
       "LOOKAHEAD_H4": "#BD6F5D",
       "LOOKAHEAD_H6": "#8E5346",
-      "ORACLE": "#948A35",
-      "ORACLE_FILL": "#EDE374",
-      "TRAIN": "#948A35",
-      "EVAL": "#6F6728",
+      "ORACLE": "#EDB774",
+      "ORACLE_FILL": "#EDB774",
+      "TRAIN": "#EDE374",
+      "EVAL": "#EDCD74",
       "SINGLE_CALL_MAIN": "#847D98",
       "BASELINE_DARK": "#7C7887",
       "BASELINE_LIGHT": "#B0AEB7",
@@ -210,18 +210,34 @@
       "ADM_22M": "#9575EE",
       "ADM_4B": "#654FA1"
     },
-    "derived_colors": "Darker salmon/green/yellow marks and light gray fills are derived from the supplied swatches; the source swatches are unchanged.",
+    "derived_colors": "Warm yellow/amber variants blend the supplied yellow #EDE374 with salmon #ED8B74. Darker salmon/green marks and light gray fills remain derived from their source swatches.",
     "rules": [
       "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
       "Use salmon shades for teacher horizons, keeping the lookahead and ADM identities separate.",
-      "Use yellow and mint originals for fills; darker related tones for small markers, thin lines and colored text.",
+      "Use original yellow #EDE374 for Train, a 25% blend toward salmon #EDCD74 for Eval, and a 50% blend #EDB774 for Oracle. Labels and CI bars remain neutral; no dark olive tones. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue."
     ],
     "previews": [
       "assets/paper_plot_palette_preview.png",
       "assets/selection_label_palette_preview.png"
-    ]
+    ],
+    "warm_blends": {
+      "yellow": "#EDE374",
+      "salmon": "#ED8B74",
+      "TRAIN": {
+        "salmon_fraction": 0.0,
+        "color": "#EDE374"
+      },
+      "EVAL": {
+        "salmon_fraction": 0.25,
+        "color": "#EDCD74"
+      },
+      "ORACLE": {
+        "salmon_fraction": 0.5,
+        "color": "#EDB774"
+      }
+    }
   },
   "approved_roles": {
     "ADM_DEFAULT": "#9575EE",

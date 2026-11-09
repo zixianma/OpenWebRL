@@ -44,14 +44,14 @@ def palette_board():
         ax.add_patch(Rectangle((x, y - height / 2), width, height,
                                facecolor=color, edgecolor="none"))
     text(.18, 4.10, "Proposed paper palette", 12, weight="semibold")
-    text(.18, 3.83, "Purple for ADM · salmon for lookahead · yellow for oracle · mint for outcomes / attention", 8)
+    text(.18, 3.83, "Purple ADM · salmon lookahead · yellow / amber oracle and outcomes · mint status / attention", 8)
     text(.18, 3.53, "ROLE", 7, weight="semibold")
     text(2.45, 3.53, "SOURCE SWATCH", 7, weight="semibold")
     text(4.12, 3.53, "PAPER MARKS / VARIANTS", 7, weight="semibold")
     rows = [
         ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
         ("Lookahead horizons", "lookahead", [("LOOKAHEAD_H1", "H=1"), ("LOOKAHEAD_H4", "H=4"), ("LOOKAHEAD_H6", "H=6")]),
-        ("Oracle / train / eval", "oracle", [("TRAIN", "oracle / train"), ("EVAL", "eval")]),
+        ("Oracle / train / eval", "oracle", [("ORACLE", "oracle"), ("TRAIN", "train"), ("EVAL", "eval")]),
         ("Single-call scaling", "single_call", [("SINGLE_CALL_MAIN", "single call")]),
         ("Success", "success", [("SUCCESS", "small marks")]),
         ("Failure", "failure", [("FAILURE", "hollow circle")]),
