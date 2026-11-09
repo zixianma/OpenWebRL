@@ -1,4 +1,4 @@
-# Figure gallery — salmon ADM / purple lookahead
+# Figure gallery — salmon ADM / purple accents
 
 [Current palette](ARM_FIGURES.md) · [Alternative color key](arm_results/palette_variants/salmon_adm/palette.png)
 

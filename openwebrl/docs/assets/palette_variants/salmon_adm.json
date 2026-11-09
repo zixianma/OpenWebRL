@@ -1,7 +1,7 @@
 {
   "schema": "paper-palette-variant-v1",
   "name": "salmon_adm",
-  "title": "Figure gallery \u2014 salmon ADM / purple lookahead",
+  "title": "Figure gallery \u2014 salmon ADM / purple accents",
   "source_ref": "d7f14a66e008f81d7197483b2a70523e9bf2712d",
   "palette_overrides": {
     "ADM_MAIN": "#ED8B74",
@@ -18,7 +18,10 @@
     "ADM_4B": "#A15F4F",
     "LOOKAHEAD_TEACHER": "#9575EE",
     "LOOKAHEAD_EVIDENCE": "#9575EE",
-    "ADM_STUDENT": "#ED8B74"
+    "ADM_STUDENT": "#ED8B74",
+    "ACTION": "#9575EE",
+    "ACTION_INK": "#654FA1",
+    "ATTENTION_ALLOWED": "#9575EE"
   },
   "document": "ARM_FIGURES_SALMON_ADM.md",
   "asset_directory": "arm_results/palette_variants/salmon_adm",

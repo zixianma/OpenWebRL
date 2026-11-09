@@ -16,7 +16,10 @@
     "ADM_4B": "#A15F4F",
     "LOOKAHEAD_TEACHER": "#9575EE",
     "LOOKAHEAD_EVIDENCE": "#9575EE",
-    "ADM_STUDENT": "#ED8B74"
+    "ADM_STUDENT": "#ED8B74",
+    "ACTION": "#9575EE",
+    "ACTION_INK": "#654FA1",
+    "ATTENTION_ALLOWED": "#9575EE"
   },
   "figure_count": 61,
   "canonical_sha256": {
@@ -172,11 +175,11 @@
     "arm_results/rl_final_20261108/training_success.pdf": "09bdcfc22e267da2af4728b184492ee2d21716e74e30759ab1aa0c8eec77f47c"
   },
   "output_sha256": {
-    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.png": "60a7436ce4363d39bf474d0081c9fbf4a9cd794603fc936ba9057df81b8753e6",
-    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.pdf": "ab4fae468bdaa690b5e9f799b03f06d3380aabba5b6e6b6ce65a1350b1005ef9",
-    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.svg": "04ef6c29ddb2b1fa9d0a0dda80a3590e748080b3894cbbe69af745b64007f2db",
-    "arm_results/palette_variants/salmon_adm/methods/selection-offline-eval-20261022.png": "2e8ff8aa11a7e7939e80dd1394317a7049b6b4111b09267cd603dd56a8339550",
-    "arm_results/palette_variants/salmon_adm/methods/selection-arch-overview-20261107.png": "1c4900c5fd8a2f46e013573f1542b0f3f40d18be4570b4ab0f202d2ccc69fc2c",
+    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.png": "5a4d9bcc8e9698a7a79f67e1d6a10597aa9b057c626bbb68aa7f292f95ab4e1f",
+    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.pdf": "5c2b75b2c52f173c6c084cb60d80f5152884446f380e2be660b2b707576ce57d",
+    "arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.svg": "dde98dbfdf7dc5e514c7a9e0d19f5ef51cd489f51cce58f01dcef1d28c616475",
+    "arm_results/palette_variants/salmon_adm/methods/selection-offline-eval-20261022.png": "5594c05ab65be20a5417065e91d8313382cbbf29eda9ae3595fed187ded0e0a6",
+    "arm_results/palette_variants/salmon_adm/methods/selection-arch-overview-20261107.png": "780df0d4f84d4272e4a41b452ed06d6526ef7a6555bc1fdfa40d163da1b2a363",
     "arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.png": "2c9d56416c08325c8e7ba21b071e87520f5215e3009eebffb194042ab62f1113",
     "arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.pdf": "db2b36c075290aeea05e6d42376c2c02413bf72b6ab4e8e338bbaa5892ba62a4",
     "arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.svg": "87522bc15c39c3508e1cfc6d8653d05bbf58ffd5b3880177e1b37d6da9b9f885",
@@ -322,8 +325,8 @@
     "arm_results/palette_variants/salmon_adm/rl_final_20261108/validation_success.pdf": "ae98ef56437d0e6f46bfbe1c5223989939bafe79c5010de0ccdf96d8442e4281",
     "arm_results/palette_variants/salmon_adm/rl_final_20261108/training_success.png": "6122cf1a36d87533fc0e6b0c946b6d59ca6fce95886fef3ce95a7860158177b6",
     "arm_results/palette_variants/salmon_adm/rl_final_20261108/training_success.pdf": "4074a744bd5171a5c4a47981bd489243ee4a7499bea4c908b3f601ca3fdeab5c",
-    "arm_results/palette_variants/salmon_adm/palette.png": "671efe9b2653a61f9296de2c339eff00f533555468f0569e543f07c9f1214606",
-    "arm_results/palette_variants/salmon_adm/palette.pdf": "2f0c88c4ef76d083d8b45911206f8351037427349c2efba67c536e203beeb8d9",
-    "arm_results/palette_variants/salmon_adm/palette.svg": "4e869cc68dad0171113f933aef94fa4af12d5cd429102e77fb423741af1fe578"
+    "arm_results/palette_variants/salmon_adm/palette.png": "f8f84233b6dbc418dd851bda551c91253f05ad95599b05b713ecbb86907d0c5b",
+    "arm_results/palette_variants/salmon_adm/palette.pdf": "3c904351df2250b6d342df2fa9d80f76b5b402870cbaf42969d912965b656b89",
+    "arm_results/palette_variants/salmon_adm/palette.svg": "278e3e9f38ef0df34019193b253c93cf7bdc3f2c768e0bd095ca6151a4bf173f"
   }
 }

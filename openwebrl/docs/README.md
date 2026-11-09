@@ -4,7 +4,7 @@
 
 [Figures-only gallery: all final-results figures, including historical and supplementary views](ARM_FIGURES.md).
 
-[Alternative palette gallery: salmon ADM and purple lookahead](ARM_FIGURES_SALMON_ADM.md).
+[Alternative palette gallery: salmon ADM and purple accents](ARM_FIGURES_SALMON_ADM.md).
 
 [Shared paper palette](assets/paper_plot_palette_preview.png) · [Named color roles](assets/paper_plot_palette.json) · [Shared plot style](paper_plot_style.py). Method diagrams use **yellow states, green actions, salmon lookahead/teacher, and purple ADM**. Default/22M ADM is light purple; 4B ADM is dark purple. Quantitative plots use neutral actor/single-call controls and purple learned ADM/selection; teachers are hollow and students have purple fills with thick source-colored outlines (yellow Pre-exec, salmon Lookahead, amber Oracle). Train/eval use yellow/amber; cached selection uses white shading. The same Albert Sans fonts and neutral text/axes colors apply throughout. Measurements, populations, intervals and layouts are preserved. [Lookahead horizon convention](ARM_FORMULATIONS.md#lookahead-horizon-convention): H counts the candidate action plus continuation actions.
 

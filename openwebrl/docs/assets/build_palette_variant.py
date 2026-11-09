@@ -58,12 +58,16 @@ def make_workspace(recipe):
     data = json.loads(palette.read_text())
     data["trial"]["colors"].update(recipe["palette_overrides"])
     data["proposal"]["paper_roles"].update(recipe["palette_overrides"])
-    data["proposal"]["base_swatches"].update(adm="#ED8B74", lookahead="#9575EE")
+    data["proposal"]["base_swatches"].update(
+        adm=recipe["palette_overrides"]["ADM_DEFAULT"],
+        lookahead=recipe["palette_overrides"]["LOOKAHEAD_TEACHER"],
+        action=recipe["palette_overrides"]["ACTION"],
+        attention=recipe["palette_overrides"]["ATTENTION_ALLOWED"])
     palette.write_text(json.dumps(data, indent=2) + "\n")
     board = work / "openwebrl/docs/assets/preview_paper_palette.py"
     board.write_text(board.read_text().replace('"Shared paper palette"', '"Alternative paper palette"')
         .replace("Purple ADM · yellow states · green actions · salmon teacher · amber oracle / eval",
-                 "Salmon ADM · yellow states · green actions · purple teacher · amber oracle / eval"))
+                 "Salmon ADM · yellow states · purple actions / teacher · amber oracle / eval"))
     env = dict(os.environ, OPENBLAS_NUM_THREADS="1", OMP_NUM_THREADS="1", MKL_NUM_THREADS="1",
                MPLCONFIGDIR=str(work / ".mpl-cache"), XDG_CACHE_HOME=str(work / ".cache"),
                PYTHONDONTWRITEBYTECODE="1")
