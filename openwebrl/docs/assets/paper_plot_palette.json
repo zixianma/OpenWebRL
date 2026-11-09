@@ -1,6 +1,6 @@
 {
   "schema": "paper-plot-palette-roles-v1",
-  "status": "ADM mapping selected; remaining palette roles proposed; main renderers not yet migrated",
+  "status": "ADM and salmon lookahead roles selected; remaining palette roles proposed; main renderers not yet migrated",
   "base_color_count": 7,
   "families": {
     "adm": {
@@ -8,7 +8,7 @@
       "meaning": "Our ADM or action-selection scaling, consistently across RL, actor+ADM and API figures."
     },
     "lookahead": {
-      "color": null,
+      "color": "#ED8B74",
       "meaning": "Teacher evidence horizon, distinct from the ADM method identity."
     },
     "oracle": {
@@ -43,11 +43,11 @@
     },
     "LOOKAHEAD_H1": {
       "family": "lookahead",
-      "tone": "very_light"
+      "tone": "base"
     },
     "LOOKAHEAD_H2": {
       "family": "lookahead",
-      "tone": "light"
+      "tone": "base"
     },
     "LOOKAHEAD_H4": {
       "family": "lookahead",
@@ -55,7 +55,7 @@
     },
     "LOOKAHEAD_H6": {
       "family": "lookahead",
-      "tone": "dark"
+      "tone": "base"
     },
     "ORACLE": {
       "family": "oracle",
@@ -95,7 +95,7 @@
     },
     "LOOKAHEAD_H3": {
       "family": "lookahead",
-      "tone": "medium_light"
+      "tone": "base"
     },
     "ADM_DEFAULT": {
       "family": "adm",
@@ -112,6 +112,18 @@
     "ADM_DARK": {
       "family": "adm",
       "tone": "dark"
+    },
+    "LOOKAHEAD_TEACHER": {
+      "family": "lookahead",
+      "tone": "base"
+    },
+    "LOOKAHEAD_EVIDENCE": {
+      "family": "lookahead",
+      "tone": "base"
+    },
+    "ADM_STUDENT": {
+      "family": "adm",
+      "tone": "base"
     }
   },
   "neutral_roles": {
@@ -126,12 +138,13 @@
     "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role"
   },
   "non_color_encodings": {
-    "teacher_vs_student": "Hollow vs filled circles in teacher/student comparisons",
+    "teacher_vs_student": "In the label comparison, teachers use hollow circles colored by label source; students use solid ADM purple. Elsewhere keep each figure legend explicit.",
     "actor_model_family": "Marker shape in model comparisons; add a shape rather than a new color per model",
     "cached": "Shaded/hatched symbol, without dark outlines",
     "configuration": "Line style, fill and ordered tones within the same semantic family; define each figure legend explicitly",
     "raw_vs_smoothed": "Opacity and line weight",
-    "frontier": "Neutral ring and dashed link"
+    "frontier": "Neutral ring and dashed link",
+    "lookahead_horizon": "Explicit H labels and x-axis positions distinguish horizons; all lookahead teachers/evidence share salmon."
   },
   "horizon_convention": {
     "definition": "H counts the candidate action plus continuation actions",
@@ -153,7 +166,7 @@
   },
   "notes": [
     "Role variables remain distinct even when a chosen palette intentionally shares a family.",
-    "ADM colors are selected in approved_roles; other families remain proposals. Main figures have not yet been migrated.",
+    "ADM and salmon lookahead colors are selected in approved_roles; other families remain proposals. Main figures have not yet been migrated.",
     "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the teacher/student horizon comparison explicitly restoring H=1.",
     "The seven base colors are user choices; light/dark tones are derived, not independent choices."
   ],
@@ -162,7 +175,7 @@
     "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
   },
   "proposal": {
-    "status": "ADM colors selected; other proposed colors remain for review; existing main figures unchanged",
+    "status": "ADM and salmon teacher/evidence roles selected; remaining colors for review; existing main figures unchanged",
     "source_images": [
       "AdobeColor-My Color Theme (1).jpeg",
       "AdobeColor-My Color Theme (2).jpeg",
@@ -183,15 +196,15 @@
       "ADM_LIGHT": "#9575EE",
       "ADM_INTERMEDIATE": "#7E63C9",
       "ADM_DARK": "#654FA1",
-      "LOOKAHEAD_H1": "#D57D68",
-      "LOOKAHEAD_H2": "#CD7864",
-      "LOOKAHEAD_H3": "#C57360",
-      "LOOKAHEAD_H4": "#BD6F5D",
-      "LOOKAHEAD_H6": "#8E5346",
+      "LOOKAHEAD_H1": "#ED8B74",
+      "LOOKAHEAD_H2": "#ED8B74",
+      "LOOKAHEAD_H3": "#ED8B74",
+      "LOOKAHEAD_H4": "#ED8B74",
+      "LOOKAHEAD_H6": "#ED8B74",
       "ORACLE": "#EDB774",
       "ORACLE_FILL": "#EDB774",
       "TRAIN": "#EDE374",
-      "EVAL": "#EDCD74",
+      "EVAL": "#EDB774",
       "SINGLE_CALL_MAIN": "#847D98",
       "BASELINE_DARK": "#7C7887",
       "BASELINE_LIGHT": "#B0AEB7",
@@ -208,13 +221,16 @@
       "FRONTIER": "#7C7887",
       "ADM_DEFAULT": "#9575EE",
       "ADM_22M": "#9575EE",
-      "ADM_4B": "#654FA1"
+      "ADM_4B": "#654FA1",
+      "LOOKAHEAD_TEACHER": "#ED8B74",
+      "LOOKAHEAD_EVIDENCE": "#ED8B74",
+      "ADM_STUDENT": "#9575EE"
     },
-    "derived_colors": "Warm yellow/amber variants blend the supplied yellow #EDE374 with salmon #ED8B74. Darker salmon/green marks and light gray fills remain derived from their source swatches.",
+    "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
       "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
-      "Use salmon shades for teacher horizons, keeping the lookahead and ADM identities separate.",
-      "Use original yellow #EDE374 for Train, a 25% blend toward salmon #EDCD74 for Eval, and a 50% blend #EDB774 for Oracle. Labels and CI bars remain neutral; no dark olive tones. Mint keeps its darker related tone for small success marks.",
+      "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple.",
+      "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue."
     ],
@@ -230,8 +246,8 @@
         "color": "#EDE374"
       },
       "EVAL": {
-        "salmon_fraction": 0.25,
-        "color": "#EDCD74"
+        "salmon_fraction": 0.5,
+        "color": "#EDB774"
       },
       "ORACLE": {
         "salmon_fraction": 0.5,
@@ -243,6 +259,9 @@
     "ADM_DEFAULT": "#9575EE",
     "ADM_MAIN": "#9575EE",
     "ADM_22M": "#9575EE",
-    "ADM_4B": "#654FA1"
+    "ADM_4B": "#654FA1",
+    "LOOKAHEAD_TEACHER": "#ED8B74",
+    "LOOKAHEAD_EVIDENCE": "#ED8B74",
+    "ADM_STUDENT": "#9575EE"
   }
 }

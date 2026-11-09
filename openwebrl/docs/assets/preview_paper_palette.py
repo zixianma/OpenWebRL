@@ -50,7 +50,7 @@ def palette_board():
     text(4.12, 3.53, "PAPER MARKS / VARIANTS", 7, weight="semibold")
     rows = [
         ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
-        ("Lookahead horizons", "lookahead", [("LOOKAHEAD_H1", "H=1"), ("LOOKAHEAD_H4", "H=4"), ("LOOKAHEAD_H6", "H=6")]),
+        ("Lookahead teacher / evidence", "lookahead", [("LOOKAHEAD_TEACHER", "teacher"), ("LOOKAHEAD_EVIDENCE", "evidence")]),
         ("Oracle / train / eval", "oracle", [("ORACLE", "oracle"), ("TRAIN", "train"), ("EVAL", "eval")]),
         ("Single-call scaling", "single_call", [("SINGLE_CALL_MAIN", "single call")]),
         ("Success", "success", [("SUCCESS", "small marks")]),
@@ -64,7 +64,7 @@ def palette_board():
         text(2.89, y, BASE[family], 7.5)
         for j, (key, description) in enumerate(variants):
             x = 4.12 + 1.08 * j
-            if key == "FAILURE":
+            if key in ("FAILURE", "LOOKAHEAD_TEACHER"):
                 ax.plot(x + .08, y + .025, "o", ms=7, mfc="white", mec=ROLE[key], mew=1.3)
             else:
                 chip(x, y + .025, ROLE[key], .22, .13)
@@ -93,6 +93,21 @@ def label_comparison():
                "#666666": ROLE["MUTED"], "#555555": ROLE["BASELINE_DARK"]}
     for old, new in changes.items():
         code = code.replace(old, new)
+    # Colors identify teacher evidence versus the learned model. Horizon identity
+    # stays on the x-axis, and all student heads here are the same 22M architecture.
+    offline_student = 'point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)'
+    online_student = 'point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)'
+    assert code.count(offline_student) == code.count(online_student) == 1
+    code = code.replace(offline_student, offline_student.replace('color, "o", True', '_PALETTE_ROLE["ADM_STUDENT"], "o", True'))
+    code = code.replace(online_student, online_student.replace('color, "o", True', '_PALETTE_ROLE["ADM_STUDENT"], "o", True'))
+    start = code.index("handles = [")
+    end = code.index("fig.legend(", start)
+    code = code[:start] + '''handles = []
+for filled in (False, True):
+    color = _PALETTE_ROLE["ADM_STUDENT"] if filled else _PALETTE_ROLE["LOOKAHEAD_TEACHER"]
+    handles.append(Line2D([], [], marker="o", ls="", color=color, ms=4.1,
+                          markeredgewidth=1.0, markerfacecolor=color if filled else "white"))
+''' + code[end:]
     old_output = 'output = HERE / "selection-label-setups-kfold-20261101"'
     assert code.count(old_output) == 1
     code = code.replace(old_output, f"output = Path({str(HERE / 'selection_label_palette_preview')!r})")
@@ -100,9 +115,10 @@ def label_comparison():
                          "axes.edgecolor": ROLE["MUTED"], "xtick.color": ROLE["INK"],
                          "ytick.color": ROLE["INK"]})
     # Use the existing renderer unchanged apart from its display colors/output.
-    namespace = {"__file__": str(source), "__name__": "palette_review"}
+    namespace = {"__file__": str(source), "__name__": "palette_review", "_PALETTE_ROLE": ROLE}
     exec(compile(code, str(source), "exec"), namespace)
     assert [row[2] for row in namespace["ROWS"]] == ["teacher_pre", "teacher_post", "teacher_k3", "teacher_k5", "outcome"]
+    return namespace
 
 
 if __name__ == "__main__":

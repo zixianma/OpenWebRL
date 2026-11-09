@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Paper palette preview](assets/paper_plot_palette_preview.png) · [Label-comparison preview](assets/selection_label_palette_preview.png) · [Color-role proposal](assets/paper_plot_palette.json): combines the three AdobeColor palettes, with distinct purple ADM and salmon lookahead families. ADM colors are selected: light purple for default/22M, dark purple for 4B. The warm-color preview uses yellow Train, golden-yellow Eval and amber Oracle. Other colors are proposed; the main result figures retain their current colors. [Lookahead horizon convention](ARM_FORMULATIONS.md#lookahead-horizon-convention): H counts the candidate action plus continuation actions.
+[Paper palette preview](assets/paper_plot_palette_preview.png) · [Label-comparison preview](assets/selection_label_palette_preview.png) · [Color-role proposal](assets/paper_plot_palette.json): combines the three AdobeColor palettes, with distinct purple ADM and salmon lookahead families. ADM colors are selected: light purple for default/22M, dark purple for 4B. The preview distinguishes salmon lookahead teacher/evidence from purple learned ADM, with yellow Train and amber Eval/Oracle. Other colors are proposed; the main result figures retain their current colors. [Lookahead horizon convention](ARM_FORMULATIONS.md#lookahead-horizon-convention): H counts the candidate action plus continuation actions.
 
 [Live evaluation protocol and code (Online-Mind2Web, WebVoyager, DeepShop): canonical settings, metrics and how to run them](EVAL.md).
 
