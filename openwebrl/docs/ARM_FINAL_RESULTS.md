@@ -1213,6 +1213,24 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
 - **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds). The [step-matched control](#final-selection-recipe3-lora-controls-20261109) is done.
 
+<a id="final-selection-recipe3-kev-om2w-20261108"></a>
+
+#### Kev-style decision pass on Recipe 3 labels (Online-Mind2Web, November 7–9)
+
+**Both Kev-style selectors beat one SFT 4B sample by +6.5 pp overall on Online-Mind2Web (Kev-A +6.5 [+2.7, +10.3], Kev-B +6.5 [+3.0, +10.0]; valid-only +7.5 and +7.8), and are level with each other (+0.0 [−3.7, +3.7]).** So skipping the LoRA on prompt tokens (Kev-B), which would let the selector reuse the actor's generation cache, costs nothing. Online-Mind2Web only, 2 runs, SFT in the same window (November 8, 16:15–19:45 PST); the Recipe 3 decoder was not run in this window, so the two are not compared directly.
+
+| Selector | Runs | Valid | Successes | Online-Mind2Web overall | Online-Mind2Web valid-only | Overall per run | − SFT alone, overall pp [95% CI] | − SFT alone, valid-only pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: |
+| SFT 4B alone (1 sample) | 2 | 531 / 600 | 161 | 26.8% | 30.3% | 26.3 / 27.3 | — | — |
+| Kev-A: LoRA on all tokens | 2 | 529 / 600 | 200 | **33.3%** | 37.8% | 35.0 / 31.7 | **+6.5 [+2.7, +10.3]** | **+7.5 [+3.1, +11.9]** |
+| Kev-B: no LoRA on prompt tokens | 2 | 525 / 600 | 200 | **33.3%** | **38.1%** | 31.7 / 35.0 | **+6.5 [+3.0, +10.0]** | **+7.8 [+3.7, +11.9]** |
+
+*300 tasks per run; judge gpt-5.6-terra (AgentTrek prompt), rolled out judge-deferred and judged afterwards; no record refused. Paired bootstrap over tasks (10,000 resamples, seed 20261029, per-task success averaged over runs); one training run per selector. For context only (other windows, cross-day): Recipe 3 22.6M heads score 37.6–40.0% and the 4B LoRA decoder 40.1% valid-only on Online-Mind2Web ([architecture round](#final-selection-recipe3-head-arch-20261107), [November 9 controls](#final-selection-recipe3-lora-controls-20261109)), with SFT at 32.9% in the head round. One Kev-A episode timed out and counts as invalid.*
+
+- **Training.** Kev-style selector ([October Kev pass](ARM_SELECTION_HEAD.md)) on the same Recipe 3 GPT-5.5 H = 4 panels and split as the default head: the 4B SFT actor with a LoRA on all 36 layers plus a pointer head on a decision token, initialised from the pointwise head, lr 1e-4 (pointer 1e-3), batch 8 states. Best probe at step 600 of 750 (4,800 training states), 6.8 h on 1 H200 each. Kev-A adapts every token; Kev-B runs the prompt through the unadapted actor (`--kev-prompt-base`). Held-out agreement with the GPT-5.5 picks on 1,727 validation panels: 41.6% (A) and 42.7% (B).
+- **Inference.** Evaluated as a separate scorer service next to the actor (`head5x`), N = 5, SFT 4B actor, T 1.0 / top-p 0.9, 30 steps.
+- Evidence: [rates and contrasts](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.json) · [script](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.py). Runtime: `recipe3-ablations-20261104/` (training `kev/train.sbatch`, `kev/common.sh`, source `source-kev/`, checkpoints `/gpfs/projects/krishna/zixianma/kev-ckpt-tmp/kev{A,B}-r3/`, evals `eval-kev/run<k>/`, job log `eval-kev/jobs.txt`).
+
 <a id="final-selection-recipe3-stealth-20261109"></a>
 
 #### Recipe 3 decoder on US-residential stealth browsers (November 9)

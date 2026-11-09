@@ -1,0 +1,71 @@
+{
+ "benchmark": "online_mind2web",
+ "tasks": 300,
+ "runs": 2,
+ "judge_models": [
+  "gpt-5.6-terra"
+ ],
+ "conditions": {
+  "sft1": {
+   "label": "SFT 4B alone (1 sample)",
+   "episodes": 600,
+   "valid": 531,
+   "successes": 161,
+   "overall": 0.2683333333333333,
+   "valid_only": 0.3032015065913371,
+   "overall_per_run": [
+    0.2633333333333333,
+    0.2733333333333333
+   ]
+  },
+  "head5x-9ff81e7c894f": {
+   "label": "Kev-A (LoRA on all tokens)",
+   "episodes": 600,
+   "valid": 529,
+   "successes": 200,
+   "overall": 0.3333333333333333,
+   "valid_only": 0.3780718336483932,
+   "overall_per_run": [
+    0.35,
+    0.31666666666666665
+   ],
+   "diff_overall_pp": [
+    6.5,
+    2.666666666666667,
+    10.333333333333334
+   ],
+   "diff_valid_only_pp": [
+    7.48703270570561,
+    3.14537033007761,
+    11.86285940373395
+   ]
+  },
+  "head5x-18ab53442be0": {
+   "label": "Kev-B (no LoRA on prompt tokens)",
+   "episodes": 600,
+   "valid": 525,
+   "successes": 200,
+   "overall": 0.3333333333333333,
+   "valid_only": 0.38095238095238093,
+   "overall_per_run": [
+    0.31666666666666665,
+    0.35
+   ],
+   "diff_overall_pp": [
+    6.5,
+    2.9999999999999973,
+    10.000000000000004
+   ],
+   "diff_valid_only_pp": [
+    7.775087436104383,
+    3.719898772434637,
+    11.856135545218791
+   ]
+  }
+ },
+ "kevB_minus_kevA_overall_pp": [
+  0.0,
+  -3.666666666666668,
+  3.6666666666666625
+ ]
+}
