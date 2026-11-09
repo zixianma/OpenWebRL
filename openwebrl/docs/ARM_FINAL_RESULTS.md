@@ -1149,7 +1149,7 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 | 2 panels per state | 7,476 | 2,112 | 1 | 36.0% | 54.3% | 51.7% | 44.8% | 47.3% | +5.3 [+2.3, +8.4] | −0.5 [−3.4, +2.4] |
 | 4 panels per state | 13,532 | 2,112 | 3 | 40.8% | **54.6%** | **55.8%** | **48.3%** | **50.4%** | **+8.8 [+6.6, +10.9]** | **+3.0 [+1.1, +4.9]** |
 
-*Per-benchmark columns are valid-only success. Mean overall is the equal-weight 3-benchmark mean of overall success (successes / tasks); differences are on it, paired bootstrap over tasks (10,000 resamples, seed 20261029), per-task success averaged over a row's runs. Intervals reflect task sampling, not training-seed variance (one seed per subset). Against the full LoRA, 4 panels per state is +6.2 [+2.0, +10.4] on DeepShop, +2.4 [−0.1, +4.9] on WebVoyager and +0.3 [−2.6, +3.3] on Online-Mind2Web; 1 panel per state is +3.3 [−1.8, +8.2], +2.2 [−0.3, +4.8] and −0.9 [−3.8, +2.0]. Task-weighted (300 / 595 / 150 of 1,045) − SFT: full +6.5, 4 panels +8.8, 1 panel +7.9, 1,000 states +7.8, 250 states +7.0. With the earlier references (SFT November 3, full LoRA November 4) the gaps were similar: 4 panels +3.5, 1 panel and 1,000 states +2.1 over the full LoRA. November 6 judge note: the OpenAI key failed mid-run, so the reference rollouts finished without judging and were judged afterwards from their saved final-turn inputs by the same judge, prompts and parsers (requests verified identical to live ones on 15 tasks per benchmark). Subsets take 480–1,700 optimizer steps (2 epochs, batch 16) against about 4,100 for the full data, so the full LoRA may be overtrained; an epoch- or step-matched control has not been run.*
+*Per-benchmark columns are valid-only success. Mean overall is the equal-weight 3-benchmark mean of overall success (successes / tasks); differences are on it, paired bootstrap over tasks (10,000 resamples, seed 20261029), per-task success averaged over a row's runs. Intervals reflect task sampling, not training-seed variance (one seed per subset). Against the full LoRA, 4 panels per state is +6.2 [+2.0, +10.4] on DeepShop, +2.4 [−0.1, +4.9] on WebVoyager and +0.3 [−2.6, +3.3] on Online-Mind2Web; 1 panel per state is +3.3 [−1.8, +8.2], +2.2 [−0.3, +4.8] and −0.9 [−3.8, +2.0]. Task-weighted (300 / 595 / 150 of 1,045) − SFT: full +6.5, 4 panels +8.8, 1 panel +7.9, 1,000 states +7.8, 250 states +7.0. With the earlier references (SFT November 3, full LoRA November 4) the gaps were similar: 4 panels +3.5, 1 panel and 1,000 states +2.1 over the full LoRA. November 6 judge note: the OpenAI key failed mid-run, so the reference rollouts finished without judging and were judged afterwards from their saved final-turn inputs by the same judge, prompts and parsers (requests verified identical to live ones on 15 tasks per benchmark). Subsets take 480–1,700 optimizer steps (2 epochs, batch 16) against about 4,100 for the full data, so the full LoRA may be overtrained. A step-matched control (November 9, [below](#final-selection-recipe3-lora-controls-20261109)) rules this out: the full data at the 4-per-state subset's 1,692 steps scores the same as at 4,122.*
 
 ![Recipe 3 GPT-5.5 H = 4 4B LoRA data ablations: mean overall success versus 5-action sets in the training data, for fewer states and fewer sets per state, with the full-data LoRA and SFT 4B](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.png)
 
@@ -1158,6 +1158,18 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 ![The same per benchmark: overall success on Online-Mind2Web, WebVoyager and DeepShop](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.png)
 
 *Same encoding, overall success per benchmark. The 4-sets-per-state lead over the full data is mostly DeepShop (+6.2 [+2.0, +10.4] pp, table note). Mean: [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.svg) · per benchmark: [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg) · [plot script](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.py) · earlier separate valid-only plots: states [PNG](arm_results/rl_integration/selection-recipe3-data-states-20261105.png), panels [PNG](arm_results/rl_integration/selection-recipe3-data-panels-20261105.png) ([script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.py)) · [data](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.json) · [analysis script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105-analysis.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/` (subset builder `build_lora_subsets.py`, LoRAs `lora/<subset>/{adapter,merged}`, evals `eval/run<k>/`, same-window references `eval-ctrl/run<k>/`, deferred judging `deferjudge/`).
+
+<a id="final-selection-recipe3-lora-controls-20261109"></a>
+
+**Step-matched LoRA and full fine-tune (November 9).** *The full-data LoRA is not overtrained, and full fine-tuning does not help.* Stopping the same LoRA at 1,692 steps (the 4-per-state subset's step count, about 0.82 epoch) gives the same success as the full 4,122-step schedule (−0.5 [−2.5, +1.4] pp mean overall). Training all language-model weights instead (lr 1e-5, same data, batch and 4,122 steps; vision tower and projector frozen) is worse: −2.5 [−4.6, −0.4] pp, mostly on WebVoyager (−4.6 [−7.2, −2.1] valid-only). Each row ran 3 times in one window (November 9, 03:30–10:15 PST); same actor, protocol and judges as the table above.
+
+| Selector training | Online-Mind2Web valid | Online-Mind2Web successes | Online-Mind2Web | WebVoyager valid | WebVoyager successes | WebVoyager | DeepShop valid | DeepShop successes | DeepShop | Mean overall | Mean valid-only | − full LoRA, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full data, LoRA, 4,122 steps (reference) | 779 / 900 | 312 | 40.1% | 1,619 / 1,785 | 919 | 56.8% | 444 / 450 | 234 | 52.7% | **46.1%** | **49.8%** | — |
+| Full data, LoRA, 1,692 steps (step-matched) | 790 / 900 | 324 | **41.0%** | 1,609 / 1,785 | 920 | **57.2%** | 445 / 450 | 221 | 49.7% | 45.6% | 49.3% | −0.5 [−2.5, +1.4] |
+| Full data, full fine-tune, 4,122 steps | 789 / 900 | 302 | 38.3% | 1,621 / 1,785 | 845 | 52.1% | 444 / 450 | 224 | 50.5% | 43.6% | 47.0% | **−2.5 [−4.6, −0.4]** |
+
+*Rate columns are valid-only, pooled over 3 runs; the difference is on mean overall (equal-weight 3-benchmark mean of overall success), paired bootstrap over tasks (10,000 resamples, seed 20261029, per-task success averaged over runs). Valid-only: step-matched − full LoRA −0.6 [−2.7, +1.5]; full fine-tune −2.9 [−5.1, −0.7]. Per benchmark, valid-only: step-matched +1.0 [−2.4, +4.3] / +0.4 [−1.9, +2.8] / −3.0 [−7.8, +1.7], full fine-tune −1.8 [−5.1, +1.7] / −4.6 [−7.2, −2.1] / −2.3 [−7.3, +2.9] (Online-Mind2Web / WebVoyager / DeepShop). One seed and one learning rate for the full fine-tune, so this shows it is worse at this setting, not that it cannot match the LoRA; we are not pursuing it further. The reference re-run reproduces November 6 (46.1% vs 45.2% mean overall). Same-window re-runs of the 4-per-state, 1-per-state and 1,000-state subsets are in progress. All 9,405 episodes judged; none refused.* Evidence: [rates and contrasts](arm_results/rl_integration/selection-recipe3-lora-controls-20261109.json) · [script](arm_results/rl_integration/selection-recipe3-lora-controls-20261109.py). Runtime: `recipe3-ablations-20261104/` (training `lora/{full-s1692,ft-full}/`, evals `eval-1108/run<k>/`, job log `eval-1108/jobs.txt`).
 
 <a id="final-selection-recipe3-head-arch-20261107"></a>
 
@@ -1199,7 +1211,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - **One path for everything:** runtime `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3/` (panels, all four label sets, LoRA SFT data, head training data and checkpoints, as symlinks; see its README.md).
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 H = 4), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
-- **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds), and an epoch- or step-matched full-data control for the [data ablations](#final-selection-recipe3-data-ablations-20261105).
+- **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds). The [step-matched control](#final-selection-recipe3-lora-controls-20261109) is done.
 
 <a id="final-selection-recipe3-stealth-20261109"></a>
 
@@ -1246,7 +1258,11 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 <a id="final-selection-head-ablations-20261021"></a>
 
-## Selection head: which training labels work (October 21, 2026)
+## Selection head: which training labels work (October 21 – November 3)
+
+**Current results: on all 1,725 branch states (task-level 5-fold), lookahead H = 4 gives the best head offline, and live over three same-day runs only the H = 4 (+2.2 [+0.1, +4.3] pp) and Oracle (+2.0 [+0.1, +4.0]) heads beat one SFT 4B sample; pre-execution labels do not help (−1.3).** Details: [5-fold](#final-selection-label-kfold-20261101), [live three runs](#final-selection-label-live-3run-20261103). These label sources were then scaled up as [Recipe 3](#final-selection-recipe3). The October 21 first comparison (one run per selector, superseded by the three-run rounds) and the October 29–31 architecture round (superseded by the [Recipe 3 architecture round](#final-selection-recipe3-head-arch-20261107), same conclusion) are collapsed below.
+
+<details><summary>October 21 first comparison (one run per selector): heads vs SelectionARM, size and cost</summary>
 
 **A 22.6 M-parameter head on the frozen SFT-4B actor, trained on observed-outcome or lookahead H = 4 labels for 1,380 SFT-actor branch states, is level with Piotr SelectionARM (−0.8 and −0.9 pp) at 56–65% of its compute per episode. Lookahead H = 2 labels gain about a third as much and pre-execution labels nothing. Trained on Piotr's data, the same head is the best method (+1.4 pp over Piotr, within noise). An 8B actor without selection gains +3.3 pp over the 4B.** Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks; T 1.0 / top-p 0.9, 30 steps, one episode per task. "Mean" weights each benchmark equally (one third), as in the API comparison above.
 
@@ -1281,6 +1297,8 @@ All four attention × scorer × loss combinations plus causal attention, one run
 *Top row: equal mean of the three benchmarks (success and cost). Bottom row: Online-Mind2Web 300 only, adding the three-candidate runs ([below](#final-selection-n3-om2w-20261022)); lines join each selector's N = 3 (triangle) and N = 5 runs. Success counts invalid episodes as failures. T = 1.0, top-p = 0.9, 30 steps; selectors use N = 5 unless marked N = 3, and SFT baselines use one sample. “Piotr” denotes SelectionARM or the head's training data, as indicated in the legend; H = 2/4 denotes the label horizon, including the candidate action. Heads have 4.46 B total parameters (pointwise: 4.457 B), versus 4.44 B for SFT 4B, so some points overlap in the parameter column. Axes are cropped; points are descriptive estimates without uncertainty bars.*
 
 [Paper PDF](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.pdf) · [Editable SVG](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.svg). Compact 7-inch canvas with a shared legend and column labels; 300 dpi PNG preview. Protocol details are in this caption.
+
+</details>
 
 - **Definitions.** "Overall" counts invalid episodes as failures; "valid-only" divides successes by valid episodes. Model time is actor + selector decision time summed over an episode, excluding browser execution. PFLOP per episode = PFLOP per step × steps per episode.
 - **Methods.** Every selector picks one of five candidates the frozen actor samples per step; "branch" data are the SFT-actor branching states collected for this project ([collection and labels](ARM_FORMULATIONS.md#lookahead-labels-current)), "Piotr's" the GPT-5.5-labelled panels of Piotr's release. SFT rows take a single sample. Training data reads states / panels (with the actions in each panel) / labels. Piotr's panels are five sampled actor actions each (about 13 per state), duplicates included, each labelled with one GPT-5.5 pick made before execution (from the screenshot and candidates only). Branch panels are one per state holding its 2–5 distinct SFT-proposed actions, reshuffled each epoch; branch states come from the tasks of Piotr's training split.
@@ -1359,6 +1377,9 @@ All four attention × scorer × loss combinations plus causal attention, one run
   The earlier three-panel version of this figure (training states, the 345 test states and live; seed-0 heads, 2026-10-27) is kept as history: [plot](arm_results/rl_integration/selection-label-setups-20261027.png) · [script](arm_results/rl_integration/selection-label-setups-20261027-plot.py).
 
   </details>
+
+<details><summary>Earlier findings (October 21–31): Online-Mind2Web shortfall, decision time, architecture round (three runs), graded targets, LoRA on 1,380 states</summary>
+
 - **Online-Mind2Web is where the branch labels fall short.** On WebVoyager and DeepShop the outcome and H = 4 heads match Piotr; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
 - **Why time barely drops.** Generating five candidates takes about 8.2 s of each 8–9 s decision; Piotr's selector adds 0.50 s and the head 0.02 s. Selector FLOPs are a fast prefill, while decoding is bandwidth-bound, so the head's 36% compute saving per step becomes only about 0.5 s per decision, roughly offset by its hidden-state capture. Episode length matters as much: the outcome head is cheapest per episode because it takes the fewest steps. Times come from live runs on different nodes, not a matched timing study.
 - <a id="final-selection-arch-k3-20261029"></a>**Architecture does not matter (lookahead H = 4 labels, three runs).** On Online-Mind2Web + WebVoyager, the six H = 4 heads run three times score 40.3–43.4% and none separates from the default head (−1.9 to +1.2 pp, every interval includes zero); the Piotr-data head, at 45.5%, beats all of them. All heads are trained on the H = 4 labels of the same 1,380 branch states (seed 0, 20 epochs, batch 64, ≈22.6 M parameters each). The default head is joint (bidirectional attention among the state and all candidates) · transformer · soft CE (bold). The five other heads are the best non-default heads of the [one-day run](#final-selection-arch-k3-run1-20261029); their runs 2 and 3 are run on 10-30/31, while the default, Piotr-data and SFT rows ran all three times on 10-29. DeepShop drifts with the run date: the same five heads score 28–35% valid-only on 10-29 and 43–48% on 10-30/31, so their DeepShop leads (+5 to +9 pp) are not attributed to the heads, and differences are read on the two-benchmark mean. Per-benchmark columns are valid-only success pooled over three runs (successes / valid episodes); "Mean overall" averages the three benchmarks' overall rates (invalid episodes count as failures) and "Mean valid-only" their valid-only rates. Differences are on the Online-Mind2Web + WebVoyager overall mean (each benchmark weighted one half; per-task success averaged over runs), [paired 95% intervals](#final-paired-bootstrap), reading row − reference. Rows are sorted by that mean.
@@ -1405,6 +1426,8 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - A 4B LoRA trained with Piotr's recipe on the 1,380 branch states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-lora-20261021)).
 - [Details, per-benchmark intervals and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · Evidence: [heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json) · [Plot script](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py)
 
+</details>
+
 <a id="final-selection-n3-om2w-20261022"></a>
 
 ### Three candidates instead of five (Online-Mind2Web)
@@ -1429,6 +1452,12 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - **Time.** A decision takes 6.0 s for Piotr and 5.4 s for the heads at N = 3, against 8.4 s and 7.8 s at N = 5: the slowest of fewer parallel candidates finishes sooner and the GPU serves fewer requests.
 - **Caveat.** Piotr's N = 3 gain over N = 5 is not significant and comes from one run per method on one benchmark; WebVoyager and DeepShop were not run at N = 3.
 - [Evidence](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Analysis script](arm_results/rl_integration/selection-n3-sft8b-full-20261021-analysis.py) · n-gram: [evidence](arm_results/rl_integration/selection-ngram-om2w-full-20261025.json), [analysis script](arm_results/rl_integration/selection-ngram-om2w-full-20261025-analysis.py) · Plot: bottom row of the figure above
+
+### Data sweeps before Recipe 3 (October 23–31)
+
+**Superseded by [Recipe 3](#final-selection-recipe3) and its [data ablations](#final-selection-recipe3-data-ablations-20261105).** On Recipe 2 data, neither more of our states, Piotr-style panels instead of one panel per state, nor stronger lookahead judges (GPT-5.5, GPT-6.1 Sol) closed the gap to Piotr's data, and more of Piotr's own states or panels did not lift the head either. Recipe 3, many lookahead-labelled panels per state at scale, is the version that matches SelectionARM.
+
+<details><summary>Details: more of our data, many panels per state, stronger judges, more of Piotr's data</summary>
 
 <a id="final-selection-our-data-20261028"></a>
 
@@ -1556,6 +1585,7 @@ SFT 4B: Online-Mind2Web 31.7% and WebVoyager 44.4% (10-18; Online-Mind2Web re-ju
 
 </details>
 
+</details>
 
 <a id="final-selection-sameday3-20261030"></a>
 
@@ -1627,7 +1657,8 @@ Pooled over three runs: per-benchmark valid-only = successes / valid episodes ac
 
 - [Evidence (three runs)](arm_results/rl_integration/selection-rlactor-4096-3run-20261031.json) · [Analysis script](arm_results/rl_integration/selection-rlactor-4096-3run-20261031.py) · [Run notes](ARM_SELECTION_HEAD.md#selection-head-rl-actor-20261030)
 
-#### One run, including the frozen SFT-4B encoder
+<details><summary>One run, including the frozen SFT-4B encoder (October 30–31; rankings did not survive the three-run pooling)</summary>
+
 
 Run 1 of every condition, plus the heads with a separate frozen SFT-4B encoder (one run only). Rankings among the top rows here did not survive the three-run pooling above. Baselines and the frozen-encoder Recipe 2 head ran on October 30, all other heads on October 31; all 1,045 tasks, N = 5 candidates, T 1.0 / top-p 0.9, 30 steps, **4,096 response tokens** (the paper's setting), one run each. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o.
 
@@ -1652,6 +1683,7 @@ Recipes as [defined above](#final-selection-sameday3-20261030). All heads were t
 - **October 31 run notes.** On Online-Mind2Web the frozen SFT-4B scorer of the Recipe 1 head failed with a cuDNN attention error on 184 episodes (persistently after about an hour); those tasks were rerun the same day, while 26 tasks whose site failed to load kept their single original attempt, as for every other run. The 1.3K head on RL-actor features stopped at the 4 h limit on WebVoyager with 581 of 595 tasks and was resumed for the other 14.
 - [Details and counts](ARM_SELECTION_HEAD.md#selection-head-rl-actor-20261030) · [Evidence](arm_results/rl_integration/selection-rlactor-4096-20261030.json) · Scripts: [per-run rates](arm_results/rl_integration/selection-rlactor-4096-20261030-heads.py), [paired](arm_results/rl_integration/selection-rlactor-4096-20261030-paired.py)
 
+</details>
 
 <a id="rl-smoothed-eval-learning-curves"></a>
 ## RL evaluation through training

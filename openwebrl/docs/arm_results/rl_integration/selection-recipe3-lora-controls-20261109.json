@@ -1,0 +1,146 @@
+{
+ "conditions": {
+  "arm5-9fadc8dc4655": {
+   "label": "Full data, LoRA (4,122 steps; reference)",
+   "training": "rl-actor-recollect-20261016/p16-k3-20261031/lora/lora (rank 32, lr 1e-4, 2 epochs, batch 16)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 779,
+    "successes": 312,
+    "overall": 0.3466666666666667,
+    "valid_only": 0.40051347881899874
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1619,
+    "successes": 919,
+    "overall": 0.5148459383753501,
+    "valid_only": 0.5676343421865349
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 444,
+    "successes": 234,
+    "overall": 0.52,
+    "valid_only": 0.527027027027027
+   },
+   "mean_overall": 0.46050420168067224,
+   "mean_valid_only": 0.4983916160108535
+  },
+  "arm5-5f368697014f": {
+   "label": "Full data, LoRA, step-matched (1,692 steps)",
+   "training": "recipe3-ablations-20261104/lora/full-s1692 (identical LoRA, max_steps 1692 = 4-panels-per-state subset's steps, ~0.82 epoch)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 790,
+    "successes": 324,
+    "overall": 0.36,
+    "valid_only": 0.41012658227848103,
+    "diff_valid_only_pp": [
+     0.9613103459482297,
+     -2.3759008413086176,
+     4.263996413110769
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1609,
+    "successes": 920,
+    "overall": 0.5154061624649859,
+    "valid_only": 0.5717837165941578,
+    "diff_valid_only_pp": [
+     0.41493744076229744,
+     -1.917005988468168,
+     2.789406476073738
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 221,
+    "overall": 0.4911111111111111,
+    "valid_only": 0.4966292134831461,
+    "diff_valid_only_pp": [
+     -3.0397813543880883,
+     -7.775687630281153,
+     1.67656782074543
+    ]
+   },
+   "mean_overall": 0.455505757858699,
+   "mean_valid_only": 0.492846504118595,
+   "diff_mean_overall_pp": [
+    -0.4998443821973231,
+    -2.4867802676626214,
+    1.4497587924058521
+   ],
+   "diff_mean_valid_only_pp": [
+    -0.5545111892258536,
+    -2.6620588540510064,
+    1.4900230041582987
+   ]
+  },
+  "arm5-31cb7266dae5": {
+   "label": "Full data, full fine-tune (4,122 steps)",
+   "training": "recipe3-ablations-20261104/lora/ft-full (all language-model weights; vision tower and projector frozen; lr 1e-5, 2 epochs, batch 16)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 789,
+    "successes": 302,
+    "overall": 0.33555555555555555,
+    "valid_only": 0.38276299112801015,
+    "diff_valid_only_pp": [
+     -1.7750487690988581,
+     -5.113499736044994,
+     1.6867012770884264
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1621,
+    "successes": 845,
+    "overall": 0.4733893557422969,
+    "valid_only": 0.5212831585441086,
+    "diff_valid_only_pp": [
+     -4.635118364242629,
+     -7.207114979947605,
+     -2.0905762908552545
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 444,
+    "successes": 224,
+    "overall": 0.49777777777777776,
+    "valid_only": 0.5045045045045045,
+    "diff_valid_only_pp": [
+     -2.2522522522522515,
+     -7.320592150908599,
+     2.943330485347294
+    ]
+   },
+   "mean_overall": 0.4355742296918767,
+   "mean_valid_only": 0.46951688472554104,
+   "diff_mean_overall_pp": [
+    -2.492997198879554,
+    -4.573755057578586,
+    -0.365624027388733
+   ],
+   "diff_mean_valid_only_pp": [
+    -2.8874731285312483,
+    -5.079958855027843,
+    -0.6704269903669053
+   ]
+  }
+ },
+ "runs": 3,
+ "reference": "arm5-9fadc8dc4655"
+}
