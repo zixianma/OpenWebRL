@@ -130,7 +130,6 @@
     "result_horizon_exceptions": {
       "arm_results/rl_integration/selection-label-setups-kfold-20261101": [
         1,
-        2,
         4,
         6
       ]
@@ -139,7 +138,7 @@
   "notes": [
     "Role variables remain distinct even when a chosen palette intentionally shares a family.",
     "No colors have been changed by creating this proposal.",
-    "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the all-horizons teacher/student comparison explicitly restoring H=1.",
+    "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the teacher/student horizon comparison explicitly restoring H=1.",
     "The seven base colors are user choices; light/dark tones are derived, not independent choices."
   ],
   "category_cycle": {
