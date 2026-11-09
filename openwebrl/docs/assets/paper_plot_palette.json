@@ -138,7 +138,7 @@
     "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role"
   },
   "non_color_encodings": {
-    "teacher_vs_student": "In the label comparison, teachers use hollow circles colored by label source; students use solid ADM purple. Elsewhere keep each figure legend explicit.",
+    "teacher_vs_student": "Teachers use hollow circles colored by label source. Students use light-purple fills with thick warm label-source outlines: yellow Pre-exec, salmon-orange Lookahead, amber Oracle. Explicit H labels distinguish horizons.",
     "actor_model_family": "Marker shape in model comparisons; add a shape rather than a new color per model",
     "cached": "Shaded/hatched symbol, without dark outlines",
     "configuration": "Line style, fill and ordered tones within the same semantic family; define each figure legend explicitly",
@@ -229,7 +229,7 @@
     "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
       "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
-      "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple.",
+      "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple. Student fills keep purple, with thick warm outlines to identify label sources (yellow Pre-exec, salmon-orange Lookahead, amber Oracle).",
       "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue."
@@ -307,6 +307,7 @@
       "arm_results/rl_final_20261108/plot_rl_learning_compact.py",
       "arm_results/methods/selection-offline-eval-20261022.py",
       "arm_results/methods/selection-arch-overview-20261107.py"
-    ]
+    ],
+    "student_label_outline": "Student ADM-22M uses light-purple fills and thick warm outlines: yellow for Pre-exec labels, salmon-orange for Lookahead labels, amber for Oracle labels. Explicit H labels distinguish horizons."
   }
 }

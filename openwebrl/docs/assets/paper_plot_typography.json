@@ -134,9 +134,9 @@
     "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-20261027.png": "8a7e623a5e426abc5e9687b0f4f1fca3818269ab7a234ef9a650ba32a4a201f4",
     "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-kfold-20261101.png": "4c9826285ec10bc48c0e3e348d3d410160de0076b4672b0f0cf62b6c512f2ce1",
     "openwebrl/docs/arm_results/rl_integration/selection-label-setups-20261027.png": "f58831e0e0d69e749cd192d610060dff66652bfc6cd74bdc5dbbfad2f803bec0",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf": "4bad4f64129f3f8ad9ec4f3141cb62b859c9d12820a1ab10d601577246a09bf2",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.png": "e619c1f6a63734c5a382250f64a7686bc7e75e5140315f42631dc0c7ab525950",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.svg": "c7ebfb354096cd69c152badbfbed7fb5ef1fc21e0db04dcbb92e7f700ddf00c3",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf": "c0670218a778ab6a9da35044085dcc8d59a8065d68365adfed221a17e4e5d652",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.png": "d89d9f4b6e9690f314788d33f63bb9d259d46216b429e1589814d7b44d076e9f",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.svg": "fcd3f56b1b85fc85c73a52007c5632c358255d3c791b7b5fab8e8e78ea1e9a99",
     "openwebrl/docs/arm_results/rl_integration/selection-label-stages-20261027.png": "cfbe60ecde74aca9c332a42f6f5ed3c8b1d42f6702f8994f760e59a33f16c90d",
     "openwebrl/docs/arm_results/rl_integration/selection-label-stages-kfold-20261101.png": "d54c5ef915161a8dedc478c4d4f61c169d93122002b05ad61849a1e13be74368",
     "openwebrl/docs/arm_results/rl_integration/selection-n3-om2w-vs-cost-20261021.png": "f68c0ef33d6630010fd560d584144afed9ab9b9b76a764cc05118dc2ce7304ef",
@@ -248,10 +248,10 @@
     "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_draw_split_valid_only.png": "29711602b8ceb50851961d9cfa29d157e35f6b1fd41c945281d072c20f038c4d",
     "openwebrl/docs/assets/paper_plot_palette_preview.png": "1d5644b452907f94b2e962c93b7846e3f0e0d1c99501764828916400a95a1690",
     "openwebrl/docs/assets/paper_plot_palette_preview.pdf": "ec8799abe82fe0ceba2c3fc2af000592f177bf6b10724eb2eb4b522bd3c54fc5",
-    "openwebrl/docs/assets/paper_plot_palette_preview.svg": "baaa528ea5ea098e38fdcd4182b6f4079a7b549428a18f4e9eda1fd23048ce99",
-    "openwebrl/docs/assets/selection_label_palette_preview.png": "f395918231269e0d8f37bbcb0cf2c38c8acdaf54de9cbca824853fc9975e0f73",
-    "openwebrl/docs/assets/selection_label_palette_preview.pdf": "1895104674f8b96e98670a4e5d85dde10c22b55261d0660e7e6b027fe30ec58e",
-    "openwebrl/docs/assets/selection_label_palette_preview.svg": "3402bf41a4b53fb93d3b909871adf8cc8b8d06129726641e6d19ce71b1b2db73"
+    "openwebrl/docs/assets/paper_plot_palette_preview.svg": "25a4a0945dac246d75146c725b8da21baff7548b113c174d7d729e59fa61c6b8",
+    "openwebrl/docs/assets/selection_label_palette_preview.png": "1777cc6f4975c726872d496a04792087336ee6f097f8a2def45022ac0bde45da",
+    "openwebrl/docs/assets/selection_label_palette_preview.pdf": "fb09ab969f7f8e03e592f2efdb7c56071cb25e240159d3da10804b89831578b2",
+    "openwebrl/docs/assets/selection_label_palette_preview.svg": "c2997fcab0f3afb710b30d42075dd9847007baf62da307566fb8a243ff81377d"
   },
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied."

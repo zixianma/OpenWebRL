@@ -46,10 +46,12 @@ PANELS = [
     ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
-def point(ax, x, v, color, marker, filled):
+def point(ax, x, v, color, marker, filled, outline=None):
     d, lo, hi = v
     ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
-                zorder=3, markeredgewidth=1.0, markerfacecolor=color if filled else "white", markeredgecolor=color)
+                zorder=3, markeredgewidth=1.7 if filled else 1.0,
+                markerfacecolor=color if filled else "white",
+                markeredgecolor=outline if outline is not None else color)
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
 
@@ -57,14 +59,15 @@ fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
+        outline = C["TRAIN"] if src == "teacher_pre" else color
         if kind == "live":
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ADM_STUDENT"], "o", True)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], C["ADM_STUDENT"], "o", True)
+            point(ax, x + 0.17, P[src]["head_minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -81,11 +84,12 @@ for ax, (title, kind, base) in zip(axes, PANELS):
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
 axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
-handles = []
-for filled in (False, True):
-    color = C["ADM_STUDENT"] if filled else C["LOOKAHEAD_TEACHER"]
-    handles.append(Line2D([], [], marker="o", ls="", color=color, ms=4.1,
-                          markeredgewidth=1.0, markerfacecolor=color if filled else "white"))
+handles = [
+    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
+           markeredgewidth=1.0, markerfacecolor="white"),
+    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
+           markeredgewidth=1.7, markerfacecolor=C["ADM_STUDENT"]),
+]
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
