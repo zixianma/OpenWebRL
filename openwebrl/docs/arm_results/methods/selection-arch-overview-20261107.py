@@ -29,7 +29,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
 HEAD, DECODER = INK, "#4B5563"
-SHARED, SHARED_BG = "#737A83", "#F3F4F5"
+SHARED, SHARED_BG = "#737A83", "white"
 ALLOWED_FILL, MASKED_FILL = "#81CCD7", "#F5F6F7"
 K = 5
 plt.rcParams.update({
@@ -82,7 +82,7 @@ box(.08, 3.21, 1.02, .28, edge=SHARED, fill=SHARED_BG)
 text(.59, 3.35, "Context", color=SHARED, ha="center")
 arrow(1.11, 3.35, 1.35, 3.35)
 box(1.36, 3.21, 1.32, .28, edge=INK, fill=SHARED_BG, lw=.95)
-text(2.02, 3.35, "Frozen actor", size=8, weight="bold", ha="center")
+text(2.02, 3.35, "Frozen actor", size=8, ha="center")
 arrow(2.69, 3.35, 4.01, 3.35)
 box(4.02, 3.21, 2.17, .28, edge=SHARED, fill=SHARED_BG)
 text(5.105, 3.35, r"$K=5$ candidates: reasoning + $a_t^i$", color=SHARED, ha="center")
@@ -94,7 +94,7 @@ arrow(5.105, 2.90, 5.105, 2.80, color=DECODER)
 actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01)
 box(.50, 2.58, 3.28, .42, edge=SHARED, fill=SHARED_BG)
 text(2.14, 2.91, "a)  ADM head", size=8,
-     weight="bold", ha="center")
+     weight="medium", ha="center")
 text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5,
      ha="center", linespacing=1.05)
 text(2.97, 2.73, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5,
@@ -105,15 +105,15 @@ for center in (1.285, 2.875):
 CELL = .115
 COLS = {"Joint": .94, "Independent": 2.53}
 for name, x0 in COLS.items():
-    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD if name == "Joint" else DECODER, weight="bold", ha="center")
+    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD if name == "Joint" else DECODER, ha="center")
 # Neutral row enclosures separate attention from MLP computation.
-for y, height, fill in ((1.40, .92, "white"), (.33, .98, "#F7F8FA")):
+for y, height, fill in ((1.40, .92, "white"), (.33, .98, "white")):
     ax.add_patch(FancyBboxPatch((.06, y), 3.75, height,
         boxstyle="round,pad=0,rounding_size=.035", edgecolor=LINE,
         facecolor=fill, linewidth=.55, zorder=.5))
 TTOP = 2.16
-text(.22, 1.86, "Transformer", size=7.5, weight="bold", ha="center", rotation=90)
-text(.22, .82, "MLP", size=7.5, weight="bold", ha="center", rotation=90)
+text(.22, 1.86, "Transformer", size=7.5, ha="center", rotation=90)
+text(.22, .82, "MLP", size=7.5, ha="center", rotation=90)
 for name, x0 in COLS.items():
     joint = name == "Joint"
     # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
@@ -140,7 +140,7 @@ text(2.02, .13, r"$i^*=\arg\max_i z_i$", color=HEAD, ha="center")
 
 # --- right: ADM-4B decoder ---------------------------------------------------------------------------------------
 ax.plot([3.96, 3.96], [.02, 2.79], color=LINE, linewidth=.6)
-text(5.105, 2.72, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
+text(5.105, 2.72, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="medium", ha="center")
 DCELL, DX, DTOP = .17, 4.51, 2.16
 # Label each candidate-text block by its proposed action. The decoder receives
 # full candidate reasoning/action text, never the head's projected c_i vectors.
