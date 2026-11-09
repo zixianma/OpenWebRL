@@ -1,0 +1,525 @@
+{
+ "benchmarks": {
+  "online_mind2web": {
+   "common_tasks": 154,
+   "collected": {
+    "sft1": 266,
+    "arm5-9fadc8dc4655": 154
+   },
+   "sft1": {
+    "valid": 154,
+    "successes": 75,
+    "overall": 0.487012987012987,
+    "valid_only": 0.487012987012987,
+    "local_same_tasks": {
+     "runs": 2,
+     "tasks": 154,
+     "overall": 0.24675324675324675,
+     "valid_only": 0.2783882783882784,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-kev/run1/online_mind2web/sft1/online_mind2web",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-kev/run2/online_mind2web/sft1/online_mind2web"
+     ]
+    }
+   },
+   "arm5-9fadc8dc4655": {
+    "valid": 150,
+    "successes": 83,
+    "overall": 0.538961038961039,
+    "valid_only": 0.5533333333333333,
+    "local_same_tasks": {
+     "runs": 3,
+     "tasks": 154,
+     "overall": 0.3268398268398268,
+     "valid_only": 0.37844611528822053,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run1/online_mind2web/arm5-9fadc8dc4655/online_mind2web",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run2/online_mind2web/arm5-9fadc8dc4655/online_mind2web",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run3/online_mind2web/arm5-9fadc8dc4655/online_mind2web"
+     ]
+    }
+   },
+   "diff_overall_pp": [
+    5.1948051948051965,
+    -2.5974025974025983,
+    12.987012987012992
+   ],
+   "diff_valid_only_pp": [
+    6.6320346320346335,
+    -0.8967223252937528,
+    14.431177375256317
+   ]
+  },
+  "webvoyager": {
+   "common_tasks": 276,
+   "collected": {
+    "sft1": 413,
+    "arm5-9fadc8dc4655": 276
+   },
+   "sft1": {
+    "valid": 273,
+    "successes": 162,
+    "overall": 0.5869565217391305,
+    "valid_only": 0.5934065934065934,
+    "local_same_tasks": {
+     "runs": 3,
+     "tasks": 276,
+     "overall": 0.42995169082125606,
+     "valid_only": 0.4368098159509202,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run1/webvoyager/sft1/webvoyager",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run2/webvoyager/sft1/webvoyager",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run3/webvoyager/sft1/webvoyager"
+     ]
+    }
+   },
+   "arm5-9fadc8dc4655": {
+    "valid": 269,
+    "successes": 198,
+    "overall": 0.717391304347826,
+    "valid_only": 0.7360594795539034,
+    "local_same_tasks": {
+     "runs": 3,
+     "tasks": 276,
+     "overall": 0.5434782608695652,
+     "valid_only": 0.5944517833553501,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run1/webvoyager/arm5-9fadc8dc4655/webvoyager",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run2/webvoyager/arm5-9fadc8dc4655/webvoyager",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run3/webvoyager/arm5-9fadc8dc4655/webvoyager"
+     ]
+    }
+   },
+   "diff_overall_pp": [
+    13.043478260869556,
+    6.521739130434789,
+    19.565217391304344
+   ],
+   "diff_valid_only_pp": [
+    14.265288614730999,
+    7.710606955868356,
+    20.778599743021946
+   ]
+  },
+  "deepshop": {
+   "common_tasks": 122,
+   "collected": {
+    "sft1": 150,
+    "arm5-9fadc8dc4655": 122
+   },
+   "sft1": {
+    "valid": 121,
+    "successes": 50,
+    "overall": 0.4098360655737705,
+    "valid_only": 0.4132231404958678,
+    "local_same_tasks": {
+     "runs": 3,
+     "tasks": 122,
+     "overall": 0.43989071038251365,
+     "valid_only": 0.44352617079889806,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run1/deepshop/sft1/deepshop",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run2/deepshop/sft1/deepshop",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-ctrl/run3/deepshop/sft1/deepshop"
+     ]
+    }
+   },
+   "arm5-9fadc8dc4655": {
+    "valid": 122,
+    "successes": 58,
+    "overall": 0.47540983606557374,
+    "valid_only": 0.47540983606557374,
+    "local_same_tasks": {
+     "runs": 3,
+     "tasks": 122,
+     "overall": 0.5136612021857924,
+     "valid_only": 0.5207756232686981,
+     "dirs": [
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run1/deepshop/arm5-9fadc8dc4655/deepshop",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run2/deepshop/arm5-9fadc8dc4655/deepshop",
+      "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/eval-1108/run3/deepshop/arm5-9fadc8dc4655/deepshop"
+     ]
+    }
+   },
+   "diff_overall_pp": [
+    6.5573770491803245,
+    -3.2786885245901622,
+    16.393442622950815
+   ],
+   "diff_valid_only_pp": [
+    6.218669556970596,
+    -3.2786885245901622,
+    15.697062841530048
+   ]
+  }
+ },
+ "mean_overall": {
+  "sft1": 0.49460185810862933,
+  "arm5-9fadc8dc4655": 0.5772540597914796,
+  "diff_pp": [
+   8.265220168285026,
+   3.6831249055055215,
+   12.928950306444962
+  ]
+ },
+ "mean_valid_only": {
+  "sft1": 0.49788090697181603,
+  "arm5-9fadc8dc4655": 0.5882675496509369,
+  "diff_pp": [
+   9.038664267912083,
+   4.437858867371035,
+   13.765377289954639
+  ]
+ },
+ "stealth_minus_local": {
+  "sft1": {
+   "online_mind2web": {
+    "tasks": 266,
+    "local_runs": 2,
+    "local": {
+     "valid": 468,
+     "successes": 144,
+     "overall": 0.2706766917293233,
+     "valid_only": 0.3076923076923077
+    },
+    "stealth": {
+     "valid": 264,
+     "successes": 134,
+     "overall": 0.5037593984962406,
+     "valid_only": 0.5075757575757576
+    },
+    "diff_overall_pp": [
+     23.308270676691734,
+     17.293233082706767,
+     29.51127819548872
+    ],
+    "diff_valid_only_pp": [
+     19.988344988344984,
+     13.894635651191257,
+     26.266118931499175
+    ]
+   },
+   "webvoyager": {
+    "tasks": 413,
+    "local_runs": 3,
+    "local": {
+     "valid": 1221,
+     "successes": 557,
+     "overall": 0.4495560936238902,
+     "valid_only": 0.4561834561834562
+    },
+    "stealth": {
+     "valid": 409,
+     "successes": 248,
+     "overall": 0.6004842615012107,
+     "valid_only": 0.6063569682151589
+    },
+    "diff_overall_pp": [
+     15.09281678773205,
+     10.008071025020177,
+     20.177562550443906
+    ],
+    "diff_valid_only_pp": [
+     15.017351203170277,
+     9.97041978827018,
+     20.08340349368091
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "local_runs": 3,
+    "local": {
+     "valid": 447,
+     "successes": 202,
+     "overall": 0.4488888888888889,
+     "valid_only": 0.4519015659955257
+    },
+    "stealth": {
+     "valid": 149,
+     "successes": 64,
+     "overall": 0.4266666666666667,
+     "valid_only": 0.42953020134228187
+    },
+    "diff_overall_pp": [
+     -2.2222222222222197,
+     -9.555555555555555,
+     5.111111111111111
+    ],
+    "diff_valid_only_pp": [
+     -2.2371364653243853,
+     -9.72255244229091,
+     5.157940051020406
+    ]
+   },
+   "mean_overall": {
+    "local": 0.38970722474736746,
+    "stealth": 0.5103034422213727,
+    "diff_pp": [
+     12.059621747400522,
+     8.458811694962455,
+     15.721896785277695
+    ]
+   },
+   "mean_valid_only": {
+    "local": 0.4052591099570965,
+    "stealth": 0.5144876423777328,
+    "diff_pp": [
+     10.922853242063626,
+     7.241619617270574,
+     14.612325245491869
+    ]
+   }
+  },
+  "arm5-9fadc8dc4655": {
+   "online_mind2web": {
+    "tasks": 154,
+    "local_runs": 3,
+    "local": {
+     "valid": 399,
+     "successes": 151,
+     "overall": 0.3268398268398268,
+     "valid_only": 0.37844611528822053
+    },
+    "stealth": {
+     "valid": 150,
+     "successes": 83,
+     "overall": 0.538961038961039,
+     "valid_only": 0.5533333333333333
+    },
+    "diff_overall_pp": [
+     21.212121212121215,
+     13.41991341991342,
+     29.22077922077922
+    ],
+    "diff_valid_only_pp": [
+     17.488721804511282,
+     9.807078224515642,
+     25.442286700470344
+    ]
+   },
+   "webvoyager": {
+    "tasks": 276,
+    "local_runs": 3,
+    "local": {
+     "valid": 757,
+     "successes": 450,
+     "overall": 0.5434782608695652,
+     "valid_only": 0.5944517833553501
+    },
+    "stealth": {
+     "valid": 269,
+     "successes": 198,
+     "overall": 0.717391304347826,
+     "valid_only": 0.7360594795539034
+    },
+    "diff_overall_pp": [
+     17.391304347826086,
+     10.990338164251213,
+     23.913043478260864
+    ],
+    "diff_valid_only_pp": [
+     14.16076961985533,
+     7.931474643227767,
+     20.49062603431055
+    ]
+   },
+   "deepshop": {
+    "tasks": 122,
+    "local_runs": 3,
+    "local": {
+     "valid": 361,
+     "successes": 188,
+     "overall": 0.5136612021857924,
+     "valid_only": 0.5207756232686981
+    },
+    "stealth": {
+     "valid": 122,
+     "successes": 58,
+     "overall": 0.47540983606557374,
+     "valid_only": 0.47540983606557374
+    },
+    "diff_overall_pp": [
+     -3.825136612021862,
+     -10.655737704918034,
+     2.732240437158473
+    ],
+    "diff_valid_only_pp": [
+     -4.536578720312434,
+     -11.325817411058246,
+     2.0856204334745474
+    ]
+   },
+   "mean_overall": {
+    "local": 0.46132642996506146,
+    "stealth": 0.5772540597914796,
+    "diff_pp": [
+     11.592762982641814,
+     7.539943310167828,
+     15.64076536501697
+    ]
+   },
+   "mean_valid_only": {
+    "local": 0.4978911739707563,
+    "stealth": 0.5882675496509369,
+    "diff_pp": [
+     9.03763756801806,
+     4.942348712729893,
+     13.072878397722985
+    ]
+   }
+  }
+ },
+ "gain_local_vs_stealth": {
+  "online_mind2web": {
+   "tasks": 154,
+   "overall": {
+    "local": [
+     8.008658008658006,
+     3.354978354978355,
+     12.773268398268362
+    ],
+    "stealth": [
+     5.1948051948051965,
+     -2.5974025974025983,
+     12.987012987012985
+    ],
+    "stealth_minus_local": [
+     -2.8138528138528103,
+     -11.688311688311687,
+     6.0606060606060606
+    ]
+   },
+   "valid_only": {
+    "local": [
+     10.005783689994214,
+     4.76751324202194,
+     15.376071391267372
+    ],
+    "stealth": [
+     6.6320346320346335,
+     -1.1750773036487305,
+     14.448265550239233
+    ],
+    "stealth_minus_local": [
+     -3.3737490579595795,
+     -12.317394904775384,
+     5.757951356513601
+    ]
+   }
+  },
+  "webvoyager": {
+   "tasks": 276,
+   "overall": {
+    "local": [
+     11.352657004830913,
+     7.729468599033823,
+     14.975845410628018
+    ],
+    "stealth": [
+     13.043478260869556,
+     6.8840579710144905,
+     19.565217391304344
+    ],
+    "stealth_minus_local": [
+     1.6908212560386437,
+     -5.434782608695659,
+     9.060990338164213
+    ]
+   },
+   "valid_only": {
+    "local": [
+     15.764196740442987,
+     11.901534476526704,
+     19.574165439116538
+    ],
+    "stealth": [
+     14.265288614730999,
+     7.82546191553545,
+     20.864973950700218
+    ],
+    "stealth_minus_local": [
+     -1.4989081257119896,
+     -8.764395117604922,
+     5.921540235985114
+    ]
+   }
+  },
+  "deepshop": {
+   "tasks": 122,
+   "overall": {
+    "local": [
+     7.377049180327871,
+     2.1857923497267784,
+     12.841530054644812
+    ],
+    "stealth": [
+     6.5573770491803245,
+     -3.2786885245901622,
+     16.393442622950822
+    ],
+    "stealth_minus_local": [
+     -0.8196721311475474,
+     -11.47540983606557,
+     9.562841530054644
+    ]
+   },
+   "valid_only": {
+    "local": [
+     7.724945246980003,
+     2.460273839316002,
+     13.309557446430228
+    ],
+    "stealth": [
+     6.218669556970596,
+     -3.472069155531065,
+     16.068283430429474
+    ],
+    "stealth_minus_local": [
+     -1.5062756900094065,
+     -12.245656684606445,
+     8.937346937507684
+    ]
+   }
+  },
+  "mean_overall": {
+   "local": [
+    8.912788064605596,
+    6.161898359421522,
+    11.634420478415489
+   ],
+   "stealth": [
+    8.265220168285026,
+    3.63102437674783,
+    12.93584647513728
+   ],
+   "stealth_minus_local": [
+    -0.6475678963205702,
+    -5.692802683180446,
+    4.479517539032866
+   ]
+  },
+  "mean_valid_only": {
+   "local": [
+    11.164975225805735,
+    8.253564816058436,
+    14.023689528448084
+   ],
+   "stealth": [
+    9.038664267912075,
+    4.423255595806229,
+    13.688534956379069
+   ],
+   "stealth_minus_local": [
+    -2.1263109578936596,
+    -7.199119844923807,
+    3.131381965881531
+   ]
+  }
+ },
+ "notes": {
+  "bootstrap": "paired over common tasks, 10000 resamples, seed 20261029, benchmarks resampled independently",
+  "stealth": "Browser Use cloud browsers, stealth + US residential proxy + CAPTCHA solving, viewport pinned 1280x1000 at DPR 1 via CDP, screenshots Lanczos-downscaled to 1280x1000; 1 run per condition",
+  "local_references": "SFT: Online-Mind2Web Nov 8 (eval-kev, 2 runs), WebVoyager/DeepShop Nov 6 (eval-ctrl, 3 runs); decoder: Nov 9 (eval-1108, 3 runs)",
+  "judges": "Online-Mind2Web gpt-5.6-terra (AgentTrek), WebVoyager and DeepShop gpt-4o; judged after rollout"
+ }
+}
