@@ -1650,6 +1650,8 @@ batch 256, 2 PPO epochs, LR 1e−6, GPT-4.1 training judge and 15 browser turns.
 | Gate B · 40M + 16F | 40 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
 | Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 70 (→ 90 Nov 9) | Larger ARM-only share |
 
+**Failures in main batch** replaces mixed groups: $(48-N)$ mixed groups plus $N$ all-failure groups share one 48-group batch. Outcome + ADM keeps 48 mixed groups and adds failure groups through a separate loss. This comparison also changes the gate ($D=5$ versus $D\ge2$), so it does not isolate batch placement.
+
 Excluded: uniform G8 outcome-only control (by decision), runs stopped before 60 (failure β = 1,
 failure sampling 40%), and the loop-credit and rescue pilots. Appendix candidates: original bonus (to 80), Gate C
 (to 60), expanded 4,102-task outcome-only (to 60) and action-only (collapsed by 40; see
@@ -1692,11 +1694,11 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 
 ### Compact learning curves and matched evaluation
 
-![Compact RL training and validation curves for both outcome-only controls, Outcome plus ADM, failures in the main batch and 40 mixed plus 16 failure groups; matched iteration-90 gains have paired task confidence intervals](arm_results/rl_final_20261108/rl_learning_compact.png)
+![Compact RL training and validation curves for both outcome-only controls, Outcome plus ADM and 40 mixed plus 16 failure groups; matched iteration-90 gains have paired task confidence intervals](arm_results/rl_final_20261108/rl_learning_compact.png)
 
-*(a) Binary success among valid collected training trajectories, before dynamic-sampling filtering and excluding the ADM bonus. Lines average the last five per-iteration valid-only rates, not pooled counts; dots mark every tenth iteration. (b) Unsmoothed overall success on all 300 Online-Mind2Web tasks; invalid episodes count as failures. Historical evaluation dates differ. Both the 48-group and 56-group outcome-only controls appear in both panels. (c) Matched October 25 evaluations of iteration-90 checkpoints, three repeats each: ADM gains +6.44 pp [+2.67, +10.22] over outcome-48 and +5.22 pp [+1.56, +8.89] over outcome-56. Whiskers are paired 95% task intervals, not training-seed uncertainty. Five selected recipes appear here; all-run views remain below.*
+*(a) Binary success among valid collected training trajectories, before dynamic-sampling filtering and excluding the ADM bonus. Lines average the last five per-iteration valid-only rates, not pooled counts; dots mark every tenth iteration. (b) Overall success on all 300 Online-Mind2Web tasks; invalid episodes count as failures. Lines and connected circles average the current and preceding measured checkpoint (a trailing two-evaluation mean); the first point uses itself. Faint dots show the original unsmoothed values. Historical evaluation dates differ. Both the 48-group and 56-group outcome-only controls appear in both panels. (c) Matched October 25 evaluations of iteration-90 checkpoints, three repeats each: ADM gains +6.44 pp [+2.67, +10.22] over outcome-48 and +5.22 pp [+1.56, +8.89] over outcome-56. Whiskers are paired 95% task intervals, not training-seed uncertainty. Four main recipes appear here; omitted ablations remain in the results table and archived all-run views below.*
 
-**Failures in main batch** replaces mixed groups: $(48-N)$ mixed groups plus $N$ all-failure groups share one 48-group batch. Outcome + ADM keeps 48 mixed groups and adds failure groups through a separate loss. This comparison also changes the gate ($D=5$ versus $D\ge2$), so it does not isolate batch placement. `M` and `F` in 40M + 16F mean mixed and all-failure groups. Collected training success is policy-dependent, not a fixed-task held-out measure; the matched checkpoint comparison is the supported improvement.
+`M` and `F` in 40M + 16F mean mixed and all-failure groups. Collected training success is policy-dependent, not a fixed-task held-out measure; the matched checkpoint comparison is the supported improvement.
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
 

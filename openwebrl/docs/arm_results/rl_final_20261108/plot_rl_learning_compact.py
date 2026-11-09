@@ -2,7 +2,8 @@
 
 Reads only the published aggregate. Original all-run figures stay unchanged.
 Training is a trailing-five mean of valid-only collected binary success rates;
-validation is unsmoothed overall success on 300 tasks. Matched intervals are
+validation uses a trailing-two-checkpoint mean of overall success on 300 tasks,
+with raw checkpoint dots retained. Matched intervals are
 the published paired task intervals from repeated evaluations of one checkpoint,
 not uncertainty across training seeds. No training, browser or API calls.
 """
@@ -26,13 +27,13 @@ DATA = json.loads(DATA_PATH.read_text())
 RUNS = {r["key"]: r for r in DATA["runs"]}
 STEM = "rl_learning_compact"
 WINDOW = 5
+VALIDATION_WINDOW = 2
 INK, MUTED = "#30343B", "#626972"
 METHODS = {
     "outcome48": ("Outcome only · 48 groups", "#9AA0A6", (0, (3, 2))),
     "outcome56": ("Outcome only · 56 groups", "#555B63", "-"),
     "gate_b": ("Outcome + ADM (ours)", "#6250BE", "-"),
     "g40m16f": ("40M + 16F", "#A99BE3", "-"),
-    "all_failure": ("Failures in main batch", "#D8877E", "-"),
 }
 
 
@@ -48,8 +49,10 @@ def series(key):
           for i in range(len(raw))]
     vx = sorted(int(i) for i in run["validation"])
     vy = [100 * run["validation"][str(i)]["successes"] / 300 for i in vx]
+    vs = [sum(vy[max(0, i - VALIDATION_WINDOW + 1):i + 1]) / min(i + 1, VALIDATION_WINDOW)
+          for i in range(len(vy))]
     return dict(training=dict(iteration=xs, raw_percent=raw, smoothed_percent=ys),
-                validation=dict(iteration=vx, overall_percent=vy,
+                validation=dict(iteration=vx, overall_percent=vy, smoothed_percent=vs,
                                 counts={str(i): run["validation"][str(i)] for i in vx}))
 
 
@@ -73,7 +76,7 @@ def build():
     fig.subplots_adjust(left=.075, right=.985, bottom=.38, top=.88, wspace=.53)
     for ax, title in zip(axes, ("a) Training", "b) Validation", "c) Matched iter. 90")):
         style(ax, title)
-    # Draw ours last, retaining the same actual data coordinates as the controls.
+    # Draw ours last without shifting measured checkpoint positions.
     order = [key for key in METHODS if key != "gate_b"] + ["gate_b"]
     for key in order:
         label, color, ls = METHODS[key]
@@ -84,7 +87,9 @@ def build():
         axes[0].plot(tr["iteration"], tr["smoothed_percent"], color=color,
                      linestyle=ls, linewidth=width, marker="o", markevery=dots,
                      markersize=2.4, markeredgewidth=0, zorder=4 if key == "gate_b" else 3)
-        axes[1].plot(va["iteration"], va["overall_percent"], color=color,
+        axes[1].scatter(va["iteration"], va["overall_percent"], color=color,
+                        s=8, alpha=.28, edgecolors="none", zorder=2)
+        axes[1].plot(va["iteration"], va["smoothed_percent"], color=color,
                      linestyle=ls, linewidth=width, marker="o", markersize=3,
                      markeredgecolor="white", markeredgewidth=.4,
                      zorder=4 if key == "gate_b" else 3)
@@ -122,7 +127,7 @@ def build():
                       linewidth=1.8 if key == "gate_b" else 1.2,
                       label=label) for key, (label, color, ls) in METHODS.items()]
     legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(.52, .015),
-                        ncol=3, frameon=False, fontsize=8, handlelength=1.6,
+                        ncol=2, frameon=False, fontsize=8, handlelength=1.6,
                         handletextpad=.5, columnspacing=1.1, labelspacing=.55)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -150,20 +155,22 @@ def main():
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-compact-v1", source_sha256=sha(DATA_PATH),
+    report = dict(schema="rl-learning-compact-v2", source_sha256=sha(DATA_PATH),
                   renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
                                 raw_overlay=False),
-                  validation=dict(protocol=DATA["validation_protocol"], smoothing="None"),
+                  validation=dict(protocol=DATA["validation_protocol"],
+                                  smoothing="Trailing 2 measured checkpoints; the first point uses only itself.",
+                                  raw_overlay="Faint dots at every raw checkpoint; connected circles show smoothed values."),
                   matched=dict(date=DATA["matched_iter90_local"]["date"],
                                protocol=DATA["matched_iter90_local"]["protocol"],
                                training_iteration=90, differences=gains,
                                uncertainty="Paired task intervals from evaluation repeats of one trained checkpoint, not training seeds."),
                   caveats=["Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
-                           "Failures in main batch replaces mixed groups within the 48-group batch and also uses D=5; ours uses D>=2 and separate failure loss.",
-                           "Unshown ablations remain in the all-run figures; incomplete 48M+16F is not extrapolated."],
+                           "Failures in main batch is excluded from the compact curves and retained in the results table and all-run archive.",
+                           "Other unshown ablations remain in the all-run figures; incomplete 48M+16F is not extrapolated."],
                   points=points,
                   output_sha256={ext: sha(HERE / f"{STEM}.{ext}") for ext in ("png", "pdf", "svg")})
     (HERE / f"{STEM}.json").write_text(json.dumps(report, indent=2) + "\n")
