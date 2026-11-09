@@ -25,9 +25,8 @@ from render_examples import (R, SRC, INK, MUTED, GOOD, BAD, read, img, attempt_f
 from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
-COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}
-NAME["pre"], NAME["k3"] = "Pre-execution", "Lookahead H = 4"
-BAND, BANDEDGE = tint("LOOKAHEAD_EVIDENCE", 0.84), C["LOOKAHEAD_EVIDENCE"]
+COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "H = 4"
+BAND, BANDEDGE = tint("STATE", 0.62), C["STATE"]
 GOODC, BADC = C["SUCCESS"], C["FAILURE"]
 EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
@@ -86,8 +85,8 @@ def main():
     xt, wt, gt = 0.365, 0.143, 0.008   # three screens: right after the action, next action 1, next action 2
     xp = xt + 3 * wt + 2 * gt + 0.03   # picks / success (after a "…" marking further lookahead)
     th, rowgap = 0.13, 0.06
-    heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Action"), (xt + wt / 2, "Lookahead H = 1"),
-             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Lookahead H = 4"), (xp + 0.055, "Picked by")]
+    heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Action"), (xt + wt / 2, "Next screen"),
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "H = 4 continuation"), (xp + 0.055, "Picked by")]
     for x, t in heads:
         fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
     for x0, x1 in ((xt, xt + wt), (xt + wt + gt, xt + 3 * wt + 2 * gt)):
@@ -106,7 +105,7 @@ def main():
         fig.add_artist(FancyBboxPatch((bx0, y - block_h - 0.045), bx1 - bx0, block_h + 0.05,
                                       boxstyle="round,pad=0,rounding_size=0.01", fc=BAND, ec=BANDEDGE, lw=0.8,
                                       transform=fig.transFigure, zorder=-5))
-        fig.text(bx1 - 0.006, y - block_h - 0.04, "decides", fontsize=6.2, color=INK, fontweight="bold", ha="right", va="bottom")
+        fig.text(bx1 - 0.006, y - block_h - 0.04, "decides", fontsize=6.2, color=C["INK"], fontweight="bold", ha="right", va="bottom")
         ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
         for k, (i, label, caps) in enumerate(ex["cands"]):
             col = C["ACTION"]
@@ -128,7 +127,7 @@ def main():
                 rx = xt + j * (wt + gt)
                 if j < len(shots):
                     key = j in ex["decide"]
-                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=C["LOOKAHEAD_EVIDENCE"] if key else C["BORDER"],
+                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=C["STATE_BORDER"] if key else C["BORDER"],
                              lw=1.3 if key else 0.5)
                     if not key:                    # fade evidence that does not decide this example
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.55, ec="none"))

@@ -40,7 +40,7 @@ OUTCOMES = (
     (0, 0, 0, 0, 0, 1, 0, 0),
     (0, 1, 0, 1, 0, 0, 1, 0),
 )
-PICKS = {"Pre-execution": 0, "Post-execution": 0, "Lookahead K = 3": 2,
+PICKS = {"Pre-execution": 0, "Post-execution": 0, "Lookahead H = 4": 2,
          "Observed outcome": 2, "Oracle": 2}
 
 plt.rcParams.update({
@@ -81,7 +81,8 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
 
 def state_card(x, y, step, color, candidate):
     width, height = 0.28, 0.18
-    box(x - width / 2, y - height / 2, width, height, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+    box(x - width / 2, y - height / 2, width, height, edge=color,
+        fill=tint("STATE", .60), lw=1.25)
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=C["STATE"], edgecolor="none", alpha=0.65, zorder=2))
     text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["STATE_INK"], ha="center")
@@ -100,7 +101,7 @@ def outcome_marker(x, y, success, radius=0.018):
 
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
-assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
+assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead H = 4", "Oracle")] == [0, 0, 2, 2]
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACTION_INK"])
@@ -183,18 +184,22 @@ ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.23,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 # H counts the candidate action; the legacy K=3 source now displays H=4.
 # The immediate-only (H=1) teacher result is retained in source tables, not plotted.
-lanes = ((1.27, "Pre-execution", "Pre-exec", PRE, "—"),
-         (0.83, "Lookahead K = 3", "Lookahead\nH = 4", LOOK,
+lanes = ((1.27, "Pre-execution", "Pre-execution", PRE, "—"),
+         (0.83, "Lookahead H = 4", "Lookahead\nH = 4", LOOK,
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
-    text(method_x, y, label, color=color, linespacing=1.0)
-    text(evidence_x, y, evidence, color=color, ha="center", linespacing=0.95)
+    is_lookahead = key.startswith("Lookahead")
+    text(method_x, y, label, color=color,
+         weight="bold" if is_lookahead else "normal", linespacing=1.0)
+    text(evidence_x, y, evidence, color=color,
+         weight="bold" if is_lookahead else "normal", ha="center", linespacing=0.95)
     rule(5.99, shared_x, y, color=color)
     ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
-    text(teacher_x + teacher_w / 2, y, "Teacher", color=color, ha="center")
+    text(teacher_x + teacher_w / 2, y, "Teacher", color=color,
+         weight="bold" if is_lookahead else "normal", ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
     box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]

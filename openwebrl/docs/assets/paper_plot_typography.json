@@ -1,6 +1,5 @@
 {
   "font_family": "Albert Sans",
-  "shared_style_sha256": "0c82fab49458d8bd91f439ed5b2df5dc3df4105b30e1cfec6b3ed344e6ec891a",
   "font_sha256": {
     "AlbertSans-Bold.ttf": "e43cc391dbd4cc7bd4f136f2a4c07426eea463f7f9b27d3a286cec1fbbd3a672",
     "AlbertSans-BoldItalic.ttf": "77094224ce050d398acc01bfa5aae7f2d5febf0607165aee6ffc0b69cb060980",
@@ -11,7 +10,11 @@
     "AlbertSans-SemiBoldItalic.ttf": "2dcb1616712e5bf1563cc45085edea373db1529eaf6f0b3fc319f6bfd64dbfdb",
     "AlbertSans[wght].ttf": "8fe5d4cf5822d7096d4d17ad781c90f97c745ac13a22be619db74966fba45fda"
   },
-  "updated_figure_count": 142,
+  "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.pdf": "a0d6d272431c363f7bc2aa3a97621f8ff373532c8e4929aeebdf8f07ec0c5c89",
+  "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.png": "a3ff44b7eed691fd1b563e783722097cb3325cb852ba2188cb12297ae65fb215",
+  "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.pdf": "fa2b94d02ed657b0c819a8f35243fc302c7a0b2c3c7961e46b270adf3c8bab1b",
+  "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.png": "82a8bd6f138d2bf2e429407062e608ec127b602969f1e5f172703e4b2fef7465",
+  "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.svg": "5e0b472b011e2cf94f91a71a55a58d862fd2ecc0e2611b23ae551d91fd2e8e5c",
   "output_sha256": {
     "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.pdf": "12cc2cd70407a0d424dd8a53f1f04bd1d93529d009eafa673b8e6d15b1c01cbf",
     "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.png": "fd470271f9c0450ed9d852bfe683dfa24bf06769d1a75d90f33bb0cd5c76bead",
@@ -143,8 +146,8 @@
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/example-c2.jpg": "3ba2ccd8e31fa9bfbf949fe21420cac86d329053fae22294d9311498db8a81d4",
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/example-d1.jpg": "3837c90da01a52c95320236eb97ba172e9cabde1313eac9654f5f57bebbe9d29",
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/example-d2.jpg": "45ea17ea2cdf2ca6c55d82f9058482005dc0e6f6de1c8cfb7e21a81b94d7e959",
-    "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.pdf": "9597a336f0f1fa66f12d992da4010cde02fb977b31e0da175f6c5a3e0d051e70",
-    "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.png": "0a536b7bf4aa68df43b1eebcfb2874b6ee2aff8bb1d5ba96ef600dc7dcdf1d78",
+    "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.pdf": "a0d6d272431c363f7bc2aa3a97621f8ff373532c8e4929aeebdf8f07ec0c5c89",
+    "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/examples-compact.png": "a3ff44b7eed691fd1b563e783722097cb3325cb852ba2188cb12297ae65fb215",
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/minority-examples.png": "f931c5c6e2ad5311d76ae213528651954294015fd66650bb0495607102c8b4e2",
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/minority-review-M1-2634.jpg": "53e73cf631b1de0c54e45eeff2717c0b84cda8e52bba62b16b5e6e0035215fca",
     "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg": "a1930bba1b66342be578dab3a02f071b3d0deb0db728c7f355173250f2fe8e2c",
@@ -195,9 +198,9 @@
     "openwebrl/docs/arm_results/methods/selection-head-joint-independent-20261026.png": "47542e5675699c5b111f73c88146cdd98f43e4d4f587a3fab48fefcafcf5fbec",
     "openwebrl/docs/arm_results/methods/selection-head-joint-independent-20261026.svg": "588d9ca50e9fdc14102fd2947658d30baa7c37eb3fc6735ea20d6b7d3b8344ee",
     "openwebrl/docs/arm_results/methods/selection-head-variants-20261022.png": "928303d406c97e93a58a13e26879fc4b26c8aec8ff6a82840f0210d4ce070018",
-    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.pdf": "e98338eae45303fedd000aa572999b2e759fa508d6635238332962e57b80fe8f",
-    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.png": "c8b1839ce2a52df2e5743e908bf859d6121fdc7e925120b217c6194124f1cfd5",
-    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.svg": "6647a40da953a77a60c2fc9287d6387b6ea8972e55c115684ceabf8daf21f020",
+    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.pdf": "fa2b94d02ed657b0c819a8f35243fc302c7a0b2c3c7961e46b270adf3c8bab1b",
+    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.png": "82a8bd6f138d2bf2e429407062e608ec127b602969f1e5f172703e4b2fef7465",
+    "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.svg": "5e0b472b011e2cf94f91a71a55a58d862fd2ecc0e2611b23ae551d91fd2e8e5c",
     "openwebrl/docs/arm_results/methods/selection_designs_compared.png": "fc6c70336e133389f50856888dce98e3d6ee2d981dc79edeb5cfac8aa4ab4cb0",
     "openwebrl/docs/arm_results/methods/selection_designs_compared.svg": "e09734f357132f176384cf2369a5091ad7cb39d8a40e50ba56be943fa256d8d6",
     "openwebrl/docs/arm_results/methods/selection_designs_layers.png": "22b9d3f211b8a47f50e0f8d3846cc8fe7314c014145fd62e5b6aad0e773428fc",
@@ -346,6 +349,8 @@
     "openwebrl/docs/rl_results/rl_repetition_success_robustness.png": "dd9ee019cf66ed5ad96d09d682f46bc1320f93d8f4aaa74e034e60dd37651541",
     "openwebrl/docs/rl_results/rl_repetition_success_robustness.svg": "00188e525298d583f983887172c75c64834795839deb70eecab8deec4befc40c"
   },
+  "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
-  "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied."
+  "shared_style_sha256": "0c82fab49458d8bd91f439ed5b2df5dc3df4105b30e1cfec6b3ed344e6ec891a",
+  "updated_figure_count": 142
 }
