@@ -1,9 +1,9 @@
 {
   "input_sha256": "174cf21802f3926f55e341a3e97d8a4408479230646e07df2935dcf2df08aebe",
-  "plot_script_sha256": "359c0294e5937ac8085c87c01f7ed78817ed38e0461e28f2be5094966c736ec1",
+  "plot_script_sha256": "1effd58ea2b6044ff59301b6cedb6671d3bbad8779274663e17f52dc5bba0d1d",
   "qualification_sha256": "9f2fa40295533e218a49f9d3e91ec4c4ffa014f4e8be456f5ce7d94a213084e9",
   "private_preview": false,
-  "style": "Neutral mauve single proposals, purple candidates plus selection; Opus squares, Sonnet circles; open purple N3, filled purple N5; outside legends; logarithmic cost/latency; no frontier or point labels",
+  "style": "Neutral gray single proposals, purple candidates plus selection; Opus squares, Sonnet circles; open purple N3, filled purple N5; outside legends; logarithmic cost/latency; no frontier or point labels",
   "matplotlib_version": "3.9.4",
   "plot_order": [
     "model cost",

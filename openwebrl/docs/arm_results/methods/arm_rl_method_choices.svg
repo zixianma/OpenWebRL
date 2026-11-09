@@ -8,7 +8,7 @@
 <rect x="40" y="112" width="726" height="420" rx="14" fill="#FAFAFB" stroke="#CBC9CF" stroke-width="2"/>
 <text x="62" y="149" font-size="25" fill="#9575EE" font-weight="700" text-anchor="start">1  GROUPS — which trajectories train?</text>
 <text x="62" y="184" font-size="21" fill="#9575EE" font-weight="400" text-anchor="start">M = mixed outcomes [1, 0, 1, 0, 0]</text>
-<text x="62" y="215" font-size="21" fill="#EDB774" font-weight="400" text-anchor="start">F = five valid failures [0, 0, 0, 0, 0]</text>
+<text x="62" y="215" font-size="21" fill="#EDE374" font-weight="400" text-anchor="start">F = five valid failures [0, 0, 0, 0, 0]</text>
 <text x="62" y="249" font-size="20" fill="#211A33" font-weight="700" text-anchor="start">Outcome-only baseline</text>
 <text x="420" y="249" font-size="22" fill="#9575EE" font-weight="700" text-anchor="start">48M</text>
 <text x="420" y="274" font-size="17" fill="#423C54" font-weight="400" text-anchor="start">terminal outcome only</text>
@@ -43,13 +43,13 @@
 <rect x="1388" y="238" width="106" height="79" rx="14" fill="#fff" stroke="#423C54" stroke-width="2"/>
 <text x="1441" y="290" font-size="39" fill="#423C54" font-weight="700" text-anchor="middle">W</text>
 <text x="816" y="382" font-size="19" fill="#423C54" font-weight="400" text-anchor="start">The two X responses can have different reasoning.</text>
-<text x="816" y="420" font-size="21" fill="#EDB774" font-weight="400" text-anchor="start">Strict gate: 5 distinct actions required → reject (bonus 0)</text>
+<text x="816" y="420" font-size="21" fill="#EDE374" font-weight="400" text-anchor="start">Strict gate: 5 distinct actions required → reject (bonus 0)</text>
 <text x="816" y="456" font-size="21" fill="#9575EE" font-weight="700" text-anchor="start">Gate B / C: ≥2 distinct actions required → accept</text>
 <text x="816" y="510" font-size="25" fill="#9575EE" font-weight="700" text-anchor="start">3  CREDIT — what counts as an ARM win?</text>
 <rect x="816" y="532" width="720" height="119" rx="14" fill="#fff" stroke="#CBC9CF" stroke-width="2"/>
 <text x="838" y="567" font-size="23" fill="#211A33" font-weight="700" text-anchor="start">Gate B: exact response index</text>
 <text x="838" y="602" font-size="20" fill="#423C54" font-weight="400" text-anchor="start">ARM chose response 1, not the executed response 0.</text>
-<text x="838" y="631" font-size="23" fill="#EDB774" font-weight="700" text-anchor="start">b = 0.5 × (0 − 1/5) = −0.10</text>
+<text x="838" y="631" font-size="23" fill="#EDE374" font-weight="700" text-anchor="start">b = 0.5 × (0 − 1/5) = −0.10</text>
 <rect x="816" y="668" width="720" height="150" rx="14" fill="#fff" stroke="#CBC9CF" stroke-width="2"/>
 <text x="838" y="703" font-size="23" fill="#211A33" font-weight="700" text-anchor="start">Gate C: equivalent action</text>
 <text x="838" y="738" font-size="20" fill="#423C54" font-weight="400" text-anchor="start">Selected action X matches executed action X.</text>

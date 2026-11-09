@@ -34,49 +34,34 @@ def save(fig, stem):
 
 
 def palette_board():
-    fig = plt.figure(figsize=(7.4, 5.2))
+    fig = plt.figure(figsize=(6.8, 3.15))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.set(xlim=(0, 7.4), ylim=(0, 5.2))
+    ax.set(xlim=(0, 6.8), ylim=(0, 3.15))
     ax.axis("off")
     def text(x, y, s, size=8, **kwargs):
-        return ax.text(x, y, s, fontsize=size, va="center", color=ROLE["INK"], **kwargs)
+        kwargs.setdefault("color", ROLE["INK"])
+        return ax.text(x, y, s, fontsize=size, va="center", **kwargs)
     def chip(x, y, color, width=.34, height=.17):
         ax.add_patch(Rectangle((x, y - height / 2), width, height,
                                facecolor=color, edgecolor="none"))
-    text(.18, 4.90, "Shared paper palette", 12, weight="semibold")
-    text(.18, 4.63, "Purple ADM / actions · salmon future / teacher · green current state · yellow labels", 8)
-    text(.18, 4.33, "ROLE", 7, weight="semibold")
-    text(2.45, 4.33, "SOURCE SWATCH", 7, weight="semibold")
-    text(4.12, 4.33, "PAPER MARKS / VARIANTS", 7, weight="semibold")
+    text(.18, 2.88, "Four accent colors", 12, weight="semibold")
+    text(.18, 2.62, "Purple ADM/actions · salmon lookahead · green state/success · yellow outcome labels", 8)
     rows = [
-        ("Current state / context", "state", [("STATE", "state cards")]),
-        ("Actions / selected actions", "action", [("ACTION", "action cards")]),
-        ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
-        ("Future states / teacher", "lookahead", [("LOOKAHEAD_TEACHER", "teacher"), ("LOOKAHEAD_EVIDENCE", "evidence"), ("FUTURE_STATE", "future state")]),
-        ("Oracle / train / eval", "oracle", [("ORACLE", "oracle"), ("TRAIN", "train"), ("EVAL", "eval")]),
-        ("Single-call scaling", "single_call", [("SINGLE_CALL_MAIN", "single call")]),
-        ("Success", "success", [("SUCCESS", "small marks")]),
-        ("Failure", "failure", [("FAILURE", "hollow circle")]),
-        ("Attention allowed", "attention", [("ATTENTION_ALLOWED", "grid fill")]),
+        ("ADM and actions", "adm", "ADM, candidates, selected actions"),
+        ("Lookahead", "lookahead", "future states and teacher evidence"),
+        ("State and success", "success", "current context; successful outcomes"),
+        ("Outcome labels", "oracle", "oracle, train and eval"),
     ]
-    for i, (label, family, variants) in enumerate(rows):
-        y = 3.96 - .38 * i
-        text(.18, y, label)
-        chip(2.45, y, BASE[family])
-        text(2.89, y, BASE[family], 7.5)
-        for j, (key, description) in enumerate(variants):
-            x = 4.12 + 1.08 * j
-            if key in ("FAILURE", "LOOKAHEAD_TEACHER"):
-                ax.plot(x + .08, y + .025, "o", ms=7, mfc="white", mec=ROLE[key], mew=1.3)
-            else:
-                chip(x, y + .025, ROLE[key], .22, .13)
-            text(x + .29, y + .025, description, 6.7)
-            text(x, y - .12, ROLE[key], 6.5)
-    text(.18, .34, "Neutrals", 7.5)
-    for x, key, label in [(1.05, "INK", "text"), (2.38, "BASELINE_DARK", "controls"),
-                          (3.83, "BASELINE_LIGHT", "light control"), (5.39, "BORDER", "borders")]:
-        chip(x, .34, ROLE[key], .24, .15)
-        text(x + .33, .34, f"{label}  {ROLE[key]}", 6.5)
+    for i, (label, family, description) in enumerate(rows):
+        y = 2.18 - .38 * i
+        chip(.20, y, BASE[family], .34, .20)
+        text(.70, y, label, 8, weight="medium")
+        text(2.30, y, description, 7.3, color=ROLE["MUTED"])
+    text(.20, .48, "Neutral gray", 7.5, weight="medium")
+    chip(1.18, .48, ROLE["BASELINE_DARK"], .26, .15)
+    text(1.55, .48, "controls, failures and structure", 7)
+    text(.20, .20, "Use line style, marker shape and light tints to separate series within a color family.", 6.7,
+         color=ROLE["MUTED"])
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for artist in ax.texts:
