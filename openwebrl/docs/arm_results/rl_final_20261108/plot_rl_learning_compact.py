@@ -1,9 +1,9 @@
-"""Compact local RL curves and absolute stealth-browser success bars.
+"""Compact RL curves and absolute matched-checkpoint success bars.
 
 Reads only the published aggregate. Original all-run figures stay unchanged.
 Training is a trailing-five mean of valid-only collected binary success rates;
-validation shows raw overall success on 300 tasks. Stealth bars use
-published pointwise task-cluster BCa intervals from three September evaluation repeats,
+validation shows raw overall success on 300 tasks. Matched bars use
+published pointwise task-cluster percentile intervals from three October 25 repeats,
 not uncertainty across training seeds. No training, browser or API calls.
 """
 import hashlib
@@ -23,10 +23,8 @@ import paper_plot_style  # noqa: E402,F401
 
 DATA_PATH = HERE / "arm_final_results_data.json"
 DATA = json.loads(DATA_PATH.read_text())
-ABSOLUTE_CI_PATH = HERE.parent / "rl_integration/stealth-iteration90-five-method-overall-ci.json"
+ABSOLUTE_CI_PATH = HERE.parent / "rl_integration/behavior/rl-repetition-success-20261104.json"
 ABSOLUTE_CI = json.loads(ABSOLUTE_CI_PATH.read_text())
-STEALTH_PROTOCOL_PATH = HERE.parent / "rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json"
-STEALTH_PROTOCOL = json.loads(STEALTH_PROTOCOL_PATH.read_text())
 RUNS = {r["key"]: r for r in DATA["runs"]}
 STEM = "rl_learning_compact"
 WINDOW = 5
@@ -35,11 +33,6 @@ METHODS = {
     "outcome48": ("Outcome only · 48 groups", "#9AA0A6", (0, (3, 2))),
     "outcome56": ("Outcome only · 56 groups", "#555B63", "-"),
     "gate_b": ("Outcome + ADM (ours)", "#6250BE", "-"),
-}
-BAR_METHODS = {
-    "baseline": ("outcome48", "48\ngroups", "#9AA0A6"),
-    "additive": ("additive", "Strict\ngate", "#A99BE3"),
-    "gate-b": ("gate_b", "ADM", "#6250BE"),
 }
 
 
@@ -78,7 +71,7 @@ def build():
     fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.4),
                              gridspec_kw=dict(width_ratios=[1.45, 1.45, 1.05]))
     fig.subplots_adjust(left=.075, right=.985, bottom=.30, top=.88, wspace=.53)
-    for ax, title in zip(axes, ("a) Training", "b) Validation", "c) Stealth iter. 90")):
+    for ax, title in zip(axes, ("a) Training", "b) Validation", "c) Matched iter. 90")):
         style(ax, title)
     # Draw ours last without shifting measured checkpoint positions.
     order = [key for key in METHODS if key != "gate_b"] + ["gate_b"]
@@ -106,15 +99,17 @@ def build():
     axes[1].set_yticks([25, 35, 45])
     axes[1].set_ylabel("Overall success (%)", fontsize=8.5)
 
+    matched = DATA["matched_iter90_local"]
     absolute = []
-    for x, (source_key, (key, label, color)) in enumerate(BAR_METHODS.items()):
-        row = ABSOLUTE_CI["methods"][source_key]
-        counts = row["per_repeat_successes"]
-        assert row["repeats"] == 3 and row["tasks_per_repeat"] == 300
-        mean = 100 * row["overall_mean"]
-        lo, hi = [100 * v for v in row["overall_ci95"]]
+    for x, key in enumerate(("outcome48", "outcome56", "gate_b")):
+        ci_key = "gate-b" if key == "gate_b" else key
+        row = ABSOLUTE_CI["methods"][ci_key]["overall_success"]
+        counts = matched["runs"][key]["successes"]
+        assert row["repeat_successes"] == counts
+        assert row["planned_episodes"] == 900
+        mean, (lo, hi) = row["percent"], row["ci95_percent"]
         assert abs(mean - 100 * sum(counts) / 900) < 1e-10
-        assert abs(mean - DATA["stealth_iter90"]["overall_mean_pct"][key]) < .005
+        color = METHODS[key][1]
         axes[2].bar(x, mean, bottom=0, width=.62, color=color,
                     alpha=.85, edgecolor="none", zorder=2)
         axes[2].errorbar(x, mean, yerr=[[mean - lo], [hi - mean]],
@@ -123,13 +118,11 @@ def build():
         axes[2].text(x, hi + .8, f"{mean:.1f}", ha="center", va="bottom",
                      fontsize=7.5, color=color)
         absolute.append(dict(method=key, overall_percent=mean, ci95_percent=[lo, hi],
-                             repeat_successes=counts, planned_episodes=900,
-                             collection_dates_pacific=row["collection_dates_pacific"]))
-    assert len({row["collection_dates_pacific"] for row in absolute}) == 1
+                             repeat_successes=counts, planned_episodes=900))
     axes[2].set_xlim(-.6, 2.6)
-    axes[2].set_xticks([0, 1, 2], [value[1] for value in BAR_METHODS.values()], fontsize=7.5)
-    axes[2].set_ylim(0, 70)
-    axes[2].set_yticks([0, 30, 60])
+    axes[2].set_xticks([0, 1, 2], ["48\ngroups", "56\ngroups", "ADM"], fontsize=7.5)
+    axes[2].set_ylim(0, 52)
+    axes[2].set_yticks([0, 25, 50])
     axes[2].set_ylabel("Overall success (%)", fontsize=8.5)
     handles = [Line2D([], [], color=color, linestyle=ls,
                       linewidth=1.8 if key == "gate_b" else 1.2,
@@ -163,31 +156,27 @@ def main():
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-compact-v4", source_sha256=sha(DATA_PATH),
+    report = dict(schema="rl-learning-compact-v5", source_sha256=sha(DATA_PATH),
                   absolute_interval_source=str(ABSOLUTE_CI_PATH.relative_to(DOCS)),
                   absolute_interval_source_sha256=sha(ABSOLUTE_CI_PATH),
-                  stealth_protocol_source_sha256=sha(STEALTH_PROTOCOL_PATH),
-                  renderer_sha256=sha(__file__), methods=METHODS, bar_methods=BAR_METHODS,
+                  renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
                                 raw_overlay=False),
                   validation=dict(protocol=DATA["validation_protocol"],
                                   smoothing="None; connected circles are raw measured checkpoint success rates."),
-                  stealth=dict(collection_dates_pacific=absolute[0]["collection_dates_pacific"],
-                               protocol=STEALTH_PROTOCOL["protocol"],
+                  matched=dict(date=DATA["matched_iter90_local"]["date"],
+                               protocol=DATA["matched_iter90_local"]["protocol"],
                                training_iteration=90, absolute_success=absolute,
-                               display="Three vertical absolute overall-success bars from zero, for outcome48, strict-gate ADM, and relaxed-gate ADM.",
-                               uncertainty=dict(method=ABSOLUTE_CI["interval_method"],
+                               differences=DATA["matched_iter90_local"]["paired"],
+                               display="Three vertical absolute overall-success bars from zero with pointwise 95% task-cluster intervals.",
+                               uncertainty=dict(method="Percentile bootstrap of 300 task clusters, preserving all three repeats and methods; recompute overall success with 900 planned episodes per method.",
                                                 tasks=300, repeats=3,
-                                                draws=ABSOLUTE_CI["bootstrap_resamples"],
-                                                seed=ABSOLUTE_CI["bootstrap_seed"],
-                                                numerical_convention=ABSOLUTE_CI["numerical_convention"],
+                                                draws=ABSOLUTE_CI["uncertainty"]["draws"],
+                                                seed=ABSOLUTE_CI["uncertainty"]["seed"],
                                                 scope="Conditional on these fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty.")),
                   caveats=["Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
-                           "Stealth bars use a different browser/judge/actor-sampling protocol from the local GPT-4.1/T0 validation curves.",
-                           "No matching outcome56 stealth repeat cohort is available; the middle bar is the strict-gate additive ADM run.",
-                           "The stealth ADM-versus-baseline gain is not statistically established (paired CI crosses zero; Holm p about .22).",
                            "Failures in main batch and 40M+16F are excluded from the compact curves and retained in the results table and all-run archive."],
                   points=points,
                   output_sha256={ext: sha(HERE / f"{STEM}.{ext}") for ext in ("png", "pdf", "svg")})

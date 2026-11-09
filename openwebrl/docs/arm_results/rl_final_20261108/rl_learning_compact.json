@@ -1,10 +1,9 @@
 {
-  "schema": "rl-learning-compact-v4",
+  "schema": "rl-learning-compact-v5",
   "source_sha256": "bcd713b2bb925f308efca3810991f813d3420a6a58c53c2e56efecfc25765ef7",
-  "absolute_interval_source": "arm_results/rl_integration/stealth-iteration90-five-method-overall-ci.json",
-  "absolute_interval_source_sha256": "5663eef8c92e99c3810008c1847ad5c66bb4f66ac84b0065dd7428dff1b5dd00",
-  "stealth_protocol_source_sha256": "b41ba8e03524aab6dc1ec40d7e4b31ad0bea5963d1b246d9f8744b55ada1e8ea",
-  "renderer_sha256": "89a5761e36c0d4fae2453858eb3f534c5dce5720a37754dd341a76dbabe0ee79",
+  "absolute_interval_source": "arm_results/rl_integration/behavior/rl-repetition-success-20261104.json",
+  "absolute_interval_source_sha256": "f6cd2432ccb06446205113c437af5b6fb255dbc0ec16a94b3c8f9598df61fbdd",
+  "renderer_sha256": "4e5359d03b5567688c9d09018249f3484297043f08f670a7d1e3676244c62d2f",
   "methods": {
     "outcome48": [
       "Outcome only \u00b7 48 groups",
@@ -28,23 +27,6 @@
       "-"
     ]
   },
-  "bar_methods": {
-    "baseline": [
-      "outcome48",
-      "48\ngroups",
-      "#9AA0A6"
-    ],
-    "additive": [
-      "additive",
-      "Strict\ngate",
-      "#A99BE3"
-    ],
-    "gate-b": [
-      "gate_b",
-      "ADM",
-      "#6250BE"
-    ]
-  },
   "training": {
     "protocol": "W&B train/task_success_rate and train/task_invalid_rate over all completed training trajectories collected at each iteration, before dynamic-sampling filtering (15 browser turns). training_success_valid = success / (1 - invalid rate): success among valid trajectories, which removes infrastructure incidents (e.g. Gate B iterations 21-24 and 76-77, 42-90% invalid).",
     "smoothing": "Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
@@ -54,74 +36,87 @@
     "protocol": "Online-Mind2Web full 300 \u00b7 local browser \u00b7 GPT-4.1 action-history judge \u00b7 actor T0 \u00b7 30 turns; one evaluation per checkpoint",
     "smoothing": "None; connected circles are raw measured checkpoint success rates."
   },
-  "stealth": {
-    "collection_dates_pacific": "2026-09-29 to 2026-09-30",
-    "protocol": "Browser Use stealth; o4-mini/AgentTrek; T0.6/p0.95/k20; 4096 response tokens;30 turns; actor-only inference",
+  "matched": {
+    "date": "2026-10-25",
+    "protocol": "3 contemporaneous full-300 repeats; local browser; GPT-4.1 action-history; T0; 30 turns",
     "training_iteration": 90,
     "absolute_success": [
       {
         "method": "outcome48",
-        "overall_percent": 55.22222222222223,
+        "overall_percent": 34.111111111111114,
         "ci95_percent": [
-          50.888888888888886,
-          59.44444444444444
+          30.0,
+          38.333333333333336
         ],
         "repeat_successes": [
-          163,
-          173,
-          161
+          103,
+          95,
+          109
         ],
-        "planned_episodes": 900,
-        "collection_dates_pacific": "2026-09-29 to 2026-09-30"
+        "planned_episodes": 900
       },
       {
-        "method": "additive",
-        "overall_percent": 58.44444444444444,
+        "method": "outcome56",
+        "overall_percent": 35.333333333333336,
         "ci95_percent": [
-          54.333333333333336,
-          62.555555555555564
+          31.22222222222222,
+          39.55555555555556
         ],
         "repeat_successes": [
-          179,
-          176,
-          171
+          114,
+          102,
+          102
         ],
-        "planned_episodes": 900,
-        "collection_dates_pacific": "2026-09-29 to 2026-09-30"
+        "planned_episodes": 900
       },
       {
         "method": "gate_b",
-        "overall_percent": 58.77777777777777,
+        "overall_percent": 40.55555555555556,
         "ci95_percent": [
-          54.44444444444444,
-          63.0
+          36.22222222222222,
+          44.888888888888886
         ],
         "repeat_successes": [
-          166,
-          189,
-          174
+          123,
+          117,
+          125
         ],
-        "planned_episodes": 900,
-        "collection_dates_pacific": "2026-09-29 to 2026-09-30"
+        "planned_episodes": 900
       }
     ],
-    "display": "Three vertical absolute overall-success bars from zero, for outcome48, strict-gate ADM, and relaxed-gate ADM.",
+    "differences": [
+      {
+        "comparison": "Gate B \u2212 outcome56",
+        "diff_pp": 5.22,
+        "ci": [
+          1.56,
+          8.89
+        ],
+        "holm_p": 0.014
+      },
+      {
+        "comparison": "Gate B \u2212 outcome48",
+        "diff_pp": 6.44,
+        "ci": [
+          2.67,
+          10.22
+        ],
+        "holm_p": 0.004
+      }
+    ],
+    "display": "Three vertical absolute overall-success bars from zero with pointwise 95% task-cluster intervals.",
     "uncertainty": {
-      "method": "Pointwise 95% task-cluster BCa bootstrap",
+      "method": "Percentile bootstrap of 300 task clusters, preserving all three repeats and methods; recompute overall success with 900 planned episodes per method.",
       "tasks": 300,
       "repeats": 3,
-      "draws": 50000,
-      "seed": 20260930,
-      "numerical_convention": "Bootstrap integer per-task three-repeat success sums and divide confidence limits by three; equal counts retain exact BCa bias-correction ties.",
+      "draws": 20000,
+      "seed": 20261104,
       "scope": "Conditional on these fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty."
     }
   },
   "caveats": [
     "Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
     "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
-    "Stealth bars use a different browser/judge/actor-sampling protocol from the local GPT-4.1/T0 validation curves.",
-    "No matching outcome56 stealth repeat cohort is available; the middle bar is the strict-gate additive ADM run.",
-    "The stealth ADM-versus-baseline gain is not statistically established (paired CI crosses zero; Holm p about .22).",
     "Failures in main batch and 40M+16F are excluded from the compact curves and retained in the results table and all-run archive."
   ],
   "points": {
@@ -1147,8 +1142,8 @@
     }
   },
   "output_sha256": {
-    "png": "eb63f33d875bf0baea2e0ad2423589ed4c5c89ca0e61510753a2eff3ef5298e8",
-    "pdf": "c6648d80a78be6170e22da644bd5f570cc7f6ef3ad9c722845915b00db222173",
-    "svg": "a72accd60f16e496e8a524c178223b3b5b89b0431989f452227986ba9be8f812"
+    "png": "f67b3795c7d15972166e2055939f7b234348323c4683b9ad0fc420a149ca9f2d",
+    "pdf": "38309226adaac12699c651b9639870aecf17084489deb2069048f10184ef232a",
+    "svg": "c3991aac27caff7a521b4f61e10f643486ceecf7d0cb1a7b3adbbd8e77e6c0e8"
   }
 }
