@@ -57,4 +57,7 @@ for kind in ("gain", "absolute", "absolute_lines"):           # absolute_lines: 
     fig.tight_layout()
     for ext in ("png", "svg"):
         fig.savefig(D / f"lookahead_draw_split_piotr_{kind}{suffix}.{ext}", dpi=160)
+        if ext == "svg":
+            target = D / f'lookahead_draw_split_piotr_{kind}{suffix}.{ext}'
+            target.write_text("\n".join(line.rstrip() for line in target.read_text().splitlines()) + "\n")
     plt.close(fig)

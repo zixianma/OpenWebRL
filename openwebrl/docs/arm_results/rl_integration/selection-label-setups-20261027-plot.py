@@ -27,7 +27,10 @@ from paper_plot_palette import COLORS as C, tint
 def _paper_save(fig, path, **kwargs):
     """Keep raster and vector siblings synchronized with the same layout."""
     for suffix in (".png", ".pdf", ".svg"):
-        fig.savefig(path.with_suffix(suffix), **kwargs)
+        target = path.with_suffix(suffix)
+        fig.savefig(target, **kwargs)
+        if suffix == ".svg":
+            target.write_text("\n".join(line.rstrip() for line in target.read_text().splitlines()) + "\n")
 
 
 def student_outline(source_color):

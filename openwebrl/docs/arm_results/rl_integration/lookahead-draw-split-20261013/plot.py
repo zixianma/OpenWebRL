@@ -48,3 +48,6 @@ for mode, title in TITLES.items():
     fig.tight_layout(rect=(0, .1, 1, .93))
     for ext in ("png", "svg"):
         fig.savefig(out / f"lookahead_draw_split_{mode}.{ext}", dpi=160)
+        if ext == "svg":
+            target = out / f'lookahead_draw_split_{mode}.{ext}'
+            target.write_text("\n".join(line.rstrip() for line in target.read_text().splitlines()) + "\n")
