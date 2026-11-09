@@ -17,6 +17,9 @@ from urllib.request import urlopen
 
 RUNTIME = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime")
 PYTHON = RUNTIME / "venv/bin/python"
+JUDGE_MODEL = "gpt-6.1-terra"
+JUDGE_INPUT_USD_PER_MILLION = 1.0
+JUDGE_OUTPUT_USD_PER_MILLION = 5.0
 
 
 def load(path: Path) -> dict:
@@ -62,23 +65,27 @@ def audit(output: Path, expected_ids: set[str]) -> dict:
 
 
 def smoke_judge(env: dict[str, str], budget_path: Path) -> None:
-    """Validate direct o4-mini dispatch within the shared paid-call ledger."""
+    """Validate direct judge dispatch within the shared paid-call ledger."""
     from openai import OpenAI
     from openwebrl.eval.judge_api_budget import JudgeBudget
 
-    budget = JudgeBudget(budget_path, 20.0, 2480)
+    budget = JudgeBudget(
+        budget_path, 20.0, 2480,
+        input_usd_per_million=JUDGE_INPUT_USD_PER_MILLION,
+        output_usd_per_million=JUDGE_OUTPUT_USD_PER_MILLION,
+    )
     ticket = budget.reserve()
     try:
-        response = OpenAI(api_key=env["OPENAI_API_KEY"], max_retries=0).chat.completions.create(
-            model="o4-mini", messages=[{"role": "user", "content": "Reply with READY."}],
-            max_completion_tokens=64,
+        response = OpenAI(api_key=env["OPENAI_API_KEY"], max_retries=0, timeout=30).chat.completions.create(
+            model=JUDGE_MODEL, messages=[{"role": "user", "content": "Reply with READY."}],
+            seed=42, max_completion_tokens=256,
         )
     except BaseException:
         budget.settle(ticket)
         raise
     budget.settle(ticket, getattr(response, "usage", None))
-    if not response.choices:
-        raise ValueError("o4-mini smoke returned no choice")
+    if not response.choices or not response.choices[0].message.content:
+        raise ValueError("judge smoke returned no content")
 
 
 def reserve_browser_sessions(path: Path, condition: str, job_id: str) -> None:
@@ -106,7 +113,7 @@ def main() -> None:
     args = parser.parse_args()
 
     approval = load(args.output.parent / "approval.json")
-    plan = args.output.parent.parent / "plan.json"
+    plan = args.output.parent.parent / "evaluation-terra-plan.json"
     if approval.get("plan_sha256") != hashlib.sha256(plan.read_bytes()).hexdigest():
         raise ValueError("evaluation approval is bound to another plan")
     if approval.get("approved") is not True or approval.get("evaluation") != {
@@ -115,6 +122,8 @@ def main() -> None:
         "judge_attempts": 2480, "judge_usd": 20.0,
     }:
         raise ValueError("exact evaluation resource/API approval is missing")
+    if load(args.output.parent / "judge-hold.json").get("judge_on_hold") is not False:
+        raise ValueError("judge evaluation is on hold")
     if not args.checkpoint.is_dir() or not (args.checkpoint / "config.json").is_file():
         raise FileNotFoundError("actor checkpoint is missing")
     tasks = Path(__file__).resolve().parents[1] / "openwebrl/data/eval/online-mind2web.jsonl"
@@ -130,13 +139,15 @@ def main() -> None:
         if value and key in ("OPENAI_API_KEY", "JUDGE_API_KEY", "WANDB_API_KEY"):
             env.setdefault(key, value)
     if not env.get("OPENAI_API_KEY"):
-        raise ValueError("o4-mini judge credential is unavailable")
+        raise ValueError("judge credential is unavailable")
     env.update(WANDB_PROJECT="openwebrl-evals", SLIME_BROWSER_ENV_MODE="local_process",
                OPENWEBRL_DIRECT_OPENAI="1",
                SLIME_BROWSER_LOCAL_PROCESS_MAX_PROCESSES="3",
                SLIME_BROWSER_LOCAL_PROCESS_PYTHON=str(PYTHON),
                OPENWEBRL_JUDGE_BUDGET_PATH=str(args.output.parent / "judge-budget.json"),
                OPENWEBRL_JUDGE_BUDGET_USD="20.0", OPENWEBRL_JUDGE_ATTEMPT_CAP="2480",
+               OPENWEBRL_JUDGE_INPUT_USD_PER_MILLION=str(JUDGE_INPUT_USD_PER_MILLION),
+               OPENWEBRL_JUDGE_OUTPUT_USD_PER_MILLION=str(JUDGE_OUTPUT_USD_PER_MILLION),
                PYTHONDONTWRITEBYTECODE="1")
     if args.condition == "soft-mtp":
         env.update(SLIME_BROWSER_LOCAL_PROCESS_PORT_START="18000", SLIME_BROWSER_LOCAL_PROCESS_PORT_END="18499")
@@ -153,7 +164,7 @@ def main() -> None:
                     "--temperature", "0.6", "--top-p", "0.95", "--top-k", "20",
                     "--max-new-tokens", "4096", "--judge-max-completion-tokens", "4096",
                     "--context-num-screenshots", "1", "--browser-response-format-mode", "browser_env",
-                    "--judge-model", "o4-mini", "--judge-api-mode", "api_key",
+                    "--judge-model", JUDGE_MODEL, "--judge-api-mode", "api_key",
                     "--judge-timeout-secs", "120", "--eval-protocol", "online_mind2web",
                     "--inference-step-timeout-secs", "180", "--task-timeout-secs", "1800",
                     "--output", str(args.output)]
@@ -169,7 +180,8 @@ def main() -> None:
                 subprocess.run(eval_command, env=env, stdout=eval_log, stderr=subprocess.STDOUT, check=True)
             summary = audit(args.output, expected_ids)
             summary.update(condition=args.condition, checkpoint=str(args.checkpoint),
-                           protocol="local browser, OM2W/AgentTrek o4-mini, T0.6 p0.95 k20, 4096 tokens, 30 turns")
+                           judge_model=JUDGE_MODEL,
+                           protocol=f"local browser, OM2W/AgentTrek {JUDGE_MODEL}, T0.6 p0.95 k20, 4096 tokens, 30 turns")
             (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
             import wandb
 
@@ -177,7 +189,7 @@ def main() -> None:
             if env.get("WANDB_API_KEY"):
                 os.environ["WANDB_API_KEY"] = env["WANDB_API_KEY"]
             run = wandb.init(project="openwebrl-evals", name=f"soft-mtp-sft-{args.condition}-full300",
-                             group="soft-mtp-sft-paired-full300-20261031", dir=str(args.output))
+                             group="soft-mtp-sft-terra-paired-full300-20261109", dir=str(args.output))
             run.log({"success/overall": summary["overall_success_rate"],
                      "success/valid_only": summary["valid_only_success_rate"],
                      "count/valid": summary["valid"], "count/abnormal": summary["abnormal"]})

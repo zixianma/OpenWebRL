@@ -19,8 +19,13 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 <a id="arm-sft-soft-mtp-20261030"></a>
 ## Soft-MTP for the OpenWebRL SFT actor — 2026-10-30
 
-**Both matched SFT runs completed all 579 optimizer steps and passed final
-checkpoint reload; no task-success comparison has run.** The
+**In the matched 300-task actor-only evaluation, NTP-only SFT succeeded on
+41 tasks (13.7%) versus 18 (6.0%) for Soft-MTP SFT: Soft − NTP was −7.7
+percentage points (paired task-bootstrap 95% CI [−11.3, −4.0]).** The 32,768-token
+serving cap caused 77 NTP and 140 Soft-MTP context-overflow aborts, so this
+result measures the deployed actor protocol and does not isolate action quality.
+Both SFT runs completed all 579 optimizer steps and passed final checkpoint
+reload. The
 [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
 gradient routing for an existing MTP architecture with a shared linear output
 head. Its math/code fine-tuning results **discard the MTP heads and use NTP
@@ -72,15 +77,79 @@ the two eight-GPU jobs), within the approved 128-H200-hour cap.
 
 The NTP training-objective loss was 0.485 and Soft-MTP's combined-objective loss
 was 4.013. These values **are not directly comparable** because Soft-MTP adds
-an auxiliary loss; no held-out likelihood or task-success result is available.
+an auxiliary loss; no held-out likelihood, action-token parsing comparison, or
+speculative-decoding latency result is available.
 The final checkpoints, trainer states, reload receipts and Slurm logs are under
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/`.
 Training W&B run IDs are `vywjx30e` (NTP) and `dssthz8l` (Soft-MTP).
 
-The user instructed us to **hold off from the judge**. No judged evaluation
-was submitted, its approval gate remains closed, and no judge API calls were
-made for this pilot. The paired evaluation protocol below is a prepared plan,
-not active work.
+### Matched actor-only task evaluation — 2026-11-09
+
+Both actors ran the same 300 Online-Mind2Web tasks with local browsers,
+temperature 0.6/top-p 0.95/top-k 20, up to 4,096 response tokens and 30 turns.
+The judge was `gpt-6.1-terra` with the Online-Mind2Web/AgentTrek terminal-success
+prompt. The planned `o4-mini` judge returned `404 model_not_found` and its
+[model page](https://developers.openai.com/api/docs/models/o4-mini) marks it
+shut down; this is a new judge cohort, not directly comparable with historical
+`o4-mini` results. **Both used ordinary actor decoding.** The Soft-MTP serving
+view removed only its nine draft-head tensors; all 714 actor tensors matched the
+training checkpoint exactly. Neither speculative verification nor MTP drafting
+was evaluated.
+
+| Arm | Eval job | Saved tasks | Successes | Overall % | Valid tasks | Valid successes | Valid-only % | Context-limit aborts | Other aborts |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| NTP-only SFT | `440973` | 300 | 41 | 13.7 | 145 | 41 | 28.3 | 77 | 78 |
+| Soft-MTP SFT | `440972` | 300 | 18 | 6.0 | 115 | 18 | 15.7 | 140 | 45 |
+
+The **overall** Soft − NTP difference was −7.67 percentage points (20,000
+paired task-bootstrap resamples, seed 42; percentile 95% CI [−11.33, −4.00]
+points). Of 300 matched tasks, 28 succeeded only for NTP, five only for Soft,
+13 for both and 254 for neither (two-sided exact McNemar p=0.0000662).
+Among the **70 tasks valid in both arms**, NTP succeeded on 24 and Soft on 16;
+11 were NTP-only successes and three Soft-only (exact McNemar p=0.0574).
+Arm-specific valid-only rates condition on different task subsets and do not
+remove that selection effect. Each task was evaluated once; no judge timeouts,
+judge-invalid outcomes, missing tasks or abnormal result files were found.
+
+The SGLang server used a **32,768-token context cap**, below the source model's
+262,144-position configuration and the 36,864-token SFT cutoff. Its HTTP 400
+context-limit errors produced the unequal abort counts above. This is a
+substantial serving constraint; a longer-context, matched rerun is needed to
+separate actor quality from the cap. The current comparison does establish
+that adding these Soft-MTP heads and training objective did **not** improve
+full-task success in this frozen actor-only serving setup. It does not test
+multi-token inference speed or isolate Soft-MTP gradient routing from adding
+an MTP objective at all.
+
+[Aggregate results and uncertainty](arm_results/soft_mtp_sft_terra_full300_20261109.json)
+link to the local task-level audit, frozen plan and saved rollouts/verdicts.
+Evaluation W&B runs `sbi1rfpw` (NTP) and `fsd94wxo` (Soft) synced in
+`openwebrl-evals`.
+
+<details><summary>Launch recovery, full budget accounting and private evidence</summary>
+
+The initial attempts (`440909`, `440910`) failed before actor startup because
+`CUDA_HOME` was unset. Retry 1 (`440923`, `440924`) exposed a loopback proxy
+misconfiguration and SGLang's rejection of draft-head tensors in the actor
+checkpoint. Retry 2 (`440960`, `440961`) loaded both actors but encountered a
+missing Playwright Chromium binary; 66 NTP and 57 Soft failed resets launched
+zero browsers. Their provisional browser reservations were reconciled with
+saved error evidence. Chromium was installed in scrubbed storage and one
+successful browser-launch smoke was charged before the completed retry 3.
+The Soft actor-only serving-view equality audit is at
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/soft-mtp-qwen3vl4b-actor-serving/serving-view-audit.json`.
+
+All attempts consumed 14,429 seconds (4:00:29) for NTP and 13,150 seconds
+(3:39:10) for Soft, each within its approved one-H200/seven-hour cap;
+combined use was 7.66 H200-hours. The shared browser ledger recorded 601 of
+620 approved sessions including the smoke. The judge ledger recorded 230 of
+2,480 permitted attempts and $1.452 of the $20 cap, preserving all availability
+smokes and retries. The frozen evaluation plan is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/evaluation-terra-plan.json`;
+the private paired audit and saved per-task rollouts/verdicts are under its
+`evaluations/` directory. The original training plan remains frozen.
+
+</details>
 
 The first controlled pilot trains **two fresh actors**, ordinary NTP-only SFT
 and Soft-MTP SFT, from the same base and 3,085 prepared records. Their YAML
@@ -114,15 +183,9 @@ backward, checkpoint save/reload and long-context memory check, charging that
 work to that allocation. The two 8-H200 training jobs are capped at eight
 hours **each**, including gates and retries (128 H200-hours total), and may
 run concurrently. They preserve the released effective batch size of 16 with
-per-GPU batch size one and accumulation two. Two prepared, but currently held,
-one-H200, seven-hour jobs (14 H200-hours total) would evaluate the fresh NTP
-and Soft-MTP actors on the same 300 Online-Mind2Web tasks with local
-browsers, T0.6/p0.95/k20, 4,096 response tokens, 30 turns and the
-o4-mini/AgentTrek judge. The pair is bounded by 620 browser sessions, 2,480
-judge attempts and a $20 shared judge-usage ledger. The evaluation code saves
-every task result and judge verdict; separate runs log to `openwebrl-evals`.
-The held evaluations would add at most $20 of judge API usage. The earlier
-one-training-job proposal is superseded.
+per-GPU batch size one and accumulation two. The paired actor-only evaluation
+above used the approved two one-H200, seven-hour caps, including retries. The
+earlier one-training-job proposal is superseded.
 
 ---
 

@@ -1,0 +1,87 @@
+{
+  "actor_protocol": "local browser; temperature 0.6, top-p 0.95, top-k 20; 4096 new tokens; 30 turns; 32768-token SGLang context cap",
+  "arms": {
+    "ntp-sft": {
+      "abnormal_files": 0,
+      "all_attempt_elapsed_seconds": 14429,
+      "causes": {
+        "actor_http_400": 77,
+        "other_aborted": 78
+      },
+      "job_id": "440973",
+      "overall_success_rate": 0.13666666666666666,
+      "recorded": 300,
+      "successes": 41,
+      "valid": 145,
+      "valid_only_success_rate": 0.2827586206896552,
+      "valid_successes": 41,
+      "wandb_id": "sbi1rfpw"
+    },
+    "soft-mtp": {
+      "abnormal_files": 0,
+      "all_attempt_elapsed_seconds": 13150,
+      "causes": {
+        "actor_http_400": 140,
+        "other_aborted": 45
+      },
+      "job_id": "440972",
+      "overall_success_rate": 0.06,
+      "recorded": 300,
+      "successes": 18,
+      "valid": 115,
+      "valid_only_success_rate": 0.1565217391304348,
+      "valid_successes": 18,
+      "wandb_id": "fsd94wxo"
+    }
+  },
+  "budget": {
+    "all_attempt_seconds_combined": 27579,
+    "approved_seconds_per_arm": 25200,
+    "browser_sessions_cap": 620,
+    "browser_sessions_reserved_net": 601,
+    "judge_attempts": 230,
+    "judge_attempts_cap": 2480,
+    "judge_cap_usd": 20.0,
+    "judge_spent_usd": 1.4517628000000014
+  },
+  "date": "2026-11-09",
+  "judge": "gpt-6.1-terra, Online-Mind2Web/AgentTrek terminal-success prompt",
+  "limitations": [
+    "The 32768-token serving cap is below the source model 262144-token context and training 36864-token cutoff. Context-limit HTTP 400 aborts were 77 NTP versus 140 Soft; this is an operational result under that cap, not an isolated estimate of action quality or Soft-MTP gradient routing.",
+    "Valid-only rates condition on arm-specific subsets (145 NTP versus 115 Soft); the 70 common-valid tasks offer a paired quality check but are selected by both actors reaching a valid outcome.",
+    "Judge model differs from historical o4-mini cohorts; do not compare rates across judge cohorts without a matched rejudge.",
+    "One evaluation draw per task; sampling variance and live-site drift remain."
+  ],
+  "paired": {
+    "bootstrap": "20,000 paired task resamples with replacement; seed 42; percentile 95% interval; fixed checkpoints and one evaluation draw per task",
+    "common_valid": {
+      "both_success": 13,
+      "exact_mcnemar_two_sided_p": 0.057373046875,
+      "neither_success": 43,
+      "ntp_only_success": 11,
+      "ntp_successes": 24,
+      "soft_only_success": 3,
+      "soft_successes": 16,
+      "tasks": 70
+    },
+    "overall_discordance": {
+      "both_success": 13,
+      "neither_success": 254,
+      "ntp_only_success": 28,
+      "soft_only_success": 5
+    },
+    "overall_exact_mcnemar_two_sided_p": 6.618769839406013e-05,
+    "overall_soft_minus_ntp_percentage_points": -7.666666666666666,
+    "overall_task_bootstrap_95ci_percentage_points": [
+      -11.333333333333332,
+      -4.0
+    ]
+  },
+  "private_audit": "paired-audit.json",
+  "private_evidence_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/evaluations",
+  "private_plan": "../evaluation-terra-plan.json",
+  "serving_comparison": "Actor-only generation for both; Soft-MTP draft heads discarded. No speculative decoding or MTP serving-speed claim.",
+  "task_count": 300,
+  "title": "Matched NTP-only versus Soft-MTP SFT actor-only Online-Mind2Web evaluation",
+  "training_comparison": "Fresh matched base Qwen3-VL-4B-Thinking SFT, 3085 examples, 579 steps/3 epochs each; Soft-MTP adds three K=3 draft heads and the auxiliary Soft-MTP gradient route."
+}
