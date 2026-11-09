@@ -21,14 +21,14 @@
     },
     "success": {
       "color": "#74EDC3",
-      "meaning": "Explicit successful terminal-outcome markers; diagram action tokens use the same mint family in a separate labeled context."
+      "meaning": "Explicit successful terminal-outcome markers; green is reserved for success status."
     },
     "failure": {
       "color": "#7C7887",
       "meaning": "Failed rollout outcomes; keep hollow marks where already established."
     },
     "attention": {
-      "color": "#74EDC3",
+      "color": "#ED8B74",
       "meaning": "Allowed attention connections, confined to attention grids."
     },
     "state": {
@@ -36,8 +36,8 @@
       "meaning": "Observation/state tokens in method diagrams; yellow fill with dark text."
     },
     "action": {
-      "color": "#74EDC3",
-      "meaning": "Candidate and selected-action tokens in method diagrams; mint fill with dark green text."
+      "color": "#ED8B74",
+      "meaning": "Candidate and selected-action tokens in method diagrams; salmon fill with darker salmon text."
     }
   },
   "roles": {
@@ -214,9 +214,9 @@
       "single_call": "#847D98",
       "success": "#74EDC3",
       "failure": "#7C7887",
-      "attention": "#74EDC3",
+      "attention": "#ED8B74",
       "state": "#EDE374",
-      "action": "#74EDC3"
+      "action": "#ED8B74"
     },
     "paper_roles": {
       "ADM_MAIN": "#9575EE",
@@ -239,7 +239,7 @@
       "SUCCESS": "#489379",
       "SUCCESS_FILL": "#74EDC3",
       "FAILURE": "#7C7887",
-      "ATTENTION_ALLOWED": "#74EDC3",
+      "ATTENTION_ALLOWED": "#ED8B74",
       "INK": "#211A33",
       "MUTED": "#423C54",
       "BORDER": "#CBC9CF",
@@ -255,8 +255,8 @@
       "STATE": "#EDE374",
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#EDB774",
-      "ACTION": "#74EDC3",
-      "ACTION_INK": "#489379"
+      "ACTION": "#ED8B74",
+      "ACTION_INK": "#A15F4F"
     },
     "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
@@ -265,7 +265,7 @@
       "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue.",
-      "Diagram tokens keep yellow states and mint-green candidate/selected actions across every method figure. Text stays dark enough to read; lookahead remains a salmon enclosure and ADM retains purple."
+      "Diagram tokens keep yellow states and salmon candidate/selected actions across every method figure. Purple is the primary ADM color; salmon is the secondary color for actions, lookahead teachers/evidence and allowed attention cells. Darker salmon text and connectors preserve readability; green is reserved for terminal success."
     ],
     "previews": [
       "assets/paper_plot_palette_preview.png",
@@ -299,8 +299,9 @@
     "STATE": "#EDE374",
     "STATE_INK": "#211A33",
     "STATE_BORDER": "#EDB774",
-    "ACTION": "#74EDC3",
-    "ACTION_INK": "#489379"
+    "ACTION": "#ED8B74",
+    "ACTION_INK": "#A15F4F",
+    "ATTENTION_ALLOWED": "#ED8B74"
   },
   "trial": {
     "status": "Applied across all registered paper figures; frozen scientific inputs and estimates preserved",
@@ -325,7 +326,7 @@
       "SUCCESS": "#489379",
       "SUCCESS_FILL": "#74EDC3",
       "FAILURE": "#7C7887",
-      "ATTENTION_ALLOWED": "#74EDC3",
+      "ATTENTION_ALLOWED": "#ED8B74",
       "INK": "#211A33",
       "MUTED": "#423C54",
       "BORDER": "#CBC9CF",
@@ -341,8 +342,8 @@
       "STATE": "#EDE374",
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#EDB774",
-      "ACTION": "#74EDC3",
-      "ACTION_INK": "#489379"
+      "ACTION": "#ED8B74",
+      "ACTION_INK": "#A15F4F"
     },
     "renderers": [
       "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
@@ -423,10 +424,10 @@
   },
   "diagram_roles": {
     "state": "Yellow observation/state cards; dark text and amber borders for contrast.",
-    "action": "Mint-green candidate/selected-action cards; darker related green for text and connectors.",
-    "lookahead": "Salmon enclosure and teacher/evidence cues; state/action tokens retain yellow/green identity.",
+    "action": "Salmon candidate/selected-action cards; darker salmon for text and connectors.",
+    "lookahead": "Salmon enclosure and teacher/evidence cues; state/action tokens retain yellow/salmon identity.",
     "adm": "Light purple default/22M; dark purple only for 4B selector size where applicable.",
     "status": "Explicit success markers may use green; hollow gray indicates failure. Diagram token colors never denote terminal outcomes.",
-    "attention": "Mint attention cells remain a structural matrix encoding; masks are neutral."
+    "attention": "Salmon attention cells encode allowed connections; masks are neutral."
   }
 }

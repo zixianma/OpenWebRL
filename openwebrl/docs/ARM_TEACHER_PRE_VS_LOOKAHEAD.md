@@ -237,7 +237,7 @@ Eight of these states, three where the H = 4 pick did better (W) and three where
 <details>
 <summary>Review sheets: the screen, both picks, and one matched episode per side</summary>
 
-Each sheet shows the task, earlier actions, and the current screen with the pre pick (yellow source outline) and the H = 4 pick (salmon source outline). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (green action marks; amber screenshot borders), how the episode ended, and the judged outcome.
+Each sheet shows the task, earlier actions, and the current screen with the pre pick (yellow source outline) and the H = 4 pick (salmon source outline). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (salmon action marks; amber screenshot borders), how the episode ended, and the judged outcome.
 
 **W1.** WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page.
 

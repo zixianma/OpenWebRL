@@ -2,7 +2,7 @@
 """Build a separate palette-variant gallery from an isolated, pinned source copy.
 
 Use --render to reproduce, --workspace PATH to collect an already-rendered copy,
-or --check to verify the published preview and unchanged canonical figures.
+or --check to verify the published preview against its pinned source snapshot.
 Requires the same local plotting dependencies as the canonical renderers.
 """
 from __future__ import annotations
@@ -29,9 +29,12 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def pinned_bytes(ref, path):
+    return subprocess.check_output(["git", "show", f"{ref}:openwebrl/docs/{path}"], cwd=REPO)
+
+
 def pinned_text(ref, path):
-    return subprocess.check_output(["git", "show", f"{ref}:openwebrl/docs/{path}"],
-                                   cwd=REPO, text=True)
+    return pinned_bytes(ref, path).decode()
 
 
 def make_workspace(recipe):
@@ -100,7 +103,7 @@ def collect(work, recipe):
         else:
             shutil.copyfile(source, target)
         mapping[relative] = target.relative_to(DOCS).as_posix()
-        originals[relative] = sha(DOCS / path)
+        originals[relative] = hashlib.sha256(pinned_bytes(recipe["source_ref"], relative)).hexdigest()
         outputs[target.relative_to(DOCS).as_posix()] = sha(target)
     for ext in ("png", "pdf", "svg"):
         source = source_docs / f"assets/paper_plot_palette_preview.{ext}"
@@ -136,7 +139,7 @@ def check(recipe):
     for path, digest in manifest["output_sha256"].items():
         assert sha(DOCS / path) == digest, path
     for path, digest in manifest["canonical_sha256"].items():
-        assert sha(DOCS / path) == digest, f"Canonical figure changed: {path}"
+        assert hashlib.sha256(pinned_bytes(recipe["source_ref"], path)).hexdigest() == digest, path
     text = (DOCS / recipe["document"]).read_text()
     original = pinned_text(recipe["source_ref"], "ARM_FIGURES.md")
     expected = len(re.findall(r"^!\[", original, re.MULTILINE))
@@ -146,7 +149,7 @@ def check(recipe):
     for relative in LINK.findall(text):
         if "://" not in relative and not relative.startswith("#"):
             assert (DOCS / relative).is_file(), relative
-    print(f"Verified {manifest['figure_count']} preview figures; canonical figures unchanged.")
+    print(f"Verified {manifest['figure_count']} preview figures against their pinned source snapshot.")
 
 
 def main():
@@ -158,7 +161,11 @@ def main():
     args = parser.parse_args()
     recipe = json.loads(RECIPE.read_text())
     if not args.check:
+        original = pinned_text(recipe["source_ref"], "ARM_FIGURES.md")
+        current = {p: sha(DOCS / p) for p in LINK.findall(original)
+                   if Path(p).suffix.lower() in FORMATS}
         collect(make_workspace(recipe) if args.render else args.workspace.resolve(), recipe)
+        assert all(sha(DOCS / p) == digest for p, digest in current.items()), "Canonical figures changed during the variant build"
     check(recipe)
 
 

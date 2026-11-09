@@ -1,6 +1,6 @@
 """Named colors shared by paper diagrams and quantitative result plots.
 
-STATE is yellow, ACTION is mint, ADM is purple and lookahead teachers are salmon.
+STATE is yellow, ACTION is salmon, ADM is purple and lookahead teachers are salmon.
 Neutral controls, model-size shades and source-label outlines retain explicit roles.
 Color changes never affect source measurements, intervals or data populations.
 """
