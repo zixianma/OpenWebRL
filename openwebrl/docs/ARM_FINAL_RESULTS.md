@@ -1696,11 +1696,22 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 
 ![Three RL learning curves: outcome-only 48 groups, outcome-only 56 groups and Outcome plus ADM; smoothed valid-only local validation rates with faint raw checkpoint dots](arm_results/rl_final_20261108/rl_learning_compact.png)
 
-*(a) Binary success among valid collected training trajectories, before dynamic-sampling filtering and excluding the ADM bonus. Lines average the last five per-iteration rates; dots mark every tenth iteration. This policy-dependent collection metric is not fixed-task held-out accuracy. (b) Valid-only Online-Mind2Web success over iterations 20–90, reproducing the [standalone evaluation curves](rl_results/rl_eval_learning_curves.png). Lines and circles pool successes and valid counts across the latest three evaluations; faint dots show raw rates. Initial windows use one or two evaluations, without iteration-10 warmup. These historical evaluations use a local browser, GPT-4.1/action-history judge, actor T0 and 30 turns. Dates and valid populations differ; invalid episodes are excluded. One training lineage per method. The 40M+16F and other omitted ablations remain in the table and archived views below.*
+*(a) Training “Success (%)” is binary task success among valid collected trajectories, before dynamic-sampling filtering. It excludes the ADM bonus and is not the total reward. Lines average the last five per-iteration rates; dots mark every tenth iteration. This policy-dependent collection metric is not fixed-task held-out accuracy. (b) Valid-only Online-Mind2Web success over iterations 20–90, reproducing the [standalone evaluation curves](rl_results/rl_eval_learning_curves.png). Lines and circles pool successes and valid counts across the latest three evaluations; faint dots show raw rates. Initial windows use one or two evaluations, without iteration-10 warmup. These historical evaluations use a local browser, GPT-4.1/action-history judge, actor T0 and 30 turns. Dates and valid populations differ; invalid episodes are excluded. One training lineage per method. The 40M+16F and other omitted ablations remain in the table and archived views below.*
 
 The GPT-4.1-judged matched bars are omitted pending a completed shared-Terra iteration-90 comparison of 48 groups, 56 groups and ADM. Existing [Terra iteration-50 ablations](ARM_SUMMARY.md#arm-failure-group-ablations-terra-20261104) and the [sampled outcome-56 judge audit](RL_REWARD_DESIGN.md) do not supply that cohort. The curve axes retain their previous physical dimensions. No new evaluations or rejudging calls were launched.
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
+
+<details>
+<summary>Overall-success version: invalid attempts included</summary>
+
+![Overall training and validation success for the two outcome-only controls and Outcome plus ADM](arm_results/rl_final_20261108/rl_learning_compact_overall.png)
+
+*Same methods, checkpoints, physical panel sizes and smoothing windows. Training: `100 × successes / all completed collected trajectories`, before dynamic-sampling filtering; ADM bonuses are excluded. Lines average five per-iteration rates. Validation: `100 × successes / 300 planned tasks` at each checkpoint; invalid episodes count as non-success. Lines pool successes and planned counts over up to three evaluations in iterations 20–90; faint dots show raw overall rates. This validation metric still uses GPT-4.1/action-history judgments. The ADM training dips near iterations 21–24 and 76–77 coincide with infrastructure-invalid rates of about 42–90%, so overall collection success mixes policy performance with browser reliability. The valid-only figure above removes invalid attempts from its denominators.*
+
+[PDF](arm_results/rl_final_20261108/rl_learning_compact_overall.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact_overall.svg) · [Coordinates and metric definitions](arm_results/rl_final_20261108/rl_learning_compact_overall.json). Reproduce with the same renderer and `--overall`; the original input aggregates remain unchanged.
+
+</details>
 
 <details>
 <summary>All runs: full training and validation curves</summary>

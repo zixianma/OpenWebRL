@@ -11,7 +11,7 @@
     "AlbertSans-SemiBoldItalic.ttf": "2dcb1616712e5bf1563cc45085edea373db1529eaf6f0b3fc319f6bfd64dbfdb",
     "AlbertSans[wght].ttf": "8fe5d4cf5822d7096d4d17ad781c90f97c745ac13a22be619db74966fba45fda"
   },
-  "updated_figure_count": 71,
+  "updated_figure_count": 72,
   "output_sha256": {
     "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.pdf": "3a74ef88452eb51a8ee58fe80108730b60722ec1f8185cd99ffb873c6f2b200a",
     "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.png": "eb672813f371c2462a3627f388b2bf4d79cff5da48af36f6f8a4fc80c8caf0c8",
@@ -193,9 +193,12 @@
     "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.png": "b62320aff6fc6439eded85aa8e299f3c2c0e0f546af1a46219c4d7d2097cad42",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.pdf": "2b3ea54e31dbd130dfdc2fa2c3547995622b74ebc4dc07e2cf87c2465a000885",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.svg": "7ba7b33b3850e941156ad5e01719bb0fbe288f80174dd6899968eead56ffe68c",
-    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.png": "462fa290c7c6652d7404818c0b0472d115dc610d4b2b22cfde646c690e118a75",
-    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.pdf": "deec0cbe4f64e078538ed3c9ae3ddb6625625ccc1ff0afc7e423fc7647a649bd",
-    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.svg": "9f7d8049bb123208abae54ac02db485d938e647367fe1d5fd6685c680ee14ada"
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.png": "18275028ca6d897e35794771e61ea22dc7948efb4677091237c4ec03d5caa59c",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.pdf": "a824c9891f6d85eafbffdf4bf1e6b05f61410ff9ba599f9477d0630b33615b4f",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.svg": "6c7d50b4fd14fb1018d46e52cafb475f2c092a6a6b4a16eb21f85c45187346fd",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact_overall.png": "522258a76bc1cf3a93bc92de906f4d79699401f1771b6928161a9e0b0a929307",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact_overall.pdf": "ebf4ab0347215228d3bf8619c4118b0dd8b41f929474b0723281b3b5aaad2c11",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact_overall.svg": "7fa2919c78a1fee55433360e4f46aef1e7c9a4b1cbb8e542dea5005e8e0895fe"
   },
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied."

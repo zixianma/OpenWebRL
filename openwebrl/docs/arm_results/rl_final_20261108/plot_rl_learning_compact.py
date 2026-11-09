@@ -4,8 +4,10 @@ Training is a trailing-five mean of valid-only collected binary success rates.
 Validation reproduces rl_eval_learning_curves.json, including its pooled trailing
 three-evaluation smoother and raw dots. Both axes retain their previous physical
 size. Matched GPT-4.1 bars are omitted pending a complete shared-Terra comparison.
+Use --overall to include invalid attempts in both denominators.
 No training, browser or API calls.
 """
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -40,10 +42,11 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def series(key):
+def series(key, overall=False):
     run = RUNS[key]
-    xs = sorted(int(i) for i in run["training_success_valid"])
-    raw = [100 * run["training_success_valid"][str(i)] for i in xs]
+    field = "training_success" if overall else "training_success_valid"
+    xs = sorted(int(i) for i in run[field])
+    raw = [100 * run[field][str(i)] for i in xs]
     ys = [sum(raw[max(0, i - WINDOW + 1):i + 1]) / min(i + 1, WINDOW)
           for i in range(len(raw))]
     source_key = "gate-b" if key == "gate_b" else key
@@ -55,6 +58,16 @@ def series(key):
         window = displayed[max(0, i - 2):i + 1]
         assert abs(point["percent"] - 100 * sum(p["successes"] for p in window)
                    / sum(p["valid"] for p in window)) < 1e-10
+    if overall:
+        displayed = [dict(p, percent=100 * p["successes"] / p["planned"]) for p in displayed]
+        smoothed = []
+        for i, point in enumerate(displayed):
+            window = displayed[max(0, i - 2):i + 1]
+            successes = sum(p["successes"] for p in window)
+            planned = sum(p["planned"] for p in window)
+            smoothed.append(dict(iteration=point["iteration"], percent=100 * successes / planned,
+                                 successes=successes, planned=planned,
+                                 window_iterations=[p["iteration"] for p in window]))
     return dict(training=dict(iteration=xs, raw_percent=raw, smoothed_percent=ys),
                 validation=dict(iteration=[p["iteration"] for p in displayed],
                                 raw_percent=[p["percent"] for p in displayed],
@@ -75,8 +88,8 @@ def style(ax, title):
     ax.yaxis.label.set_color(MUTED)
 
 
-def build():
-    points = {key: series(key) for key in METHODS}
+def build(overall=False):
+    points = {key: series(key, overall=overall) for key in METHODS}
     fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.4),
                              gridspec_kw=dict(width_ratios=[1.45, 1.45, 1.05]))
     fig.subplots_adjust(left=.075, right=.985, bottom=.30, top=.88, wspace=.53)
@@ -103,14 +116,14 @@ def build():
         ax.set_xlim(0, 94)
         ax.set_xticks([0, 30, 60, 90])
         ax.set_xlabel("Iteration", fontsize=8.5)
-    axes[0].set_ylim(39, 61)
-    axes[0].set_yticks([40, 50, 60])
-    axes[0].set_ylabel("Valid-only success (%)", fontsize=8.5)
+    axes[0].set_ylim(15 if overall else 39, 61)
+    axes[0].set_yticks([20, 40, 60] if overall else [40, 50, 60])
+    axes[0].set_ylabel("Success (%)", fontsize=8.5)
     axes[1].set_xlim(17, 93)
     axes[1].set_xticks([20, 40, 60, 80, 90])
-    axes[1].set_ylim(25, 60)
-    axes[1].set_yticks([30, 40, 50, 60])
-    axes[1].set_ylabel("Valid-only success (%)", fontsize=8.5)
+    axes[1].set_ylim(25, 45.5 if overall else 60)
+    axes[1].set_yticks([25, 35, 45] if overall else [30, 40, 50, 60])
+    axes[1].set_ylabel("Overall success (%)" if overall else "Valid-only success (%)", fontsize=8.5)
 
     # Remove the GPT-4.1 judge comparison while preserving each curve axis in inches.
     positions = [ax.get_position().bounds for ax in axes[:2]]
@@ -144,37 +157,44 @@ def build():
     return fig, points
 
 
-def main():
-    fig, points = build()
+def main(overall=False):
+    fig, points = build(overall=overall)
+    stem = STEM + ("_overall" if overall else "")
     for ext in ("png", "pdf", "svg"):
         metadata = ({"Date": None} if ext == "svg" else
                     {"CreationDate": None, "ModDate": None} if ext == "pdf" else {})
-        path = HERE / f"{STEM}.{ext}"
+        path = HERE / f"{stem}.{ext}"
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-compact-v6", source_sha256=sha(DATA_PATH),
+    report = dict(schema="rl-learning-compact-v7",
+                  population="All completed attempts; invalid attempts count as non-success" if overall else "Valid attempts only; invalid attempts excluded", source_sha256=sha(DATA_PATH),
                   validation_source=str(VALIDATION_PATH.relative_to(DOCS)),
                   validation_source_sha256=sha(VALIDATION_PATH),
                   renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
-                                smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
+                                field="training_success" if overall else "training_success_valid",
+                                metric="100 * successes / all completed collected trajectories" if overall else "100 * successes / valid collected trajectories",
+                                includes_adm_bonus=False,
+                                smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration " + ("overall" if overall else "valid-only") + " success rates; not pooled counts.",
                                 raw_overlay=False),
                   validation=dict(protocol=VALIDATION["protocol"],
-                                  metric=VALIDATION["metric"],
+                                  metric="100 * successes / planned episodes; invalid episodes count as non-success" if overall else VALIDATION["metric"],
                                   display=VALIDATION["display"],
-                                  smoothing=VALIDATION["smoothing"],
-                                  raw_overlay="Faint raw valid-only checkpoint dots; connected circles show the trailing three-evaluation pooled ratio."),
+                                  smoothing=dict(VALIDATION["smoothing"], method="Trailing ratio of pooled success and planned counts") if overall else VALIDATION["smoothing"],
+                                  raw_overlay="Faint raw checkpoint dots; connected circles show the trailing three-evaluation pooled ratio."),
                   omitted_comparison="Iteration-90 48/56-group/ADM bars: the matched repeats are GPT-4.1 judged, and no complete shared-Terra counterpart is available. No new rejudging was launched.",
-                  caveats=["Historical validation curves use mixed dates and method-specific valid subsets; invalid episodes are excluded from the valid-only rates.",
+                  caveats=["Historical validation curves use mixed dates. Overall rates use all 300 tasks per checkpoint; valid-only rates use method-specific valid subsets.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
                            "Failures in main batch and 40M+16F are excluded from the compact curves and retained in the results table and all-run archive."],
                   points=points,
-                  output_sha256={ext: sha(HERE / f"{STEM}.{ext}") for ext in ("png", "pdf", "svg")})
-    (HERE / f"{STEM}.json").write_text(json.dumps(report, indent=2) + "\n")
-    assert b"/FontFile2" in (HERE / f"{STEM}.pdf").read_bytes()
+                  output_sha256={ext: sha(HERE / f"{stem}.{ext}") for ext in ("png", "pdf", "svg")})
+    (HERE / f"{stem}.json").write_text(json.dumps(report, indent=2) + "\n")
+    assert b"/FontFile2" in (HERE / f"{stem}.pdf").read_bytes()
     plt.close(fig)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--overall", action="store_true", help="Plot success over all attempts, including invalid attempts in the denominator.")
+    main(overall=parser.parse_args().overall)
