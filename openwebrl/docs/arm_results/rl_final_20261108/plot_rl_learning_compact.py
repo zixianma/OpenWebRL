@@ -1,10 +1,10 @@
-"""Compact RL curves and absolute matched-checkpoint success bars.
+"""Compact training and valid-only evaluation curves from published aggregates.
 
-Reads only the published aggregate. Original all-run figures stay unchanged.
-Training is a trailing-five mean of valid-only collected binary success rates;
-validation shows raw overall success on 300 tasks. Matched bars use
-published pointwise task-cluster percentile intervals from three October 25 repeats,
-not uncertainty across training seeds. No training, browser or API calls.
+Training is a trailing-five mean of valid-only collected binary success rates.
+Validation reproduces rl_eval_learning_curves.json, including its pooled trailing
+three-evaluation smoother and raw dots. Both axes retain their previous physical
+size. Matched GPT-4.1 bars are omitted pending a complete shared-Terra comparison.
+No training, browser or API calls.
 """
 import hashlib
 import json
@@ -23,8 +23,8 @@ import paper_plot_style  # noqa: E402,F401
 
 DATA_PATH = HERE / "arm_final_results_data.json"
 DATA = json.loads(DATA_PATH.read_text())
-ABSOLUTE_CI_PATH = HERE.parent / "rl_integration/behavior/rl-repetition-success-20261104.json"
-ABSOLUTE_CI = json.loads(ABSOLUTE_CI_PATH.read_text())
+VALIDATION_PATH = DOCS / "rl_results/rl_eval_learning_curves.json"
+VALIDATION = json.loads(VALIDATION_PATH.read_text())
 RUNS = {r["key"]: r for r in DATA["runs"]}
 STEM = "rl_learning_compact"
 WINDOW = 5
@@ -46,11 +46,20 @@ def series(key):
     raw = [100 * run["training_success_valid"][str(i)] for i in xs]
     ys = [sum(raw[max(0, i - WINDOW + 1):i + 1]) / min(i + 1, WINDOW)
           for i in range(len(raw))]
-    vx = sorted(int(i) for i in run["validation"])
-    vy = [100 * run["validation"][str(i)]["successes"] / 300 for i in vx]
+    source_key = "gate-b" if key == "gate_b" else key
+    method = next(m for m in VALIDATION["methods"] if m["id"] == source_key)
+    displayed = [p for p in method["points"] if 20 <= p["iteration"] <= 90]
+    assert [p["iteration"] for p in displayed] == list(range(20, 91, 10))
+    smoothed = method["smoothed"]
+    for i, point in enumerate(smoothed):
+        window = displayed[max(0, i - 2):i + 1]
+        assert abs(point["percent"] - 100 * sum(p["successes"] for p in window)
+                   / sum(p["valid"] for p in window)) < 1e-10
     return dict(training=dict(iteration=xs, raw_percent=raw, smoothed_percent=ys),
-                validation=dict(iteration=vx, overall_percent=vy,
-                                counts={str(i): run["validation"][str(i)] for i in vx}))
+                validation=dict(iteration=[p["iteration"] for p in displayed],
+                                raw_percent=[p["percent"] for p in displayed],
+                                smoothed_percent=[p["percent"] for p in smoothed],
+                                counts=displayed, windows=smoothed))
 
 
 def style(ax, title):
@@ -71,7 +80,7 @@ def build():
     fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.4),
                              gridspec_kw=dict(width_ratios=[1.45, 1.45, 1.05]))
     fig.subplots_adjust(left=.075, right=.985, bottom=.30, top=.88, wspace=.53)
-    for ax, title in zip(axes, ("a) Training", "b) Validation", "c) Matched iter. 90")):
+    for ax, title in zip(axes, ("a) Training", "b) Validation")):
         style(ax, title)
     # Draw ours last without shifting measured checkpoint positions.
     order = [key for key in METHODS if key != "gate_b"] + ["gate_b"]
@@ -84,7 +93,9 @@ def build():
         axes[0].plot(tr["iteration"], tr["smoothed_percent"], color=color,
                      linestyle=ls, linewidth=width, marker="o", markevery=dots,
                      markersize=2.4, markeredgewidth=0, zorder=4 if key == "gate_b" else 3)
-        axes[1].plot(va["iteration"], va["overall_percent"], color=color,
+        axes[1].scatter(va["iteration"], va["raw_percent"], color=color,
+                        s=8, alpha=.25, edgecolors="none", zorder=2)
+        axes[1].plot(va["iteration"], va["smoothed_percent"], color=color,
                      linestyle=ls, linewidth=width, marker="o", markersize=3,
                      markeredgecolor="white", markeredgewidth=.4,
                      zorder=4 if key == "gate_b" else 3)
@@ -95,41 +106,27 @@ def build():
     axes[0].set_ylim(39, 61)
     axes[0].set_yticks([40, 50, 60])
     axes[0].set_ylabel("Valid-only success (%)", fontsize=8.5)
-    axes[1].set_ylim(22, 45.5)
-    axes[1].set_yticks([25, 35, 45])
-    axes[1].set_ylabel("Overall success (%)", fontsize=8.5)
+    axes[1].set_xlim(17, 93)
+    axes[1].set_xticks([20, 40, 60, 80, 90])
+    axes[1].set_ylim(25, 60)
+    axes[1].set_yticks([30, 40, 50, 60])
+    axes[1].set_ylabel("Valid-only success (%)", fontsize=8.5)
 
-    matched = DATA["matched_iter90_local"]
-    absolute = []
-    for x, key in enumerate(("outcome48", "outcome56", "gate_b")):
-        ci_key = "gate-b" if key == "gate_b" else key
-        row = ABSOLUTE_CI["methods"][ci_key]["overall_success"]
-        counts = matched["runs"][key]["successes"]
-        assert row["repeat_successes"] == counts
-        assert row["planned_episodes"] == 900
-        mean, (lo, hi) = row["percent"], row["ci95_percent"]
-        assert abs(mean - 100 * sum(counts) / 900) < 1e-10
-        color = METHODS[key][1]
-        axes[2].bar(x, mean, bottom=0, width=.62, color=color,
-                    alpha=.85, edgecolor="none", zorder=2)
-        axes[2].errorbar(x, mean, yerr=[[mean - lo], [hi - mean]],
-                         fmt="none", ecolor=MUTED, elinewidth=1,
-                         capsize=2.2, capthick=.8, zorder=3)
-        axes[2].text(x, hi + .8, f"{mean:.1f}", ha="center", va="bottom",
-                     fontsize=7.5, color=color)
-        absolute.append(dict(method=key, overall_percent=mean, ci95_percent=[lo, hi],
-                             repeat_successes=counts, planned_episodes=900))
-    axes[2].set_xlim(-.6, 2.6)
-    axes[2].set_xticks([0, 1, 2], ["48\ngroups", "56\ngroups", "ADM"], fontsize=7.5)
-    axes[2].set_ylim(0, 52)
-    axes[2].set_yticks([0, 25, 50])
-    axes[2].set_ylabel("Overall success (%)", fontsize=8.5)
+    # Remove the GPT-4.1 judge comparison while preserving each curve axis in inches.
+    positions = [ax.get_position().bounds for ax in axes[:2]]
+    axes[2].remove()
+    axes = axes[:2]
+    old_width = fig.get_figwidth()
+    fig.set_size_inches(4.9, 2.4, forward=True)
+    for ax, (left, bottom, width, height) in zip(axes, positions):
+        ax.set_position([left * old_width / 4.9, bottom,
+                         width * old_width / 4.9, height])
     handles = [Line2D([], [], color=color, linestyle=ls,
                       linewidth=1.8 if key == "gate_b" else 1.2,
                       label=label) for key, (label, color, ls) in METHODS.items()]
-    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(.52, .015),
-                        ncol=3, frameon=False, fontsize=8, handlelength=1.6,
-                        handletextpad=.5, columnspacing=1.1, labelspacing=.55)
+    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(.53, .005),
+                        ncol=2, frameon=False, fontsize=7.5, handlelength=1.6,
+                        handletextpad=.5, columnspacing=1.1, labelspacing=.25)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     assert not any(legend.get_window_extent(renderer).overlaps(ax.get_tightbbox(renderer))
@@ -144,11 +141,11 @@ def build():
         assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label
     assert not [(a, b) for i, (a, x) in enumerate(boxes)
                 for b, y in boxes[i + 1:] if x.overlaps(y)]
-    return fig, points, absolute
+    return fig, points
 
 
 def main():
-    fig, points, absolute = build()
+    fig, points = build()
     for ext in ("png", "pdf", "svg"):
         metadata = ({"Date": None} if ext == "svg" else
                     {"CreationDate": None, "ModDate": None} if ext == "pdf" else {})
@@ -156,26 +153,20 @@ def main():
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-compact-v5", source_sha256=sha(DATA_PATH),
-                  absolute_interval_source=str(ABSOLUTE_CI_PATH.relative_to(DOCS)),
-                  absolute_interval_source_sha256=sha(ABSOLUTE_CI_PATH),
+    report = dict(schema="rl-learning-compact-v6", source_sha256=sha(DATA_PATH),
+                  validation_source=str(VALIDATION_PATH.relative_to(DOCS)),
+                  validation_source_sha256=sha(VALIDATION_PATH),
                   renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
                                 raw_overlay=False),
-                  validation=dict(protocol=DATA["validation_protocol"],
-                                  smoothing="None; connected circles are raw measured checkpoint success rates."),
-                  matched=dict(date=DATA["matched_iter90_local"]["date"],
-                               protocol=DATA["matched_iter90_local"]["protocol"],
-                               training_iteration=90, absolute_success=absolute,
-                               differences=DATA["matched_iter90_local"]["paired"],
-                               display="Three vertical absolute overall-success bars from zero with pointwise 95% task-cluster intervals.",
-                               uncertainty=dict(method="Percentile bootstrap of 300 task clusters, preserving all three repeats and methods; recompute overall success with 900 planned episodes per method.",
-                                                tasks=300, repeats=3,
-                                                draws=ABSOLUTE_CI["uncertainty"]["draws"],
-                                                seed=ABSOLUTE_CI["uncertainty"]["seed"],
-                                                scope="Conditional on these fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty.")),
-                  caveats=["Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
+                  validation=dict(protocol=VALIDATION["protocol"],
+                                  metric=VALIDATION["metric"],
+                                  display=VALIDATION["display"],
+                                  smoothing=VALIDATION["smoothing"],
+                                  raw_overlay="Faint raw valid-only checkpoint dots; connected circles show the trailing three-evaluation pooled ratio."),
+                  omitted_comparison="Iteration-90 48/56-group/ADM bars: the matched repeats are GPT-4.1 judged, and no complete shared-Terra counterpart is available. No new rejudging was launched.",
+                  caveats=["Historical validation curves use mixed dates and method-specific valid subsets; invalid episodes are excluded from the valid-only rates.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
                            "Failures in main batch and 40M+16F are excluded from the compact curves and retained in the results table and all-run archive."],
                   points=points,

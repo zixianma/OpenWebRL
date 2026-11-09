@@ -2,7 +2,7 @@
 
 [Live evaluation protocol and code (Online-Mind2Web, WebVoyager, DeepShop): canonical settings, metrics and how to run them](EVAL.md).
 
-[Online RL with ARM turn credit, main-paper set: method and results tables, compact training/validation curves with 48- and 56-group controls, matched local-browser iteration-90 absolute-success bars for the same three methods with CIs, raw local validation curves and all-run views](ARM_FINAL_RESULTS.md#final-rl-arm-turn-credit-20261108).
+[Online RL with ARM turn credit, main-paper set: method and results tables, compact training/validation curves with 48- and 56-group controls, valid-only local validation curves with trailing-three-evaluation smoothing, raw dots and all-run views](ARM_FINAL_RESULTS.md#final-rl-arm-turn-credit-20261108).
 
 [Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3) · [Compact SFT-only cost figure (PDF)](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf).
 
