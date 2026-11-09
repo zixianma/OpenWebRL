@@ -179,6 +179,21 @@ H = 4 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 | Luna | **+1.1 [+0.7, +1.5]** | **−2.1 [−2.7, −1.4]** | +0.2 [−0.2, +0.5] | +0.2 [−0.2, +0.6] | **+3.8 [+2.9, +4.7]** |
 | GPT-5.5 | **+1.6 [+1.2, +2.1]** | **−1.0 [−1.7, −0.4]** | **+0.8 [+0.4, +1.2]** | **+1.5 [+1.0, +2.0]** | **+3.0 [+2.0, +3.9]** |
 
+**All four students depart from the proposals in the same directions.** When an option is offered by some but not all five proposals, a student picking a proposal at random would pick it at its proposal share. Against that baseline, every student under-stops, prefers opening a URL or a new tab, prefers multi-call actions, avoids repeating the previous action, and follows the most-proposed action less often than chance.
+
+| When some (not all) proposals offer it | States | Proposals | Pre (Luna) | H = 4 (Luna) | Pre (GPT-5.5) | H = 4 (GPT-5.5) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| stop / answer | 1,228 | 41.7% | 9.4% | 10.5% | 18.6% | 24.1% |
+| stop / answer, step ≥ 10 | 661 | 40.4% | 5.0% | 7.3% | 12.6% | 19.7% |
+| open a URL or new tab | 695 | 40.8% | 75.1% | 74.8% | 75.7% | 83.3% |
+| multi-call action (e.g. click, type, Enter) | 1,614 | 42.6% | 71.9% | 64.5% | 70.1% | 62.5% |
+| repeat the previous action | 1,423 | 44.0% | 31.3% | 32.4% | 31.4% | 39.8% |
+| go back | 927 | 35.8% | 30.0% | 39.5% | 27.4% | 41.5% |
+| scroll only | 2,024 | 44.2% | 55.1% | 47.0% | 47.4% | 43.5% |
+| the unique most-proposed action | 5,488 | 58.9% | 46.7% | 41.1% | 52.1% | 47.8% |
+
+*Proposals: the share of the five proposals in that option on the same states. Rates are over the replayed states where the option is offered and not unanimous ([student-behaviors.json](arm_results/luna_pre_post_k3_20261105/student-behaviors.json), [script](arm_results/luna_pre_post_k3_20261105/student_behaviors.py)). Rates within a row are on the same states. These are pick tendencies, not outcomes: the under-stopping, for example, is consistent with the teacher labels penalizing premature answers, but the replay cannot say whether each stop would have been right.*
+
 <details>
 <summary>Replay protocol, fidelity and live behaviour</summary>
 
@@ -189,7 +204,7 @@ H = 4 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 - **Disagreements are often small:** of the 797 consistent label-split states, 278 change the action type. The rest are mostly clicks on different targets, or the same action type with different arguments (for example scroll 0.5 vs 0.7).
 - **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the H = 4 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 H = 4 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
 - **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a H = 4 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
-- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py) · [student_candidate_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_candidate_outcomes.py) · [student_minority_examples.py](arm_results/luna_pre_post_k3_20261105/student_minority_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`, all candidates: `student-replay/candidate-outcomes.jsonl`).
+- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py) · [student_candidate_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_candidate_outcomes.py) · [student_minority_examples.py](arm_results/luna_pre_post_k3_20261105/student_minority_examples.py) · [student_minority_figure.py](arm_results/luna_pre_post_k3_20261105/student_minority_figure.py) · [student_behaviors.py](arm_results/luna_pre_post_k3_20261105/student_behaviors.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`, all candidates: `student-replay/candidate-outcomes.jsonl`).
 </details>
 
 #### Outcomes where both picks were played out (eval states only)
@@ -271,6 +286,19 @@ Each sheet shows the task, earlier actions, and the current screen with the pre 
 | H = 4 GPT-5.5 | 263 | 40.8% | 41.3% | −0.5 [−5.0, +4.2] | 51 | 52 | 160 |
 
 *819 of 7,999 replayed states have two or more distinct candidates played out; [candidate-outcomes.json](arm_results/luna_pre_post_k3_20261105/candidate-outcomes.json). Most minority picks are singletons, proposed by one of the five candidates.*
+
+**Two sensible minority picks, judged on the decision only.** In both states below, the minority proposal picked by students goes toward the page that holds the answer, while the most-proposed action retreats or starts a generic search. The live outcomes cannot confirm it: reading every matched rollout shows that the final verdicts on both tasks are unreliable. In (a), a "task impossible" answer is judged a success on one side and a failure on the other. In (b), every episode judged successful answered "0 articles" after filtering on the wrong dates. So the figure shows no success counts.
+
+![Two replayed eval states with a sensible minority pick. (a) Hugging Face model card at step 6, the task needs the last-update date: one proposal clicks the "Files and versions" tab, picked by pre Luna, H = 4 Luna and pre GPT-5.5; the next screen lists files with their update ages. Three proposals go back to the search results, picked by H = 4 GPT-5.5. (b) arXiv home at step 1, the task needs the Electrical Engineering and Systems Science section: one proposal scrolls down the subject list, picked by H = 4 GPT-5.5; the next screen shows that section. Two proposals click the site search icon, picked by the other three students, one reasoning that the section is "typically in the cs.CV … or cs.RO".](arm_results/luna_pre_post_k3_20261105/minority-examples.png)
+
+*Each row: the shared screen (A = minority pick, B = most-proposed action), the next screen after A from one matched live episode, and excerpts of each action's own reasoning, with the students that picked it. These are sheets [M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg) and [M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg) below ([script](arm_results/luna_pre_post_k3_20261105/student_minority_figure.py)).*
+
+**Few outcome splits survive a check of the final answers.** There are 9 states where a student-picked action succeeded on ≥ 75% of its matched episodes and another action on ≤ 25%, with at least 5 episodes between them. After reading the final answers, the verdicts look reliable in only three: the losing side mostly ran out of steps, and the winning side gives consistent, task-complete answers.
+- Apple--34, step 1 ([L3](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)): the site search icon (pre students) 24/24, all reporting the same dimensions, against the "Entertainment" menu (H = 4 GPT-5.5) 2/8, with 4 timeouts and one answer that gives the Siri Remote's height as the box's.
+- Online-Mind2Web arXiv search for reinforcement-learning papers, step 1: typing the query into search (pre Luna) 6/7, and an unpicked equivalent 7/7, against clicking the "Computer Science" heading (both H = 4 students) 0/2, both timeouts.
+- Online-Mind2Web Amazon Jobs pharmacy posting, step 1: the job-site search (pre GPT-5.5) 4/4, against a new tab to indeed.com (no student) 0/2.
+
+The other six fail the check. One is a blocked page (M1). Two are the same action at a slightly different spot: clicks within 10/1000 on Google Flights--36, and two scrolls of different length on Apple--8. In three, the judge scores matching answers both ways: ArXiv--13 "0" and "62" both pass, ArXiv--5 "14,489" both passes and fails, and the ArXiv--16 answers are not checkable.
 
 The sheets below show every state where a minority pick did at least 50 points better than the majority action. The majority action had to be played out in at least two episodes, and the pick could not be a near-copy of it (same calls, clicks within 30/1000, same scroll direction and text). M sheets: the pick was played out in two or more episodes. S sheets: in one episode only, so anecdotal. Each sheet shows every candidate: lettered boxes on the screen, how many of the five proposals each got, which students picked it, and its matched outcomes. Then one episode after the pick and one after the majority action.
 
