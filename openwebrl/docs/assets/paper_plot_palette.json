@@ -1,10 +1,10 @@
 {
   "schema": "paper-plot-palette-roles-v1",
-  "status": "Proposal awaiting user colors; not loaded by renderers yet",
+  "status": "ADM mapping selected; remaining palette roles proposed; main renderers not yet migrated",
   "base_color_count": 7,
   "families": {
     "adm": {
-      "color": null,
+      "color": "#9575EE",
       "meaning": "Our ADM or action-selection scaling, consistently across RL, actor+ADM and API figures."
     },
     "lookahead": {
@@ -39,7 +39,7 @@
     },
     "ADM_LIGHT": {
       "family": "adm",
-      "tone": "light"
+      "tone": "base"
     },
     "LOOKAHEAD_H1": {
       "family": "lookahead",
@@ -96,6 +96,22 @@
     "LOOKAHEAD_H3": {
       "family": "lookahead",
       "tone": "medium_light"
+    },
+    "ADM_DEFAULT": {
+      "family": "adm",
+      "tone": "base"
+    },
+    "ADM_22M": {
+      "family": "adm",
+      "tone": "base"
+    },
+    "ADM_4B": {
+      "family": "adm",
+      "tone": "dark"
+    },
+    "ADM_DARK": {
+      "family": "adm",
+      "tone": "dark"
     }
   },
   "neutral_roles": {
@@ -137,7 +153,7 @@
   },
   "notes": [
     "Role variables remain distinct even when a chosen palette intentionally shares a family.",
-    "No colors have been changed by creating this proposal.",
+    "ADM colors are selected in approved_roles; other families remain proposals. Main figures have not yet been migrated.",
     "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the teacher/student horizon comparison explicitly restoring H=1.",
     "The seven base colors are user choices; light/dark tones are derived, not independent choices."
   ],
@@ -146,7 +162,7 @@
     "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
   },
   "proposal": {
-    "status": "For review only; existing figure palette remains unchanged",
+    "status": "ADM colors selected; other proposed colors remain for review; existing main figures unchanged",
     "source_images": [
       "AdobeColor-My Color Theme (1).jpeg",
       "AdobeColor-My Color Theme (2).jpeg",
@@ -154,7 +170,7 @@
     ],
     "strategy": "Palette 3 supplies ADM purples; palette 1 supplies semantic accents; palette 2 supplies neutral controls and text.",
     "base_swatches": {
-      "adm": "#654FA1",
+      "adm": "#9575EE",
       "lookahead": "#ED8B74",
       "oracle": "#EDE374",
       "single_call": "#847D98",
@@ -163,10 +179,10 @@
       "attention": "#74EDC3"
     },
     "paper_roles": {
-      "ADM_MAIN": "#654FA1",
+      "ADM_MAIN": "#9575EE",
       "ADM_LIGHT": "#9575EE",
       "ADM_INTERMEDIATE": "#7E63C9",
-      "ADM_DARK": "#4B3B78",
+      "ADM_DARK": "#654FA1",
       "LOOKAHEAD_H1": "#D57D68",
       "LOOKAHEAD_H2": "#CD7864",
       "LOOKAHEAD_H3": "#C57360",
@@ -189,11 +205,14 @@
       "BORDER": "#CBC9CF",
       "BACKGROUND": "#FFFFFF",
       "ATTENTION_MASKED": "#F1EFF4",
-      "FRONTIER": "#7C7887"
+      "FRONTIER": "#7C7887",
+      "ADM_DEFAULT": "#9575EE",
+      "ADM_22M": "#9575EE",
+      "ADM_4B": "#654FA1"
     },
     "derived_colors": "Darker salmon/green/yellow marks and light gray fills are derived from the supplied swatches; the source swatches are unchanged.",
     "rules": [
-      "Use saturated purple consistently for ADM across all result families.",
+      "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
       "Use salmon shades for teacher horizons, keeping the lookahead and ADM identities separate.",
       "Use yellow and mint originals for fills; darker related tones for small markers, thin lines and colored text.",
       "Keep failure marks hollow gray.",
@@ -203,5 +222,11 @@
       "assets/paper_plot_palette_preview.png",
       "assets/selection_label_palette_preview.png"
     ]
+  },
+  "approved_roles": {
+    "ADM_DEFAULT": "#9575EE",
+    "ADM_MAIN": "#9575EE",
+    "ADM_22M": "#9575EE",
+    "ADM_4B": "#654FA1"
   }
 }

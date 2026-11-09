@@ -49,7 +49,7 @@ def palette_board():
     text(2.45, 3.53, "SOURCE SWATCH", 7, weight="semibold")
     text(4.12, 3.53, "PAPER MARKS / VARIANTS", 7, weight="semibold")
     rows = [
-        ("ADM", "adm", [("ADM_MAIN", "main"), ("ADM_LIGHT", "light")]),
+        ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
         ("Lookahead horizons", "lookahead", [("LOOKAHEAD_H1", "H=1"), ("LOOKAHEAD_H4", "H=4"), ("LOOKAHEAD_H6", "H=6")]),
         ("Oracle / train / eval", "oracle", [("TRAIN", "oracle / train"), ("EVAL", "eval")]),
         ("Single-call scaling", "single_call", [("SINGLE_CALL_MAIN", "single call")]),
