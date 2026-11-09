@@ -1,176 +1,130 @@
-"""Standalone paper figure: what each candidate's score can see, for the ADM head variants and the 4B decoder.
+"""One-column ADM architecture: frozen actor, four feature-head variants, decoder.
 
-Left: CandidateSetHead (openwebrl/selection_head.py) on frozen actor features, interaction (joint / independent) x
-scorer (two-layer transformer / depth-2 MLP). Transformer cells are attention connections. MLP flows concatenate
-[c_i, s] independently and [c_i, s, c_i - mean of the others] jointly (the others enter only as a mean).
-Right: the ADM-4B decoder, a LoRA on a separate OpenWebRL-4B-SFT copy that reads the selection prompt (task, history,
-URL, screenshot) followed by the numbered candidates and generates {"selection": i} under JSON-schema decoding; its
-causal attention lets each candidate read only the earlier ones, and the answer token reads everything.
-The actor samples all five actions. Its encoded features feed the head, while the selection prompt and candidate text feed
-the separate decoder. Either selector returns an index into those same actor proposals; only that action executes.
-No training, API calls or result payloads are needed. Writes adjacent 300-dpi PNG, editable SVG and PDF.
+The head reads projected actor features s/c_i. Transformer rows visualize the
+original K=5 joint/independent attention masks; MLP rows show their input vectors.
+The decoder reads prompt/candidate text and generates the candidate index. Both
+selectors execute an original actor proposal. No experiments or API calls.
 """
 import os
 from pathlib import Path
+import sys
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-head-architecture-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-# Shared paper typography, including bundled Albert Sans fonts.
-import sys as _paper_sys
-from pathlib import Path as _PaperPath
-_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
-                                if (p / "paper_plot_style.py").is_file())))
-import paper_plot_style as _paper_style  # noqa: F401
-from paper_plot_palette import COLORS as C, tint
-
-from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
+
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents
+                           if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style  # noqa: E402,F401
+from paper_plot_palette import COLORS as C, tint  # noqa: E402
 
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
 HEAD, DECODER = C["ADM_22M"], C["ADM_4B"]
-SHARED, SHARED_BG = C["BASELINE_DARK"], "white"
-ALLOWED_FILL, MASKED_FILL = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
+ALLOWED, MASKED = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
 K = 5
-plt.rcParams.update({
-    "font.family": "Albert Sans", "font.size": 7,
-    "text.color": INK, "mathtext.fontset": "custom",
-    "svg.fonttype": "none", "pdf.fonttype": 42,
-    "savefig.facecolor": "white",
-})
-W, H = 6.25, 3.95
+W, H = 3.35, 1.95
+plt.rcParams.update({"font.family": "Albert Sans", "font.size": 6,
+                     "text.color": INK, "svg.fonttype": "none", "pdf.fonttype": 42,
+                     "savefig.facecolor": "white"})
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
-ax.set(xlim=(0, W), ylim=(-0.42, 3.53))
+ax.set(xlim=(0, W), ylim=(0, H))
 ax.axis("off")
 
 
-def text(x, y, label, size=7, color=INK, weight="normal", ha="left", **kw):
-    return ax.text(x, y, label, fontsize=size, color=color, weight=weight, ha=ha, va="center", **kw)
+def text(x, y, label, size=6, color=INK, ha="left", **kw):
+    return ax.text(x, y, label, fontsize=size, color=color, ha=ha, va="center", **kw)
 
 
-def box(x, y, w, h, edge=LINE, fill="white", lw=0.65):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.035",
-                                facecolor=fill, edgecolor=edge, linewidth=lw, zorder=2))
+def box(x, y, w, h, edge=LINE, fill="white", lw=.55):
+    p = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=.025",
+                      facecolor=fill, edgecolor=edge, linewidth=lw, zorder=2)
+    ax.add_patch(p)
+    return p
 
 
-def arrow(x0, y0, x1, y1, color=MUTED):
-    patch = FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=6,
-                            shrinkA=0, shrinkB=0, linewidth=0.8, color=color, zorder=3)
-    ax.add_patch(patch)
-    return patch
+def arrow(x0, y0, x1, y1, color=HEAD, head=4):
+    p = FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>",
+                       mutation_scale=head, shrinkA=0, shrinkB=0,
+                       color=color, linewidth=.65, zorder=3)
+    ax.add_patch(p)
+    return p
 
 
-def matrix(x0, top, rows, cols, cell, fill_of, row_color=lambda r: INK, col_color=lambda c: INK):
-    """rows/cols: labels; fill_of(r, c) -> fill colour. Rows query (or score) columns."""
-    for c, label in enumerate(cols):
-        text(x0 + (c + 0.5) * cell, top + 0.075, label, color=col_color(c), ha="center")
-    for r, label in enumerate(rows):
-        text(x0 - 0.04, top - (r + 0.5) * cell, label, color=row_color(r), ha="right")
-        for c in range(len(cols)):
-            ax.add_patch(Rectangle((x0 + c * cell, top - (r + 1) * cell), cell, cell,
-                                   facecolor=fill_of(r, c), edgecolor="white", linewidth=0.8))
+def matrix(x0, top, labels, cell, mask, answer=False):
+    for i, label in enumerate(labels):
+        color = C["STATE_INK"] if i == 0 else DECODER if answer and i == K + 1 else C["ACTION_INK"]
+        text(x0 + (i + .5)*cell, top+.055, label, size=5.6, color=color, ha="center")
+        text(x0-.025, top-(i+.5)*cell, label, size=5.6, color=color, ha="right")
+        for j in range(len(labels)):
+            ax.add_patch(Rectangle((x0+j*cell, top-(i+1)*cell), cell, cell,
+                                   facecolor=ALLOWED if mask[i][j] else MASKED,
+                                   edgecolor="white", linewidth=.45, zorder=3))
 
 
-STATE = [r"$s$"]
-CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
+# Shared actor sampling; both outgoing arrows remain explicit at printed size.
+box(.025, 1.735, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+text(.29, 1.83, "Context", ha="center")
+arrow(.565, 1.83, .665, 1.83, color=MUTED)
+box(.675, 1.735, .80, .19, edge=INK)
+text(1.075, 1.83, "Frozen actor", size=6.3, ha="center")
+arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
+box(1.66, 1.735, 1.66, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(2.49, 1.83, r"$K=5$ candidate responses", color=C["ACTION_INK"], ha="center")
+arrow(1.075, 1.725, 1.075, 1.655, color=HEAD)
+arrow(2.80, 1.725, 2.80, 1.655, color=DECODER)
 
+# Feature head: attention and MLP are alternative scorers, each joint/independent.
+box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
+text(1.075, 1.565, "a) ADM head", size=6.8, color=HEAD, ha="center")
+text(.60, 1.425, r"$s$: prompt end", size=5.8, color=C["STATE_INK"], ha="center")
+text(1.57, 1.425, r"$c_i$: response", size=5.8, color=C["ACTION_INK"], ha="center")
+text(1.075, 1.325, "Actor features", size=5.5, color=MUTED, ha="center")
+CELL, TOP = .084, 1.105
+labels = [r"$s$"]+[rf"$c_{{{i}}}$" for i in range(1, K+1)]
+joint_mask = [[True]*(K+1) for _ in range(K+1)]
+independent_mask = [[r == c or (r > 0 and c == 0) for c in range(K+1)] for r in range(K+1)]
+assert sum(map(sum, joint_mask)) == 36
+assert sum(map(sum, independent_mask)) == 11
+for name, x0, mask in (("Joint", .365, joint_mask), ("Independent", 1.355, independent_mask)):
+    text(x0+3*CELL, 1.235, name, size=6, color=HEAD, ha="center")
+    matrix(x0, TOP, labels, CELL, mask)
+text(.105, .86, "Transformer", size=5.8, color=HEAD, ha="center", rotation=90)
+ax.plot([.18, 2.065], [.575, .575], color=LINE, linewidth=.45)
+text(.105, .445, "MLP", size=5.8, color=HEAD, ha="center", rotation=90)
+# cbar_-i is the mean of OTHER candidates, defined in the caption. Each MLP
+# shares parameters across candidates. Brackets denote vector concatenation.
+for center, inputs in ((.617, r"$[c_i,s,c_i-\bar c_{-i}]$"), (1.607, r"$[c_i,s]$")):
+    text(center, .51, inputs, size=5.8, ha="center")
+    arrow(center, .465, center, .425, color=HEAD, head=3)
+    text(center, .375, r"MLP $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
+arrow(1.075, .315, 1.075, .285, color=HEAD, head=3)
+text(1.075, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
-# One actor proposes actions for either selector. Head tokens s/c_i are projected
-# actor features, whereas the separate decoder reads prompt/action content.
-box(.08, 3.21, 1.02, .28, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
-text(.59, 3.35, "Context", color=C["STATE_INK"], ha="center")
-arrow(1.11, 3.35, 1.35, 3.35)
-box(1.36, 3.21, 1.32, .28, edge=INK, fill=SHARED_BG, lw=.95)
-text(2.02, 3.35, "Frozen actor", size=8, ha="center")
-arrow(2.69, 3.35, 4.01, 3.35)
-box(4.02, 3.21, 2.17, .28, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(5.105, 3.35, r"$K=5$ candidates: reasoning + $a_t^i$", color=C["ACTION_INK"], ha="center")
-arrow(5.105, 3.20, 5.105, 3.10, color=DECODER)
-text(5.105, 2.99, r"Prompt $p$ + candidates", color=DECODER, ha="center")
-arrow(5.105, 2.90, 5.105, 2.80, color=DECODER)
+# Decoder uses text rather than the head's projected feature vectors.
+text(2.80, 1.565, "b) ADM-4B", size=6.8, color=DECODER, ha="center")
+text(2.80, 1.425, r"Prompt $p$ + responses", size=5.8, color=DECODER, ha="center")
+text(2.80, 1.325, "Text decoder", size=5.5, color=MUTED, ha="center")
+DX, DCELL = 2.48, .115
+TOKENS = [r"$p$"]+[rf"$a_t^{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
+causal_mask = [[c <= r for c in range(K+2)] for r in range(K+2)]
+assert sum(map(sum, causal_mask)) == 28
+matrix(DX, TOP, TOKENS, DCELL, causal_mask, answer=True)
+mid = DX + len(TOKENS)*DCELL/2
+arrow(mid, .29, mid, .275, color=DECODER, head=3)
+text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 
-# --- left: ADM head on frozen actor features ---------------------------------------------------------------------
-actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01, color=HEAD)
-box(.50, 2.58, 3.28, .42, edge=SHARED, fill=SHARED_BG)
-text(2.14, 2.91, "a)  ADM head", size=8, color=HEAD,
-     weight="medium", ha="center")
-text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5, color=C["STATE_INK"],
-     ha="center", linespacing=1.05)
-text(2.97, 2.73, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5, color=C["ACTION_INK"],
-     ha="center", linespacing=1.05)
-# Short shared-input connectors replace the long per-input routing buses.
-for center in (1.285, 2.875):
-    ax.plot([center, center], [2.57, 2.49], color=LINE, linewidth=.65)
-CELL = .115
-COLS = {"Joint": .94, "Independent": 2.53}
-for name, x0 in COLS.items():
-    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD, ha="center")
-# Neutral row enclosures separate attention from MLP computation.
-for y, height, fill in ((1.40, .92, "white"), (.33, .98, "white")):
-    ax.add_patch(FancyBboxPatch((.06, y), 3.75, height,
-        boxstyle="round,pad=0,rounding_size=.035", edgecolor=LINE,
-        facecolor=fill, linewidth=.55, zorder=.5))
-TTOP = 2.16
-text(.22, 1.86, "Transformer", size=7.5, ha="center", rotation=90)
-text(.22, .82, "MLP", size=7.5, ha="center", rotation=90)
-for name, x0 in COLS.items():
-    joint = name == "Joint"
-    # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
-    matrix(x0, TTOP, STATE + CANDS, STATE + CANDS, CELL,
-           lambda r, c, j=joint: ALLOWED_FILL if j or r == c or (r > 0 and c == 0) else MASKED_FILL,
-           row_color=lambda r: C["STATE_INK"] if r == 0 else C["ACTION_INK"],
-           col_color=lambda c: C["STATE_INK"] if c == 0 else C["ACTION_INK"])
-
-# MLP: show computation rather than token connectivity. Each column uses the
-# same MLP weights for every candidate. The joint difference excludes c_i from
-# the pooled mean and concatenates c_i and s as separate inputs as well.
-box(.535, 1.05, 1.50, .18, edge=SHARED, fill=SHARED_BG)
-text(1.285, 1.14, r"$\bar c_{-i}=\mathrm{mean}_{j\ne i}\,c_j$", size=6.5, ha="center")
-arrow(1.285, 1.04, 1.285, .94)
-for center, inputs in ((1.285, r"$[c_i, s, c_i-\bar c_{-i}]$"),
-                       (2.875, r"$[c_i, s]$")):
-    box(center - .65, .73, 1.30, .20, edge=SHARED)
-    text(center, .83, inputs, ha="center")
-    arrow(center, .72, center, .59)
-    box(center - .50, .40, 1.00, .18, edge=SHARED)
-    text(center, .49, r"MLP $\rightarrow z_i$", ha="center")
-ax.plot([1.285, 1.285, 2.875, 2.875], [.39, .32, .32, .39], color=SHARED, linewidth=.65)
-ax.plot([2.02, 2.02], [.32, .24], color=SHARED, linewidth=.65)
-box(1.27, .02, 1.50, .22, edge=HEAD)
-text(2.02, .13, r"$i^*=\arg\max_i z_i$", color=HEAD, ha="center")
-
-# --- right: ADM-4B decoder ---------------------------------------------------------------------------------------
-ax.plot([3.96, 3.96], [.02, 2.79], color=LINE, linewidth=.6)
-text(5.105, 2.72, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="medium", ha="center")
-DCELL, DX, DTOP = .17, 4.51, 2.16
-# Label each candidate-text block by its proposed action. The decoder receives
-# full candidate reasoning/action text, never the head's projected c_i vectors.
-TOKENS = [r"$p$"] + [rf"$a_t^{{{i}}}$" for i in range(1, K + 1)] + [r"$y$"]
-matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL,
-       row_color=lambda r: C["STATE_INK"] if r == 0 else C["ACTION_INK"] if r <= K else DECODER,
-       col_color=lambda c: C["STATE_INK"] if c == 0 else C["ACTION_INK"] if c <= K else DECODER)
-mid = DX + len(TOKENS) * DCELL / 2
-arrow(mid, DTOP - len(TOKENS) * DCELL - .04, mid, .25, color=DECODER)
-box(mid - .70, .02, 1.40, .22, edge=DECODER)
-text(mid, .13, r"$y\rightarrow i^*$", color=DECODER, ha="center")
-
-# Both alternatives execute one of the actor's original candidate actions.
-arrow(2.02, .01, 3.02, -.10, color=HEAD)
-arrow(mid, .01, 3.82, -.10, color=DECODER)
-box(2.62, -.33, 1.60, .22, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(3.42, -.22, r"Execute $a_t^{i^*}$", color=C["ACTION_INK"], ha="center")
-
-# Right-aligned legend; cells encode connectivity, not values.
-legend_right = 6.20
-renderer = fig.canvas.get_renderer()
-for label, fill in reversed((("Allowed", ALLOWED_FILL), ("Masked", MASKED_FILL))):
-    width = renderer.get_text_width_height_descent(label, FontProperties(size=7), ismath=False)[0] / fig.dpi
-    marker_x = legend_right - width - 0.08
-    ax.add_patch(Rectangle((marker_x - 0.03, -.38), .06, .06, facecolor=fill, edgecolor=LINE, linewidth=.4))
-    text(legend_right, -.35, label, color=MUTED, ha="right")
-    legend_right = marker_x - 0.18
+# One original action executes, whichever alternative selector is used.
+arrow(1.075, .185, 1.40, .15, color=HEAD)
+arrow(mid, .185, 1.94, .15, color=DECODER)
+box(1.10, .025, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(1.665, .085, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
+# Compact legend, right aligned. Rows query columns in all matrices.
+for x, fill, label in ((2.43, ALLOWED, "Allowed"), (2.94, MASKED, "Masked")):
+    ax.add_patch(Rectangle((x, .052), .045, .045, facecolor=fill, edgecolor=LINE, linewidth=.3))
+    text(x+.065, .075, label, size=5.6, color=MUTED)
 
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
@@ -180,8 +134,8 @@ for label in ax.texts:
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
     metadata = {"Date": None} if ext == "svg" else {"CreationDate": None, "ModDate": None} if ext == "pdf" else {}
-    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025, metadata=metadata)
+    fig.savefig(path, dpi=300, metadata=metadata)
     if ext == "svg":
-        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines())+"\n")
 assert b"/FontFile2" in Path(__file__).with_suffix(".pdf").read_bytes()
 plt.close(fig)

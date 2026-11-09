@@ -44,7 +44,7 @@ def palette_board():
         ax.add_patch(Rectangle((x, y - height / 2), width, height,
                                facecolor=color, edgecolor="none"))
     text(.18, 4.90, "Shared paper palette", 12, weight="semibold")
-    text(.18, 4.63, "Purple ADM · salmon actions / teacher · yellow states · amber oracle / eval", 8)
+    text(.18, 4.63, "Purple ADM / actions · salmon teacher · green states · yellow / amber labels", 8)
     text(.18, 4.33, "ROLE", 7, weight="semibold")
     text(2.45, 4.33, "SOURCE SWATCH", 7, weight="semibold")
     text(4.12, 4.33, "PAPER MARKS / VARIANTS", 7, weight="semibold")

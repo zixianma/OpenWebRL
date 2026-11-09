@@ -25,14 +25,14 @@
 <rect x="792" y="112" width="768" height="744" rx="14" fill="#FAFAFB" stroke="#CBC9CF" stroke-width="2"/>
 <text x="816" y="149" font-size="25" fill="#9575EE" font-weight="700" text-anchor="start">2  GATE — is this candidate set usable?</text>
 <text x="816" y="184" font-size="21" fill="#423C54" font-weight="400" text-anchor="start">All five responses must be valid. Letters denote actions.</text>
-<text x="877" y="223" font-size="18" fill="#A15F4F" font-weight="400" text-anchor="middle">response 0</text>
-<rect x="824" y="238" width="106" height="79" rx="14" fill="#F9D6CE" stroke="#A15F4F" stroke-width="2"/>
-<text x="877" y="290" font-size="39" fill="#A15F4F" font-weight="700" text-anchor="middle">X</text>
-<text x="877" y="346" font-size="18" fill="#A15F4F" font-weight="700" text-anchor="middle">executed</text>
-<text x="1018" y="223" font-size="18" fill="#A15F4F" font-weight="400" text-anchor="middle">response 1</text>
-<rect x="965" y="238" width="106" height="79" rx="14" fill="#F9D6CE" stroke="#A15F4F" stroke-width="2"/>
-<text x="1018" y="290" font-size="39" fill="#A15F4F" font-weight="700" text-anchor="middle">X</text>
-<text x="1018" y="346" font-size="18" fill="#A15F4F" font-weight="700" text-anchor="middle">ARM chose</text>
+<text x="877" y="223" font-size="18" fill="#654FA1" font-weight="400" text-anchor="middle">response 0</text>
+<rect x="824" y="238" width="106" height="79" rx="14" fill="#DACFF9" stroke="#654FA1" stroke-width="2"/>
+<text x="877" y="290" font-size="39" fill="#654FA1" font-weight="700" text-anchor="middle">X</text>
+<text x="877" y="346" font-size="18" fill="#654FA1" font-weight="700" text-anchor="middle">executed</text>
+<text x="1018" y="223" font-size="18" fill="#654FA1" font-weight="400" text-anchor="middle">response 1</text>
+<rect x="965" y="238" width="106" height="79" rx="14" fill="#DACFF9" stroke="#654FA1" stroke-width="2"/>
+<text x="1018" y="290" font-size="39" fill="#654FA1" font-weight="700" text-anchor="middle">X</text>
+<text x="1018" y="346" font-size="18" fill="#654FA1" font-weight="700" text-anchor="middle">ARM chose</text>
 <text x="1159" y="223" font-size="18" fill="#423C54" font-weight="400" text-anchor="middle">response 2</text>
 <rect x="1106" y="238" width="106" height="79" rx="14" fill="#fff" stroke="#423C54" stroke-width="2"/>
 <text x="1159" y="290" font-size="39" fill="#423C54" font-weight="700" text-anchor="middle">Y</text>

@@ -20,6 +20,12 @@
 
 ![ADM architecture](arm_results/methods/selection-arch-overview-20261107.png)
 
+### Teacher decisions: worked examples
+
+![Teacher decisions: worked examples](arm_results/luna_pre_post_k3_20261105/examples-compact.png)
+
+[PDF](arm_results/luna_pre_post_k3_20261105/examples-compact.pdf)
+
 ## Teacher and student ADM
 
 ### Teacher and student: offline and online
@@ -95,6 +101,12 @@
 ![Training and validation: overall success](arm_results/rl_final_20261108/rl_learning_compact_overall.png)
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact_overall.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact_overall.svg)
+
+### Repetition, success and threshold robustness
+
+![Repetition, success and threshold robustness](rl_results/rl_repetition_success_robustness.png)
+
+[PDF](rl_results/rl_repetition_success_robustness.pdf) · [SVG](rl_results/rl_repetition_success_robustness.svg)
 
 ## BrowserCode scaling: completed and gap-repaired results
 

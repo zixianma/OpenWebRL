@@ -35,6 +35,8 @@ TITLES = {
     "figure1": "Action Decision Models: overview",
     "selection-offline-eval-20261022": "Rollout collection and action decision labeling",
     "selection-arch-overview-20261107": "ADM architecture",
+    "examples-compact": "Teacher decisions: worked examples",
+    "rl_repetition_success_robustness": "Repetition, success and threshold robustness",
     "selection-label-setups-kfold-20261101": "Teacher and student: offline and online",
     "selection-label-stages-kfold-20261101": "Label sources across three stages: 5-fold",
     "selection-label-same-state-kfold-20261101": "Training, held-out and online: 5-fold",
@@ -97,7 +99,7 @@ TITLES = {
 
 def figure_group(stem: str) -> str:
     name = Path(stem).name
-    if "/methods/" in stem:
+    if "/methods/" in stem or Path(stem).name == "examples-compact":
         return GROUPS[0]
     if name.startswith("selection-label-") and "kfold" in name:
         return GROUPS[1]
@@ -105,7 +107,7 @@ def figure_group(stem: str) -> str:
         return GROUPS[2]
     if name.startswith("selection-recipe3-data-ablations"):
         return GROUPS[3]
-    if name.startswith("rl_learning_compact"):
+    if name.startswith("rl_learning_compact") or name == "rl_repetition_success_robustness":
         return GROUPS[4]
     if "/browsercode_cached_selection_" in stem or "/browsercode_gap_repaired_" in stem:
         return GROUPS[5]
@@ -149,6 +151,10 @@ def collect_figures() -> tuple[dict[str, list[str]], set[str]]:
         stem = f"arm_results/methods/{name}"
         figures.setdefault(stem, [stem + ".png"])
     stem = "arm_results/methods/adm_overview/figure1"
+    figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf", ".svg")])
+    stem = "arm_results/luna_pre_post_k3_20261105/examples-compact"
+    figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf")])
+    stem = "rl_results/rl_repetition_success_robustness"
     figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf", ".svg")])
     return figures, source_paths
 

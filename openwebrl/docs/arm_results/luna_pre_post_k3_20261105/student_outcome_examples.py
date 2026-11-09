@@ -3,7 +3,7 @@
 
 Each sheet: the task, the current screen with the pre pick (yellow source outline) and the H = 4 pick (salmon source outline), and how many matched
 episodes succeeded after each. Then, per side, one real matched episode whose outcome matches that side's majority: the
-next three screens with the action taken on each (salmon box) and the judged outcome. W = the H = 4 pick did better,
+next three screens with the action taken on each (purple box) and the judged outcome. W = the H = 4 pick did better,
 L = worse. Pick labels are written by hand; later actions are summarised from their tool calls.
 
   student_outcome_examples.py  (CPU only; writes outcome-review-*.jpg next to this file)

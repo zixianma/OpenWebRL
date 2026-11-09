@@ -103,7 +103,7 @@ held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
-text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold")
+text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACTION_INK"])
 outcome_header = text(1.65, 0.245, r"Rollout success $R^{i,j}\in\{0,1\}$",
                       color=MUTED, ha="center")
 # Outcome status key only; selected-action check marks remain omitted.
@@ -144,17 +144,17 @@ rollout_box = box(0.94, y_low - 0.02, xs[0] + rollout_pitch / 2 - 0.94,
                   y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG, lw=1.0)
 rollout_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
-    arrow(0.28, mid, 0.465, y, color=MUTED, lw=.75, head=5)
-    box(0.47, y - 0.09, 0.34, 0.18, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+    arrow(0.28, mid, 0.465, y, color=C["ACTION_INK"], lw=.75, head=5)
+    box(0.47, y - 0.09, 0.34, 0.18, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     text(0.64, y, rf"$a_t^{{{i + 1}}}$", size=7.5, color=C["ACTION_INK"], ha="center")
-    arrow(0.815, y, 0.950, y, color=IMMEDIATE, lw=.75, head=5)
+    arrow(0.815, y, 0.950, y, color=C["ACTION_INK"], lw=.75, head=5)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
             state_card(x, y, k + 1, IMMEDIATE if k == 0 else LOOK, i + 1)
             if k:
                 arrow(trajectory_x[k - 1] + 0.142, y, x - 0.142, y,
-                      color=LOOK, lw=.75, head=5)
-        arrow(trajectory_x[-1] + .145, y, 2.57, y, color=LOOK)
+                      color=C["ACTION_INK"], lw=.75, head=5)
+        arrow(trajectory_x[-1] + .145, y, 2.57, y, color=C["ACTION_INK"])
         text(2.63, y, "…", color=MUTED, ha="center")
     else:
         text(1.73, y, r"$\cdots$", size=10, color=MUTED, ha="center")
@@ -169,7 +169,7 @@ ax.plot([4.42, 4.42], [0.26, 1.91], color=LINE, linewidth=0.6)
 method_x, evidence_x = 4.52, 5.55
 teacher_x, teacher_w = 6.20, 0.54
 pick_x, pick_w, eval_x = 6.86, 0.32, 7.40
-text(method_x, 1.98, "b)  Action Decision Labeling", size=8.5, weight="bold")
+text(method_x, 1.98, "b)  Action Decision Labeling", size=8.5, weight="bold", color=C["ACTION_INK"])
 box(method_x, 1.67, 3.02, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
 shared_label = text(6.03, 1.79,
      r"Shared: task · history · $s_t$ · $\{a_t^{i}\}_{i=1}^{K}$",
@@ -196,7 +196,7 @@ for y, key, label, color, evidence in lanes:
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
     text(teacher_x + teacher_w / 2, y, "Teacher", color=color, ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
-    box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+    box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]
     text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=C["ACTION_INK"], ha="center")
     arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
@@ -211,7 +211,7 @@ arrow(5.97, y, teacher_x - 0.01, y, color=ORACLE)
 box(teacher_x, y - 0.115, teacher_w, 0.23, edge=ORACLE)
 text(teacher_x + teacher_w / 2, y, "Argmax", color=INK, ha="center")
 arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
-box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
 text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=C["ACTION_INK"], ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
 text(eval_x, y, "80", color=INK, weight="bold", ha="center")
