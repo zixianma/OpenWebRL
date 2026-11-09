@@ -1205,7 +1205,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 #### Recipe 3 decoder on US-residential stealth browsers (November 9)
 
-**Stealth browsers raise success on the same tasks by +12.1 [+8.5, +15.7] pp mean overall for SFT 4B and +11.6 [+7.5, +15.6] with the GPT-5.5 K = 3 4B LoRA, all of it on Online-Mind2Web (about +20 pp valid-only) and WebVoyager (about +15); DeepShop does not gain (−2 to −5, intervals cross 0). The decoder's gain over one SFT sample is unchanged: +8.3 [+3.6, +12.9] pp under stealth versus +8.9 [+6.2, +11.6] locally on the same tasks (difference −0.6 [−5.7, +4.5]). Partial coverage: one stealth run per condition, stopped when Browser Use credits ran out; 1,381 of 2,090 episodes.** Same actor, decoder, N = 5, T 1.0 / top-p 0.9, 30 steps and judges as the local [Recipe 3](#final-selection-recipe3) evaluations (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o); only the browser changes. Both stealth conditions ran in one window (November 9, 00:04–01:36 PST).
+**Stealth browsers raise success on the same tasks by +12.1 [+8.5, +15.7] pp mean overall for SFT 4B and +11.6 [+7.5, +15.6] with the GPT-5.5 H = 4 4B LoRA, all of it on Online-Mind2Web (about +20 pp valid-only) and WebVoyager (about +15); DeepShop does not gain (−2 to −5, intervals cross 0). The decoder's gain over one SFT sample is unchanged: +8.3 [+3.6, +12.9] pp under stealth versus +8.9 [+6.2, +11.6] locally on the same tasks (difference −0.6 [−5.7, +4.5]). Partial coverage: one stealth run per condition, stopped when Browser Use credits ran out; 1,381 of 2,090 episodes.** Same actor, decoder, N = 5, T 1.0 / top-p 0.9, 30 steps and judges as the local [Recipe 3](#final-selection-recipe3) evaluations (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o); only the browser changes. Both stealth conditions ran in one window (November 9, 00:04–01:36 PST).
 
 **Stealth − local, same tasks.** Each condition on every task it finished under stealth; local runs pooled.
 
@@ -1216,7 +1216,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 | | DeepShop | 150 | 3 | 447 | 202 | 149 | 64 | 45.2% | 43.0% | −2.2 [−9.7, +5.2] |
 | | **Mean overall** | | | | | | | 39.0% | 51.0% | **+12.1 [+8.5, +15.7]** |
 | | Mean valid-only | | | | | | | 40.5% | 51.4% | +10.9 [+7.2, +14.6] |
-| + GPT-5.5 K = 3 4B LoRA | Online-Mind2Web | 154 | 3 | 399 | 151 | 150 | 83 | 37.8% | 55.3% | +17.5 [+9.8, +25.4] |
+| + GPT-5.5 H = 4 4B LoRA | Online-Mind2Web | 154 | 3 | 399 | 151 | 150 | 83 | 37.8% | 55.3% | +17.5 [+9.8, +25.4] |
 | | WebVoyager | 276 | 3 | 757 | 450 | 269 | 198 | 59.4% | 73.6% | +14.2 [+7.9, +20.5] |
 | | DeepShop | 122 | 3 | 361 | 188 | 122 | 58 | 52.1% | 47.5% | −4.5 [−11.3, +2.1] |
 | | **Mean overall** | | | | | | | 46.1% | 57.7% | **+11.6 [+7.5, +15.6]** |
