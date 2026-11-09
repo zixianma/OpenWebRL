@@ -110,10 +110,12 @@ def build():
     for y, key in ((1, "outcome48"), (0, "outcome56")):
         row = paired["Gate B − " + key]
         gain, (lo, hi) = row["diff_pp"], row["ci"]
+        axes[2].barh(y, gain, left=0, height=.36, color=METHODS["gate_b"][1],
+                     alpha=.65, edgecolor="none", zorder=2)
         axes[2].errorbar(gain, y, xerr=[[gain - lo], [hi - gain]],
-                         fmt="o", color=METHODS["gate_b"][1], markersize=4,
-                         elinewidth=1.1, capsize=2.4, markeredgewidth=.7)
-        axes[2].text(gain, y + .18, f"+{gain:.2f}", ha="center", va="bottom",
+                         fmt="none", ecolor="#4B4566", elinewidth=1.1,
+                         capsize=2.4, capthick=.8, zorder=3)
+        axes[2].text(gain, y + .23, f"+{gain:.2f}", ha="center", va="bottom",
                      fontsize=8, color=METHODS["gate_b"][1])
         gains.append(dict(reference=key, difference_pp=gain, ci95_pp=[lo, hi],
                           holm_p=row["holm_p"]))
@@ -166,6 +168,7 @@ def main():
                   matched=dict(date=DATA["matched_iter90_local"]["date"],
                                protocol=DATA["matched_iter90_local"]["protocol"],
                                training_iteration=90, differences=gains,
+                               display="Horizontal gain bars from zero, with paired 95% confidence intervals.",
                                uncertainty="Paired task intervals from evaluation repeats of one trained checkpoint, not training seeds."),
                   caveats=["Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
