@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Paper figure palette proposal](assets/paper_plot_palette.json): seven semantic color families with derived light/dark shades and neutral structural roles; colors await user selection, and no recoloring has been applied. [Lookahead horizon convention](ARM_FORMULATIONS.md#lookahead-horizon-convention): H counts the candidate action plus continuation actions.
+[Paper palette preview](assets/paper_plot_palette_preview.png) · [Label-comparison preview](assets/selection_label_palette_preview.png) · [Color-role proposal](assets/paper_plot_palette.json): combines the three AdobeColor palettes, with distinct purple ADM and salmon lookahead families. Proposed colors are for review; the main result figures retain their current colors. [Lookahead horizon convention](ARM_FORMULATIONS.md#lookahead-horizon-convention): H counts the candidate action plus continuation actions.
 
 [Live evaluation protocol and code (Online-Mind2Web, WebVoyager, DeepShop): canonical settings, metrics and how to run them](EVAL.md).
 

@@ -144,5 +144,64 @@
   "category_cycle": {
     "purpose": "External reference methods or diagnostic categories with no role above",
     "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
+  },
+  "proposal": {
+    "status": "For review only; existing figure palette remains unchanged",
+    "source_images": [
+      "AdobeColor-My Color Theme (1).jpeg",
+      "AdobeColor-My Color Theme (2).jpeg",
+      "AdobeColor-My Color Theme (3).jpeg"
+    ],
+    "strategy": "Palette 3 supplies ADM purples; palette 1 supplies semantic accents; palette 2 supplies neutral controls and text.",
+    "base_swatches": {
+      "adm": "#654FA1",
+      "lookahead": "#ED8B74",
+      "oracle": "#EDE374",
+      "single_call": "#847D98",
+      "success": "#74EDC3",
+      "failure": "#7C7887",
+      "attention": "#74EDC3"
+    },
+    "paper_roles": {
+      "ADM_MAIN": "#654FA1",
+      "ADM_LIGHT": "#9575EE",
+      "ADM_INTERMEDIATE": "#7E63C9",
+      "ADM_DARK": "#4B3B78",
+      "LOOKAHEAD_H1": "#D57D68",
+      "LOOKAHEAD_H2": "#CD7864",
+      "LOOKAHEAD_H3": "#C57360",
+      "LOOKAHEAD_H4": "#BD6F5D",
+      "LOOKAHEAD_H6": "#8E5346",
+      "ORACLE": "#948A35",
+      "ORACLE_FILL": "#EDE374",
+      "TRAIN": "#948A35",
+      "EVAL": "#6F6728",
+      "SINGLE_CALL_MAIN": "#847D98",
+      "BASELINE_DARK": "#7C7887",
+      "BASELINE_LIGHT": "#B0AEB7",
+      "PRE_EXEC": "#7C7887",
+      "SUCCESS": "#489379",
+      "SUCCESS_FILL": "#74EDC3",
+      "FAILURE": "#7C7887",
+      "ATTENTION_ALLOWED": "#74EDC3",
+      "INK": "#211A33",
+      "MUTED": "#423C54",
+      "BORDER": "#CBC9CF",
+      "BACKGROUND": "#FFFFFF",
+      "ATTENTION_MASKED": "#F1EFF4",
+      "FRONTIER": "#7C7887"
+    },
+    "derived_colors": "Darker salmon/green/yellow marks and light gray fills are derived from the supplied swatches; the source swatches are unchanged.",
+    "rules": [
+      "Use saturated purple consistently for ADM across all result families.",
+      "Use salmon shades for teacher horizons, keeping the lookahead and ADM identities separate.",
+      "Use yellow and mint originals for fills; darker related tones for small markers, thin lines and colored text.",
+      "Keep failure marks hollow gray.",
+      "Teacher/student fill, actor-model shapes and cached shading remain independent of hue."
+    ],
+    "previews": [
+      "assets/paper_plot_palette_preview.png",
+      "assets/selection_label_palette_preview.png"
+    ]
   }
 }
