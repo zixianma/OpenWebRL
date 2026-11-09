@@ -4,6 +4,8 @@
 
 [PDF](figure1.pdf) · [SVG](figure1.svg) · [Plot script](plot_figure1.py)
 
+Counterclockwise exports: [PNG](figure1-ccw.png) · [PDF](figure1-ccw.pdf) · [SVG](figure1-ccw.svg)
+
 ## Reproduce
 
 From the repository root, install `requirements.txt` in your Python environment, then run:
@@ -19,7 +21,7 @@ No browser session or experiment service is required.
 
 ## Sources
 
-This is the paper's Figure 1 snapshot from paper commit `6f3f7c9`; the uploaded exports preserve that version. The script only adapts its font lookup to the OpenWebRL repository.
+The layout and numerical results retain the paper's Figure 1 snapshot from paper commit `6f3f7c9`. The exports use the shared paper palette: light-purple ADM, salmon lookahead evidence and teacher, yellow teacher-selected training action, and neutral actor/context inputs. Lighter purple fills denote secondary ADM bars. The script imports `paper_plot_palette.py` alongside the shared typography; no data, smoothing, screenshot content or geometry is changed.
 
 - The real browser observation is the Dinka Wikipedia task state shown in the paper. `web_states/dinka/state.jpg` is the original observation, resized without cropping. Its SHA-256 is `d028c34171bf1fd94709663c7c071f090cbce4bab4751db77d3ab8df8a4080be`. Lookahead icons, teacher choice and model scores are schematic.
 - Inference inset: November 4 SFT-only, three-run valid-only benchmark means from `selection-recipe3-vs-cost-20261104.json` (Git blob `5fcc4d9819540dde6285174759a82d15f85ef301`), embedded in the script. The plotted coordinates match the paper's Figure 4 snapshot.
