@@ -1,0 +1,374 @@
+# Figure gallery — salmon ADM / purple lookahead
+
+[Current palette](ARM_FIGURES.md) · [Alternative color key](arm_results/palette_variants/salmon_adm/palette.png)
+
+
+## Methods
+
+### Action Decision Models: overview
+
+![Action Decision Models: overview](arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.pdf) · [SVG](arm_results/palette_variants/salmon_adm/methods/adm_overview/figure1.svg) · [Plot script](arm_results/methods/adm_overview/plot_figure1.py) · [Reproduce this palette](assets/palette_variants/salmon_adm.json)
+
+### Rollout collection and action decision labeling
+
+![Rollout collection and action decision labeling](arm_results/palette_variants/salmon_adm/methods/selection-offline-eval-20261022.png)
+
+### ADM architecture
+
+![ADM architecture](arm_results/palette_variants/salmon_adm/methods/selection-arch-overview-20261107.png)
+
+## Teacher and student ADM
+
+### Teacher and student: offline and online
+
+![Teacher and student: offline and online](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-kfold-20261101.svg)
+
+### Label sources across three stages: 5-fold
+
+![Label sources across three stages: 5-fold](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-stages-kfold-20261101.png)
+
+### Training, held-out and online: 5-fold
+
+![Training, held-out and online: 5-fold](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-same-state-kfold-20261101.png)
+
+## Actor + ADM trade-offs
+
+### All actors: benchmark mean
+
+![All actors: benchmark mean](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-20261104.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-20261104.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-20261104.svg)
+
+### All actors: per benchmark
+
+![All actors: per benchmark](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.svg)
+
+### SFT actors: benchmark mean
+
+![SFT actors: benchmark mean](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.svg)
+
+### SFT actors: per benchmark
+
+![SFT actors: per benchmark](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.svg)
+
+### RL actors: benchmark mean
+
+![RL actors: benchmark mean](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
+
+## Recipe 3 data ablations
+
+### Training states and panels: benchmark mean
+
+![Training states and panels: benchmark mean](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-compact-20261105.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-compact-20261105.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-compact-20261105.svg)
+
+### Training states and panels: per benchmark
+
+![Training states and panels: per benchmark](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg)
+
+## RL training and evaluation
+
+### Training and validation: valid-only success
+
+![Training and validation: valid-only success](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact.svg)
+
+### Training and validation: overall success
+
+![Training and validation: overall success](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact_overall.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact_overall.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_final_20261108/rl_learning_compact_overall.svg)
+
+## BrowserCode scaling: completed and gap-repaired results
+
+### Fourteen settings: same valid tasks
+
+![Fourteen settings: same valid tasks](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.svg)
+
+### Fourteen settings: own-valid tasks
+
+![Fourteen settings: own-valid tasks](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.svg)
+
+### Scaling after gap recovery
+
+![Scaling after gap recovery](arm_results/palette_variants/salmon_adm/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.svg)
+
+## BrowserCode Pareto variants: before gap recovery
+
+### Per-benchmark Pareto frontiers
+
+![Per-benchmark Pareto frontiers](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.svg)
+
+### Weighted-average Pareto frontier
+
+![Weighted-average Pareto frontier](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg)
+
+### Common-valid weighted Pareto frontier
+
+![Common-valid weighted Pareto frontier](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.pdf)
+
+### Sixteen settings: right-side legend
+
+![Sixteen settings: right-side legend](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.svg)
+
+### Sixteen settings: bottom legend
+
+![Sixteen settings: bottom legend](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.svg)
+
+### Sixteen settings: overall success
+
+![Sixteen settings: overall success](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.svg)
+
+### Sixteen settings: same valid tasks
+
+![Sixteen settings: same valid tasks](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.svg)
+
+## BrowserCode scaling: historical and supplementary views
+
+### Scaling strategies: compact
+
+![Scaling strategies: compact](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.svg)
+
+### Scaling strategies: six-panel view
+
+![Scaling strategies: six-panel view](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png)
+
+### Success and efficiency: per benchmark
+
+![Success and efficiency: per benchmark](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling.pdf)
+
+### Action selection and browser-code batches
+
+![Action selection and browser-code batches](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_interaction.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_interaction.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_interaction.svg)
+
+### Action selection: paired outcomes
+
+![Action selection: paired outcomes](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.svg)
+
+### Candidate-count scaling
+
+![Candidate-count scaling](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_scaling.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_scaling.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_selection_scaling.svg)
+
+### Equal-weight benchmark average
+
+![Equal-weight benchmark average](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_average.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_average.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_average.svg)
+
+### Task-weighted benchmark average
+
+![Task-weighted benchmark average](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.svg)
+
+### Eleven methods: same valid tasks
+
+![Eleven methods: same valid tasks](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.svg)
+
+### Output and reasoning token consumption
+
+![Output and reasoning token consumption](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.svg) · [PDF](arm_results/palette_variants/salmon_adm/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.pdf)
+
+## BrowserCode on US-residential stealth browsers
+
+### US-stealth success and observed browser costs
+
+![US-stealth success and observed browser costs](arm_results/palette_variants/salmon_adm/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.pdf) · [SVG](arm_results/palette_variants/salmon_adm/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.svg)
+
+## Claude BrowserCode
+
+### Claude: high-effort trade-offs
+
+![Claude: high-effort trade-offs](arm_results/palette_variants/salmon_adm/claude_browsercode_om2w300_20261028/claude_tradeoffs.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/claude_browsercode_om2w300_20261028/claude_tradeoffs.svg) · [PDF](arm_results/palette_variants/salmon_adm/claude_browsercode_om2w300_20261028/claude_tradeoffs.pdf)
+
+### Claude: same valid tasks
+
+![Claude: same valid tasks](arm_results/palette_variants/salmon_adm/claude_browsercode_om2w300_20261028/claude_tradeoffs_common_valid.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/claude_browsercode_om2w300_20261028/claude_tradeoffs_common_valid.svg)
+
+## Shared-Terra comparisons
+
+### High-effort trade-offs: three benchmarks
+
+![High-effort trade-offs: three benchmarks](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.pdf) · [SVG](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.svg)
+
+### OM2W: pre-recovery high-effort comparison
+
+![OM2W: pre-recovery high-effort comparison](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.pdf)
+
+### OM2W: all GPT settings
+
+![OM2W: all GPT settings](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.pdf) · [SVG](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.svg)
+
+### OM2W: valid-task BrowserCode efficiency
+
+![OM2W: valid-task BrowserCode efficiency](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.pdf) · [SVG](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.svg)
+
+### OM2W: valid-task efficiency, both harnesses
+
+![OM2W: valid-task efficiency, both harnesses](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs.pdf)
+
+### OM2W: original medium- and low-effort cohort
+
+![OM2W: original medium- and low-effort cohort](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.pdf)
+
+## API comparisons: earlier cohorts
+
+### Three-benchmark API trade-offs
+
+![Three-benchmark API trade-offs](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.svg) · [PDF](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.pdf)
+
+### API performance versus cost
+
+![API performance versus cost](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.svg) · [PDF](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.pdf)
+
+### API performance versus latency
+
+![API performance versus latency](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.svg) · [PDF](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.pdf)
+
+### API performance versus browser steps
+
+![API performance versus browser steps](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.png)
+
+[SVG](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.svg) · [PDF](arm_results/palette_variants/salmon_adm/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.pdf)
+
+### OM2W: historical grading, all 300 tasks
+
+![OM2W: historical grading, all 300 tasks](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg)
+
+### OM2W: historical grading, 111 common-valid tasks
+
+![OM2W: historical grading, 111 common-valid tasks](arm_results/palette_variants/salmon_adm/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png)
+
+## Selection labels: historical comparisons
+
+### October 21: label sources versus cost
+
+![October 21: label sources versus cost](arm_results/palette_variants/salmon_adm/rl_integration/selection-head-labels-vs-cost-20261021.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_integration/selection-head-labels-vs-cost-20261021.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_integration/selection-head-labels-vs-cost-20261021.svg)
+
+### October 27: label sources across three stages
+
+![October 27: label sources across three stages](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-stages-20261027.png)
+
+### October 27: training, test and online
+
+![October 27: training, test and online](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-same-state-20261027.png)
+
+### October 27: three-panel label comparison
+
+![October 27: three-panel label comparison](arm_results/palette_variants/salmon_adm/rl_integration/selection-label-setups-20261027.png)
+
+## Selection data: earlier sweeps
+
+### Recipe 3 states: earlier valid-only view
+
+![Recipe 3 states: earlier valid-only view](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-states-20261105.png)
+
+### Recipe 3 panels: earlier valid-only view
+
+![Recipe 3 panels: earlier valid-only view](arm_results/palette_variants/salmon_adm/rl_integration/selection-recipe3-data-panels-20261105.png)
+
+### One panel per state: benchmark mean
+
+![One panel per state: benchmark mean](arm_results/palette_variants/salmon_adm/rl_integration/selection-state-scale-1panel-mean-20261027.png)
+
+### One panel per state: per benchmark
+
+![One panel per state: per benchmark](arm_results/palette_variants/salmon_adm/rl_integration/selection-state-scale-1panel-paired-20261027.png)
+
+## RL curves: historical and all-run views
+
+### Outcome-only and ADM: local validation, iterations 20–90
+
+![Outcome-only and ADM: local validation, iterations 20–90](arm_results/palette_variants/salmon_adm/rl_results/rl_eval_learning_curves.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_results/rl_eval_learning_curves.pdf) · [SVG](arm_results/palette_variants/salmon_adm/rl_results/rl_eval_learning_curves.svg)
+
+### Validation success: all runs
+
+![Validation success: all runs](arm_results/palette_variants/salmon_adm/rl_final_20261108/validation_success.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_final_20261108/validation_success.pdf)
+
+### Training success: all runs
+
+![Training success: all runs](arm_results/palette_variants/salmon_adm/rl_final_20261108/training_success.png)
+
+[PDF](arm_results/palette_variants/salmon_adm/rl_final_20261108/training_success.pdf)

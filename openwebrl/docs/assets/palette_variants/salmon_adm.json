@@ -1,0 +1,315 @@
+{
+  "schema": "paper-palette-variant-v1",
+  "name": "salmon_adm",
+  "title": "Figure gallery \u2014 salmon ADM / purple lookahead",
+  "source_ref": "d7f14a66e008f81d7197483b2a70523e9bf2712d",
+  "palette_overrides": {
+    "ADM_MAIN": "#ED8B74",
+    "ADM_LIGHT": "#ED8B74",
+    "ADM_INTERMEDIATE": "#C97662",
+    "ADM_DARK": "#A15F4F",
+    "LOOKAHEAD_H1": "#9575EE",
+    "LOOKAHEAD_H2": "#9575EE",
+    "LOOKAHEAD_H3": "#9575EE",
+    "LOOKAHEAD_H4": "#9575EE",
+    "LOOKAHEAD_H6": "#9575EE",
+    "ADM_DEFAULT": "#ED8B74",
+    "ADM_22M": "#ED8B74",
+    "ADM_4B": "#A15F4F",
+    "LOOKAHEAD_TEACHER": "#9575EE",
+    "LOOKAHEAD_EVIDENCE": "#9575EE",
+    "ADM_STUDENT": "#ED8B74"
+  },
+  "document": "ARM_FIGURES_SALMON_ADM.md",
+  "asset_directory": "arm_results/palette_variants/salmon_adm",
+  "commands": [
+    [
+      "openwebrl/docs/arm_results/methods/adm_overview/plot_figure1.py"
+    ],
+    [
+      "openwebrl/docs/assets/preview_paper_palette.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_final_20261108/plot_rl_learning_compact.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_final_20261108/plot_rl_learning_compact.py",
+      "--overall"
+    ],
+    [
+      "scripts/plot_arm_final_results.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_eval_learning_curves.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-stages-kfold-20261101-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-kfold-20261101-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-stages-20261027-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-20261027-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-label-setups-20261027-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-ablations-20261105.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/rl_integration/selection-state-scale-1panel-paired-20261027-plot.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/aggregate.json",
+      "--output-dir",
+      ".salmon-api-build/scaling"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/scaling'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/aggregate.json",
+      "--stem",
+      "browsercode_scaling_tokens",
+      "--tokens",
+      "--token-method",
+      "luna_single_high",
+      "--token-method",
+      "luna_single_xhigh_12288",
+      "--token-method",
+      "luna_single_high_24576",
+      "--token-method",
+      "luna_single_high_6144",
+      "--token-method",
+      "luna_single_high_60steps",
+      "--token-method",
+      "luna_single_high_120steps",
+      "--output-dir",
+      ".salmon-api-build/tokens"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/tokens'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_average.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/aggregate.json",
+      "--output-dir",
+      ".salmon-api-build/average"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/average'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_average.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/aggregate.json",
+      "--weighting",
+      "task-count",
+      "--output-dir",
+      ".salmon-api-build/weighted"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/weighted'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_common_valid.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/aggregate_common_valid.json",
+      "--output-dir",
+      ".salmon-api-build/common"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/common'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py",
+      "--output-dir",
+      ".salmon-api-build/families"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/families'); target=Path('openwebrl/docs/arm_results/browsercode_inference_scaling_20261031')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_selection_strength_variants.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/plot_gap_repaired_scaling.py",
+      "--output-dir",
+      ".salmon-api-build/gap"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/gap'); target=Path('openwebrl/docs/arm_results/browsercode_gap_repaired_20261104')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_us_stealth_full300_20261102/plot_stealth_costs.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_us_stealth_full300_20261102/aggregate.json",
+      "--population",
+      "common-valid",
+      "--output-dir",
+      ".salmon-api-build/stealth"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/stealth'); target=Path('openwebrl/docs/arm_results/browsercode_us_stealth_full300_20261102')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/sol6_luna_three_benchmarks_20261019/plot_api_tradeoffs.py",
+      "--output-dir",
+      ".salmon-api-build/api"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/api'); target=Path('openwebrl/docs/arm_results/sol6_luna_three_benchmarks_20261019')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py",
+      "--output-dir",
+      ".salmon-api-build/harness"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/harness'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py",
+      "--output-dir",
+      ".salmon-api-build/terra_all"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/terra_all'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py",
+      "--valid-only",
+      "--output-dir",
+      ".salmon-api-build/terra_valid"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/terra_valid'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py",
+      "--valid-only",
+      "--harness",
+      "browsercode",
+      "--output-dir",
+      ".salmon-api-build/terra_browsercode"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/terra_browsercode'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py",
+      "--valid-only",
+      "--high-only",
+      "--output-dir",
+      ".salmon-api-build/terra_high"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/terra_high'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_terra_benchmark_tradeoffs.py",
+      "--output-dir",
+      ".salmon-api-build/terra_benchmarks"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/terra_benchmarks'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/common_valid111/plot_om2w_harness_tradeoffs.py",
+      "--output-dir",
+      ".salmon-api-build/harness_common"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/harness_common'); target=Path('openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/common_valid111')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/facets_preview/plot_facets.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028/aggregate.json",
+      "--qualification",
+      "openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028/render-qualification.json",
+      "--output-dir",
+      ".salmon-api-build/claude"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/claude'); target=Path('openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
+      "--aggregate",
+      "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/aggregate.json",
+      "--output-directory",
+      ".salmon-api-build/cached14"
+    ],
+    [
+      "-c",
+      "from pathlib import Path; import shutil\nsource=Path('.salmon-api-build/cached14'); target=Path('openwebrl/docs/arm_results/browsercode_cached_selection_20261105')\nfor p in source.iterdir():\n q=target/p.name\n if q.exists() and p.suffix in (\".png\", \".pdf\", \".svg\", \".csv\", \".json\") and p.name != \"aggregate.json\": shutil.copyfile(p,q)\n"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_preview.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_right_legend_preview.py"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py",
+      "--population",
+      "overall"
+    ],
+    [
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py",
+      "--population",
+      "common-valid"
+    ]
+  ]
+}
