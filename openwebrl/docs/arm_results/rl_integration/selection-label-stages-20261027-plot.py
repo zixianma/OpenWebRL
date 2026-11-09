@@ -35,9 +35,8 @@ LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["th
 INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
 ROWS = [  # label, colour, teacher key, head-offline key, live key
     ("Pre-exec", "#4B5563", "Before execution", "teacher_pre", "Ours pre"),
-    ("Post-exec", "#D8877E", "Immediate result", "teacher_post", "Ours post"),
-    ("Lookahead\nH = 1", "#A99BE3", "Lookahead K=1", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 3", "#6250BE", "Lookahead K=3", "teacher_k3", "Ours K3"),
+    ("Lookahead\nH = 2", "#A99BE3", "Lookahead K=1", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", "#6250BE", "Lookahead K=3", "teacher_k3", "Ours K3"),
     ("Oracle", "#ED7D00", "Best on observed draws", "outcome", "Ours outcome"),
     ("Web-\nArbiter", "#8c6d31", "WebArbiter formulation", None, None),
     ("Web-\nShepherd", "#b5a33a", "WebShepherd formulation", None, None),

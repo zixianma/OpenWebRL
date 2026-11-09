@@ -5,7 +5,7 @@ The reviewed C2/Piotr data mixture, filtering rules, full-history examples, trai
 ## Contents
 
 - [Critic training source inventory: 24 sources and derived views](#arm-critic-source-inventory-20261004)
-- [Piotr post-execution audit and next experiments](#piotr-post-execution-audit-20261006)
+- [Piotr immediate-result audit and next experiments](#piotr-post-execution-audit-20261006)
 - [Joint C2 and Piotr teacher-data training proposal](#arm-joint-data-training-plan)
 - [Combined ARM data: prepared for review](#arm-joint-data-review)
 - [Retained SFT example: two previous turns](#arm-joint-sft-history-example)
@@ -131,9 +131,9 @@ a browser command, teacher preference, local task progress and eventual task
 success: they are different targets.
 
 <a id="piotr-post-execution-audit-20261006"></a>
-## Piotr post-execution evidence and experiment priorities — October6 UTC
+## Piotr immediate-result evidence and experiment priorities — October6 UTC
 
-**Real post-execution evidence is extractable from Piotr's OpenWebRL raw
+**Real immediate-result evidence is extractable from Piotr's OpenWebRL raw
 states. It is not a dataset of executed candidate branches or measured
 advantages.** This audit uses the immutable `0d83b48c1659cac47a1044ef88fb573d3c16e180`
 release, checks all state histories and image hashes, and preserves the source

@@ -3,7 +3,7 @@
 candidates (Netflix help page); (b) only the actor's next steps do (arXiv search box vs going back).
 
 One column grid for both examples: current screen (what every teacher sees) | candidate action | screen right after the
-action (post-exec and K = 3 see it) | the actor's next two actions and their screens (K = 3 only) | teacher picks and
+action | the actor's next two actions and their screens (lookahead H = 4) | teacher picks and
 held-out success. Success = successful share of held-out continuations (draws 4-8, valid only); an action the actor
 proposed k times (merged duplicates) has 5k held-out continuations. Same saved screenshots as render_examples.py.
 
@@ -23,7 +23,7 @@ from render_examples import (R, SRC, INK, MUTED, GOOD, BAD, read, img, attempt_f
                              held, picks, calls)
 
 HERE = Path(__file__).resolve().parent
-COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "Lookahead"
+COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "H = 4"
 BAND, BANDEDGE = "#FFF1C2", "#E0A800"
 GOODC, BADC = "#1B7F3B", "#B3261E"
 EXAMPLES = [
@@ -84,7 +84,7 @@ def main():
     xp = xt + 3 * wt + 2 * gt + 0.03   # picks / success (after a "…" marking further lookahead)
     th, rowgap = 0.13, 0.06
     heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Action"), (xt + wt / 2, "Next screen"),
-             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Lookahead"), (xp + 0.055, "Picked by")]
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "H = 4 continuation"), (xp + 0.055, "Picked by")]
     for x, t in heads:
         fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
     for x0, x1 in ((xt, xt + wt), (xt + wt + gt, xt + 3 * wt + 2 * gt)):
@@ -136,7 +136,7 @@ def main():
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color="#888888", va="center")
             bx = xp
-            for kk in [kk for kk in ("pre", "post", "k3") if p[kk].count(i) == 2]:
+            for kk in [kk for kk in ("pre", "k3") if p[kk].count(i) == 2]:
                 t_ = fig.text(bx, ry + th * 0.7, NAME[kk], fontsize=5.8, color="white", fontweight="bold", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
                 fig.canvas.draw(); bx = t_.get_window_extent().transformed(fig.transFigure.inverted()).x1 + 0.006

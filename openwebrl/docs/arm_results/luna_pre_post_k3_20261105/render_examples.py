@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Render qualitative pre-exec / post-exec / K = 3 examples from the saved branch states (real screenshots).
+"""Render qualitative pre-exec / lookahead H = 4 examples from the saved branch states (real screenshots).
 
 For each chosen state: the screen the teachers judge (with each candidate's click / scroll point), a list of all candidates
 with each teacher's pick and held-out success (draws 4-8, valid only), and, for the two contested candidates, what
-the post-exec teacher saw (the immediate result of draw 1) and what the K = 3 teacher additionally saw (the actor's next
-three steps after it). Teachers' picks are firm: both calls of each teacher agree (select_examples.py).
+the lookahead H = 4 teacher saw: the immediate result of rollout 1 and the actor's next
+three steps after it. Teachers' picks are firm: both calls of each teacher agree (select_examples.py).
 
   render_examples.py STATE:GOOD:BAD:SLUG [...]     (CPU only; writes example-<SLUG>.jpg next to this file)
 """
@@ -29,7 +29,7 @@ import paper_plot_style as _paper_style  # noqa: E402,F401
 
 R = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021")
 HERE = Path(__file__).resolve().parent
-SRC = [("pre", "Pre", "#4B5563"), ("post", "Post", "#D8877E"), ("k3", "K = 3", "#6250BE")]
+SRC = [("pre", "Pre", "#4B5563"), ("k3", "H = 4", "#6250BE")]
 CAND = ["#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9"]
 INK, MUTED, GOOD, BAD = "#222222", "#666666", "#1B7F3B", "#B3261E"
 CALL = re.compile(r"<tool_call>\s*(\{.*?\})\s*</tool_call>", re.S)
@@ -185,9 +185,9 @@ def render(sid, good, bad, slug, recs):
             if p[src].count(i):
                 t = pill(ax, xx, y - 0.035, name + (" ×2" if p[src].count(i) == 2 else ""), color, fs=5.4)
                 fig.canvas.draw(); bb = t.get_window_extent().transformed(ax.transData.inverted()); xx = bb.x1 + 0.02
-    # (3) what post-exec and K = 3 additionally see, for the two contested candidates
+    # (3) what lookahead H = 4 additionally sees, for the two contested candidates
     for r, (which, i, imm, steps) in enumerate(rows, start=1):
-        shots = [("Immediate result (post-exec sees)", imm)] + [(f"+{j + 1}: {short(s['label'], 34)}", img(s["shot"]) if s["shot"] else None)
+        shots = [("After candidate action", imm)] + [(f"+{j + 1}: {short(s['label'], 34)}", img(s["shot"]) if s["shot"] else None)
                                                                   for j, s in enumerate(steps)]
         for c in range(4):
             ax = fig.add_subplot(gs[r, c]); ax.set_xticks([]); ax.set_yticks([])
@@ -205,7 +205,7 @@ def render(sid, good, bad, slug, recs):
                 ax.text(-0.06, 0.5, f"Cand. {i + 1}\n{s}/{m} succeed", transform=ax.transAxes, fontsize=6.2, ha="right", va="center",
                         color=GOOD if which == "better" else BAD, fontweight="bold")
         if r == 1:
-            fig.text(0.6, gs[1, 0].get_position(fig).y1 + 0.035, "K = 3 also sees the next three actor steps", fontsize=6.0, color=MUTED)
+            fig.text(0.6, gs[1, 0].get_position(fig).y1 + 0.035, "Lookahead H = 4 includes the next three actor steps", fontsize=6.0, color=MUTED)
     buf = io.BytesIO(); fig.savefig(buf, dpi=220, format="png", facecolor="white"); plt.close(fig)
     Image.open(buf).convert("RGB").save(HERE / f"example-{slug}.jpg", quality=84, optimize=True)
     return dict(state=sid, slug=slug, task=x["task"].strip(), depth=depth, labels=[l for l, _ in labels],

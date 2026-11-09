@@ -1,4 +1,6 @@
-# Final ARM teacher design: candidates, K = 3 lookahead labels and selection-head training data
+# Final ARM teacher design: candidates, H = 4 lookahead labels and selection-head training data
+
+Lookahead H includes the candidate action: H = 1 is its immediate result, and H = 4 includes three continuation actions. [Notation and legacy identifier mapping](ARM_FORMULATIONS.md#lookahead-horizon-convention).
 
 This page records how the teacher labels used by the selection head are produced, what the teacher sees, and how the
 labels become training targets. Results are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md); collection is in
@@ -6,7 +8,7 @@ labels become training targets. Results are in [ARM_SELECTION_HEAD.md](ARM_SELEC
 
 ## Summary
 
-- **Teacher:** `gpt-6-luna`, reasoning effort high, **K = 3 lookahead**. It sees each action executed once plus the
+- **Teacher:** `gpt-6-luna`, reasoning effort high, **H = 4 lookahead**. It sees each action executed once plus the
   same SFT actor's next 3 steps after it. It never sees a success judgment.
 - **What is labelled:** at each state, every *distinct action* the SFT checkpoint proposed that was also executed.
   That is 2–5 actions per state (median 3), not always 5.
@@ -109,7 +111,7 @@ To test Piotr-style training on several 5-proposal sets per state, each training
 and cut into disjoint sets of 5, keeping sets with at least 2 distinct actions. That gives 1,627 sets on 1,302 states.
 
 - 1,313 sets contain all of their state's actions and reuse the state's label, since the request is identical.
-- 243 sets contain fewer actions and were labelled anew with the same frozen K = 3 setup: 476 calls, USD 0.77.
+- 243 sets contain fewer actions and were labelled anew with the same frozen H = 4 setup: 476 calls, USD 0.77.
 
 Only 131 states yield more than one set, so the existing proposals add few extra sets. The comparison of distinct,
 natural, all-set and one-set training is in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md) once job 387510 finishes.

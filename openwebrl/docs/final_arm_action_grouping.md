@@ -173,7 +173,7 @@ scores each proposal's own text, so different answers are different choices ther
 | Group | Luna partitions a state's distinct `done` answers (same request as the check above), for states whose `done` proposals differ in text |
 | Split | each answer group is one action, ordered by its first proposal; its representative is the first proposal of the group's most common answer; at most 5 actions per state in first-proposal order |
 | Evidence | a group reuses the executed `done` candidate's evidence (screenshot unchanged, no lookahead) with the receipt's `Response:` replaced by the group's answer; all 238 rewritten receipts were checked against their candidate's own answer |
-| Label | the same frozen K = 3 Luna setup, 2 calls in random orders; picks index the split actions |
+| Label | the same frozen H = 4 Luna setup, 2 calls in random orders; picks index the split actions |
 
 | Dataset | Change |
 | --- | --- |

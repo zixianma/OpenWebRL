@@ -34,8 +34,7 @@ LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-\nexec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Post-\nexec", "#D8877E", "teacher_post", "Ours post"),
-    ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
+    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
     ("Oracle", "#397FA3", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [

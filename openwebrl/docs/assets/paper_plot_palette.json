@@ -1,0 +1,141 @@
+{
+  "schema": "paper-plot-palette-roles-v1",
+  "status": "Proposal awaiting user colors; not loaded by renderers yet",
+  "base_color_count": 7,
+  "families": {
+    "adm": {
+      "color": null,
+      "meaning": "Our ADM or action-selection scaling, consistently across RL, actor+ADM and API figures."
+    },
+    "lookahead": {
+      "color": null,
+      "meaning": "Teacher evidence horizon, distinct from the ADM method identity."
+    },
+    "oracle": {
+      "color": null,
+      "meaning": "Outcome-based oracle and outcome-label supervision; train/eval use related shades."
+    },
+    "single_call": {
+      "color": null,
+      "meaning": "Single-call inference scaling; effort, tokens and browser-step budgets use shades/line styles."
+    },
+    "success": {
+      "color": null,
+      "meaning": "Successful rollout outcomes only."
+    },
+    "failure": {
+      "color": null,
+      "meaning": "Failed rollout outcomes; keep hollow marks where already established."
+    },
+    "attention": {
+      "color": null,
+      "meaning": "Allowed attention connections, confined to attention grids."
+    }
+  },
+  "roles": {
+    "ADM_MAIN": {
+      "family": "adm",
+      "tone": "base"
+    },
+    "ADM_LIGHT": {
+      "family": "adm",
+      "tone": "light"
+    },
+    "LOOKAHEAD_H1": {
+      "family": "lookahead",
+      "tone": "very_light"
+    },
+    "LOOKAHEAD_H2": {
+      "family": "lookahead",
+      "tone": "light"
+    },
+    "LOOKAHEAD_H4": {
+      "family": "lookahead",
+      "tone": "base"
+    },
+    "LOOKAHEAD_H6": {
+      "family": "lookahead",
+      "tone": "dark"
+    },
+    "ORACLE": {
+      "family": "oracle",
+      "tone": "base"
+    },
+    "TRAIN": {
+      "family": "oracle",
+      "tone": "light"
+    },
+    "EVAL": {
+      "family": "oracle",
+      "tone": "dark"
+    },
+    "SINGLE_CALL_LOW": {
+      "family": "single_call",
+      "tone": "light"
+    },
+    "SINGLE_CALL_MAIN": {
+      "family": "single_call",
+      "tone": "base"
+    },
+    "SINGLE_CALL_HIGH": {
+      "family": "single_call",
+      "tone": "dark"
+    },
+    "SUCCESS": {
+      "family": "success",
+      "tone": "base"
+    },
+    "FAILURE": {
+      "family": "failure",
+      "tone": "base"
+    },
+    "ATTENTION_ALLOWED": {
+      "family": "attention",
+      "tone": "light"
+    },
+    "LOOKAHEAD_H3": {
+      "family": "lookahead",
+      "tone": "medium_light"
+    }
+  },
+  "neutral_roles": {
+    "INK": "Primary text, rollout-1 outline",
+    "MUTED": "Secondary text, baseline references and frontier links",
+    "BASELINE_DARK": "Second actor-only control",
+    "BASELINE_LIGHT": "First actor-only control and pre-execution labels",
+    "BORDER": "Axes, masks and thin box boundaries",
+    "BACKGROUND": "White canvas; soft fills derive from base colors rather than new hues",
+    "PRE_EXEC": "Pre-execution teacher labels; explicit semantic alias of an actor-baseline neutral",
+    "ATTENTION_MASKED": "Masked attention connections; derive from the neutral background/border",
+    "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role"
+  },
+  "non_color_encodings": {
+    "teacher_vs_student": "Hollow vs filled circles in teacher/student comparisons",
+    "actor_model_family": "Marker shape in model comparisons; add a shape rather than a new color per model",
+    "cached": "Shaded/hatched symbol, without dark outlines",
+    "configuration": "Line style, fill and ordered tones within the same semantic family; define each figure legend explicitly",
+    "raw_vs_smoothed": "Opacity and line weight",
+    "frontier": "Neutral ring and dashed link"
+  },
+  "horizon_convention": {
+    "definition": "H counts the candidate action plus continuation actions",
+    "legacy_post_execution": 1,
+    "legacy_lookahead_1": 2,
+    "legacy_lookahead_3": 4,
+    "legacy_lookahead_5": 6,
+    "omit_result_horizons": [
+      1
+    ],
+    "legacy_lookahead_2": 3
+  },
+  "notes": [
+    "Role variables remain distinct even when a chosen palette intentionally shares a family.",
+    "No colors have been changed by creating this proposal.",
+    "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from plots.",
+    "The seven base colors are user choices; light/dark tones are derived, not independent choices."
+  ],
+  "category_cycle": {
+    "purpose": "External reference methods or diagnostic categories with no role above",
+    "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
+  }
+}

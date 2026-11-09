@@ -1,10 +1,12 @@
 # ARM selection head: choosing actions from the actor's own hidden states
 
+Lookahead H includes the candidate action: H = 1 is its immediate result, and H = 4 includes three continuation actions. [Notation and legacy identifier mapping](ARM_FORMULATIONS.md#lookahead-horizon-convention).
+
 **Goal: pick among the actor's five candidate actions without a second model.** Piotr SelectionARM runs a separate 4B selector over the screenshot and all candidates. The selection head reads the hidden states the actor already computes while generating.
 
 ## Headline results
 
-**On Online-Mind2Web, WebVoyager and DeepShop (1,045 tasks, each benchmark weighted equally), a 22.6 M-parameter head on the frozen SFT-4B actor matches Piotr SelectionARM's 4.44 B selector when trained on Piotr's data (+1.4 pp [−2.1, +4.9]). Trained on observed-outcome or lookahead K = 3 labels for only 1,380 branch states, it is level with Piotr (−0.8 and −0.9 pp, intervals spanning 0) at 56–65% of his compute per episode. The training labels matter most; selector size does not, and an 8B actor without selection gains +3.3 pp [−0.3, +6.9].**
+**On Online-Mind2Web, WebVoyager and DeepShop (1,045 tasks, each benchmark weighted equally), a 22.6 M-parameter head on the frozen SFT-4B actor matches Piotr SelectionARM's 4.44 B selector when trained on Piotr's data (+1.4 pp [−2.1, +4.9]). Trained on observed-outcome or lookahead H = 4 labels for only 1,380 branch states, it is level with Piotr (−0.8 and −0.9 pp, intervals spanning 0) at 56–65% of his compute per episode. The training labels matter most; selector size does not, and an 8B actor without selection gains +3.3 pp [−0.3, +6.9].**
 - **Setup:** every task of each benchmark, one episode per task, the same tasks for every method. Actor OpenWebRL-4B-SFT unless noted, T 1.0 / top-p 0.9, 30 steps, five candidates per decision; one H200 per method and benchmark. Judges: o4-mini for Online-Mind2Web (retired 2026-10-23; [re-judged with gpt-5.6-terra](#selection-head-data-scale-20261023)); GPT-4o for WebVoyager and DeepShop. Paired 95% bootstrap over tasks.
 
 | Actor | Selector | Training data: states / panels / labels | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] |
@@ -25,17 +27,17 @@
 | SFT 4B | Piotr SelectionARM | GPT-5.5, before | 4.44 B + 4.44 B | 0.098 | 1.53 | 143 s | 15.4 |
 | SFT 4B | Head | GPT-5.5, before | 4.44 B + 22.6 M | 0.063 | 0.92 | 131 s | 14.6 |
 | SFT 4B | Head | Observed outcome | 4.44 B + 22.6 M | 0.062 | 0.86 | 109 s | 13.8 |
-| SFT 4B | Head | Luna, K = 3 | 4.44 B + 22.6 M | 0.062 | 1.00 | 142 s | 16.0 |
-| SFT 4B | Head | Luna, K = 1 | 4.44 B + 22.6 M | 0.062 | 1.05 | 149 s | 16.8 |
+| SFT 4B | Head | Luna, H = 4 | 4.44 B + 22.6 M | 0.062 | 1.00 | 142 s | 16.0 |
+| SFT 4B | Head | Luna, H = 2 | 4.44 B + 22.6 M | 0.062 | 1.05 | 149 s | 16.8 |
 | SFT 4B | Head | Luna, before execution | 4.44 B + 22.6 M | 0.062 | 1.05 | 155 s | 16.8 |
 
 - **Columns.** "Overall" counts invalid episodes as failures; "valid-only" divides successes by valid episodes. "Mean" weights each benchmark equally (one third), for success and cost alike. Differences are paired on the same tasks: 95% bootstrap, tasks resampled within each benchmark; valid-only differences (tasks valid under both) agree within 1.1 pp. Parameters are those loaded at inference; the head's 22.6 M are its only trained weights. Model time is decision time summed over an episode, excluding browser execution; times come from live runs on different nodes.
-- **Against Piotr SelectionARM** (mean overall, pp [95% CI]): Piotr-data head +1.4 [−2.1, +4.9], outcome −0.8 [−4.5, +2.8], K = 3 −0.9 [−4.5, +2.7], K = 1 −4.5 [−8.3, −0.8], pre-execution −7.4 [−11.1, −3.8], SFT 8B −3.4 [−7.3, +0.4].
+- **Against Piotr SelectionARM** (mean overall, pp [95% CI]): Piotr-data head +1.4 [−2.1, +4.9], outcome −0.8 [−4.5, +2.8], H = 4 −0.9 [−4.5, +2.7], H = 2 −4.5 [−8.3, −0.8], pre-execution −7.4 [−11.1, −3.8], SFT 8B −3.4 [−7.3, +0.4].
 - **Methods.** Every selector picks one of five candidates the frozen actor samples per step; "branch" data are the SFT-actor branching states collected for this project ([collection and labels](ARM_FORMULATIONS.md#lookahead-labels-current)), "Piotr's" the GPT-5.5-labelled panels of Piotr's release. SFT rows take a single sample. Training data reads states / panels (with the actions in each panel) / labels. Differences are on the mean overall rate. Piotr's panels are five sampled actions each (about 13 per state), duplicates included, each with one GPT-5.5 pick made before execution (from the screenshot and candidates only). Branch panels are one per state holding its 2–5 distinct SFT-proposed actions, reshuffled each epoch.
-- **Labels.** The four label heads share one architecture and the same 1,380 SFT-actor training states; only the label differs. Outcome = the action with the best success on continuation draws 0–2 (draws 3–7 are kept for offline scoring); K = 1 / K = 3 = Luna judging one or three steps after execution; pre-execution = Luna before execution. Online-Mind2Web is where the branch labels fall short: no label head clearly beats SFT there, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]). Details: [ablations](#selection-head-sft-actions-20261021).
+- **Labels.** The four label heads share one architecture and the same 1,380 SFT-actor training states; only the label differs. Outcome = the action with the best success on continuation draws 0–2 (draws 3–7 are kept for offline scoring); H = 2 / H = 4 = Luna judging one or three steps after execution; pre-execution = Luna before execution. Online-Mind2Web is where the branch labels fall short: no label head clearly beats SFT there, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]). Details: [ablations](#selection-head-sft-actions-20261021).
 - **Why time barely drops.** Generating five candidates dominates each 8–9 s decision; the head saves 36% of compute per step but only about 0.5 s per decision. Fewer candidates help more: **with three candidates on Online-Mind2Web, Piotr and the Piotr-data head lose no measurable success and save 26–33% of model time** ([details](#selection-head-n3-8b-20261022)).
 - **Scaling the actor is not a substitute for selection.** SFT 8B gains on WebVoyager and DeepShop but not on Online-Mind2Web (+0.0 pp), and the Piotr-data head beats it by +4.8 pp [+1.0, +8.5] (Piotr +3.4 [−0.4, +7.3]) at 1.6× its compute per episode (Piotr 2.7×) ([details](#selection-head-n3-8b-20261022)).
-- **Earlier heads.** The K = 1 head trained on 1,908 SFT + RL states (October 18) scores 43.9% mean overall, +5.7 pp [+2.0, +9.4] over SFT 4B and −1.0 [−4.5, +2.5] against Piotr ([details](#selection-head-crossbench-full-20261018)). At 100 steps, SFT gains +5.8 pp and Piotr +4.8 pp, and Piotr's lead holds ([details](#selection-head-100-steps-20261019)); the heads have not been run at 100 steps.
+- **Earlier heads.** The H = 2 head trained on 1,908 SFT + RL states (October 18) scores 43.9% mean overall, +5.7 pp [+2.0, +9.4] over SFT 4B and −1.0 [−4.5, +2.5] against Piotr ([details](#selection-head-crossbench-full-20261018)). At 100 steps, SFT gains +5.8 pp and Piotr +4.8 pp, and Piotr's lead holds ([details](#selection-head-100-steps-20261019)); the heads have not been run at 100 steps.
 - **Evidence:** [label heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json). Plot: [final results](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
 **Earlier, Online-Mind2Web on identical hardware (3 × 300 tasks, T 0.7; head trained on Piotr's teacher labels): the selection head matches Piotr SelectionARM's success with 36% less compute and 11% lower latency per decision.**
@@ -58,7 +60,7 @@
   - The head's decisions cost 64% of Piotr's compute: only the actor's work, since its selector adds under 1%.
   - It is the fastest five-candidate method, 0.4 s behind five samples with no selector.
   - The slow selectors slow down further under live load: Kev-style's decisions take 16.6 s live against 8.7 s offline.
-- **Across benchmarks, 100-task subsets at T 0.7** ([details](#selection-head-crossbench-20261017)): on the same 100 tasks per benchmark, the lookahead K = 1 head trained on 1,908 SFT + RL branch states beats the 840-state version by +7.0 pp [+0.7, +13.3] (300 tasks). It is level with SFT (+1.7 pp [−4.7, +7.7]) and with the head trained on Piotr's data; no selector beats SFT on DeepShop.
+- **Across benchmarks, 100-task subsets at T 0.7** ([details](#selection-head-crossbench-20261017)): on the same 100 tasks per benchmark, the lookahead H = 2 head trained on 1,908 SFT + RL branch states beats the 840-state version by +7.0 pp [+0.7, +13.3] (300 tasks). It is level with SFT (+1.7 pp [−4.7, +7.7]) and with the head trained on Piotr's data; no selector beats SFT on DeepShop.
 - **Branching states with held-out outcomes.**
   - No teacher-trained selector clearly beats a uniform pick, while choosing by observed outcomes does: +5.32 pp [+3.09, +7.62] ([details](#selection-head-outcomes-20261010)).
   - Among small students, only **lookahead-labelled** ones move above uniform (+2.4 to +3.0 pp) ([label types](#selection-head-label-types-20261011)).
@@ -185,29 +187,29 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 
 <a id="selection-head-onepanel-k3-scale-20261028"></a>
 
-## State scaling of the Luna K = 3 head at one panel per state (2026-10-28)
+## State scaling of the Luna H = 4 head at one panel per state (2026-10-28)
 
-**Training the one-panel Luna K = 3 head on more of our branching states does not help: 263, 501, 1,003 and 2,612 states score 37.0 / 34.7 / 37.7 / 38.9% on the three-benchmark mean, all below the 1,380-state head (41.4%). The 2,612-state head is −2.5 pp [−6.2, +1.3] against it and +1.9 [−1.9, +5.8] against 263 states. Offline the five sizes are within 1.1 pp (37.05–38.15%). The 1,380-state head's DeepShop lead holds on a same-day rerun (40.0% vs 42.7% on 10-21, −2.7 [−12.0, +6.7]); every other head scores 26.7–33.3% there.** This matches the GPT-5.5 [one-panel state scaling](#selection-head-state-scale-1panel-20261027): beyond a few hundred states, more states do not lift the head. The 1,380-state head is the best of these on the mean, but the curve is not monotonic (501 states is the lowest), so its edge is more likely a property of that particular trained head than of its state count.
+**Training the one-panel Luna H = 4 head on more of our branching states does not help: 263, 501, 1,003 and 2,612 states score 37.0 / 34.7 / 37.7 / 38.9% on the three-benchmark mean, all below the 1,380-state head (41.4%). The 2,612-state head is −2.5 pp [−6.2, +1.3] against it and +1.9 [−1.9, +5.8] against 263 states. Offline the five sizes are within 1.1 pp (37.05–38.15%). The 1,380-state head's DeepShop lead holds on a same-day rerun (40.0% vs 42.7% on 10-21, −2.7 [−12.0, +6.7]); every other head scores 26.7–33.3% there.** This matches the GPT-5.5 [one-panel state scaling](#selection-head-state-scale-1panel-20261027): beyond a few hundred states, more states do not lift the head. The 1,380-state head is the best of these on the mean, but the curve is not monotonic (501 states is the lowest), so its edge is more likely a property of that particular trained head than of its state count.
 
 Result tables and paired differences: [final results](ARM_FINAL_RESULTS.md#final-selection-our-data-20261028).
 
-- **Setup.** States: the 1,380 training states of the 1,380-state head plus 1,232 labels-only SFT-actor states (lbt 710, lbu 522; our 86 offline test tasks excluded). Each state is one panel of its 2–5 distinct actions with the Luna K = 3 vote share (two calls in two orders) as target. Recipe of the 1,380-state head (`train_head_round.py --source teacher_k3`, joint transformer, soft CE, batch 64, last of 20 epochs, seed 0); retraining the 1,380-state head through this data path reproduces it exactly offline (37.68%). Subsets are whole-task prefixes of one seeded task order (`--train-frac`, seed 20261021), so smaller sets are subsets of larger ones and mix old and new states. The new states' labels name actions by plan candidate id, which skips dropped failed actions in 90 states; the builder maps them through the plan.
+- **Setup.** States: the 1,380 training states of the 1,380-state head plus 1,232 labels-only SFT-actor states (lbt 710, lbu 522; our 86 offline test tasks excluded). Each state is one panel of its 2–5 distinct actions with the Luna H = 4 vote share (two calls in two orders) as target. Recipe of the 1,380-state head (`train_head_round.py --source teacher_k3`, joint transformer, soft CE, batch 64, last of 20 epochs, seed 0); retraining the 1,380-state head through this data path reproduces it exactly offline (37.68%). Subsets are whole-task prefixes of one seeded task order (`--train-frac`, seed 20261021), so smaller sets are subsets of larger ones and mix old and new states. The new states' labels name actions by plan candidate id, which skips dropped failed actions in 90 states; the builder maps them through the plan.
 - **Caveats.** DeepShop of every row here is from 10-27/28 except Piotr's data (10-23) and the Piotr-style-panel head (10-27). Same-day SFT 4B DeepShop fell to 26.7% from 33.3% the evening before, so DeepShop gaps to SFT are inflated by that day's draw; head-versus-head DeepShop gaps are same-day. Live heads are seed 0 only; live seed variance of these heads is unmeasured.
 - **Run note.** Fourteen jobs (393700–393704 for the 2,612-state head and the DeepShop reruns, 393725–393733 for the three subsets), one H200 each, all complete on the first attempt; 32.6 H200-h, judge spend $21.36.
 - [Evidence](arm_results/rl_integration/selection-onepanel-k3-scale-20261028.json) · [analysis script](arm_results/rl_integration/selection-onepanel-k3-scale-20261028-analysis.py) · runtime `rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/` (`build.py`, `data2/`, `heads/`, `train.sbatch`, `paired.json`) and `evaluations/onepanel-k3-scale-20261027/` (`submit_live.sh`, `submit_scale.sh`, `jobs.txt`).
 
 <a id="selection-head-lunak3-panels-20261027"></a>
 
-## Luna K = 3 labels on Piotr-style panels (2026-10-27)
+## Luna H = 4 labels on Piotr-style panels (2026-10-27)
 
-**Swapping Piotr's GPT-5.5 picks for Luna K = 3 lookahead picks, on 2,551 of our branching states in Piotr's panel format (22,880 panels, same trainer and recipe), gives a head level with the Piotr-data head: −1.2 pp [−4.9, +2.5] on the three-benchmark mean against its 10-23 run and −0.1 [−3.7, +3.4] against its same-recipe 10-25 rerun. It is +1.6 [−1.8, +5.1] over SFT 4B and −4.0 [−7.6, −0.2] below the earlier 1,380-state one-panel K = 3 head, a gap that is all DeepShop (−10.0, run six days apart). Offline it scores 37.80% against 38.31% for the Piotr-data head (−0.51 [−2.43, +1.42]) and 37.68% for the one-panel K = 3 head.** Like the [state](#selection-head-state-scale-1panel-20261027) and [panel](#selection-head-panel-scale-20261026) scaling, more Luna-labelled panels and states do not lift the head, so further state collection for this purpose is not justified by these results.
+**Swapping Piotr's GPT-5.5 picks for Luna H = 4 lookahead picks, on 2,551 of our branching states in Piotr's panel format (22,880 panels, same trainer and recipe), gives a head level with the Piotr-data head: −1.2 pp [−4.9, +2.5] on the three-benchmark mean against its 10-23 run and −0.1 [−3.7, +3.4] against its same-recipe 10-25 rerun. It is +1.6 [−1.8, +5.1] over SFT 4B and −4.0 [−7.6, −0.2] below the earlier 1,380-state one-panel H = 4 head, a gap that is all DeepShop (−10.0, run six days apart). Offline it scores 37.80% against 38.31% for the Piotr-data head (−0.51 [−2.43, +1.42]) and 37.68% for the one-panel H = 4 head.** Like the [state](#selection-head-state-scale-1panel-20261027) and [panel](#selection-head-panel-scale-20261026) scaling, more Luna-labelled panels and states do not lift the head, so further state collection for this purpose is not justified by these results.
 
 Result tables and paired differences: [final results](ARM_FINAL_RESULTS.md#final-selection-our-data-panels-20261027).
 
-- **Setup.** States: 1,329 of the 1,380 training states of the [label ablation](#selection-head-sft-actions-20261021) plus 1,222 newer branching states (collections lbt and lbu). Each state gets up to 13 random five-proposal panels drawn from its sampled proposals, duplicates included, as in Piotr's release, and one Luna K = 3 call per panel (screenshots only, no history; $87.70). The target is the picked proposal spread over its action-equivalent duplicates (`equivalence_target`, the function used on Piotr's panels). Training is the Piotr-data recipe (`train_head_round.py --extra-only`, joint transformer, soft CE, batch 256, 20 epochs, seed 0; features from layers 18/27/36), so only the labels and states differ. Our 86 offline test tasks are excluded by task text; 10% of tasks (56) form the validation split.
+- **Setup.** States: 1,329 of the 1,380 training states of the [label ablation](#selection-head-sft-actions-20261021) plus 1,222 newer branching states (collections lbt and lbu). Each state gets up to 13 random five-proposal panels drawn from its sampled proposals, duplicates included, as in Piotr's release, and one Luna H = 4 call per panel (screenshots only, no history; $87.70). The target is the picked proposal spread over its action-equivalent duplicates (`equivalence_target`, the function used on Piotr's panels). Training is the Piotr-data recipe (`train_head_round.py --extra-only`, joint transformer, soft CE, batch 256, 20 epochs, seed 0; features from layers 18/27/36), so only the labels and states differ. Our 86 offline test tasks are excluded by task text; 10% of tasks (56) form the validation split.
 - **Epoch.** The best validation epoch (6) is kept. Validation agreement is flat (0.50–0.52) across epochs, so fixed-five success on the 1,390 training states was checked per epoch: 41.4% at epoch 1, 41.8% at epoch 6 and 42.3% at epoch 20, a spread too small to justify a different choice. The last-epoch head scores 37.63% offline (348 test states).
-- **Offline** (348 test states, 86 tasks, fixed five, held-out draws 3–7, task-clustered bootstrap; one SFT sample 35.65%): new 37.80%, Piotr data (nall, seed 0) 38.31%, one-panel K = 3 37.68% (seeds 1–2: 37.31%, 37.40%). New − Piotr −0.51 [−2.43, +1.42]; new − one-panel K = 3 +0.11 [−1.53, +1.74].
-- **Caveats.** The one-panel K = 3 DeepShop run is from 10-21; the Piotr-data head's DeepShop moved −3.3 pp between 10-23 and 10-25 while SFT 4B moved −0.7 pp between 10-18 and 10-27, so part of the −10.0 may be date drift. WebVoyager, where the new head trails Piotr, does not drift measurably.
+- **Offline** (348 test states, 86 tasks, fixed five, held-out draws 3–7, task-clustered bootstrap; one SFT sample 35.65%): new 37.80%, Piotr data (nall, seed 0) 38.31%, one-panel H = 4 37.68% (seeds 1–2: 37.31%, 37.40%). New − Piotr −0.51 [−2.43, +1.42]; new − one-panel H = 4 +0.11 [−1.53, +1.74].
+- **Caveats.** The one-panel H = 4 DeepShop run is from 10-21; the Piotr-data head's DeepShop moved −3.3 pp between 10-23 and 10-25 while SFT 4B moved −0.7 pp between 10-18 and 10-27, so part of the −10.0 may be date drift. WebVoyager, where the new head trails Piotr, does not drift measurably.
 - **Run note.** Three jobs plus a same-day SFT DeepShop run, one H200 each; WebVoyager 392797 crashed at 287/595 (sglang multimodal-embedding length mismatch) and resumed from its committed records as 393095. 9.0 H200-h in total; judge spend $5.70.
 - [Evidence](arm_results/rl_integration/selection-lunak3-panels-20261027.json) · [analysis script](arm_results/rl_integration/selection-lunak3-panels-20261027-analysis.py) · runtime `rl-actor-recollect-20261016/diverse2/collector-labels2/` (`panels/`, `compare/` heads, `epochs/`, `live/`) and `evaluations/lunak3-panels-20261027/` (`jobs.txt`).
 
@@ -300,7 +302,7 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 ## Teacher-data scaling, and the Online-Mind2Web judge change (2026-10-23/24)
 
-**More of Piotr's GPT-5.5 panels does not make a better head. On all 1,045 tasks (each benchmark weighted equally), heads trained on 254 or 501 of Piotr's states gain +5.0 and +5.6 pp over one SFT sample, as much as our 1,380-state K = 3 and outcome heads; at 2,587 states the gain is +2.8 pp (2,587 − 254: −2.2 [−5.9, +1.7] pp). Offline, the gain over one SFT sample stays at +2.3 to +3.0 pp at every size.** Validation agreement with GPT-5.5 rises with data (58% → 66%), so the head learns the teacher better without picking better actions. At equal size, one Piotr panel per state (1,393 states) is below our 1,380 branch states on K = 3 labels live (**−4.3 [−8.1, −0.5]** pp) and level offline (+2.0 vs +2.0 pp). The new heads are flat on Online-Mind2Web and WebVoyager and lower on DeepShop (36.0% at 254 states, 31.3% at 2,587) than the earlier head's 44.0% on 10-18, but **DeepShop itself drifted: same-day reruns on 10-24 dropped SFT 4B from 34.0% to 28.0% and the earlier head from 44.0% to 34.0%**, and against that same-day earlier head the new heads differ by −6.0 to +2.7 pp (all intervals spanning 0). The DeepShop columns, and therefore the three-benchmark means, are not comparable across run dates.
+**More of Piotr's GPT-5.5 panels does not make a better head. On all 1,045 tasks (each benchmark weighted equally), heads trained on 254 or 501 of Piotr's states gain +5.0 and +5.6 pp over one SFT sample, as much as our 1,380-state H = 4 and outcome heads; at 2,587 states the gain is +2.8 pp (2,587 − 254: −2.2 [−5.9, +1.7] pp). Offline, the gain over one SFT sample stays at +2.3 to +3.0 pp at every size.** Validation agreement with GPT-5.5 rises with data (58% → 66%), so the head learns the teacher better without picking better actions. At equal size, one Piotr panel per state (1,393 states) is below our 1,380 branch states on H = 4 labels live (**−4.3 [−8.1, −0.5]** pp) and level offline (+2.0 vs +2.0 pp). The new heads are flat on Online-Mind2Web and WebVoyager and lower on DeepShop (36.0% at 254 states, 31.3% at 2,587) than the earlier head's 44.0% on 10-18, but **DeepShop itself drifted: same-day reruns on 10-24 dropped SFT 4B from 34.0% to 28.0% and the earlier head from 44.0% to 34.0%**, and against that same-day earlier head the new heads differ by −6.0 to +2.7 pp (all intervals spanning 0). The DeepShop columns, and therefore the three-benchmark means, are not comparable across run dates.
 - **Judge change.** OpenAI retired o4-mini on 2026-10-23 (both `o4-mini` and `o4-mini-2025-04-16` return `model_not_found`). Online-Mind2Web is now judged by **gpt-5.6-terra** with the same AgentTrek prompt, final screenshot and parser. All earlier Online-Mind2Web references below are **re-judged** by replaying each episode's saved judge request with only the model swapped. Terra is stricter: it agrees with o4-mini on 88–95% of episodes and lowers success by up to 6.7 pp ([below](#selection-head-terra-rejudge-20261023)). Online-Mind2Web numbers elsewhere in this document are o4-mini; WebVoyager and DeepShop still use GPT-4o.
 - **Setup.** Joint transformer head (soft CE) on SFT-4B features, trained only on Piotr's training panels, seed 0. Subsets add whole tasks in a fixed random order (seed 20261023) until the state count is reached, so they are nested; the 86 tasks of our offline test set are excluded throughout. Recipe as the Piotr-data head: batch 256, 20 epochs, epoch chosen on Piotr's validation split (280 states). The one-panel row keeps one random panel per state and uses our branch recipe (batch 64, last of 20 epochs). Live: Online-Mind2Web 300 tasks, the [headline](#headline-results) task order, T 1.0 / top-p 0.9, 30 steps, five candidates, one H200 per run.
 - **Offline metric (now the primary one).** On our 348 test states (86 tasks), the head picks among the **first five SFT proposals** by draw index, duplicates kept, as in live decoding; the baseline is one SFT sample from the same five (35.65%; the best of the five is 46.74%). Success on held-out continuation draws 3–7, valid draws only; 95% bootstrap over tasks.
@@ -316,9 +318,9 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | SFT 4B, one sample | — | — | — | — | 35.65% | — | 275 | 95 | 31.7% | 34.5% | — | **−7.3 [−13.0, −1.7]** |
 | Piotr SelectionARM (4B LoRA) | 2,692 | 35,916 | — | — | — | — | 263 | 117 | 39.0% | 44.5% | **+7.3 [+1.7, +13.0]** | — |
 | Earlier Piotr-data head | 2,692 | 35,916 | — | — | — | — | 265 | 113 | 37.7% | 42.6% | **+6.0 [+0.7, +11.3]** | −1.3 [−6.3, +3.7] |
-| Ours, K = 3 labels | 1,380 | 1,380 | — | — | 37.68% | +2.0 [+0.3, +3.9] | 267 | 99 | 33.0% | 37.1% | +1.3 [−4.0, +6.3] | **−6.0 [−11.3, −1.0]** |
+| Ours, H = 4 labels | 1,380 | 1,380 | — | — | 37.68% | +2.0 [+0.3, +3.9] | 267 | 99 | 33.0% | 37.1% | +1.3 [−4.0, +6.3] | **−6.0 [−11.3, −1.0]** |
 | Ours, observed outcome | 1,380 | 1,380 | — | — | 35.31% | −0.3 [−2.1, +1.4] | 270 | 94 | 31.3% | 34.8% | −0.3 [−5.3, +4.7] | **−7.7 [−13.0, −2.3]** |
-| Ours, K = 1 labels | 1,380 | 1,380 | — | — | 37.74% | +2.1 [+0.6, +3.7] | 264 | 93 | 31.0% | 35.2% | −0.7 [−5.7, +4.3] | **−8.0 [−13.0, −3.0]** |
+| Ours, H = 2 labels | 1,380 | 1,380 | — | — | 37.74% | +2.1 [+0.6, +3.7] | 264 | 93 | 31.0% | 35.2% | −0.7 [−5.7, +4.3] | **−8.0 [−13.0, −3.0]** |
 | Ours, pre-execution labels | 1,380 | 1,380 | — | — | 36.76% | +1.1 [−0.6, +2.9] | 268 | 90 | 30.0% | 33.6% | −1.7 [−6.7, +3.3] | **−9.0 [−14.0, −4.0]** |
 
 **All three benchmarks** (1,045 tasks; Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o; mean weights each benchmark 1/3, bootstrap resamples tasks within each benchmark):
@@ -334,9 +336,9 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | SFT 4B, one sample | — | — | 31.7% | 44.4% | 34.0% | 36.7% | 37.9% | *36.7% (level)* |
 | Piotr SelectionARM (4B LoRA) | 2,692 | 35,916 | 39.0% | 52.4% | 41.3% | 44.3% | 46.7% | **+7.6 [+4.0, +11.3]** |
 | Earlier Piotr-data head | 2,692 | 35,916 | 37.7% | 51.3% | 44.0% | 44.3% | 47.0% | **+7.6 [+3.9, +11.3]** |
-| Ours, K = 3 labels | 1,380 | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** |
+| Ours, H = 4 labels | 1,380 | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** |
 | Ours, observed outcome | 1,380 | 1,380 | 31.3% | 52.3% | 42.0% | 41.9% | 43.5% | **+5.2 [+1.8, +8.6]** |
-| Ours, K = 1 labels | 1,380 | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] |
+| Ours, H = 2 labels | 1,380 | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] |
 | Ours, pre-execution labels | 1,380 | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] |
 
 - **Columns.** OM2W = Online-Mind2Web, 300 tasks, gpt-5.6-terra judge. "Overall" counts invalid episodes as failures; differences are paired by task on the overall rate (95% bootstrap). The earlier Piotr-data head trained on all 2,692 of Piotr's states (no test-task exclusion; [recipe](#selection-head-sft-actions-20261021)). "Ours" rows are the [label ablation](#selection-head-sft-actions-20261021) heads; their offline numbers are the same fixed-five metric.
@@ -355,7 +357,7 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 - **SFT 4B row:** the difference column gives its own success rate (three-benchmark mean, overall), the level every other row is compared with.
 - **Within the scaling runs (pp [95% CI]), Online-Mind2Web / three-benchmark mean:** 2,587 − 254 states −3.0 [−8.3, +2.0] / −2.2 [−5.9, +1.7]; 1,011 − 254 −0.7 [−5.3, +4.0] / −1.5 [−5.2, +2.2]; one-panel 1,393 − all 2,587 −0.7 [−5.0, +3.7] / −1.5 [−5.0, +2.1]. One-panel − ours outcome +1.3 [−4.0, +6.3] / **−3.9 [−7.4, −0.3]**.
 - **Caveats.** One seed per size. The new runs and the references ran on different days, and sites change: the new all-data head scores −4.3 pp [−10.0, +1.3] against the earlier Piotr-data head trained on nearly the same data, about as large as any scaling effect here. On the three-benchmark mean the gap is **−4.8 [−8.5, −1.1]** pp, driven by DeepShop (47 vs 66 of 150 successes; WebVoyager 53.8% vs 51.3% favours the new head). DeepShop episodes were equally valid (148 vs 147 of 150) and ended normally. **Same-day DeepShop reruns (10-24, jobs 385776–385777, runtime `evaluations/deepshop-sameday-20261024/`) confirm a site/day effect:** SFT 4B 51 → 42 of 150 (−6.0 pp [−14.0, +2.0]), earlier Piotr-data head 66 → 51 (−10.0 [−19.3, +0.0]). Against the same-day earlier head (34.0%), the new heads on DeepShop: 254 states +2.0 [−8.0, +12.0], 2,587 states −2.7 [−12.0, +6.7], one panel per state −6.0 [−16.0, +4.0]; earlier head − same-day SFT +6.0 [−3.3, +15.3]. So the new and earlier Piotr-data heads are indistinguishable live as well as offline, and the label-head references (DeepShop run 10-21) likely benefit from the earlier, easier DeepShop. The two heads are effectively the same model: same architecture, loss and recipe, and on our 348 test states they pick the same action in 85% of fixed-five panels and score 38.31% vs 37.99% (+0.3 pp [−0.3, +1.1]; CPU job 384787, runtime `data-scale-20261023/compare-old/`). The earlier head itself ranged 36.3–39.7% over three o4-mini repetitions ([same-hardware runs](#same-hardware-runs-three-repetitions-of-seven-methods)). Read the scaling rows against each other; read differences against the references with that in mind.
-- **Offline, distinct-action view** (head − uniform over distinct actions): +1.4, +2.7, +2.8, +3.5 pp for 254 → 2,587 states, +2.1 for one panel per state; ours outcome +0.7, K = 3 +0.4, K = 1 +1.0, pre-execution +0.2. Only this view, which removes duplicates, shows a weak trend with data.
+- **Offline, distinct-action view** (head − uniform over distinct actions): +1.4, +2.7, +2.8, +3.5 pp for 254 → 2,587 states, +2.1 for one panel per state; ours outcome +0.7, H = 4 +0.4, H = 2 +1.0, pre-execution +0.2. Only this view, which removes duplicates, shows a weak trend with data.
 - [Evidence](arm_results/rl_integration/selection-data-scale-20261023.json) · [analysis script](arm_results/rl_integration/selection-data-scale-20261023-analysis.py). Runtime `selection-head-20261008/data-scale-20261023/` (heads, `fixed-five.json` beside each) and `evaluations/data-scale-20261023/` (Online-Mind2Web jobs 383632–383636, 11.1 H200-hours; WebVoyager/DeepShop jobs 384818–384827, 25.9 H200-hours).
 
 <a id="selection-head-terra-rejudge-20261023"></a>
@@ -375,11 +377,11 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | Piotr-data joint head, N = 5 | 265 | 131 | 43.7% | 113 | 37.7% | 42.6% | 235 | 24 | 6 |
 | Piotr-data joint head, N = 3 | 269 | 127 | 42.3% | 110 | 36.7% | 40.9% | 240 | 23 | 6 |
 | Piotr-data pointwise head, N = 3 | 264 | 124 | 41.3% | 115 | 38.3% | 43.6% | 241 | 16 | 7 |
-| K = 1 head, SFT + RL 1,908 states (10-18) | 261 | 112 | 37.3% | 103 | 34.3% | 39.5% | 246 | 12 | 3 |
-| K = 1 head, SFT-only states (10-18) | 259 | 105 | 35.0% | 97 | 32.3% | 37.5% | 237 | 15 | 7 |
+| H = 2 head, SFT + RL 1,908 states (10-18) | 261 | 112 | 37.3% | 103 | 34.3% | 39.5% | 246 | 12 | 3 |
+| H = 2 head, SFT-only states (10-18) | 259 | 105 | 35.0% | 97 | 32.3% | 37.5% | 237 | 15 | 7 |
 | Outcome head | 270 | 114 | 38.0% | 94 | 31.3% | 34.8% | 238 | 26 | 6 |
-| K = 3 head | 267 | 115 | 38.3% | 99 | 33.0% | 37.1% | 241 | 21 | 5 |
-| K = 1 head | 264 | 102 | 34.0% | 93 | 31.0% | 35.2% | 251 | 11 | 2 |
+| H = 4 head | 267 | 115 | 38.3% | 99 | 33.0% | 37.1% | 241 | 21 | 5 |
+| H = 2 head | 264 | 102 | 34.0% | 93 | 31.0% | 35.2% | 251 | 11 | 2 |
 | Pre-execution head | 268 | 99 | 33.0% | 90 | 30.0% | 33.6% | 251 | 13 | 4 |
 | Independent transformer, soft CE | 265 | 99 | 33.0% | 91 | 30.3% | 34.3% | 245 | 14 | 6 |
 | Independent transformer, BCE | 267 | 110 | 36.7% | 100 | 33.3% | 37.5% | 253 | 12 | 2 |
@@ -418,7 +420,7 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 ## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
 
-**Labels matter more than anything else we varied. On the three benchmarks (1,045 tasks, each benchmark weighted equally), heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 56–65% of its compute per episode. Lookahead K = 1 labels gain about a third as much; pre-execution labels gain nothing.** Architecture barely matters: on all 1,045 tasks the four transformer heads crossing joint / independent attention with soft CE / BCE are within 1.3 pp of each other. The MLP, pointer and data variants fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
+**Labels matter more than anything else we varied. On the three benchmarks (1,045 tasks, each benchmark weighted equally), heads trained on observed-outcome or lookahead H = 4 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 56–65% of its compute per episode. Lookahead H = 2 labels gain about a third as much; pre-execution labels gain nothing.** Architecture barely matters: on all 1,045 tasks the four transformer heads crossing joint / independent attention with soft CE / BCE are within 1.3 pp of each other. The MLP, pointer and data variants fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
 
 **Full benchmarks, per benchmark (Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks; one episode per task; default head: joint transformer, soft CE).** Success rates and mean differences are in the [headline table](#headline-results); this table splits the overall-success difference from SFT 4B by benchmark.
 
@@ -427,14 +429,14 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | Piotr SelectionARM | GPT-5.5 before, Piotr's 2,692 states | +4.7 [−0.7, +10.3] | **+8.1 [+4.0, +11.8]** | +7.3 [−1.3, +16.0] |
 | Head (22.6 M) | GPT-5.5 before, Piotr's 2,692 states | **+7.3 [+1.7, +13.0]** | **+6.9 [+2.9, +10.9]** | **+10.0 [+1.3, +18.7]** |
 | Head (22.6 M) | Observed outcome, the 1,380 branch states | +1.7 [−3.3, +6.7] | **+7.9 [+3.9, +12.1]** | +8.0 [0.0, +16.0] |
-| Head (22.6 M) | Luna K = 3, the 1,380 branch states | +2.0 [−3.7, +8.0] | **+6.7 [+2.9, +10.6]** | +8.7 [0.0, +17.3] |
-| Head (22.6 M) | Luna K = 1, the 1,380 branch states | −2.3 [−7.3, +2.7] | **+4.9 [+0.7, +8.9]** | +4.0 [−4.7, +12.7] |
+| Head (22.6 M) | Luna H = 4, the 1,380 branch states | +2.0 [−3.7, +8.0] | **+6.7 [+2.9, +10.6]** | +8.7 [0.0, +17.3] |
+| Head (22.6 M) | Luna H = 2, the 1,380 branch states | −2.3 [−7.3, +2.7] | **+4.9 [+0.7, +8.9]** | +4.0 [−4.7, +12.7] |
 | Head (22.6 M) | Luna before execution, the 1,380 branch states | −3.3 [−8.7, +1.7] | +1.3 [−2.5, +5.4] | 0.0 [−8.0, +8.7] |
 
 - **Setup** as in the 150-task screen below; SFT, Piotr and the Piotr-data head are the [full-benchmark runs](#selection-head-crossbench-full-20261018). The four label heads share one architecture and the same 1,380 training states; only the label differs.
-- **Ranking.** Outcome ≈ K = 3 > K = 1 > pre-execution. On the mean overall rate, outcome and K = 3 are −2.2 pp [−5.9, +1.4] and −2.3 pp [−5.8, +1.3] against the Piotr-data head.
+- **Ranking.** Outcome ≈ H = 4 > H = 2 > pre-execution. On the mean overall rate, outcome and H = 4 are −2.2 pp [−5.9, +1.4] and −2.3 pp [−5.8, +1.3] against the Piotr-data head.
 - **Per benchmark.** The branch-label heads gain on WebVoyager and DeepShop; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does.
-- **K = 1 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp pooled over all 1,045 tasks here), a reminder that the screen resolves only about ±8 pp.
+- **H = 2 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp pooled over all 1,045 tasks here), a reminder that the screen resolves only about ±8 pp.
 - **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
 - Evidence: [per-benchmark runs](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json)
 
@@ -467,9 +469,9 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 <a id="selection-head-arch-full-20261022"></a>
 
-**Full benchmarks, interaction × loss (all K = 1 Luna labels on the same 1,380 branch states; Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks).** The 150-task screen could not separate the transformer variants, so all four were run on every task.
+**Full benchmarks, interaction × loss (all H = 2 Luna labels on the same 1,380 branch states; Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks).** The 150-task screen could not separate the transformer variants, so all four were run on every task.
 
-| Head (K = 1 labels) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] | PFLOP per<br>episode |
+| Head (H = 2 labels) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] | PFLOP per<br>episode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B, 1 sample | 39.6% | 45.0% | 34.2% | 38.2% | 39.6% | — | 0.28 |
 | Piotr SelectionARM | 46.8% | 53.8% | 41.9% | 44.9% | 47.5% | **+6.7 [+3.0, +10.4]** | 1.53 |
@@ -479,7 +481,7 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | Independent transformer, BCE | 41.2% | 48.5% | 36.9% | 40.3% | 42.2% | +2.1 [−1.6, +5.7] | 0.99 |
 
 - **Main effects on the mean overall rate, pp [95% CI]:** joint − independent +0.7 [−2.1, +3.4] (soft CE +0.2, BCE +1.2); soft CE − BCE −0.6 [−3.1, +1.9] (joint −1.1, independent 0.0); interaction term −1.1 [−6.0, +3.8]. Valid-only differences agree within 0.5 pp.
-- **Against Piotr,** every K = 1 head is 3.4–4.7 pp lower; three of the four intervals exclude zero. The gap to Piotr is a label effect: outcome and K = 3 labels on the default head close it (see the [headline table](#headline-results)).
+- **Against Piotr,** every H = 2 head is 3.4–4.7 pp lower; three of the four intervals exclude zero. The gap to Piotr is a label effect: outcome and H = 4 labels on the default head close it (see the [headline table](#headline-results)).
 - **Setup.** Same actor, decoding, judges and task order as the label runs above; one H200 per run, nodes g013, g014 and g019 excluded. One Online-Mind2Web run lost its first two tasks to a Chromium launch failure on g019; those records were set aside and the tasks rerun. Every task has exactly one recorded episode and no selector fell back.
 - **Differences:** stratified bootstrap, tasks resampled within each benchmark (10,000 draws); each benchmark weighted one third. Valid-only uses tasks valid under all compared heads.
 - Evidence: [runs and contrasts](arm_results/rl_integration/selection-head-arch-2x2-full-20261022.json) · [script](arm_results/rl_integration/selection-head-arch-2x2-full-20261022.py)
@@ -492,10 +494,10 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | Piotr SelectionARM | 37.8% | 51.0% | 51.0% | 44.7% | 46.6% | +9.3 | — |
 | **Labels** (default head: joint transformer, soft CE) | | | | | | | |
 | Pre-execution (Luna) | 26.8% | 40.8% | 38.0% | 33.3% | 35.2% | −2.0 [−10.0, +6.0] | **−11.3 [−19.3, −3.3]** |
-| Lookahead K = 1 (Luna) | 37.8% | 53.1% | 45.8% | 43.3% | 45.6% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
-| Lookahead K = 3 (Luna) | 42.2% | 53.2% | 46.9% | 44.7% | 47.5% | **+9.3 [+2.0, +16.7]** | 0.0 [−8.7, +8.7] |
+| Lookahead H = 2 (Luna) | 37.8% | 53.1% | 45.8% | 43.3% | 45.6% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
+| Lookahead H = 4 (Luna) | 42.2% | 53.2% | 46.9% | 44.7% | 47.5% | **+9.3 [+2.0, +16.7]** | 0.0 [−8.7, +8.7] |
 | Observed outcome (draws 0–2) | 42.6% | 48.0% | 48.0% | 45.3% | 46.2% | **+10.0 [+2.7, +17.3]** | +0.7 [−7.3, +8.7] |
-| **Architecture** (K = 1 labels) | | | | | | | |
+| **Architecture** (H = 2 labels) | | | | | | | |
 | Joint transformer, BCE | 39.1% | 51.1% | 44.9% | 42.7% | 45.0% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
 | Independent transformer, soft CE | 32.6% | 48.9% | 53.1% | 42.7% | 44.9% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
 | Independent transformer, BCE | 41.9% | 43.8% | 53.1% | 43.3% | 46.2% | +8.0 [0.0, +16.7] | −1.3 [−10.0, +7.3] |
@@ -505,9 +507,9 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | Independent MLP, BCE | 41.3% | 45.8% | 42.9% | 41.3% | 43.3% | +6.0 [−2.0, +14.0] | −3.3 [−11.3, +4.7] |
 | `<decide>` pointer readout, soft CE | 43.2% | 38.8% | 44.9% | 40.0% | 42.3% | +4.7 [−4.0, +13.3] | −4.7 [−13.3, +4.0] |
 | **Data** (default head) | | | | | | | |
-| K = 1, natural-frequency panels | 33.3% | 45.7% | 45.8% | 38.7% | 41.6% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
+| H = 2, natural-frequency panels | 33.3% | 45.7% | 45.8% | 38.7% | 41.6% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
 | Pre-execution + Piotr's 34,518 panels | 48.8% | 40.8% | 34.0% | 38.7% | 41.2% | +3.3 [−5.3, +12.0] | −6.0 [−14.0, +2.0] |
-| K = 1, 1,908 SFT + RL states (earlier head) | 46.5% | 41.7% | 51.0% | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
+| H = 2, 2,908 SFT + RL states (earlier head) | 46.5% | 41.7% | 51.0% | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
 
 - **Setup.**
   - Actor OpenWebRL-4B-SFT, T 1.0 / top-p 0.9, 30 steps, five candidates per decision. One H200 per head. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
@@ -525,26 +527,26 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 **Offline evaluation.** Lighter-blue “Train labels” use rollout 1's evidence or outcome rates on rollouts 1–3. Darker-blue “Held-out eval” scores all picks on rollouts 4–8. These names identify the within-state rollout split; the head's training/test state split is separate.
 
-![Side-by-side offline evaluation diagram. (a) Rollout Collection: five candidate actions, rollout-1 state prefixes, all eight binary outcomes per action labeled Rollout success R, train rates and held-out rates. (b) Action Decision Labeling: shared task/history/current-state context and all five actions feed each teacher jointly, with no future, immediate post-action state, or H=3 rollout evidence. Teacher and observed-outcome oracle picks are scored on held-out rollouts. The larger data-collection panel gives each state transition a visible arrow; rollout success R is binary, with its notation below panel (a)](arm_results/methods/selection-offline-eval-20261022.png)
+![Side-by-side offline evaluation diagram. (a) Rollout Collection: five candidate actions, rollout-1 state prefixes, all eight binary outcomes per action labeled Rollout success R, train rates and held-out rates. (b) Action Decision Labeling: shared task/history/current-state context and all five actions feed each teacher jointly, with Pre-exec or H = 4 rollout evidence. Teacher and observed-outcome oracle picks are scored on held-out rollouts. The larger data-collection panel gives each state transition a visible arrow; rollout success R is binary, with its notation below panel (a)](arm_results/methods/selection-offline-eval-20261022.png)
 
-*Illustrative example; valid rollouts only. Teacher: GPT-6 Luna. Rollout success $R^{i,j}\in\{0,1\}$ is the binary terminal outcome for candidate $i\in\{1,\ldots,K\}$ and one-based rollout index $j\in\{1,\ldots,8\}$. Lighter-blue Train % averages outcomes on rollouts 1–3; darker-blue Eval % uses rollouts 4–8. Filled green circles mean success (R = 1) and hollow gray circles mean failure (R = 0); the binary-outcome notation is shown below panel (a). Subscripts index time and superscripts index candidates. One pale-gray enclosure with a black outline marks rollout 1 across all candidates; only actions 1 and 5 have expanded state labels. Immediate post-action states are salmon and later states purple. Slate, salmon, purple and lighter blue identify pre-execution, post-execution, lookahead H = 3 and the observed-rollout oracle. The same lighter blue identifies the train-label rate inputs and their oracle path. K = 5 counts candidates; H = 3 counts continuation steps. In (b), the gray shared input supplies task, history, current state and the current candidate-action set $\{a_t^{i}\}_{i=1}^{K}$ ($K=5$) to every teacher. Each call jointly receives rollout-1 evidence for **every** candidate, represented by sets indexed i=1 to K, and returns one candidate index. The dash means no future evidence. Lookahead abbreviates the four-state sequence as $s_{t+1:t+4}^{i}$ and its three continuation actions as $a_{t+1:t+3}^{i}$; both ranges are inclusive. No teacher receives terminal verdicts. The oracle takes an argmax over the five Train % values in (a), then its pick is scored on held-out outcomes. Values are percentages rounded to at most one decimal; the percent sign appears in column headers only. K = 5 is stated once in panel (a), while the shared-input box uses the action-set notation without repeating its value.*
+*Illustrative example; valid rollouts only. Teacher: GPT-6 Luna. Rollout success $R^{i,j}\in\{0,1\}$ is the binary terminal outcome for candidate $i\in\{1,\ldots,K\}$ and one-based rollout index $j\in\{1,\ldots,8\}$. Lighter-blue Train % averages outcomes on rollouts 1–3; darker-blue Eval % uses rollouts 4–8. Filled green circles mean success (R = 1) and hollow gray circles mean failure (R = 0); the binary-outcome notation is shown below panel (a). Subscripts index time and superscripts index candidates. One pale-gray enclosure with a black outline marks rollout 1 across all candidates; only actions 1 and 5 have expanded state labels. Immediate post-action states are salmon and later states purple. Slate, purple and lighter blue identify Pre-exec, Lookahead H = 4 and the observed-rollout oracle; the H = 1 comparison row is omitted. The same lighter blue identifies the train-label rate inputs and their oracle path. K = 5 counts candidates; H = 4 counts the candidate action plus three continuation actions. In (b), the gray shared input supplies task, history, current state and the current candidate-action set $\{a_t^{i}\}_{i=1}^{K}$ ($K=5$) to every teacher. Each call jointly receives rollout-1 evidence for **every** candidate, represented by sets indexed i=1 to K, and returns one candidate index. The dash means no future evidence. Lookahead abbreviates the four-state sequence as $s_{t+1:t+4}^{i}$ and its three continuation actions as $a_{t+1:t+3}^{i}$; both ranges are inclusive. No teacher receives terminal verdicts. The oracle takes an argmax over the five Train % values in (a), then its pick is scored on held-out outcomes. Values are percentages rounded to at most one decimal; the percent sign appears in column headers only. K = 5 is stated once in panel (a), while the shared-input box uses the action-set notation without repeating its value.*
 
 “Oracle (observed rollouts)” selects using the first three rollouts and is scored on the rest; it is distinct from an oracle that maximizes held-out success. The same comparison on all 1,010 main-set states:
 
 ![Success of each selector's pick on held-out rollouts 3–7 with paired 95% intervals; labels and the oracle use rollouts 0–2](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_success_bars_valid_only_main.png)
 
-*Main set: 1,010 states, 323 tasks, all OpenWebRL-4B-SFT; valid draws only. Rollouts are numbered 0–7 as in the tables. Teachers see rollout 0 only (screenshot-only, no history; diamonds are the WebArbiter, WebShepherd and PRO-CUA formulations, GPT-6 Luna); the oracle picks the best action on rollouts 0–2; every pick is scored on rollouts 3–7. Error bars are paired 95% task-clustered intervals of the difference from the actor's first sample, drawn around the actor's rate plus that difference (the actor's first sample is the dashed line); absolute intervals are about ±5 pp for every point because tasks differ far more than selectors. The y axis starts at 30%. Lookahead K = 3 reaches 40.26% and the oracle 40.13%: +4.94 pp [+2.95, +6.81] and +4.81 pp [+3.02, +6.49] over the actor (35.32%). [JSON](arm_results/rl_integration/lookahead-draw-split-20261013/curve_fixedfit_main.json), [code](arm_results/rl_integration/lookahead-draw-split-20261013/curve_fixedfit.py), [plot](arm_results/rl_integration/lookahead-draw-split-20261013/plot_bars.py); [rollouts 3–5 / 3–6 / 3–7 lines](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_fixed_split_valid_only_main.png) (flat); earlier variable-split version (oracle on 8 − x draws): [figure](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_draw_split_piotr_absolute_lines_valid_only_main.png), [JSON](arm_results/rl_integration/lookahead-draw-split-20261013/curve_piotr_main.json).*
+*Main set: 1,010 states, 323 tasks, all OpenWebRL-4B-SFT; valid draws only. Rollouts are numbered 0–7 as in the tables. Teachers see rollout 0 only (screenshot-only, no history; diamonds are the WebArbiter, WebShepherd and PRO-CUA formulations, GPT-6 Luna); the oracle picks the best action on rollouts 0–2; every pick is scored on rollouts 3–7. Error bars are paired 95% task-clustered intervals of the difference from the actor's first sample, drawn around the actor's rate plus that difference (the actor's first sample is the dashed line); absolute intervals are about ±5 pp for every point because tasks differ far more than selectors. The y axis starts at 30%. Lookahead H = 4 reaches 40.26% and the oracle 40.13%: +4.94 pp [+2.95, +6.81] and +4.81 pp [+3.02, +6.49] over the actor (35.32%). [JSON](arm_results/rl_integration/lookahead-draw-split-20261013/curve_fixedfit_main.json), [code](arm_results/rl_integration/lookahead-draw-split-20261013/curve_fixedfit.py), [plot](arm_results/rl_integration/lookahead-draw-split-20261013/plot_bars.py); [rollouts 3–5 / 3–6 / 3–7 lines](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_fixed_split_valid_only_main.png) (flat); earlier variable-split version (oracle on 8 − x draws): [figure](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_draw_split_piotr_absolute_lines_valid_only_main.png), [JSON](arm_results/rl_integration/lookahead-draw-split-20261013/curve_piotr_main.json).*
 
 <details>
 <summary>Protocol, scoring and head training</summary>
 
 Figure rollout indices are one-based; archived rollout IDs remain zero-based (figure $j$ = archived ID + 1). This is a display change: the first three rollouts supply label-pool rates and the last five score picks, with unchanged outcomes and denominators.
 
-Each rollout replays the shared state $s_t$ in a fresh browser, executes candidate $a_t^{i}$ and lets the frozen SFT actor finish; o4-mini judges success. State symbols represent screenshots/observations and tool feedback. Continuation actions $a_{t+1}^{i}, a_{t+2}^{i}, a_{t+3}^{i}$ extend lookahead H = 3 to $s_{t+4}^{i}$; H = 1 ends at $s_{t+2}^{i}$. The superscript identifies the branch's original candidate, not a newly sampled candidate index at every step. All expanded states/actions belong to rollout 1. The omitted middle state labels are a display simplification, not missing teacher inputs or collected data. Every call receives all five candidate/evidence pairs together, in addition to shared task/history/current-state context. It does not receive all eight rollouts: only rollout 1 supplies future teacher evidence. Prefixes are schematic and may end earlier. GPT-6 Luna returns a candidate index, not success rates; final answers are hidden from lookahead, and terminal verdicts are withheld from all teacher inputs.
+Each rollout replays the shared state $s_t$ in a fresh browser, executes candidate $a_t^{i}$ and lets the frozen SFT actor finish; o4-mini judges success. State symbols represent screenshots/observations and tool feedback. Continuation actions $a_{t+1}^{i}, a_{t+2}^{i}, a_{t+3}^{i}$ extend lookahead H = 4 to $s_{t+4}^{i}$; H = 2 ends at $s_{t+2}^{i}$ and H = 1 at the immediate result $s_{t+1}^{i}$. The superscript identifies the branch's original candidate, not a newly sampled candidate index at every step. All expanded states/actions belong to rollout 1. The omitted middle state labels are a display simplification, not missing teacher inputs or collected data. Every call receives all five candidate/evidence pairs together, in addition to shared task/history/current-state context. It does not receive all eight rollouts: only rollout 1 supplies future teacher evidence. Prefixes are schematic and may end earlier. GPT-6 Luna returns a candidate index, not success rates; final answers are hidden from lookahead, and terminal verdicts are withheld from all teacher inputs.
 
-All eight example rollouts per action are valid. Scores are pre/post 60%, lookahead/observed-rollout oracle 80%, and uniform/SFT sample 44%; the held-out-max oracle is also 80% in this example. Tied picks average the tied actions' rates. SFT sample weights actions by proposal frequency; the five example proposals differ, so it equals uniform. The observed-rollout oracle is the outcome-label reference previously called “Observed outcome.” Argmax uses unrounded rates; percentage formatting does not change its choice.
+All eight example rollouts per action are valid. Scores are Pre-exec 60%, Lookahead H = 4 / observed-rollout oracle 80%, and uniform/SFT sample 44%; the held-out-max oracle is also 80% in this example. Tied picks average the tied actions' rates. SFT sample weights actions by proposal frequency; the five example proposals differ, so it equals uniform. The observed-rollout oracle is the outcome-label reference previously called “Observed outcome.” Argmax uses unrounded rates; percentage formatting does not change its choice.
 
-Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts calls selecting action i and N counts valid calls. Outcome ties split target mass equally. Post-execution is a teacher comparison only; no head is trained on its labels. Heads use pre-action features, train on 1,380 states and are evaluated on 348 states from 86 unseen tasks.
+Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts calls selecting action i and N counts valid calls. Outcome ties split target mass equally. In this October 21 comparison, Lookahead H = 1 is a teacher comparison only; later [label-source experiments](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101) also train an H = 1 head. Heads use pre-action features, train on 1,380 states and are evaluated on 348 states from 86 unseen tasks.
 
 </details>
 
@@ -558,18 +560,18 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 | SFT sample (actor's own frequency) | 35.63% | 35.63% | — | — |
 | Oracle | 47.96% | — | — | — |
 | Pre-execution | 36.44% | 36.31% | +0.68 [−0.85, +2.34] | 22.56 M |
-| Lookahead K = 1 | 37.29% | **38.06%** | **+2.43 [+1.19, +3.74]** | 22.56 M |
-| Lookahead K = 3 | 36.69% | 37.68% | +2.05 [+0.65, +3.60] | 22.56 M |
+| Lookahead H = 2 | 37.29% | **38.06%** | **+2.43 [+1.19, +3.74]** | 22.56 M |
+| Lookahead H = 4 | 36.69% | 37.68% | +2.05 [+0.65, +3.60] | 22.56 M |
 | Observed outcome | 36.97% | 35.65% | +0.02 [−1.56, +1.59] | 22.56 M |
-| K = 1, joint transformer, BCE | 37.70% | 37.26% | +1.63 [+0.44, +2.97] | 22.56 M |
-| K = 1, independent transformer, soft CE | 38.07% | 37.85% | +2.22 [+0.81, +3.78] | 22.56 M |
-| K = 1, independent transformer, BCE | 37.67% | 37.68% | +2.05 [+0.58, +3.76] | 22.56 M |
-| K = 1, joint MLP, soft CE | **38.26%** | 37.98% | +2.35 [+0.97, +3.91] | 22.56 M |
-| K = 1, joint MLP, BCE | 37.47% | 37.25% | +1.62 [+0.33, +2.95] | 22.56 M |
-| K = 1, independent MLP, soft CE | 37.56% | 37.61% | +1.98 [+0.60, +3.38] | 22.56 M |
-| K = 1, independent MLP, BCE | 37.09% | 37.15% | +1.52 [+0.28, +2.88] | 22.56 M |
-| K = 1, pointer readout | 38.15% | 37.68% | +2.05 [+0.69, +3.46] | 23.09 M |
-| K = 1, natural-frequency training | 38.00% | 38.04% | +2.41 [+0.83, +4.19] | 22.56 M |
+| H = 2, joint transformer, BCE | 37.70% | 37.26% | +1.63 [+0.44, +2.97] | 22.56 M |
+| H = 2, independent transformer, soft CE | 38.07% | 37.85% | +2.22 [+0.81, +3.78] | 22.56 M |
+| H = 2, independent transformer, BCE | 37.67% | 37.68% | +2.05 [+0.58, +3.76] | 22.56 M |
+| H = 2, joint MLP, soft CE | **38.26%** | 37.98% | +2.35 [+0.97, +3.91] | 22.56 M |
+| H = 2, joint MLP, BCE | 37.47% | 37.25% | +1.62 [+0.33, +2.95] | 22.56 M |
+| H = 2, independent MLP, soft CE | 37.56% | 37.61% | +1.98 [+0.60, +3.38] | 22.56 M |
+| H = 2, independent MLP, BCE | 37.09% | 37.15% | +1.52 [+0.28, +2.88] | 22.56 M |
+| H = 2, pointer readout | 38.15% | 37.68% | +2.05 [+0.69, +3.46] | 23.09 M |
+| H = 2, natural-frequency training | 38.00% | 38.04% | +2.41 [+0.83, +4.19] | 22.56 M |
 | Pre-execution + Piotr's panels | 37.53% | 36.90% | +1.27 [−0.29, +3.01] | 22.56 M |
 
 - **Panels.**
@@ -581,7 +583,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
   - Soft CE beats BCE in all four architecture pairings offline, by 0.4–1.0 pp. Live, those pairs split 2–2.
 - **Data changes.**
   - Natural-frequency training equals distinct-panel training on natural panels (38.04% vs 38.06%).
-  - Piotr's panels raise the pre-execution head by about 0.6–1.1 pp offline. That still leaves it short of K = 1 trained on the 1,380 branch states alone.
+  - Piotr's panels raise the pre-execution head by about 0.6–1.1 pp offline. That still leaves it short of H = 2 trained on the 1,380 branch states alone.
 
 <a id="selection-head-sft-actions-lora-20261021"></a>
 
@@ -592,18 +594,18 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 | Uniform over actions | 36.0% | — | — |
 | SFT sample (actor frequency) | 35.4% | — | — |
 | Oracle | 47.8% | — | — |
-| Head, K = 3 labels | 36.4% | 37.4% | — |
-| LoRA 4B, K = 3 labels | 37.2% | 37.5% | +1.5 [−0.1, +3.1] |
+| Head, H = 4 labels | 36.4% | 37.4% | — |
+| LoRA 4B, H = 4 labels | 37.2% | 37.5% | +1.5 [−0.1, +3.1] |
 | Head, outcome labels | 36.7% | 35.4% | — |
 | LoRA 4B, outcome labels | 36.4% | 36.6% | +0.6 [−0.6, +2.0] |
 | Piotr SelectionARM (his 34,518 panels) | 39.1% | 38.4% | **+2.4 [+1.1, +3.8]** |
 
-- LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on branch data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
+- LoRA − head on the same states: H = 4 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on branch data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
 - Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads of the offline table above, restricted to these 345 states (one distinct ordering), so they differ slightly from that table.
 - **Caveat for the Piotr row:** the branch states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
 - Live (10-28): see [LoRA vs head](#selection-head-recipe-model-scale-device-20261028). [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
 
-**More one-panel data, larger selector (offline, 10-28).** The same LoRA recipe trained on all 2,612 one-panel K = 3 states (the 1,380 above plus 1,232 labels-only states; 28,150 examples, 10 orderings per state) still does not beat the all-states 22.6 M head on the heads' fixed-five metric. Same 345 test states / 86 tasks, held-out draws 3–7, one SFT sample 35.4%, oracle 46.6%:
+**More one-panel data, larger selector (offline, 10-28).** The same LoRA recipe trained on all 2,612 one-panel H = 4 states (the 1,380 above plus 1,232 labels-only states; 28,150 examples, 10 orderings per state) still does not beat the all-states 22.6 M head on the heads' fixed-five metric. Same 345 test states / 86 tasks, held-out draws 3–7, one SFT sample 35.4%, oracle 46.6%:
 
 | Selector (training states) | Fixed five | − SFT sample, pp [95% CI] | − all-states head, pp [95% CI] |
 | --- | ---: | ---: | ---: |
@@ -627,7 +629,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
   - Every label arm trains on the same 1,380 train states, those with all four labels available.
   - One training seed (0), no cross-validation.
 - **Labels.**
-  - Luna, screenshots only, no history, two random candidate orders, final answers hidden. Conditions: before execution, lookahead K = 1 and K = 3. Luna sees only the state's SFT actions.
+  - Luna, screenshots only, no history, two random candidate orders, final answers hidden. Conditions: before execution, lookahead H = 2 and H = 4. Luna sees only the state's SFT actions.
   - Outcome labels: best success on draws 0–2, valid draws only, ties split. Draws 3–7 are used only for scoring.
   - Labelling cost USD 13.92 of the USD 30 cap.
 - **Architectures** (`openwebrl/selection_head.py`).
@@ -649,7 +651,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 
 | Actor | Test | Head | Head − baseline, pp [95% CI] |
 | --- | --- | --- | ---: |
-| Qwen3-VL-2B OpenWebRL SFT (`davidan03/qwen3-vl-2b-thinking-openwebrl-sft` @ `95d5b13`) | Live, full Online-Mind2Web (300 tasks), T 1.0, 30 steps | Head retrained on 2B features (layers 14/21/28), K = 1 labels on the 1,631 SFT-actor states (4B-sampled candidates) | **−8.3 [−13.3, −3.3]** vs SFT-2B, 1 sample |
+| Qwen3-VL-2B OpenWebRL SFT (`davidan03/qwen3-vl-2b-thinking-openwebrl-sft` @ `95d5b13`) | Live, full Online-Mind2Web (300 tasks), T 1.0, 30 steps | Head retrained on 2B features (layers 14/21/28), H = 2 labels on the 1,631 SFT-actor states (4B-sampled candidates) | **−8.3 [−13.3, −3.3]** vs SFT-2B, 1 sample |
 | OpenWebRL-4B (RL) @ `616cc8f` | Offline, 444 RL-actor states (270 tasks), held-out draws 3–7 | Frozen SFT-only 4B head, reading SFT-4B features | −0.26 [−1.96, +1.42] vs uniform |
 | OpenWebRL-4B (RL) @ `616cc8f` | Same, as it would run live | Frozen SFT-only 4B head, reading the RL actor's own features | −1.12 [−2.95, +0.67] vs uniform |
 
@@ -685,7 +687,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 
 - **Held fixed.**
   - Features: OpenWebRL-4B-SFT layers 18/27/36, three summaries per candidate.
-  - Labels: Luna lookahead K = 1 on SFT-actor states.
+  - Labels: Luna lookahead H = 2 on SFT-actor states.
   - Training: d_model 512, dropout 0.1; AdamW 3e-4, weight decay 0.05, batch 64, 20 epochs, one-cycle schedule.
 - **Offline protocol.**
   - 5-fold task-grouped cross-validation × 3 seeds: 160 CPU array tasks, `scripts/run_head_factorial.py`, code `f02599b` and the following commit.
@@ -693,7 +695,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
   - Reported per cell: success and gain over uniform. Each dimension's paired contrast is averaged over the other two dimensions' four cells, at every data scale, with task-clustered bootstrap intervals.
 - **Live check** (needs GPU approval): the best and worst variants and two or three data scales on full Online-Mind2Web at T 1.0, 30 steps, about 3.5 GPU-hours each. Offline scores have not predicted live gains well.
 - **New states, once collected.**
-  1. K = 1 labels (Luna, about USD 4.40 per 1,000 states).
+  1. H = 2 labels (Luna, about USD 4.40 per 1,000 states).
   2. Panels and targets (CPU).
   3. 4B features (about 35 min per 1,000 states on one H200).
 - **Pilot (fold 0, seed 0, 1,631 SFT states; 285 test states, 65 tasks).**
@@ -727,10 +729,10 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 | --- | --- | --- | --- | ---: | ---: | ---: | --- |
 | Pointwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states (35,916 panels) | GPT-5.5 pick | 2,692 states | — | 16.8 M | Online-Mind2Web same-hardware; WebVoyager + DeepShop 100-task |
 | Listwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states | GPT-5.5 pick | 2,692 states | — | 22.6 M | full sets, 30 steps |
-| Listwise, our SFT + RL states | OpenWebRL-4B-SFT (18/27/36) | 1,474 SFT-actor + 434 RL-actor branching states | Luna lookahead K = 1 votes | 1,908 | 1,410 | 22.6 M | full sets, 30 steps |
-| Listwise, our SFT-actor states | OpenWebRL-4B-SFT (18/27/36) | SFT-actor branching states only | Luna lookahead K = 1 votes | 1,631 | 1,186 | 22.6 M | full sets, 30 steps |
-| Listwise, our SFT-actor states, 2B actor | Qwen3-VL-2B OpenWebRL SFT `95d5b13` (14/21/28) | SFT-actor branching states only (candidates sampled by the 4B actor) | Luna lookahead K = 1 votes | 1,631 | 1,186 | 19.4 M | pending |
-| Listwise students (outcomes, pre-execution, K = 1, K = 3) | OpenWebRL-4B-SFT (18/27/36) | supervision-ablation folds 1–4 | per source | 840 | — | 22.6 M | 100-task subsets, T 0.7 |
+| Listwise, our SFT + RL states | OpenWebRL-4B-SFT (18/27/36) | 1,474 SFT-actor + 434 RL-actor branching states | Luna lookahead H = 2 votes | 1,908 | 1,410 | 22.6 M | full sets, 30 steps |
+| Listwise, our SFT-actor states | OpenWebRL-4B-SFT (18/27/36) | SFT-actor branching states only | Luna lookahead H = 2 votes | 1,631 | 1,186 | 22.6 M | full sets, 30 steps |
+| Listwise, our SFT-actor states, 2B actor | Qwen3-VL-2B OpenWebRL SFT `95d5b13` (14/21/28) | SFT-actor branching states only (candidates sampled by the 4B actor) | Luna lookahead H = 2 votes | 1,631 | 1,186 | 19.4 M | pending |
+| Listwise students (outcomes, pre-execution, H = 2, H = 4) | OpenWebRL-4B-SFT (18/27/36) | supervision-ablation folds 1–4 | per source | 840 | — | 22.6 M | 100-task subsets, T 0.7 |
 
 - **Distinct actions.**
   - Effective = action type plus target (element under a click, URL, typed text, scroll direction, keys), as in the [diversity analysis](ARM_FORMULATIONS.md).
@@ -746,7 +748,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 
 ## Full benchmarks: Online-Mind2Web, WebVoyager and DeepShop at T 1.0
 
-**On all 1,045 tasks, the lookahead K = 1 head trained on 1,908 of our states beats the single-sample SFT actor by +4.6 pp [+1.5, +7.6] at 64% of Piotr SelectionARM's compute. Piotr SelectionARM gains +7.0 pp [+3.9, +10.0]; the head is 2.4 pp behind it [−5.3, +0.4].**
+**On all 1,045 tasks, the lookahead H = 2 head trained on 1,908 of our states beats the single-sample SFT actor by +4.6 pp [+1.5, +7.6] at 64% of Piotr SelectionARM's compute. Piotr SelectionARM gains +7.0 pp [+3.9, +10.0]; the head is 2.4 pp behind it [−5.3, +0.4].**
 - **Setup:** every task of each benchmark, one episode per task, the same tasks for every condition.
   - Actor decoding T 1.0, top-p 0.9 (chosen after a [30-task decoding test](#selection-head-decoding-test-20261018)); 1,024 tokens and 30 steps.
   - Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
@@ -756,13 +758,13 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B, 1 sample | 109 | 264 | 51 | 424 | 36.3% | 44.4% | 34.0% | 40.6% | 41.9% |
 | Piotr SelectionARM | **123** | **312** | 62 | **497** | **41.0%** | **52.4%** | 41.3% | **47.6%** | **50.2%** |
-| **K = 1 head, 1,908 SFT + RL states** | 112 | 292 | **68** | 472 | 37.3% | 49.1% | **45.3%** | 45.2% | 47.9% |
+| **H = 2 head, 1,908 SFT + RL states** | 112 | 292 | **68** | 472 | 37.3% | 49.1% | **45.3%** | 45.2% | 47.9% |
 
 | Paired difference, same tasks, pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | All 1,045 tasks |
 | --- | ---: | ---: | ---: | ---: |
-| K = 1 head − SFT | +1.0 [−4.3, +6.3] | **+4.7 [+0.7, +8.6]** | **+11.3 [+2.7, +20.0]** | **+4.6 [+1.5, +7.6]** |
+| H = 2 head − SFT | +1.0 [−4.3, +6.3] | **+4.7 [+0.7, +8.6]** | **+11.3 [+2.7, +20.0]** | **+4.6 [+1.5, +7.6]** |
 | Piotr SelectionARM − SFT | +4.7 [−1.0, +10.0] | **+8.1 [+4.2, +11.9]** | +7.3 [−1.3, +16.0] | **+7.0 [+3.9, +10.0]** |
-| K = 1 head − Piotr SelectionARM | −3.7 [−8.7, +1.0] | −3.4 [−7.2, +0.5] | +4.0 [−4.7, +12.7] | −2.4 [−5.3, +0.4] |
+| H = 2 head − Piotr SelectionARM | −3.7 [−8.7, +1.0] | −3.4 [−7.2, +0.5] | +4.0 [−4.7, +12.7] | −2.4 [−5.3, +0.4] |
 
 Overall rates count invalid episodes as failures. Valid-only paired differences on all tasks are +5.2 pp [+2.0, +8.4] for the head and +7.5 pp [+4.3, +10.5] for Piotr against SFT (978 and 979 tasks valid under both).
 
@@ -770,7 +772,7 @@ Overall rates count invalid episodes as failures. Valid-only paired differences 
 | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B, 1 sample | 0.019 | — | 2.81 | 13.6 | 5 |
 | Piotr SelectionARM | 0.096 | 0.034 | 8.68 | 14.3 | 16 |
-| K = 1 head | **0.060** | **<0.001** | **8.21** | 15.3 | 22 |
+| H = 2 head | **0.060** | **<0.001** | **8.21** | 15.3 | 22 |
 
 - **Both selectors beat a single sample on the full sets; the head costs 36% less compute than Piotr.** The head's selector adds under 0.1% of a step's compute because it reads hidden states the actor already computed. Its decisions are 0.5 s faster than Piotr's.
 - **The head is behind Piotr SelectionARM on Online-Mind2Web and WebVoyager and ahead on DeepShop**; no per-benchmark difference between the two excludes zero.
@@ -801,8 +803,8 @@ Overall rates count invalid episodes as failures. Valid-only paired differences 
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Head | Piotr: 2,692 states, GPT-5.5 picks | **131** | 305 | 66 | **502** | **48.0%** | **+7.5 [+4.4, +10.5]** |
 | Piotr SelectionARM (LoRA 4B) | Piotr: 2,692 states, GPT-5.5 picks | 123 | **312** | 62 | 497 | 47.6% | +7.0 [+3.9, +10.0] |
-| Head | ours: 1,908 SFT + RL states, Luna K = 1 | 112 | 292 | **68** | 472 | 45.2% | +4.6 [+1.5, +7.6] |
-| Head | ours: 1,631 SFT-actor states only, Luna K = 1 | 105 | 295 | 64 | 464 | 44.4% | +3.8 [+0.8, +6.9] |
+| Head | ours: 1,908 SFT + RL states, Luna H = 2 | 112 | 292 | **68** | 472 | 45.2% | +4.6 [+1.5, +7.6] |
+| Head | ours: 1,631 SFT-actor states only, Luna H = 2 | 105 | 295 | 64 | 464 | 44.4% | +3.8 [+0.8, +6.9] |
 | SFT 4B, 1 sample | — | 109 | 264 | 51 | 424 | 40.6% | — |
 
 - **Same data, different selector size:** head − Piotr SelectionARM, both on Piotr's data, is +0.5 pp [−2.5, +3.4]. Per benchmark: +2.7, −1.2 and +2.7 pp.
@@ -818,7 +820,7 @@ Overall rates count invalid episodes as failures. Valid-only paired differences 
 
 - **Decoding test (30 tasks per benchmark, the first 30 of each 100-task subset; 90 tasks).**
   - SFT successes: T 0.7 35, T 0.6 / top-p 0.95 27, T 1.0 / top-p 0.9 32.
-  - K = 1 head successes: 40, 30 and 40.
+  - H = 2 head successes: 40, 30 and 40.
   - Paired T 0.6 − T 0.7: SFT −8.9 pp [−20.0, +2.2], head −11.1 pp [−22.2, 0.0]. Paired T 1.0 − T 0.7: SFT −3.3 pp [−13.3, +6.7], head 0.0 pp [−10.0, +10.0].
   - The T 0.6 drop is concentrated on DeepShop, mostly in episodes that exhaust the 30-step limit.
   - The T 0.7 runs were on 2026-10-17 and the others on 2026-10-18, so decoding and date are confounded.
@@ -841,7 +843,7 @@ Overall rates count invalid episodes as failures. Valid-only paired differences 
 
 ## Across benchmarks: Online-Mind2Web, WebVoyager and DeepShop
 
-**Training the lookahead K = 1 head on 1,908 of our states (SFT- and RL-actor) instead of 840 raises its live success by 7.0 pp [+0.7, +13.3] over 300 tasks. It is now level with the single-sample SFT actor (+1.7 pp [−4.7, +7.7]) and with the same head trained on Piotr's data. No selector beats SFT on DeepShop.**
+**Training the lookahead H = 2 head on 1,908 of our states (SFT- and RL-actor) instead of 840 raises its live success by 7.0 pp [+0.7, +13.3] over 300 tasks. It is now level with the single-sample SFT actor (+1.7 pp [−4.7, +7.7]) and with the same head trained on Piotr's data. No selector beats SFT on DeepShop.**
 - **Setup:** the same seeded 100 tasks per benchmark for every condition (Online-Mind2Web 100 of 300, WebVoyager 100 of 595, DeepShop 100 of 150), one episode per task.
 - **Decoding:** T 0.7, top-p 0.9 and 1,024 tokens, as in the same-hardware runs. Heads see pre-execution inputs only.
 - **Judges:** o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
@@ -853,23 +855,23 @@ Overall rates count invalid episodes as failures. Valid-only paired differences 
 | Piotr SelectionARM (LoRA 4B selector) | Piotr: 2,692 states, 35,916 panels | — | **55** | 45 | — | 57.3% | 45.9% |
 | Head, Piotr's data, pointwise | Piotr: 2,692 states, 35,916 panels | — | 50 | **51** | — | 51.5% | 53.1% |
 | Head, Piotr's data, listwise | Piotr: 2,692 states, 35,916 panels | **42** | 48 | 42 | 46.7% | 48.0% | 42.0% |
-| **Head, lookahead K = 1, SFT + RL states** | **ours: 1,908 states** | **39** | **49** | **41** | **46.4%** | **50.5%** | **41.0%** |
-| Head, lookahead K = 1 | ours: 840 states | 27 | 45 | 36 | 30.3% | 45.5% | 37.1% |
+| **Head, lookahead H = 2, SFT + RL states** | **ours: 1,908 states** | **39** | **49** | **41** | **46.4%** | **50.5%** | **41.0%** |
+| Head, lookahead H = 2 | ours: 840 states | 27 | 45 | 36 | 30.3% | 45.5% | 37.1% |
 | Head, observed outcomes (draws 0–2) | ours: 840 states | 37 | 42 | 35 | 40.7% | 42.4% | 35.4% |
 | Head, pre-execution teacher | ours: 840 states | 34 | 38 | 37 | 39.1% | 38.4% | 37.4% |
-| Head, lookahead K = 3 | ours: 840 states | 25 | 40 | 40 | 29.4% | 40.8% | 42.1% |
+| Head, lookahead H = 4 | ours: 840 states | 25 | 40 | 40 | 29.4% | 40.8% | 42.1% |
 
 Successes are out of 100 tasks, so they equal the overall rate in %. Piotr SelectionARM and the pointwise Piotr-data head were not rerun on Online-Mind2Web; their 3 × 300 same-hardware results are [above](#selection-head-samehw-20261012).
 
 | Paired difference, same tasks | Benchmarks | Tasks | Overall, pp [95% CI] | Valid tasks | Valid only, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: | ---: |
-| K = 1 head: 1,908 states − 840 states | all three | 300 | **+7.0 [+0.7, +13.3]** | 272 | +7.4 [+0.7, +14.0] |
-| K = 1 head, 1,908 states − SFT | all three | 300 | +1.7 [−4.7, +7.7] | 279 | +2.5 [−4.3, +9.3] |
-| K = 1 head, 840 states − SFT | all three | 300 | −5.3 [−11.3, +0.7] | 281 | −5.0 [−11.0, +1.1] |
+| H = 2 head: 1,908 states − 840 states | all three | 300 | **+7.0 [+0.7, +13.3]** | 272 | +7.4 [+0.7, +14.0] |
+| H = 2 head, 1,908 states − SFT | all three | 300 | +1.7 [−4.7, +7.7] | 279 | +2.5 [−4.3, +9.3] |
+| H = 2 head, 840 states − SFT | all three | 300 | −5.3 [−11.3, +0.7] | 281 | −5.0 [−11.0, +1.1] |
 | Listwise head, Piotr's data − SFT | all three | 300 | +2.7 [−3.7, +9.0] | 286 | +2.4 [−4.2, +9.1] |
 | Pointwise head, Piotr's data − SFT | WebVoyager, DeepShop | 200 | +5.5 [−2.5, +13.5] | 193 | +7.3 [−0.5, +15.0] |
 | Piotr SelectionARM − SFT | WebVoyager, DeepShop | 200 | +5.0 [−2.5, +12.5] | 194 | +5.7 [−2.1, +13.4] |
-| K = 1 head, 1,908 states − Piotr SelectionARM | WebVoyager, DeepShop | 200 | −5.0 [−12.5, +2.0] | 191 | −5.2 [−12.6, +2.1] |
+| H = 2 head, 1,908 states − Piotr SelectionARM | WebVoyager, DeepShop | 200 | −5.0 [−12.5, +2.0] | 191 | −5.2 [−12.6, +2.1] |
 
 Intervals resample tasks (10,000 resamples). Per benchmark, only two differences exclude zero: Piotr SelectionARM − SFT on WebVoyager, +12.0 pp [+2.0, +22.0], and the 1,908-state − 840-state head on Online-Mind2Web, +12.0 pp [+2.0, +22.0].
 
@@ -892,18 +894,18 @@ Intervals resample tasks (10,000 resamples). Per benchmark, only two differences
   - Selectors: five candidates per step. Heads score them from layers 18/27/36 captured while the actor generates, and Piotr SelectionARM runs on its own sglang server on the same GPU.
   - Plans are frozen per condition and benchmark (task subset seed 0, protocol hash, head sha256). A restart skips verified task records.
 - **Invalid episodes.** Each Online-Mind2Web condition has 6 site-unreachable resets and 2 browser-step errors. Actor context overflows (a request over 32K tokens) vary by selector:
-  - 8 for the 1,908-state head and 7 for the K = 3 head;
+  - 8 for the 1,908-state head and 7 for the H = 4 head;
   - 2 for SFT, Piotr SelectionARM and the listwise Piotr-data head.
   - Overflows count as failures in the overall rate, because the selector's picks lead to them.
 - **Selector training data.**
   - **Our heads:** branching states with 5 fixed SFT-sampled candidates and 8 continuation draws per candidate.
   - **Label sources:** Luna lookahead votes (screenshots only, no history, 2 randomized-order calls), the pre-execution teacher, or observed outcomes on draws 0–2. Draws 3–7 are never used.
   - **840-state heads:** the supervision-ablation split (folds 1–4).
-  - **1,908-state heads:** 1,171 labelled SFT-actor states plus 925 new ones: 460 SFT-actor and 465 collected with the RL checkpoint OpenWebRL-4B `616cc8f`. All states have K = 1 labels ($4.10, 1,851 Luna calls), and training keeps states that also have an observed-outcome target.
+  - **1,908-state heads:** 1,171 labelled SFT-actor states plus 925 new ones: 460 SFT-actor and 465 collected with the RL checkpoint OpenWebRL-4B `616cc8f`. All states have H = 2 labels ($4.10, 1,851 Luna calls), and training keeps states that also have an observed-outcome target.
   - **New tasks:** they go to training folds only, so the test fold stays task-disjoint.
   - **Piotr-data heads:** the selection-head training set above (GPT-5.5 picks on Piotr's 2,692 states). Pointwise scores each candidate alone; listwise attends across the five.
 - **Offline check on the shared test fold** (task-disjoint; held-out draws 3–7, valid only; mean of 3 seeds). On the original 210 test states:
-  - **K = 1 head:** 840 states 36.16%, 1,908-state training set 34.66% (o4-mini). The 1,908-state version trains on the 1,564 non-test states.
+  - **H = 2 head:** 840 states 36.16%, 1,908-state training set 34.66% (o4-mini). The 1,908-state version trains on the 1,564 non-test states.
   - **Observed-outcomes head:** 34.73% and 35.05%.
   - **Uniform pick:** 31.91%.
   - **Under the Luna judge:** the same ordering. [Evidence](arm_results/rl_integration/sftrl-heads-offline-20261018.json).
@@ -1533,7 +1535,7 @@ Jobs `354654` (primary) and `354696` (breakdown; identical folds, seeds and pick
 
 | Training labels | Labelled states | 5-fold CV, − uniform, pp [95%] | Train 124 → test 87 new, − uniform, pp [95%] |
 | --- | ---: | --- | --- |
-| **Luna, 3-step lookahead, answers hidden** | **48** | **+2.37 [−0.08, +4.97]** | **+2.99 [−0.56, +6.54]** |
+| **Luna, Lookahead H = 4, answers hidden** | **48** | **+2.37 [−0.08, +4.97]** | **+2.99 [−0.56, +6.54]** |
 | Luna after execution, draw-0 evidence | 119 | −0.42 [−3.49, +2.65] | −0.75 [−3.95, +2.34] |
 | Luna after execution, evidence from draws 0–2 | 121 | −0.52 [−3.60, +2.49] | +0.26 [−2.72, +3.15] |
 | Luna before execution | 124 | −1.71 [−4.82, +1.31] | −0.46 [−3.44, +2.67] |
@@ -1723,14 +1725,14 @@ Oracle-action rate on informative states, % · difference from chance in pp [95%
 | --- | ---: | ---: | ---: | ---: | ---: |
 | *Chance* | *44.1* | *44.1* | *42.0* | *42.0* | — |
 | Oracle (observed outcome) | 56.2 · +12.1 [+9.0, +15.2] | 57.5 · +13.4 [+9.9, +16.7] | 57.7 · +15.7 [+9.4, +22.8] | 42.8 · +0.8 [−6.3, +8.3] | 56.7% |
-| Lookahead H = 3 | 55.8 · +11.7 [+8.5, +14.7] | 55.7 · +11.6 [+8.2, +14.9] | 55.5 · +13.5 [+5.5, +22.3] | 49.0 · +7.0 [+0.2, +14.6] | 47.6% |
-| Lookahead H = 1 | 56.3 · +12.2 [+9.0, +15.5] | 56.0 · +11.9 [+8.6, +15.1] | 55.7 · +13.7 [+5.3, +22.9] | 47.6 · +5.6 [−1.0, +12.0] | 55.8% |
+| Lookahead H = 4 | 55.8 · +11.7 [+8.5, +14.7] | 55.7 · +11.6 [+8.2, +14.9] | 55.5 · +13.5 [+5.5, +22.3] | 49.0 · +7.0 [+0.2, +14.6] | 47.6% |
+| Lookahead H = 2 | 56.3 · +12.2 [+9.0, +15.5] | 56.0 · +11.9 [+8.6, +15.1] | 55.7 · +13.7 [+5.3, +22.9] | 47.6 · +5.6 [−1.0, +12.0] | 55.8% |
 | Pre-exec | 51.3 · +7.2 [+4.0, +10.5] | 51.5 · +7.3 [+3.9, +10.8] | 50.5 · +8.5 [+2.5, +14.9] | 48.1 · +6.1 [+0.4, +12.2] | 74.5% |
-| Post-exec | 53.7 · +9.6 [+6.2, +12.9] | 53.0 · +8.8 [+5.4, +12.3] | 59.5 · +17.4 [+10.2, +25.4] | 51.0 · +8.9 [+2.7, +15.1] | 61.1% |
+| Lookahead H = 1 | 53.7 · +9.6 [+6.2, +12.9] | 53.0 · +8.8 [+5.4, +12.3] | 59.5 · +17.4 [+10.2, +25.4] | 51.0 · +8.9 [+2.7, +15.1] | 61.1% |
 
 - On training states the students pick the teacher's top action in 97.5–99.5% of states, so their oracle agreement equals the teacher's: they fit their training labels.
 - On test states student and teacher agree in only 48–75% of states. Pre-exec labels are the easiest to learn (74.5% agreement) but carry the least signal.
-- Over all states (including those where every pick is an oracle action, chance 65.0%) the pattern is the same, e.g. the H = 3 student on test +4.2 [+0.1, +8.7], the outcome student +0.5 [−3.8, +4.9].
+- Over all states (including those where every pick is an oracle action, chance 65.0%) the pattern is the same, e.g. the H = 4 student on test +4.2 [+0.1, +8.7], the outcome student +0.5 [−3.8, +4.9].
 - Training-state student numbers are not held-out: the students saw those states' labels, though never draws 3–7.
 - [Evidence](arm_results/rl_integration/selection-label-oracle-agreement-20261028.json) · [analysis script](arm_results/rl_integration/selection-label-oracle-agreement-20261028-analysis.py) (CPU job 394863).
 
@@ -1862,7 +1864,7 @@ Rerun rows measure day-to-day noise of identical weights. DeepShop accounts for 
 
 - **The gap opens where our data are thin.** Online-Mind2Web and DeepShop lose about 14 pp of `done` finishes once an episode reaches step 10. More of our head's episodes get there: Online-Mind2Web 29.2% end before step 10 vs 35.7%; DeepShop 20.8% vs 26.6%. WebVoyager, the benchmark without a significant gap, barely changes.
 - **Site coverage does not explain it.** Our training sites are narrower (arxiv and Wikipedia are 47% of states), and DeepShop's Amazon is absent. Yet the gap is no larger on tasks whose start site we never saw: +2.3 [−0.5, +5.1], against +4.7 [+1.5, +8.1] on covered sites (all benchmarks' tasks pooled). On WebVoyager it reverses on unseen sites (−4.5 [−10.3, +1.2]).
-- **The labels are not the problem.** The Luna K = 3 labels avoid repeating the previous action (36.3% vs 48.9% chance), and rightly so: on our test states, repeat picks succeed 22.6% of the time on held-out draws, other picks 44.3%. Both heads learn this offline (repeat picks 31.2% and 28.8% vs 52.2% chance). Live, our head repeats at about chance (49–50% vs 46–47%) while the Piotr-data copies stay at or below it (35.9% and 43.0%). This is a symptom of being off its training distribution, not a label defect.
+- **The labels are not the problem.** The Luna H = 4 labels avoid repeating the previous action (36.3% vs 48.9% chance), and rightly so: on our test states, repeat picks succeed 22.6% of the time on held-out draws, other picks 44.3%. Both heads learn this offline (repeat picks 31.2% and 28.8% vs 52.2% chance). Live, our head repeats at about chance (49–50% vs 46–47%) while the Piotr-data copies stay at or below it (35.9% and 43.0%). This is a symptom of being off its training distribution, not a label defect.
 - **Ruled out.** Panel count (one panel ≈ 13 panels on Piotr's states, [panel scaling](#selection-head-panel-scale-20261026)). Stuck-state coverage: ours has more repeat-offered states than Piotr's (22.1% vs 7.7%).
 
 </details>
@@ -1873,7 +1875,7 @@ Rerun rows measure day-to-day noise of identical weights. DeepShop accounts for 
 - **The LoRA costs much more.**
   - Inference: a second 4.44 B model, 0.098 vs 0.063 PFLOP per step ([headline](#headline-results)).
   - Training on 2,612 states: 4 H200 × 3 h 31 m (job 393844). The head trains in about 2 minutes.
-- **LoRA recipe.** Piotr's SelectionARM recipe on OpenWebRL-4B-SFT: LLaMA-Factory LoRA, rank 32 / alpha 64 on all linear layers, vision tower frozen, 2 epochs, lr 1e-4, output `{"selection": N}`. Same states and Luna K = 3 vote-share targets as the heads, distinct actions in 10 shuffled orders per state (28,150 training examples for 2,612 states). Served live as `arm5`.
+- **LoRA recipe.** Piotr's SelectionARM recipe on OpenWebRL-4B-SFT: LLaMA-Factory LoRA, rank 32 / alpha 64 on all linear layers, vision tower frozen, 2 epochs, lr 1e-4, output `{"selection": N}`. Same states and Luna H = 4 vote-share targets as the heads, distinct actions in 10 shuffled orders per state (28,150 training examples for 2,612 states). Served live as `arm5`.
 
 </details>
 
@@ -1882,7 +1884,7 @@ Rerun rows measure day-to-day noise of identical weights. DeepShop accounts for 
 - **The head's only loss is on DeepShop.** On 10-27, the night both heads ran DeepShop, the score was 32.0% vs 40.0% (−8.0 [−17.3, +1.3]). Head subsets of 263–1,003 states show no trend ([state scaling](#selection-head-onepanel-k3-scale-20261028)).
 - **The LoRA doesn't share the loss.** Trained on the same two datasets, it shows no gap, and its DeepShop difference has the opposite sign. With one training seed per head, a lucky 1,380-state head is not ruled out.
 
-**What the 1,232 added states change.** The 2,612 states are the 1,380 earlier states plus 1,232 labels-only states (collections lbt 710 and lbu 522). The labeller config is identical (Luna K = 3, two calls per state).
+**What the 1,232 added states change.** The 2,612 states are the 1,380 earlier states plus 1,232 labels-only states (collections lbt 710 and lbu 522). The labeller config is identical (Luna H = 4, two calls per state).
 
 | Training states | Earlier 1,380 | Added 1,232 (lbt / lbu) |
 | --- | ---: | ---: |
@@ -1943,7 +1945,7 @@ Rerun rows measure day-to-day noise of identical weights. DeepShop accounts for 
 - **Judges.** Online-Mind2Web: gpt-5.6-terra, with the 10-18 and 10-21 runs re-judged ([judge change](#selection-head-data-scale-20261023)). WebVoyager and DeepShop: GPT-4o. All checked on the saved verdicts.
 - **Columns.** "Overall" counts invalid episodes as failures. "Mean" weights the three benchmarks equally.
 - **Paired differences.** Paired over tasks, 95% bootstrap, with benchmarks resampled independently for the mean. A selector with several runs (copies or reruns) is pooled per task.
-- **Labels.** Our states carry Luna K = 3 vote-share labels: one panel of 2–5 distinct actions per state ([data](#selection-head-onepanel-k3-scale-20261028)). Piotr's states carry GPT-5.5 pre-execution picks: about 13 five-proposal panels per state.
+- **Labels.** Our states carry Luna H = 4 vote-share labels: one panel of 2–5 distinct actions per state ([data](#selection-head-onepanel-k3-scale-20261028)). Piotr's states carry GPT-5.5 pre-execution picks: about 13 five-proposal panels per state.
 - **Seeds.** One training seed per selector.
 
 </details>
@@ -2032,7 +2034,7 @@ The two selectors first run on 10-18 both lost about 3.3 pp since, almost all on
 
 <details><summary>Offline: one vs all lookahead panels per state</summary>
 
-Same 22K Luna K = 3 Piotr-style panels (2,551 states) and trainer as the 22K-panel head; either one panel per state (seeded choice) or all panels (about 9 per state). Fixed-five success on our 348 test states; the Piotr-data head scores 38.31% here.
+Same 22K Luna H = 4 Piotr-style panels (2,551 states) and trainer as the 22K-panel head; either one panel per state (seeded choice) or all panels (about 9 per state). Fixed-five success on our 348 test states; the Piotr-data head scores 38.31% here.
 
 | Panels per state | Seed 0 | Seed 1 | Seed 2 | Mean |
 | --- | ---: | ---: | ---: | ---: |
@@ -2045,7 +2047,7 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 
 <details><summary>Offline: LoRA panel format (orders and Piotr-style panels)</summary>
 
-4B LoRA, Piotr's SelectionARM recipe, on our states with Luna K = 3 labels. Fixed-five success on 345 test states (first five SFT proposals, held-out draws; SFT one sample 35.39%, oracle 46.56%). Read after the training prefix; serving prefix in brackets.
+4B LoRA, Piotr's SelectionARM recipe, on our states with Luna H = 4 labels. Fixed-five success on 345 test states (first five SFT proposals, held-out draws; SFT one sample 35.39%, oracle 46.56%). Read after the training prefix; serving prefix in brackets.
 
 | Selector | Training panels | Examples | Fixed five | Fixed five − SFT sample, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: |

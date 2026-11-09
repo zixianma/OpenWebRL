@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Review sheets: eval states where the pre and K = 3 students split and both picks were played out live (student_outcomes.py).
+"""Review sheets: eval states where the pre and H = 4 students split and both picks were played out live (student_outcomes.py).
 
-Each sheet: the task, the current screen with the pre pick (grey box) and the K = 3 pick (purple box), and how many matched
+Each sheet: the task, the current screen with the pre pick (grey box) and the H = 4 pick (purple box), and how many matched
 episodes succeeded after each. Then, per side, one real matched episode whose outcome matches that side's majority: the
-next three screens with the action taken on each (orange box) and the judged outcome. W = the K = 3 pick did better,
+next three screens with the action taken on each (orange box) and the judged outcome. W = the H = 4 pick did better,
 L = worse. Pick labels are written by hand; later actions are summarised from their tool calls.
 
   student_outcome_examples.py  (CPU only; writes outcome-review-*.jpg next to this file)
@@ -20,7 +20,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 RD = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/label-kfold-20261101/pre-post-k3/student-replay")
 HERE = Path(__file__).resolve().parent
-EX = [  # name, state, site, pre pick, K = 3 pick
+EX = [  # name, state, site, pre pick, H = 4 pick
     ("W1", 2586, "Hugging Face", 'click "Documentation" on the 429 page', "go back"),
     ("W2", 7262, "arXiv", "type into the search box", 'open the "gr-qc" listing'),
     ("W3", 5324, "Allrecipes", "go to google.com", "new tab: bbcgoodfood.com"),
@@ -124,7 +124,7 @@ def main():
         x0 = 24 + cw + 40; yy = y + 10
         for side, label, col in (("pre", pre_label, PRE), ("k3", k3_label, K3)):
             k, n = r[side]["success"], r[side]["n"]
-            d.text((x0, yy), "Pre-exec students pick" if side == "pre" else "Lookahead students pick", fill=col, font=F(32, True))
+            d.text((x0, yy), "Pre-exec students pick" if side == "pre" else "Lookahead H = 4 students pick", fill=col, font=F(32, True))
             yy += 46
             for ln in textwrap.wrap(label, 30):
                 d.text((x0, yy), ln, fill=INK, font=F(38, True)); yy += 50
@@ -137,7 +137,7 @@ def main():
             ims = images(e["trace"]); es = {x["turn"]: x for x in map(json.loads, open(e["trace"]))}
             ok = e["reward"] == 1
             d.line([24, y, W - 24, y], fill=(200, 200, 200), width=2); y += 16
-            d.text((24, y), f"After the {'pre-exec' if side == 'pre' else 'lookahead'} pick, one episode:", fill=col, font=F(34, True))
+            d.text((24, y), f"After the {'pre-exec' if side == 'pre' else 'lookahead H = 4'} pick, one episode:", fill=col, font=F(34, True))
             d.text((780, y), "SUCCESS" if ok else "FAILURE", fill=GOOD if ok else BAD, font=F(34, True))
             y += 56
             tw, gap, hmax = (W - 48 - 2 * 24) // 3, 24, 0

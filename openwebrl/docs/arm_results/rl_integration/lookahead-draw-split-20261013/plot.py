@@ -17,8 +17,8 @@ import paper_plot_style as _paper_style
 D = Path(__file__).resolve().parent
 res = json.loads((D / "curve.json").read_text())
 STYLE = {"Uniform": ("Uniform pick", "#9a9890", "--"), "Before execution": ("Before execution", "#52514e", "-"),
-         "Immediate result": ("Immediate result", "#eb6834", "-"), "Lookahead K=1": ("Lookahead K = 1", "#7fb0ea", "-"),
-         "Lookahead K=3": ("Lookahead K = 3", "#2a78d6", "-"), "Best on observed draws": ("Best on observed draws 0..n−1", "#1baf7a", "-")}
+         "Lookahead K=1": ("Lookahead H = 2", "#7fb0ea", "-"),
+         "Lookahead K=3": ("Lookahead H = 4", "#2a78d6", "-"), "Best on observed draws": ("Best on observed draws 0..n−1", "#1baf7a", "-")}
 PANELS = [("pooled", "Pooled"), ("lookahead-fast1k-20261013", "New fast1k states"), ("lookahead-v2-20261013", "Earlier states")]
 TITLES = {"invalid_as_failure": "A. Invalid draws count as failures",
           "valid_only": "B. Valid draws only (state kept when every action has a valid draw on both sides)"}

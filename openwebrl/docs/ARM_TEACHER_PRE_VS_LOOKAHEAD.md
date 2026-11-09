@@ -1,4 +1,6 @@
-# Pre-execution, post-execution and K = 3 lookahead teacher labels (GPT-6 Luna)
+# Pre-exec and Lookahead H = 1 / H = 4 teacher labels (GPT-6 Luna)
+
+Lookahead H includes the candidate action: H = 1 is its immediate result, and H = 4 includes three continuation actions. [Notation and legacy identifier mapping](ARM_FORMULATIONS.md#lookahead-horizon-convention).
 
 <a id="luna-pre-vs-k3p-20261103"></a>
 
@@ -6,7 +8,7 @@
 
 **Takeaways** (20,671 p16 panels, 2026-11-03):
 
-- **Live, K = 3 labels help heads but not LoRAs.** Heads: +2.9 pp (Luna) and +3.2 pp (GPT-5.5) mean overall success over pre labels, both significant; Luna LoRA: +0.3 [−1.8, +2.4]. No p16 selector beats same-day SelectionARM. [Table](#luna-pre-vs-k3p-live-20261103)
+- **Live, H = 4 labels help heads but not LoRAs.** Heads: +2.9 pp (Luna) and +3.2 pp (GPT-5.5) mean overall success over pre labels, both significant; Luna LoRA: +0.3 [−1.8, +2.4]. No p16 selector beats same-day SelectionARM. [Table](#luna-pre-vs-k3p-live-20261103)
 
 - **The two labels pick the same executed action on 63.3% of panels.** Agreement falls as panels hold more distinct actions: 69.9% with 2 distinct targets, 44.3% with 5.
 - **Lookahead mostly replaces guesses with observed effects.** k3p cites a concrete observed result in 88.8% of coded disagreements. Its reasoning hedges ("may", "likely", "appears") on 20.8% of panels, against 47.2% for pre.
@@ -16,41 +18,41 @@
 - **About a quarter of disagreements are label noise.** 14.2% are near-ties among equivalent actions, where the difference is arbitrary. In another 12.5%, k3p credits or blames a candidate for what the actor happened to do afterwards in its single sampled continuation. All 7 coded cases where pre looks better in that 12.5% are of this kind.
 - **There is no outcome ground truth here.** Each p16 candidate was executed once, so "which looks better" is a text-only judgement by an LLM coder. Of the 240 coded disagreements, 37.1% favour k3p, 4.2% favour pre and 58.8% are unclear. Treat these as qualitative evidence, not a success-rate estimate. The live LoRA and head evaluations are the outcome test ([below](#luna-pre-vs-k3p-live-20261103)).
 
-## Pre-exec vs post-exec vs K = 3 lookahead, with outcomes (same 1,727 branch states)
+## Pre-exec vs Lookahead H = 1 vs H = 4 lookahead, with outcomes (same 1,727 branch states)
 
 <a id="luna-pre-post-k3-20261105"></a>
 
-**Question.** Where does the lookahead teacher's advantage come from: from seeing the immediate result of each action (post-exec), or from the actor's next 3 steps? Unlike the p16 panels above, these states have 8 continuation draws per action, so each teacher's pick can be scored against held-out outcomes.
+**Question.** Where does the lookahead teacher's advantage come from: from seeing the immediate result of each action (Lookahead H = 1), or from the actor's next 3 steps? Unlike the p16 panels above, these states have 8 continuation draws per action, so each teacher's pick can be scored against held-out outcomes.
 
 **Takeaways** (GPT-6 Luna, 1,727 SFT-action branch states, 434 tasks; labels 10-21, analysis 11-05):
 
-- **Most of the gain comes from the immediate result.** Gain of the pick over one SFT sample on held-out draws: pre-exec +1.7 [+1.0, +2.4] pp, post-exec +2.8 [+2.0, +3.5], K = 3 +3.2 [+2.4, +4.0], oracle +3.4 [+2.7, +4.3]. Where the picks differ, post-exec beats pre-exec by +2.1 [+0.8, +3.4] (903 states). The 3-step tail adds only +0.9 [−0.6, +2.5] over post-exec (741 states), with the interval crossing zero.
-- **Post-exec sits much closer to K = 3 than to pre-exec.** The two labels agree on 65% of states, against 55% for pre/post and 49% for pre/K = 3. Chance is 38%. Each teacher agrees with its own second call on 80–85% of states, so even post-exec and K = 3 are well below the noise ceiling. The gap widens with more candidates.
-- **Pre-exec over-picks scroll.** Without execution evidence, Luna picks scroll on 30% of calls, against 16% of offered candidates; post-exec and K = 3 pick it on 20% and 19%. The most common pre → post switch is scroll → click. Seeing the result also confirms clicks: 45% of picks are clicks for pre-exec, against 59–60% with execution evidence.
+- **Most of the gain comes from the immediate result.** Gain of the pick over one SFT sample on held-out draws: pre-exec +1.7 [+1.0, +2.4] pp, Lookahead H = 1 +2.8 [+2.0, +3.5], H = 4 +3.2 [+2.4, +4.0], oracle +3.4 [+2.7, +4.3]. Where the picks differ, Lookahead H = 1 beats pre-exec by +2.1 [+0.8, +3.4] (903 states). The 3-step tail adds only +0.9 [−0.6, +2.5] over Lookahead H = 1 (741 states), with the interval crossing zero.
+- **Lookahead H = 1 sits much closer to H = 4 than to pre-exec.** The two labels agree on 65% of states, against 55% for pre/H = 1 and 49% for pre/H = 4. Chance is 38%. Each teacher agrees with its own second call on 80–85% of states, so even Lookahead H = 1 and H = 4 are well below the noise ceiling. The gap widens with more candidates.
+- **Pre-exec over-picks scroll.** Without execution evidence, Luna picks scroll on 30% of calls, against 16% of offered candidates; Lookahead H = 1 and H = 4 pick it on 20% and 19%. The most common pre → H = 1 switch is scroll → click. Seeing the result also confirms clicks: 45% of picks are clicks for pre-exec, against 59–60% with execution evidence.
 - **The p16 depth-0 stop shift does not reproduce here.** Only 15 of 351 depth-0 states offer a stop candidate, too few to test.
 - **[Seven illustrated examples](#luna-pre-post-k3-examples-20261105)** with real screenshots show each pattern: the result fixes a guessed scroll or blocked site; the 3-step tail exposes a loop; the tail credits a candidate for the actor's later recovery; and execution evidence cannot see the value of stopping.
 
-![Pre-exec vs post-exec vs K = 3 lookahead teacher picks: (a) pairwise and self agreement, (b) agreement by number of distinct candidate actions, (c) action type of picks, (d) held-out success of picks over one SFT sample and pairwise on disagreement states](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.png)
+![Pre-exec vs Lookahead H = 4 teacher picks: (a) pairwise and self agreement, (b) agreement by number of distinct candidate actions, (c) action type of picks, (d) held-out success of picks over one SFT sample and pairwise on disagreement states](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.png)
 
-*(a) Share of states where two teachers pick the same distinct action. The two calls of each source are matched by call index and averaged; the diagonal compares a source's two calls with each other. (b) The same by number of distinct candidate actions; the band spans the three self-agreements. (c) Action type of the picked action (first parsed call; both calls, all states), with ticks for the share among offered candidates. (d) Held-out success of the pick on the fixed-five view of the [5-fold label study](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101): each state's first five SFT proposals, scored on draws 4–8, valid only. Teacher = argmax of its two-call vote share among the five, with ties averaged. Oracle = best success on draws 1–3. The lower rows compare two teachers on the states where their picks differ. All intervals are task-clustered 95% bootstraps (10,000 resamples). The teacher gains reproduce the 5-fold table (+1.6 / +2.7 / +3.2 / +3.5 on 1,725 states).* [PDF](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.pdf) · [SVG](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.svg) · [stats](arm_results/luna_pre_post_k3_20261105/stats.json) · [analysis](arm_results/luna_pre_post_k3_20261105/analysis.py) · [plot](arm_results/luna_pre_post_k3_20261105/plot.py)
+*(a) Share of states where two teachers pick the same distinct action. The two calls of each source are matched by call index and averaged; the diagonal compares a source's two calls with each other. (b) The same by number of distinct candidate actions; the band spans the three self-agreements. (c) Action type of the picked action (first parsed call; both calls, all states), with ticks for the share among offered candidates. (d) Held-out success of the pick on the fixed-five view of the [5-fold label study](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101): each state's first five SFT proposals, scored on draws 4–8, valid only. Teacher = argmax of its two-call vote share among the five, with ties averaged. Oracle = best success on draws 1–3. The lower rows compare two teachers on the states where their picks differ. All intervals are task-clustered 95% bootstraps (10,000 resamples). The displayed teacher gains reproduce the 5-fold table (Pre-exec +1.6, H = 4 +3.2, Oracle +3.5 on 1,725 states); H = 1 results remain in the table below.* [PDF](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.pdf) · [SVG](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.svg) · [stats](arm_results/luna_pre_post_k3_20261105/stats.json) · [analysis](arm_results/luna_pre_post_k3_20261105/analysis.py) · [plot](arm_results/luna_pre_post_k3_20261105/plot.py)
 
 | Held-out success of the pick | States (count) | Tasks (count) | Pick success (%) | Gain, pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: |
 | SFT sample (mean of five) | 1,727 | 434 | 38.7 | — |
 | Pre-exec − SFT | 1,727 | 434 | 40.4 | +1.7 [+1.0, +2.4] |
-| Post-exec − SFT | 1,727 | 434 | 41.5 | +2.8 [+2.0, +3.5] |
-| K = 3 − SFT | 1,727 | 434 | 41.9 | +3.2 [+2.4, +4.0] |
+| Lookahead H = 1 − SFT | 1,727 | 434 | 41.5 | +2.8 [+2.0, +3.5] |
+| H = 4 − SFT | 1,727 | 434 | 41.9 | +3.2 [+2.4, +4.0] |
 | Oracle − SFT | 1,726 | 434 | 42.2 | +3.4 [+2.7, +4.3] |
-| Post − pre, picks differ | 903 | 336 | 35.3 → 37.4 | +2.1 [+0.8, +3.4] |
-| K = 3 − post, picks differ | 741 | 308 | 35.0 → 36.0 | +0.9 [−0.6, +2.5] |
-| K = 3 − pre, picks differ | 1010 | 356 | 36.1 → 38.6 | +2.5 [+1.3, +3.8] |
+| H = 1 − pre, picks differ | 903 | 336 | 35.3 → 37.4 | +2.1 [+0.8, +3.4] |
+| H = 4 − H = 1, picks differ | 741 | 308 | 35.0 → 36.0 | +0.9 [−0.6, +2.5] |
+| H = 4 − pre, picks differ | 1010 | 356 | 36.1 → 38.6 | +2.5 [+1.3, +3.8] |
 
 <details>
 <summary>Setup and caveats</summary>
 
 - **Labels:** runtime `selection-head-20261008/sft-actions-20261021/labels/{pre,post,k3}/judgments/`. One judge (`gpt-6-luna`, effort high) with the same prompt and candidates (all distinct actions of the state, 2–5). The three sources differ only in evidence: none, the draw-1 immediate execution result, or that result plus the actor's next 3 steps. There are two calls per state per source, each with its own random candidate order. Answers are an index only, so the reasoning-cue and qualitative analyses of the p16 study cannot be repeated here.
 - **States:** 1,727 of the 1,738 labelled states have two valid calls from all three sources. The outcome rows need held-out draws for each of the fixed five.
-- **Scope:** the outcomes measure the teacher's pick, not a trained selector. Live heads trained on these labels are in the [label-source comparison](ARM_FINAL_RESULTS.md#final-selection-label-live-3run-20261103). Draw 1 is the evidence draw for post-exec and K = 3, and draws 4–8 are never shown to any teacher.
+- **Scope:** the outcomes measure the teacher's pick, not a trained selector. Live heads trained on these labels are in the [label-source comparison](ARM_FINAL_RESULTS.md#final-selection-label-live-3run-20261103). Draw 1 is the evidence draw for Lookahead H = 1 and H = 4, and draws 4–8 are never shown to any teacher.
 </details>
 
 ### Examples: what each teacher saw and picked
@@ -59,55 +61,55 @@
 
 **Compact version (paper, 7 × 3.2 in, about a third of a page).** Two of the examples below.
 
-![Two rows per example. Columns: current screen, action, next screen, lookahead (the actor's next steps) and the teachers that picked it with held-out success. A yellow "decides" band marks the evidence that separates the candidates, and the other screens are faded. (a) Netflix, band on the next screen: clicking "Netflix payment options" opens the answer page (picked by post-exec and lookahead, 100%), while scrolling shows more billing text (pre-exec, 0%). (b) arXiv, band on the lookahead: after clicking search the actor types "machine learning" and reaches 353,132 results (lookahead, 100%); after going back it clicks the same listing and goes back again (pre-exec and post-exec, 0%)](arm_results/luna_pre_post_k3_20261105/examples-compact.png)
+![Two rows per example. Columns: current screen, action, next screen, lookahead (the actor's next steps) and the teachers that picked it with held-out success. A yellow "decides" band marks the evidence that separates the candidates, and the other screens are faded. (a) Netflix, band on the next screen: clicking "Netflix payment options" opens the answer page (picked by Lookahead H = 4, 100%), while scrolling shows more billing text (pre-exec, 0%). (b) arXiv, band on the lookahead: after clicking search the actor types "machine learning" and reaches 353,132 results (lookahead, 100%); after going back it clicks the same listing and goes back again (Pre-exec, 0%)](arm_results/luna_pre_post_k3_20261105/examples-compact.png)
 
-*Each example has one row per candidate. All teachers see the current screen and the action. Post-exec also sees the next screen. Lookahead (H = 3) additionally sees the actor's next three steps; the first two are shown, and “…” marks the rest. On the current screen, a box marks a click target and an arrow marks a scroll. The yellow "decides" band marks the evidence that separates the two candidates, and the other screens are faded. "Picked by" shows the teachers that chose that candidate on both calls. Success is the share of held-out continuations that succeed (draws 4–8, valid only). An action the actor proposed k times has 5k continuations because duplicate proposals are merged: (a) 20/20 and 0/5, (b) 5/5 and 0/19.* [PDF](arm_results/luna_pre_post_k3_20261105/examples-compact.pdf) · [script](arm_results/luna_pre_post_k3_20261105/compact_examples.py)
+*Each example has one row per candidate. All teachers see the current screen and the action. Lookahead H = 1 also sees the next screen. Lookahead (H = 4) additionally sees the actor's next three steps; the first two are shown, and “…” marks the rest. On the current screen, a box marks a click target and an arrow marks a scroll. The yellow "decides" band marks the evidence that separates the two candidates, and the other screens are faded. "Picked by" shows Pre-exec and H = 4 choices that agree on both calls; H = 1 pick badges and result rates are omitted from the figure. Success is the share of held-out continuations that succeed (draws 4–8, valid only). An action the actor proposed k times has 5k continuations because duplicate proposals are merged: (a) 20/20 and 0/5, (b) 5/5 and 0/19.* [PDF](arm_results/luna_pre_post_k3_20261105/examples-compact.pdf) · [script](arm_results/luna_pre_post_k3_20261105/compact_examples.py)
 
-Seven states from the same 1,727, chosen as the clearest cases of each pattern. In each one, every teacher picked the same candidate on both of its calls, and the better and worse picks differ by at least 40 pp in held-out success. Each figure shows three things. Top left is the screen all three teachers judge, with each candidate's click or scroll point numbered. Top right lists the candidates, each teacher's pick (×2 = both calls) and held-out success (draws 4–8, valid only). Below are the two contested candidates. The first column is the draw-1 immediate result, which the post-exec teacher sees. The next three columns are the actor's following steps, which only the K = 3 teacher sees. All screenshots are the saved ones.
+Seven states from the same 1,727, chosen as the clearest cases of each pattern. In each one, every teacher picked the same candidate on both of its calls, and the better and worse picks differ by at least 40 pp in held-out success. Each figure shows three things. Top left is the screen all three teachers judge, with each candidate's click or scroll point numbered. Top right lists the candidates, the displayed Pre-exec and H = 4 picks (×2 = both calls) and held-out success (draws 4–8, valid only). Below are the two contested candidates. The first column is the draw-1 immediate result, which the Lookahead H = 1 teacher sees. The next three columns are the actor's following steps, which only the H = 4 teacher sees. All screenshots are the saved ones.
 
-**1. Seeing the result fixes a guess (the most common pattern: pre-exec scrolls, post-exec clicks).**
+**1. Seeing the result fixes a guess (the most common pattern: pre-exec scrolls, Lookahead H = 1 clicks).**
 
-*Netflix payment methods.* The help page lists a "Netflix payment options" link. Pre-exec scrolls down (0/5). With the result in view, post-exec and K = 3 click the link, which opens the payment-options article directly (20/20).
+*Netflix payment methods.* The help page lists a "Netflix payment options" link. Pre-exec scrolls down (0/5). With the result in view, Lookahead H = 1 and H = 4 click the link, which opens the payment-options article directly (20/20).
 
-![Netflix help page: pre-exec scrolls (0/5); post-exec and K = 3 click "Netflix payment options", which opens the article (20/20)](arm_results/luna_pre_post_k3_20261105/example-a2.jpg)
+![Netflix help page: pre-exec scrolls (0/5); H = 4 click "Netflix payment options", which opens the article (20/20)](arm_results/luna_pre_post_k3_20261105/example-a2.jpg)
 
-*Blocked news site.* NYTimes blocks the agent as a robot. Pre-exec switches to bbc.com (1/5), whose immediate result is an "Access denied" page. Post-exec sees that page and picks Google News instead (5/5), which loads the headlines.
+*Blocked news site.* NYTimes blocks the agent as a robot. Pre-exec switches to bbc.com (1/5), whose immediate result is an "Access denied" page. Lookahead H = 1 sees that page and picks Google News instead (5/5), which loads the headlines.
 
-![NYTimes robot block: pre-exec goes to bbc.com, which shows Access denied (1/5); post-exec and K = 3 go to Google News, which loads (5/5)](arm_results/luna_pre_post_k3_20261105/example-a4.jpg)
+![NYTimes robot block: pre-exec goes to bbc.com, which shows Access denied (1/5); H = 4 go to Google News, which loads (5/5)](arm_results/luna_pre_post_k3_20261105/example-a4.jpg)
 
 **2. The three-step tail reveals what one result cannot.**
 
-*arXiv search vs going back.* On a Formal Languages listing, pre-exec and post-exec go back (0/19). Going back looks reasonable after one step, and the lookahead shows it turning into a click / back loop. K = 3 picks the search box (5/5): its immediate result is only an open search field, but the next steps type "machine learning" and reach 353,132 results.
+*arXiv search vs going back.* On a Formal Languages listing, pre-exec and Lookahead H = 1 go back (0/19). Going back looks reasonable after one step, and the lookahead shows it turning into a click / back loop. H = 4 picks the search box (5/5): its immediate result is only an open search field, but the next steps type "machine learning" and reach 353,132 results.
 
 ![arXiv: go back looks fine after one step but loops (0/19); the search box looks like nothing happened after one step, but the lookahead reaches machine-learning results (5/5)](arm_results/luna_pre_post_k3_20261105/example-b1.jpg)
 
-*Finding the 79th abbot.* On the Luxembourgish article about the abbey, pre-exec and post-exec keep scrolling the article (0/20). The scrolling path answers after two more scrolls without ever finding the name. Going back lands on a search-results page, which looks marginal after one step. Its continuation searches again, opens "Willibrord Scheffer" and answers (3/5).
+*Finding the 79th abbot.* On the Luxembourgish article about the abbey, pre-exec and Lookahead H = 1 keep scrolling the article (0/20). The scrolling path answers after two more scrolls without ever finding the name. Going back lands on a search-results page, which looks marginal after one step. Its continuation searches again, opens "Willibrord Scheffer" and answers (3/5).
 
 ![Luxembourgish Wikipedia: scrolling answers without finding the abbot (0/20); go back leads to a search that opens Willibrord Scheffer (3/5)](arm_results/luna_pre_post_k3_20261105/example-b4.jpg)
 
 **3. The tail misleads: credit for what the actor happened to do next.**
 
-*West Frisian "Fryske Frijheid".* Pre-exec and post-exec search for the term (9/20). K = 3 picks "click, then go back" (0/5), whose own result is the Wikipedy main page, a step backwards. In its single sampled continuation, the actor then searched for "Fryske Frijheid" by itself, and K = 3 credited the candidate for that recovery. This is the single-continuation noise (category G) found in the p16 coding above.
+*West Frisian "Fryske Frijheid".* Pre-exec and Lookahead H = 1 search for the term (9/20). H = 4 picks "click, then go back" (0/5), whose own result is the Wikipedy main page, a step backwards. In its single sampled continuation, the actor then searched for "Fryske Frijheid" by itself, and H = 4 credited the candidate for that recovery. This is the single-continuation noise (category G) found in the p16 coding above.
 
-![West Frisian Wikipedia: K = 3 credits "click, then go back" for the actor's later search (0/5) over the direct search (9/20)](arm_results/luna_pre_post_k3_20261105/example-c2.jpg)
+![West Frisian Wikipedia: H = 4 credits "click, then go back" for the actor's later search (0/5) over the direct search (9/20)](arm_results/luna_pre_post_k3_20261105/example-c2.jpg)
 
 **4. Pre-exec is right and the execution evidence misleads.**
 
-*Stopping on an arXiv listing.* After 12 steps on the Statistics listing, stop/answer succeeds 8/10, and pre-exec picks it. Its immediate "result" is the same page and it has no continuation. So post-exec and K = 3 see no evidence for stopping and prefer clicking "more" (1/5), whose result looks like progress. Execution evidence can only favour actions that visibly change something.
+*Stopping on an arXiv listing.* After 12 steps on the Statistics listing, stop/answer succeeds 8/10, and pre-exec picks it. Its immediate "result" is the same page and it has no continuation. So Lookahead H = 1 and H = 4 see no evidence for stopping and prefer clicking "more" (1/5), whose result looks like progress. Execution evidence can only favour actions that visibly change something.
 
-![arXiv Statistics listing: pre-exec stops (8/10); post-exec and K = 3 click "more" (1/5) because stop has no visible result](arm_results/luna_pre_post_k3_20261105/example-d1.jpg)
+![arXiv Statistics listing: pre-exec stops (8/10); H = 4 click "more" (1/5) because stop has no visible result](arm_results/luna_pre_post_k3_20261105/example-d1.jpg)
 
-*Norwegian Wikipedia, Eurovision 2025.* The task asks for the answer from the homepage's "Aktuelt" section. Pre-exec scrolls to that section (12/15). Post-exec and K = 3 pick the search, which immediately opens the Eurovision Song Contest 2025 article, a convincing result (1/5). The article path still rarely succeeds. The task names the homepage section as the source, which plausibly explains this, but the held-out verdicts were not inspected.
+*Norwegian Wikipedia, Eurovision 2025.* The task asks for the answer from the homepage's "Aktuelt" section. Pre-exec scrolls to that section (12/15). Lookahead H = 1 and H = 4 pick the search, which immediately opens the Eurovision Song Contest 2025 article, a convincing result (1/5). The article path still rarely succeeds. The task names the homepage section as the source, which plausibly explains this, but the held-out verdicts were not inspected.
 
 ![Norwegian Wikipedia: scrolling to Aktuelt succeeds (12/15); searching opens a convincing Eurovision article but rarely succeeds (1/5)](arm_results/luna_pre_post_k3_20261105/example-d2.jpg)
 
-*Selection: [select_examples.py](arm_results/luna_pre_post_k3_20261105/select_examples.py) ranks firm-pick states by held-out gap in four categories (38 / 16 / 7 / 9 states qualify). Rendering: [render_examples.py](arm_results/luna_pre_post_k3_20261105/render_examples.py). Points are the actor's normalised `point_2d` on the 1280 × 720 screen. Lookahead screenshots come from the draw-1 rollout that the K = 3 teacher was shown.*
+*Selection: [select_examples.py](arm_results/luna_pre_post_k3_20261105/select_examples.py) ranks firm-pick states by held-out gap in four categories (38 / 16 / 7 / 9 states qualify). Rendering: [render_examples.py](arm_results/luna_pre_post_k3_20261105/render_examples.py). Points are the actor's normalised `point_2d` on the 1280 × 720 screen. Lookahead screenshots come from the draw-1 rollout that the H = 4 teacher was shown.*
 
-## Live outcome: K = 3 vs pre labels, Luna vs GPT-5.5, LoRA vs head (3 runs, 2026-11-03)
+## Live outcome: H = 4 vs pre labels, Luna vs GPT-5.5, LoRA vs head (3 runs, 2026-11-03)
 
 <a id="luna-pre-vs-k3p-live-20261103"></a>
 
-**Every selector trained on the p16 panels beats one SFT sample except the two pre-label heads, and every 11-03 selector is below same-day SelectionARM (45.7% mean overall).** K = 3 labels help heads (+2.9 Luna, +3.2 GPT-5.5, both significant) but not LoRAs (Luna +0.3, interval crossing zero). With K = 3 labels, the GPT-5.5 head is 1.6 pp above the Luna head ([−0.4, +3.6]), and the Luna LoRA and head are tied (−0.6 [−2.5, +1.5]).
+**Every selector trained on the p16 panels beats one SFT sample except the two pre-label heads, and every 11-03 selector is below same-day SelectionARM (45.7% mean overall).** H = 4 labels help heads (+2.9 Luna, +3.2 GPT-5.5, both significant) but not LoRAs (Luna +0.3, interval crossing zero). With H = 4 labels, the GPT-5.5 head is 1.6 pp above the Luna head ([−0.4, +3.6]), and the Luna LoRA and head are tied (−0.6 [−2.5, +1.5]).
 
 Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepShop 150). SFT 4B actor, N = 5 candidates, T 1.0 / top-p 0.9, seed 20261018, 30 steps, local browsers. Judges: gpt-5.6-terra for Online-Mind2Web, GPT-4o for WebVoyager and DeepShop. Per-benchmark columns are valid-only success (successes / valid episodes), pooled over three runs. Mean = equal-weight average of the three benchmarks, overall (invalid = failure) and valid-only. Differences are on mean overall against the same-day SFT run, with per-task success averaged over the three runs and [paired 95% intervals](ARM_FINAL_RESULTS.md#final-paired-bootstrap) (10,000 task resamples within each benchmark, seed 20261103); **bold** intervals exclude zero. Paired intervals against SelectionARM are in the [JSON](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.json).
 
@@ -116,17 +118,17 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 | SFT 4B, one sample | 11-03/04 | 45.6% | 34.6% | 43.1% | 39.6% | 41.1% | — |
 | SelectionARM (Piotr) | 11-03/04 | 52.4% | 43.8% | 50.5% | 45.7% | 48.9% | **+6.2 [+4.0, +8.3]** |
 | Luna pre, LoRA | 11-03 | 51.2% | 40.2% | 46.2% | 42.1% | 45.9% | **+2.5 [+0.3, +4.6]** |
-| Luna K = 3, LoRA | 11-03 | 49.4% | 37.8% | 50.9% | 42.3% | 46.1% | **+2.8 [+0.7, +4.9]** |
+| Luna H = 4, LoRA | 11-03 | 49.4% | 37.8% | 50.9% | 42.3% | 46.1% | **+2.8 [+0.7, +4.9]** |
 | Luna pre, head | 11-03 | 47.3% | 38.8% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] |
-| Luna K = 3, head | 11-03 | 48.0% | 39.8% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** |
+| Luna H = 4, head | 11-03 | 48.0% | 39.8% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** |
 | GPT-5.5 pre, head | 11-03 | 49.9% | 36.8% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] |
-| GPT-5.5 K = 3, head | 11-03 | 52.8% | 37.6% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** |
+| GPT-5.5 H = 4, head | 11-03 | 52.8% | 37.6% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** |
 | GPT-5.5 pre, LoRA ¹ | 11-04 | 53.7% | 41.4% | 51.2% | 46.2% | 48.8% | **+6.7 [+4.5, +8.9]** |
-| GPT-5.5 K = 3, LoRA ¹ | 11-04 | 52.7% | 41.1% | 47.3% | 44.7% | 47.0% | **+5.1 [+3.0, +7.3]** |
+| GPT-5.5 H = 4, LoRA ¹ | 11-04 | 52.7% | 41.1% | 47.3% | 44.7% | 47.0% | **+5.1 [+3.0, +7.3]** |
 
-¹ The two GPT-5.5 LoRAs were re-evaluated in a same-day 3-run batch on 11-04 together with SelectionARM, the window right after the 11-03/04 SFT run; SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp). Same-day: K = 3 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json)). The earlier 11-02/03 runs (46.5% and 48.0% mean overall) are superseded.
+¹ The two GPT-5.5 LoRAs were re-evaluated in a same-day 3-run batch on 11-04 together with SelectionARM, the window right after the 11-03/04 SFT run; SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp). Same-day: H = 4 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json)). The earlier 11-02/03 runs (46.5% and 48.0% mean overall) are superseded.
 
-| K = 3 − pre, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
+| H = 4 − pre, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
 | --- | ---: | ---: | ---: | ---: |
 | Luna, LoRA | −0.2 [−2.9, +2.6] | −2.6 [−5.6, +0.4] | +3.6 [−1.3, +8.2] | +0.3 [−1.8, +2.4] |
 | Luna, head | +1.5 [−0.9, +3.8] | +1.1 [−1.9, +4.1] | **+6.0 [+0.9, +11.3]** | **+2.9 [+0.7, +5.0]** |
@@ -136,7 +138,7 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 <details>
 <summary>Training data, runs and files</summary>
 
-- **Training data:** all p16 panels (20,525 labelled by both Luna conditions; 2,309 states, 896 tasks), the same panels and train/validation split for every row. LoRAs: Piotr's SelectionARM LoRA recipe on the 4B decoder, served merged as the selector. Heads: `train_head_round.py --extra-only`, batch 256, 20 epochs, seed 0, best validation epoch. GPT-5.5 labels are the earlier K = 3 lookahead and pre-execution labels on the same panels.
+- **Training data:** all p16 panels (20,525 labelled by both Luna conditions; 2,309 states, 896 tasks), the same panels and train/validation split for every row. LoRAs: Piotr's SelectionARM LoRA recipe on the 4B decoder, served merged as the selector. Heads: `train_head_round.py --extra-only`, batch 256, 20 epochs, seed 0, best validation epoch. GPT-5.5 labels are the earlier H = 4 lookahead and pre-execution labels on the same panels.
 - **Runs:** every row has 1,785 / 900 / 450 completed episodes; there are no missing tasks. Two jobs were retried and resumed from saved records (Luna pre LoRA run 1 DeepShop: startup goto timeouts; Luna pre head run 3 Online-Mind2Web: model service died at 181/300).
 - **Files:** [per-row counts and all paired intervals](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.json) · [script](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.py). Runtime evaluation roots: `evaluations/{p16-lora-lunapre-20261103, p16-lora-lunak3-20261103, p16-heads-luna-20261103, p16-heads-all-20261102, p16-lora-pre-20261102, p16-lora-20261101, controls-sameday-20261103}`.
 - **Interval scope:** the intervals cover task sampling only, not training-seed variance (one seed per selector) or drift between eval windows.
@@ -146,21 +148,21 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 
 <a id="luna-pre-k3-students-20261107"></a>
 
-**The label type changes student picks more than the judge does.** The two pre-execution students agree on 72.8% of states, and the two K = 3 students on 62.1%. A pre and a K = 3 student trained by the same judge agree on only 63.4% (Luna) and 58.3% (GPT-5.5); chance is 39.4%. On 10.0% of states, both pre students pick one action and both K = 3 students pick another. Only 4.3% split the same way by judge.
+**The label type changes student picks more than the judge does.** The two pre-execution students agree on 72.8% of states, and the two H = 4 students on 62.1%. A pre and a H = 4 student trained by the same judge agree on only 63.4% (Luna) and 58.3% (GPT-5.5); chance is 39.4%. On 10.0% of states, both pre students pick one action and both H = 4 students pick another. Only 4.3% split the same way by judge.
 
-**K = 3 students leave the page and stop sooner; pre students follow the majority proposal.** Two patterns hold for both judges:
-- **Leaving a scroll loop.** After two or more scrolls, with "go back" among the proposals (93 states), the K = 3 students go back on 55% of states, against 17–18% for the pre students.
-- **Stopping on a minority proposal.** When only one or two of the five proposals stop, the K = 3 students stop more often: Luna 6% → 9%, GPT-5.5 10% → 20%.
+**H = 4 students leave the page and stop sooner; pre students follow the majority proposal.** Two patterns hold for both judges:
+- **Leaving a scroll loop.** After two or more scrolls, with "go back" among the proposals (93 states), the H = 4 students go back on 55% of states, against 17–18% for the pre students.
+- **Stopping on a minority proposal.** When only one or two of the five proposals stop, the H = 4 students stop more often: Luna 6% → 9%, GPT-5.5 10% → 20%.
 
-On the same states, the K = 3 students also pick a scroll less often and more often pick an action that only one of the five candidates proposed.
+On the same states, the H = 4 students also pick a scroll less often and more often pick an action that only one of the five candidates proposed.
 
-These patterns cut both ways (figure (b)). The replayed eval states show what changes, not which side is right; [below](#luna-pre-k3-student-outcomes-20261107), outcomes from the states where both picks were played out live show no difference. Live success is in the table above: LoRA K = 3 − pre is +0.3 (Luna) and −1.5 (GPT-5.5) pp, both intervals crossing zero. Outcomes for every candidate exist only on the [branch states](#luna-pre-post-k3-20261105).
+These patterns cut both ways (figure (b)). The replayed eval states show what changes, not which side is right; [below](#luna-pre-k3-student-outcomes-20261107), outcomes from the states where both picks were played out live show no difference. Live success is in the table above: LoRA H = 4 − pre is +0.3 (Luna) and −1.5 (GPT-5.5) pp, both intervals crossing zero. Outcomes for every candidate exist only on the [branch states](#luna-pre-post-k3-20261105).
 
-![Two replayed eval states. (a) WebVoyager, a quantized Qwen3-8B model card after four alternating scrolls: four of five proposals scroll down, picked by both pre students; one proposes go back, picked by both K = 3 students. (b) Online-Mind2Web 401(k) calculator still on its defaults: two proposals set the starting balance to $0, picked by both pre students; three answer $2,496,238, picked by both K = 3 students.](arm_results/luna_pre_post_k3_20261105/student-examples.png)
+![Two replayed eval states. (a) WebVoyager, a quantized Qwen3-8B model card after four alternating scrolls: four of five proposals scroll down, picked by both pre students; one proposes go back, picked by both H = 4 students. (b) Online-Mind2Web 401(k) calculator still on its defaults: two proposals set the starting balance to $0, picked by both pre students; three answer $2,496,238, picked by both H = 4 students.](arm_results/luna_pre_post_k3_20261105/student-examples.png)
 
-*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the K = 3 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the K = 3 students' answer is premature. The pre pick is not shown to succeed either: in the logged GPT-5.5 pre episode, the student set the balance to $0, then answered, and failed. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
+*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the H = 4 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the H = 4 students' answer is premature. The pre pick is not shown to succeed either: in the logged GPT-5.5 pre episode, the student set the balance to $0, then answered, and failed. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
 
-| Same 7,999 states | Pre (Luna) | K = 3 (Luna) | Pre (GPT-5.5) | K = 3 (GPT-5.5) | Proposals |
+| Same 7,999 states | Pre (Luna) | H = 4 (Luna) | Pre (GPT-5.5) | H = 4 (GPT-5.5) | Proposals |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | click | 58.3% | 59.6% | 59.2% | 57.1% | 57.3% |
 | scroll | 17.7% | 15.6% | 15.7% | 14.7% | 14.9% |
@@ -170,7 +172,7 @@ These patterns cut both ways (figure (b)). The replayed eval states show what ch
 | repeats the previous action | 5.6% | 5.8% | 5.6% | 7.1% | — |
 | stop, when 1–2 of 5 propose it | 5.8% | 8.7% | 9.7% | 20.2% | — |
 
-K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post_k3_20261105/student-replay.json):
+H = 4 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post_k3_20261105/student-replay.json):
 
 | Judge | go back | scroll | stop / answer | repeats previous | 1-of-5 pick |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -182,11 +184,11 @@ K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 
 - **States:** 8,000 live decisions on the SFT 4B actor where the five proposals contain at least two distinct actions. There are 2,000 from each student's own runs (the 3-run batches in the table above: Luna 11-03, GPT-5.5 11-04), stratified 300 : 595 : 150 over Online-Mind2Web / WebVoyager / DeepShop, seed 20261107. One state lacked its task text, leaving 7,999.
 - **Replay:** each selector request was rebuilt from the saved trace: task, URL, history of executed responses, five candidates, and the logged screenshot (its sha256 matches the log). It was sent to all four merged LoRAs on the live serving stack (sglang, greedy, JSON schema), 1 H200 for 55 min. Picks are compared as actions (same tool calls, points within 5/1000).
-- **Fidelity:** the replayed pick matches the student's own live pick on 99.1% (Luna pre), 98.4% (Luna K = 3), 98.4% (GPT-5.5 pre) and 95.4% (GPT-5.5 K = 3) of states.
+- **Fidelity:** the replayed pick matches the student's own live pick on 99.1% (Luna pre), 98.4% (Luna H = 4), 98.4% (GPT-5.5 pre) and 95.4% (GPT-5.5 H = 4) of states.
 - **Agreement chance:** the expected agreement if each student picked a proposal at random, in proportion to how many of the five proposed each action.
 - **Disagreements are often small:** of the 797 consistent label-split states, 278 change the action type. The rest are mostly clicks on different targets, or the same action type with different arguments (for example scroll 0.5 vs 0.7).
-- **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the K = 3 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 K = 3 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
-- **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a K = 3 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
+- **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the H = 4 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 H = 4 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
+- **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a H = 4 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
 - **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py) · [student_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_outcomes.py) · [student_outcome_examples.py](arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py) · [student_candidate_outcomes.py](arm_results/luna_pre_post_k3_20261105/student_candidate_outcomes.py) · [student_minority_examples.py](arm_results/luna_pre_post_k3_20261105/student_minority_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}` (matched episodes: `student-replay/split-outcomes.jsonl`, all candidates: `student-replay/candidate-outcomes.jsonl`).
 </details>
 
@@ -194,9 +196,9 @@ K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 
 <a id="luna-pre-k3-student-outcomes-20261107"></a>
 
-**Where both picks have live outcomes, the K = 3 pick does no better than the pre pick.** Every selector evaluated on November 1–4 ran the same SFT 4B actor on the same 1,045 tasks: 40,755 episodes. So the same screen often recurs, and different selectors executed different actions from it. A split state is matched to these episodes by identical screenshot (sha256), task and step, and each matched episode that executed the pre pick or the K = 3 pick contributes its judged outcome (valid episodes only; gpt-4o for WebVoyager and DeepShop, Terra for Online-Mind2Web, the same judge on both sides).
+**Where both picks have live outcomes, the H = 4 pick does no better than the pre pick.** Every selector evaluated on November 1–4 ran the same SFT 4B actor on the same 1,045 tasks: 40,755 episodes. So the same screen often recurs, and different selectors executed different actions from it. A split state is matched to these episodes by identical screenshot (sha256), task and step, and each matched episode that executed the pre pick or the H = 4 pick contributes its judged outcome (valid episodes only; gpt-4o for WebVoyager and DeepShop, Terra for Online-Mind2Web, the same judge on both sides).
 
-| Split states | Both picks played out | Tasks | After pre pick | After K = 3 pick | K = 3 − pre, pp [95% CI] |
+| Split states | Both picks played out | Tasks | After pre pick | After H = 4 pick | H = 4 − pre, pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Luna students disagree | 173 | 139 | 49.8% | 46.6% | −3.1 [−9.1, +2.7] |
 | GPT-5.5 students disagree | 238 | 187 | 46.3% | 48.2% | +2.0 [−2.8, +6.7] |
@@ -204,9 +206,9 @@ K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 
 *Success is averaged per state over the matched episodes on each side, then over states; intervals are task-clustered bootstraps ([student-outcomes.json](arm_results/luna_pre_post_k3_20261105/student-outcomes.json)). Only 411 of 4,612 split states have both sides played out, mostly early steps (late screens rarely recur exactly), and neither example in the figure above is among them. Each outcome is the whole episode, whose later steps were chosen by different selectors, so this is a rough signal.*
 
-Eight of these states, three where the K = 3 pick did better (W) and three where it did worse (L) plus one alternate each. They show both patterns cutting both ways: going back wins on a rate-limit or blocked page (W1, W3) and loses when the answer is one click or a few scrolls away (L1, L2).
+Eight of these states, three where the H = 4 pick did better (W) and three where it did worse (L) plus one alternate each. They show both patterns cutting both ways: going back wins on a rate-limit or blocked page (W1, W3) and loses when the answer is one click or a few scrolls away (L1, L2).
 
-| Sheet | State | Pre students pick | Succeed | K = 3 students pick | Succeed |
+| Sheet | State | Pre students pick | Succeed | H = 4 students pick | Succeed |
 | --- | --- | --- | ---: | --- | ---: |
 | [W1](arm_results/luna_pre_post_k3_20261105/outcome-review-W1-2586.jpg) | WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page | click footer "Documentation" | 0/1 | go back | 2/2 |
 | [W2](arm_results/luna_pre_post_k3_20261105/outcome-review-W2-7262.jpg) | WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers | search box | 0/2 | click the gr-qc listing | 3/3 |
@@ -220,39 +222,39 @@ Eight of these states, three where the K = 3 pick did better (W) and three where
 <details>
 <summary>Review sheets: the screen, both picks, and one matched episode per side</summary>
 
-Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the K = 3 pick (purple box). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (orange box), how the episode ended, and the judged outcome.
+Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the H = 4 pick (purple box). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (orange box), how the episode ended, and the judged outcome.
 
 **W1.** WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page.
 
-![W1: WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page. Pre pick click footer "Documentation" (0/1 succeed), K = 3 pick go back (2/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W1-2586.jpg)
+![W1: WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page. Pre pick click footer "Documentation" (0/1 succeed), H = 4 pick go back (2/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W1-2586.jpg)
 
 **W2.** WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers.
 
-![W2: WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers. Pre pick search box (0/2 succeed), K = 3 pick click the gr-qc listing (3/3 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W2-7262.jpg)
+![W2: WebVoyager ArXiv--16, step 1 (Luna): this week's gravitational-wave papers. Pre pick search box (0/2 succeed), H = 4 pick click the gr-qc listing (3/3 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W2-7262.jpg)
 
 **W3.** WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page.
 
-![W3: WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page. Pre pick go to google.com (0/1 succeed), K = 3 pick new tab, bbcgoodfood.com (5/9 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W3-5324.jpg)
+![W3: WebVoyager Allrecipes--6, step 1 (GPT-5.5): access-blocked page. Pre pick go to google.com (0/1 succeed), H = 4 pick new tab, bbcgoodfood.com (5/9 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-W3-5324.jpg)
 
 **L1.** WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date.
 
-![L1: WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date. Pre pick click "Files and versions" (2/2 succeed), K = 3 pick go back (0/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L1-2809.jpg)
+![L1: WebVoyager HF--0, step 6 (GPT-5.5): model card after 4 scrolls, task needs the last-update date. Pre pick click "Files and versions" (2/2 succeed), H = 4 pick go back (0/2 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L1-2809.jpg)
 
 **L2.** WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down.
 
-![L2: WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down. Pre pick keep scrolling (8/13 succeed), K = 3 pick go back (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L2-677.jpg)
+![L2: WebVoyager Apple--40, step 9 (both judges): Vision Pro specs after 4 scrolls, built-in apps further down. Pre pick keep scrolling (8/13 succeed), H = 4 pick go back (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L2-677.jpg)
 
 **L3.** WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs.
 
-![L3: WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs. Pre pick click the search icon (24/24 succeed), K = 3 pick click "Entertainment" (2/8 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)
+![L3: WebVoyager Apple--34, step 1 (GPT-5.5): Apple TV 4K specs. Pre pick click the search icon (24/24 succeed), H = 4 pick click "Entertainment" (2/8 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)
 
 **alt-W.** WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models.
 
-![alt-W: WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models. Pre pick search on the error page (0/1 succeed), K = 3 pick go back (1/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-W-3610.jpg)
+![alt-W: WebVoyager HF--24, step 5 (GPT-5.5): 429 page on Models. Pre pick search on the error page (0/1 succeed), H = 4 pick go back (1/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-W-3610.jpg)
 
 **alt-L.** WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog.
 
-![alt-L: WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog. Pre pick click footer "General information" (5/5 succeed), K = 3 pick scroll (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-L-3000.jpg)
+![alt-L: WebVoyager ArXiv--38, step 2 (Luna): find the arXiv blog. Pre pick click footer "General information" (5/5 succeed), H = 4 pick scroll (0/1 succeed).](arm_results/luna_pre_post_k3_20261105/outcome-review-alt-L-3000.jpg)
 
 </details>
 
@@ -264,9 +266,9 @@ Each sheet shows the task, earlier actions, and the current screen with the pre 
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Any student | 401 | 40.4% | 39.9% | +0.5 [−3.3, +4.4] | 81 | 88 | 232 |
 | Pre Luna | 288 | 38.5% | 39.0% | −0.5 [−4.8, +4.0] | 52 | 60 | 176 |
-| K = 3 Luna | 304 | 37.0% | 38.6% | −1.7 [−6.0, +2.8] | 55 | 67 | 182 |
+| H = 4 Luna | 304 | 37.0% | 38.6% | −1.7 [−6.0, +2.8] | 55 | 67 | 182 |
 | Pre GPT-5.5 | 264 | 36.9% | 36.5% | +0.5 [−4.4, +5.5] | 54 | 57 | 153 |
-| K = 3 GPT-5.5 | 263 | 40.8% | 41.3% | −0.5 [−5.0, +4.2] | 51 | 52 | 160 |
+| H = 4 GPT-5.5 | 263 | 40.8% | 41.3% | −0.5 [−5.0, +4.2] | 51 | 52 | 160 |
 
 *819 of 7,999 replayed states have two or more distinct candidates played out; [candidate-outcomes.json](arm_results/luna_pre_post_k3_20261105/candidate-outcomes.json). Most minority picks are singletons, proposed by one of the five candidates.*
 
@@ -274,25 +276,25 @@ The sheets below show every state where a minority pick did at least 50 points b
 
 | Sheet | State | Minority pick | Proposals | Picked by | Succeed | Majority action | Proposals | Succeed |
 | --- | --- | --- | ---: | --- | ---: | --- | ---: | ---: |
-| [M1](arm_results/luna_pre_post_k3_20261105/minority-review-M1-2634.jpg) | WebVoyager Allrecipes--2, step 1 (blocked page) | new tab, open foodnetwork.com | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 3/3 | new tab | 2 | 0/2 |
-| [M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg) | WebVoyager Huggingface--0, step 6 | click "Files and versions" | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 2/2 | go back | 3 | 0/2 |
-| [M3](arm_results/luna_pre_post_k3_20261105/minority-review-M3-2836.jpg) | WebVoyager Google Flights--16, step 3 | click "Tokyo, Japan" (other spot) | 1 | pre Luna, K3 Luna | 2/2 | click "Tokyo, Japan" | 2 | 2/4 |
-| [M4](arm_results/luna_pre_post_k3_20261105/minority-review-M4-7006.jpg) | WebVoyager ArXiv--13, step 1 | click the search icon (only) | 1 | K3 Luna | 3/3 | click the search box, type "SimCSE" | 2 | 3/12 |
-| [M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg) | WebVoyager ArXiv--23, step 1 | scroll down | 1 | K3 GPT-5.5 | 3/6 | click the search icon | 2 | 0/3 |
-| [S1](arm_results/luna_pre_post_k3_20261105/minority-review-S1-208.jpg) | OM2W 1ab384fb, step 2 | click "Physics" (other spot) | 1 | pre Luna, K3 GPT-5.5 | 1/1 | click "Physics" | 2 | 1/12 |
-| [S2](arm_results/luna_pre_post_k3_20261105/minority-review-S2-1678.jpg) | WebVoyager Huggingface--37, step 1 | click "Datasets" | 1 | pre Luna, K3 Luna, K3 GPT-5.5 | 1/1 | click "Docs" | 4 | 1/2 |
-| [S3](arm_results/luna_pre_post_k3_20261105/minority-review-S3-2844.jpg) | WebVoyager ArXiv--23, step 1 | click the search box, type (no Enter) | 1 | K3 GPT-5.5 | 1/1 | click, type, Enter | 2 | 1/5 |
-| [S4](arm_results/luna_pre_post_k3_20261105/minority-review-S4-2914.jpg) | WebVoyager ArXiv--12, step 6 | scroll down, click | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 1/1 | click "Store" | 2 | 0/3 |
-| [S5](arm_results/luna_pre_post_k3_20261105/minority-review-S5-3036.jpg) | WebVoyager ArXiv--26, step 1 | click the Astrophysics link | 1 | K3 Luna | 1/1 | click the search box, type the query | 3 | 3/15 |
-| [S6](arm_results/luna_pre_post_k3_20261105/minority-review-S6-3088.jpg) | WebVoyager Huggingface--12, step 2 | scroll down | 1 | K3 Luna | 1/1 | go back | 3 | 0/2 |
+| [M1](arm_results/luna_pre_post_k3_20261105/minority-review-M1-2634.jpg) | WebVoyager Allrecipes--2, step 1 (blocked page) | new tab, open foodnetwork.com | 1 | pre Luna, H = 4 Luna, pre GPT-5.5 | 3/3 | new tab | 2 | 0/2 |
+| [M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg) | WebVoyager Huggingface--0, step 6 | click "Files and versions" | 1 | pre Luna, H = 4 Luna, pre GPT-5.5 | 2/2 | go back | 3 | 0/2 |
+| [M3](arm_results/luna_pre_post_k3_20261105/minority-review-M3-2836.jpg) | WebVoyager Google Flights--16, step 3 | click "Tokyo, Japan" (other spot) | 1 | pre Luna, H = 4 Luna | 2/2 | click "Tokyo, Japan" | 2 | 2/4 |
+| [M4](arm_results/luna_pre_post_k3_20261105/minority-review-M4-7006.jpg) | WebVoyager ArXiv--13, step 1 | click the search icon (only) | 1 | H = 4 Luna | 3/3 | click the search box, type "SimCSE" | 2 | 3/12 |
+| [M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg) | WebVoyager ArXiv--23, step 1 | scroll down | 1 | H = 4 GPT-5.5 | 3/6 | click the search icon | 2 | 0/3 |
+| [S1](arm_results/luna_pre_post_k3_20261105/minority-review-S1-208.jpg) | OM2W 1ab384fb, step 2 | click "Physics" (other spot) | 1 | pre Luna, H = 4 GPT-5.5 | 1/1 | click "Physics" | 2 | 1/12 |
+| [S2](arm_results/luna_pre_post_k3_20261105/minority-review-S2-1678.jpg) | WebVoyager Huggingface--37, step 1 | click "Datasets" | 1 | pre Luna, H = 4 Luna, H = 4 GPT-5.5 | 1/1 | click "Docs" | 4 | 1/2 |
+| [S3](arm_results/luna_pre_post_k3_20261105/minority-review-S3-2844.jpg) | WebVoyager ArXiv--23, step 1 | click the search box, type (no Enter) | 1 | H = 4 GPT-5.5 | 1/1 | click, type, Enter | 2 | 1/5 |
+| [S4](arm_results/luna_pre_post_k3_20261105/minority-review-S4-2914.jpg) | WebVoyager ArXiv--12, step 6 | scroll down, click | 1 | pre Luna, H = 4 Luna, pre GPT-5.5 | 1/1 | click "Store" | 2 | 0/3 |
+| [S5](arm_results/luna_pre_post_k3_20261105/minority-review-S5-3036.jpg) | WebVoyager ArXiv--26, step 1 | click the Astrophysics link | 1 | H = 4 Luna | 1/1 | click the search box, type the query | 3 | 3/15 |
+| [S6](arm_results/luna_pre_post_k3_20261105/minority-review-S6-3088.jpg) | WebVoyager Huggingface--12, step 2 | scroll down | 1 | H = 4 Luna | 1/1 | go back | 3 | 0/2 |
 | [S7](arm_results/luna_pre_post_k3_20261105/minority-review-S7-3422.jpg) | WebVoyager Allrecipes--1, step 4 | click the sorting dropdown | 1 | pre Luna, pre GPT-5.5 | 1/1 | click | 3 | 1/3 |
-| [S8](arm_results/luna_pre_post_k3_20261105/minority-review-S8-4425.jpg) | OM2W 905cb530, step 1 | click the search field, type "dermatologist" | 1 | K3 Luna, pre GPT-5.5 | 1/1 | click "Accept" | 3 | 2/4 |
-| [S9](arm_results/luna_pre_post_k3_20261105/minority-review-S9-4900.jpg) | WebVoyager Google Flights--14, step 6 | click "London, United Kingdom" | 1 | pre Luna, K3 Luna, pre GPT-5.5 | 1/1 | click the first option | 2 | 0/4 |
+| [S8](arm_results/luna_pre_post_k3_20261105/minority-review-S8-4425.jpg) | OM2W 905cb530, step 1 | click the search field, type "dermatologist" | 1 | H = 4 Luna, pre GPT-5.5 | 1/1 | click "Accept" | 3 | 2/4 |
+| [S9](arm_results/luna_pre_post_k3_20261105/minority-review-S9-4900.jpg) | WebVoyager Google Flights--14, step 6 | click "London, United Kingdom" | 1 | pre Luna, H = 4 Luna, pre GPT-5.5 | 1/1 | click the first option | 2 | 0/4 |
 | [S10](arm_results/luna_pre_post_k3_20261105/minority-review-S10-5042.jpg) | WebVoyager ArXiv--29, step 5 (blank page) | open arxiv.org | 1 | all four | 1/1 | go back | 3 | 0/3 |
 | [S11](arm_results/luna_pre_post_k3_20261105/minority-review-S11-5592.jpg) | WebVoyager Allrecipes--15, step 1 | reload (F5) | 1 | all four | 1/1 | go back | 3 | 0/2 |
-| [S12](arm_results/luna_pre_post_k3_20261105/minority-review-S12-6649.jpg) | WebVoyager Wolfram Alpha--29, step 1 | type "cat curve", Enter (no click) | 1 | K3 Luna, K3 GPT-5.5 | 1/1 | click the input, type "cat curve", Enter | 2 | 0/2 |
-| [S13](arm_results/luna_pre_post_k3_20261105/minority-review-S13-7306.jpg) | WebVoyager Huggingface--28, step 4 | answer | 1 | K3 GPT-5.5 | 1/1 | scroll down | 3 | 1/2 |
-| [S14](arm_results/luna_pre_post_k3_20261105/minority-review-S14-7400.jpg) | WebVoyager Google Flights--23, step 1 | click, type "Mumbai", type "Vancouver" | 1 | K3 GPT-5.5 | 1/1 | click | 2 | 2/6 |
+| [S12](arm_results/luna_pre_post_k3_20261105/minority-review-S12-6649.jpg) | WebVoyager Wolfram Alpha--29, step 1 | type "cat curve", Enter (no click) | 1 | H = 4 Luna, H = 4 GPT-5.5 | 1/1 | click the input, type "cat curve", Enter | 2 | 0/2 |
+| [S13](arm_results/luna_pre_post_k3_20261105/minority-review-S13-7306.jpg) | WebVoyager Huggingface--28, step 4 | answer | 1 | H = 4 GPT-5.5 | 1/1 | scroll down | 3 | 1/2 |
+| [S14](arm_results/luna_pre_post_k3_20261105/minority-review-S14-7400.jpg) | WebVoyager Google Flights--23, step 1 | click, type "Mumbai", type "Vancouver" | 1 | H = 4 GPT-5.5 | 1/1 | click | 2 | 2/6 |
 
 <details>
 <summary>Review sheets: all five candidates, with outcomes, where a minority pick did better</summary>
@@ -341,7 +343,7 @@ Lettered boxes mark each click candidate's target on the current screen; the rig
 
 ## Setup
 
-| | Pre-execution (`pre`) | K = 3 lookahead (`k3p`) |
+| | Pre-execution (`pre`) | H = 4 lookahead (`k3p`) |
 | --- | --- | --- |
 | Judge | `gpt-6-luna`, effort high, 16,384 output tokens | same |
 | Prompt | Piotr's system prompt and instructions: task, action history, current screenshot, 5 candidates with actor thoughts. The judge explains its choice in 2–4 sentences, then outputs `{"selection": N}` | same, plus one "Execution Lookahead" block before the instructions |
@@ -352,7 +354,7 @@ Lettered boxes mark each click candidate's target on the current screen; the rig
 
 Agreement compares the **executed target** of the two picks. Two picks that differ in position but point to the same deduplicated action count as agreement.
 
-Note: the earlier GPT-5.5 K=3 labels used a different prompt: our instructions, a JSON-schema answer with no explanation, and shuffled order. That prompt difference is a confound in the GPT-5.5 K=3 vs pre comparison and does not apply here.
+Note: the earlier GPT-5.5 H = 4 labels used a different prompt: our instructions, a JSON-schema answer with no explanation, and shuffled order. That prompt difference is a confound in the GPT-5.5 H = 4 vs pre comparison and does not apply here.
 
 ## Picks
 
@@ -505,7 +507,7 @@ Representative pairs (verbatim, trimmed):
 - **About a quarter of the disagreement rate is noise from single sampled continuations and ties.** Categories E and G together make up 26.7%. Several continuation draws per candidate, or collapsing equivalent actions before labelling, would reduce this noise. Head targets already merge equivalent calls (`equivalence_target`), which absorbs part of category E. LoRA targets are a single index.
 - **Pre labels rarely look better (4.2%), but their errors are systematic.** Pre misjudges clicks, sticks with direct URLs and Google fallbacks that are blocked, and keeps retrying on dead-end pages. A pre-execution student inherits these errors, and only execution evidence can correct them.
 
-The live outcome comparison is in [Live outcome](#luna-pre-vs-k3p-live-20261103): K = 3 labels beat pre labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for the Luna LoRA (+0.3).
+The live outcome comparison is in [Live outcome](#luna-pre-vs-k3p-live-20261103): H = 4 labels beat pre labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for the Luna LoRA (+0.3).
 
 <details>
 <summary>Method, files and caveats</summary>

@@ -27,8 +27,8 @@ from student_outcome_examples import BAD, F, GOOD, INK, K3, MUTED, PRE, RD, W, c
 HERE = Path(__file__).resolve().parent
 COLS = [(37, 99, 235), (230, 120, 0), (13, 148, 136), (190, 24, 93), (120, 80, 40)]
 NEXT = (202, 138, 4)
-WHO = {"gpt55-pre": ("Pre GPT-5.5", PRE), "luna-pre": ("Pre Luna", PRE), "gpt55-k3": ("Lookahead GPT-5.5", K3),
-       "luna-k3": ("Lookahead Luna", K3)}
+WHO = {"gpt55-pre": ("Pre GPT-5.5", PRE), "luna-pre": ("Pre Luna", PRE), "gpt55-k3": ("H = 4 GPT-5.5", K3),
+       "luna-k3": ("H = 4 Luna", K3)}
 SITE = lambda task: task.split("/", 1)[1].split("--")[0]  # noqa: E731
 
 

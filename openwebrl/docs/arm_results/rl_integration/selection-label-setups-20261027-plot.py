@@ -31,9 +31,8 @@ EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
-    ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
+    ("Lookahead\nH = 2", "#A99BE3", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 tr, te = S["splits"]["train"], S["splits"]["test"]
 PANELS = [

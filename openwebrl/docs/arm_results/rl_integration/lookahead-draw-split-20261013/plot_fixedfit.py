@@ -42,4 +42,7 @@ for side in ("top", "right"):
 ax.legend(loc="center left", bbox_to_anchor=(1.01, .5), fontsize=9, frameon=False)
 fig.tight_layout()
 for ext in ("png", "svg"):
-    fig.savefig(D / f"lookahead_fixed_split_valid_only_main.{ext}", dpi=160)
+    path = D / f"lookahead_fixed_split_valid_only_main.{ext}"
+    fig.savefig(path, dpi=160)
+    if ext == "svg":
+        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")

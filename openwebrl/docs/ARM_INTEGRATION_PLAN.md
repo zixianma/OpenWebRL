@@ -42,8 +42,8 @@ no new neural fit, branch collection or allocation is launched by this decision.
 <a id="arm-post-evidence-protocol-20261006"></a>
 ### Selected experiments 1 and 3: proposed execution protocol — October 6 UTC
 
-The user selected the post-execution evidence diagnostic and training a
-pre-action selector from post-execution supervision, and requested the exact
+The user selected the immediate-result evidence diagnostic and training a
+pre-action selector from immediate-result supervision, and requested the exact
 plan. New same-state branch collection is outside this first pass. Converting
 already-saved fixed-SFT rollouts is a necessary preparation step for experiment
 3; it does not authorize collecting the branches from experiment2. The
@@ -388,7 +388,7 @@ totaled$1.3371; actual receipt-based estimated cost was$0.0541 for120 successful
 calls. The superseded Sol proposal and all original preparation were preserved.
 The 40-example result remains a separate calibration; the independent 200-task panel is reported above. [Aggregate readiness](arm_results/rl_integration/teacher-evidence-pilot-plan-20261006.json).
 
-Real post-execution evidence currently applies to executed demonstrations and
+Real immediate-result evidence currently applies to executed demonstrations and
 exact tool-identical proposals only. Other proposals can receive pre-execution
 judgments, but not authentic after-state judgments without executing them.
 This first stage therefore compares action ratings, not which candidate wins
@@ -461,8 +461,8 @@ remain available for their separate endpoint.
 | Arm | Model input | Target | Purpose |
 | --- | --- | --- | --- |
 | PRE | Before state + executed tool action | Teacher's pre-execution progress distribution | Matched pre-action judgment-supervision control |
-| POST→PRE | Identical to PRE | Teacher's post-execution progress distribution | Main test: execution-informed supervision at pre-action deployment |
-| POST | Before state/action + after observation | Same post-execution progress distribution | Measure the additional information available after execution |
+| POST→PRE | Identical to PRE | Teacher's immediate-result progress distribution | Main test: execution-informed supervision at pre-action deployment |
+| POST | Before state/action + after observation | Same immediate-result progress distribution | Measure the additional information available after execution |
 | Q | Before state + executed tool action | Native binary episode outcome | Ordinary outcome-prediction baseline, not novelty |
 | Existing SelectionARM | Its frozen canonical candidate-set interface | No new fit | Historical preference reference, not a matched-training control |
 
@@ -512,7 +512,7 @@ Likewise propose an exact GPU/CPU/RAM/time cap and an independently budgeted
 online-evaluation stage before scheduling them. Prior pilot/full300 balances
 are not reusable approvals. No training, teacher call or new browser run has
 been launched by this plan. The research hypothesis is improved selection from
-verified post-execution supervision; V/Q, privileged-information training and
+verified immediate-result supervision; V/Q, privileged-information training and
 distillation themselves are not novelty claims.
 
 ### Data that actually supports each target

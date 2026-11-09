@@ -22,14 +22,13 @@ STATES = 421
 # root, success key, label, colour, marker, filled
 POINTS = [("before", "Pre-execution, 3 past steps", "Pre-execution", "#7b4fd0", "o", True),
           ("before-h0", "Pre-execution, no history", "Pre, no history", "#7b4fd0", "o", False),
-          ("immediate", "Post-execution, 3 past steps", "Post-execution", "#eb6834", "o", True),
-          ("k1", "K=1, 3 past steps", "K=1", "#93bdef", "o", True),
-          ("k1-h0", "K=1, no history", "K=1, no history", "#93bdef", "o", False),
-          ("k2", "K=2, 3 past steps", "K=2", "#4f8fdc", "o", True),
-          ("k3", "K=3, 3 past steps", "K=3", "#1f5fae", "o", True),
-          ("k3-h0", "K=3, no history", "K=3, no history", "#1f5fae", "o", False),
-          ("k3-nofb", "K=3, no tool feedback in lookahead", "K=3, no tool feedback", "#1f5fae", "s", False),
-          ("k3-img1", "K=3, current screenshot only", "K=3, current screenshot only", "#1f5fae", "D", False)]
+          ("k1", "K=1, 3 past steps", "H=2", "#93bdef", "o", True),
+          ("k1-h0", "K=1, no history", "H=2, no history", "#93bdef", "o", False),
+          ("k2", "K=2, 3 past steps", "H=3", "#4f8fdc", "o", True),
+          ("k3", "K=3, 3 past steps", "H=4", "#1f5fae", "o", True),
+          ("k3-h0", "K=3, no history", "H=4, no history", "#1f5fae", "o", False),
+          ("k3-nofb", "K=3, no tool feedback in lookahead", "H=4, no tool feedback", "#1f5fae", "s", False),
+          ("k3-img1", "K=3, current screenshot only", "H=4, current screenshot only", "#1f5fae", "D", False)]
 # label positions in data coordinates (x = USD per 1,000 states, y = %), joined to points by thin leader lines
 LABEL_AT = {"before": (8.2, 32.75), "before-h0": (6.6, 32.0), "immediate": (17.0, 34.55), "k1-h0": (17.0, 35.35),
             "k1": (26.4, 36.4), "k2": (25.5, 34.7), "k3": (31.6, 36.3), "k3-h0": (31.6, 35.8), "k3-nofb": (31.6, 35.3),

@@ -32,8 +32,8 @@ methods = [  # label, (source, id), params, color, marker, hollow
     ("Head, Piotr's data, N = 3", ("new", "head3-755d4cd49137"), HEAD, "#2a78d6", "v", False),
     ("Pointwise head, Piotr's data, N = 3", ("new", "head3-26c57559ccb4"), POINT, "#2a78d6", "v", True),
     ("Head, outcome labels", ("full", "Head, Observed outcome, 1,380 SFT states"), HEAD, "#1baf7a", "o", False),
-    ("Head, K3 labels", ("full", "Head, Lookahead K3, 1,380 SFT states"), HEAD, "#6250d6", "o", False),
-    ("Head, K1 labels", ("full", "Head, Lookahead K1, 1,380 SFT states"), HEAD, "#eda100", "o", False),
+    ("Head, H=4 labels", ("full", "Head, Lookahead K3, 1,380 SFT states"), HEAD, "#6250d6", "o", False),
+    ("Head, H=2 labels", ("full", "Head, Lookahead K1, 1,380 SFT states"), HEAD, "#eda100", "o", False),
     ("Head, pre-execution labels", ("full", "Head, Pre-execution, 1,380 SFT states"), HEAD, "#e87ba4", "o", False),
 ]
 links = [("Piotr SelectionARM", "Piotr SelectionARM, N = 3", "#eb6834"), ("Head, Piotr's data", "Head, Piotr's data, N = 3", "#2a78d6")]
@@ -98,7 +98,7 @@ for letter, ax, (_, xlabel) in zip("abc", axes[1], cols):
 handles, labels = axes[1, 0].get_legend_handles_labels()
 short_labels = ["SFT 4B", "SFT 8B", "Piotr, N = 5", "Piotr, N = 3",
                 "Head: Piotr, N = 5", "Head: Piotr, N = 3", "Pointwise: Piotr, N = 3",
-                "Head: outcome", "Head: K = 3", "Head: K = 1", "Head: pre-execution"]
+                "Head: outcome", "Head: H = 4", "Head: H = 2", "Head: pre-execution"]
 fig.legend(handles, short_labels, loc="lower center", ncol=4, frameon=False,
            bbox_to_anchor=(0.52, 0.005), fontsize=7,
            handletextpad=0.35, columnspacing=1.2, labelspacing=0.5)

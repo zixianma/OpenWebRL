@@ -25,7 +25,7 @@ import paper_plot_style as _paper_style
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#397FA3", "#173F78"
+PRE, IMMEDIATE, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#397FA3", "#173F78"
 ORACLE = OUTCOME
 ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
 SHARED, SHARED_BG = "#737A83", "#F3F4F5"
@@ -146,10 +146,10 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.28, mid, 0.465, y, color=MUTED, lw=.75, head=5)
     box(0.47, y - 0.09, 0.34, 0.18)
     text(0.64, y, rf"$a_t^{{{i + 1}}}$", size=7.5, ha="center")
-    arrow(0.815, y, 0.950, y, color=POST, lw=.75, head=5)
+    arrow(0.815, y, 0.950, y, color=IMMEDIATE, lw=.75, head=5)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
-            state_card(x, y, k + 1, POST if k == 0 else LOOK, i + 1)
+            state_card(x, y, k + 1, IMMEDIATE if k == 0 else LOOK, i + 1)
             if k:
                 arrow(trajectory_x[k - 1] + 0.142, y, x - 0.142, y,
                       color=LOOK, lw=.75, head=5)
@@ -177,12 +177,13 @@ text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
 eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=HELD, ha="center")
 shared_x = 6.08
-ax.plot([shared_x, shared_x], [1.67, 0.66], color=SHARED, linewidth=0.9, zorder=1)
+ax.plot([shared_x, shared_x], [1.67, 0.83], color=SHARED, linewidth=0.9, zorder=1)
 ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.23,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-lanes = ((1.30, "Pre-execution", "Pre-exec", PRE, "—"),
-         (1.01, "Post-execution", "Post-exec", POST, r"$\{s_{t+1}^{i}\}_{i=1}^{K}$"),
-         (0.66, "Lookahead K = 3", "Lookahead\nH = 3", LOOK,
+# H counts the candidate action; the legacy K=3 source now displays H=4.
+# The immediate-only (H=1) teacher result is retained in source tables, not plotted.
+lanes = ((1.27, "Pre-execution", "Pre-exec", PRE, "—"),
+         (0.83, "Lookahead K = 3", "Lookahead\nH = 4", LOOK,
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     text(method_x, y, label, color=color, linespacing=1.0)

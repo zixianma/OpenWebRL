@@ -25,8 +25,8 @@ import paper_plot_style as _paper_style
 HERE = Path(__file__).resolve().parent
 T = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
 INK, MUTED, GRID, BLUE, GRAY = "#222222", "#666666", "#e6e6e6", "#2a78d6", "#444444"
-ROWS = [("SFT 4B\n(1 sample)", "SFT 4B"), ("Observed\noutcome", "Ours outcome"), ("Luna,\n3 steps after", "Ours K3"),
-        ("Luna,\n1 step after", "Ours K1"), ("Luna,\nbefore execution", "Ours pre")]
+ROWS = [("SFT 4B\n(1 sample)", "SFT 4B"), ("Observed\noutcome", "Ours outcome"), ("Lookahead\nH = 4", "Ours K3"),
+        ("Lookahead\nH = 2", "Ours K1"), ("Luna,\nbefore execution", "Ours pre")]
 
 
 # dot plot (position, not bar length, encodes the value, so the cropped axis is honest); SFT 4B is the dashed reference

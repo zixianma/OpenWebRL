@@ -24,8 +24,8 @@ from style import STYLE  # noqa: E402
 
 D = Path(__file__).resolve().parent
 r = json.loads((D / "curve_fixedfit_main.json").read_text())["valid_only"]["3-7"]["pooled"]
-NAMES = {"Best on observed draws": "Oracle\n(rollouts 0–2)", "Lookahead K=3": "Lookahead\nK=3", "Lookahead K=1": "Lookahead\nK=1",
-         "Immediate result": "Post-\nexecution", "Before execution": "Pre-\nexecution", "WebArbiter formulation": "Web-\nArbiter",
+NAMES = {"Best on observed draws": "Oracle\n(rollouts 0–2)", "Lookahead K=3": "Lookahead\nH=4", "Lookahead K=1": "Lookahead\nH=2",
+         "Before execution": "Pre-\nexecution", "WebArbiter formulation": "Web-\nArbiter",
          "WebShepherd formulation": "Web-\nShepherd", "PRO-CUA formulation": "PRO-\nCUA", "Uniform": "Uniform",
          "Actor first sample": "Actor\n1st sample"}
 keys = [k for k in STYLE if k in r and k != "Actor first sample"]
@@ -46,4 +46,7 @@ for side in ("top", "right"):
     ax.spines[side].set_visible(False)
 fig.tight_layout()
 for ext in ("png", "svg"):
-    fig.savefig(D / f"lookahead_success_bars_valid_only_main.{ext}", dpi=160)
+    path = D / f"lookahead_success_bars_valid_only_main.{ext}"
+    fig.savefig(path, dpi=160)
+    if ext == "svg":
+        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")

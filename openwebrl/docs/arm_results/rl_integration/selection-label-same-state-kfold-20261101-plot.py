@@ -36,10 +36,9 @@ LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "
 INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
 ROWS = [  # label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
-    ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Lookahead\nH = 5", "#33246E", "teacher_k5", "K5"),
+    ("Lookahead\nH = 2", "#A99BE3", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
+    ("Lookahead\nH = 6", "#33246E", "teacher_k5", "K5"),
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 MARK = [  # legend, marker, filled, dx
     (f"Teacher, train states ({TR['states']:,})", "o", False, -0.32),

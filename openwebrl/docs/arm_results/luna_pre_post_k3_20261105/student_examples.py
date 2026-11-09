@@ -2,7 +2,7 @@
 """Compact two-example figure: what the trained students (ADM-4B LoRAs, Recipe 3) pick on the same live eval state.
 
 Both examples are replayed eval states (student_replay.py) on which the two pre-execution students (GPT-5.5 and Luna labels)
-pick one action and the two K = 3 lookahead students pick another. Left: the state's screenshot as logged live; right: the
+pick one action and the two H = 4 lookahead students pick another. Left: the state's screenshot as logged live; right: the
 five actor proposals grouped into distinct actions (with how many of the five proposed each) and who picked which.
 (a) leaving a scroll loop; (b) answering before the calculator inputs match the task. The rate line under each example is
 the same-state rate over all replayed states of that kind (student-replay.json).
@@ -38,7 +38,7 @@ EXAMPLES = [
          groups=[("scroll down", 4, "pre"), ("go back", 1, "k3")], boxes=[],
          rate=f"Over {A['states']} replayed states after 2+ scrolls with “go back” offered: go back "
               f"{A['luna-pre']['back']:.0f}% / {A['gpt55-pre']['back']:.0f}% (pre: Luna / GPT-5.5) vs "
-              f"{A['luna-k3']['back']:.0f}% / {A['gpt55-k3']['back']:.0f}% (lookahead)"),
+              f"{A['luna-k3']['back']:.0f}% / {A['gpt55-k3']['back']:.0f}% (H = 4)"),
     dict(letter="b", i=4528, crop=(0.04, 0.0, 0.84, 0.70), site="nerdwallet.com 401(k) calculator",
          title="Answering before the inputs match the task",
          history="the page still shows defaults (starting balance \\$100,000; contributions 16% of income)",
@@ -47,7 +47,7 @@ EXAMPLES = [
          rate=f"When only 1–2 of the 5 proposals stop, the student stops: "
               f"Luna {ST['luna-pre']['stop_given_minority_offer']:.0f}% to {ST['luna-k3']['stop_given_minority_offer']:.0f}%, "
               f"GPT-5.5 {ST['gpt55-pre']['stop_given_minority_offer']:.0f}% to {ST['gpt55-k3']['stop_given_minority_offer']:.0f}% "
-              f"(pre to lookahead)"),
+              f"(pre to H = 4)"),
 ]
 
 
@@ -97,7 +97,7 @@ def main():
             fig.text(xr + 0.227, yy, f"{n} of 5", fontsize=6.0, color=MUTED, va="center", ha="right")
             bx = xr + 0.25
             for j in ("GPT-5.5", "Luna"):
-                bx = badge(fig, bx, yy, f"{'Pre-exec' if who == 'pre' else 'Lookahead'} ({j})", c)
+                bx = badge(fig, bx, yy, f"{'Pre-exec' if who == 'pre' else 'H = 4'} ({j})", c)
         fig.text(xr, y - h + 0.005, ex["rate"], fontsize=5.8, color=MUTED, va="bottom", style="italic")
         y -= h + 0.105
     for ext in ("png", "pdf"):
