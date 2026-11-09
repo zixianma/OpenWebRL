@@ -3,7 +3,8 @@
   selection-recipe3-data-ablations-per-benchmark-20261105.*   overall success on Online-Mind2Web, WebVoyager and DeepShop
 Both subset families share one log axis of 5-action sets (panels) in the training data: fewer states (whole tasks until 252 / 1,001
 states, all their sets) and fewer sets per state (1 / 4 per state, all 2,112 states); both end at the full data (2,112 states,
-18,786 sets). Each point is labelled with its states and sets. Overall success = successes / tasks, 3 runs pooled per point; the
+18,786 sets). Each point is labelled with its states (rounded, in K) and mean sets per state (the 4-per-state subset
+averages 3.5 because some states have fewer than 4 sets). Overall success = successes / tasks, 3 runs pooled per point; the
 1-run subsets (500 states, 2 sets per state) are left out. Gray dashed: SFT 4B alone (3 runs, November 6).
 Data: selection-recipe3-data-ablations-20261105.json (selection-recipe3-data-ablations-20261105-analysis.py); state and set counts
 from the subset builder's summary (recipe3-ablations-20261104/lora-data/summary.json)."""
@@ -31,8 +32,13 @@ SERIES = [("Fewer states (all their sets)", "#6250BE", "o", ["s250", "s1000", "f
 BENCH = [("online_mind2web", "Online-Mind2Web"), ("webvoyager", "WebVoyager"), ("deepshop", "DeepShop")]
 
 
+def kfmt(n):
+    return f"{n / 1000:.2g}K"
+
+
 def name(k):
-    return f"{STATES[k]:,} states\n{SETS[k]:,} sets"
+    r = SETS[k] / STATES[k]
+    return f"{kfmt(STATES[k])} states\n{r:.2g} {'set' if r == 1 else 'sets'}/state"
 
 
 def draw(ax, y, fs):
