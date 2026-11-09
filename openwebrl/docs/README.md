@@ -59,7 +59,7 @@
 
 [Valid-only success versus repetition and threshold robustness (K = 2–5): compact 3.35-inch-wide iteration-90 paper figure, with vertical 95% task-bootstrap intervals and Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-repetition-incidence-paper) · [Paper PDF](rl_results/rl_repetition_success_robustness.pdf) · [Success counts and paired differences](RL_BEHAVIOR.md#rl-repetition-success-preview). [Earlier failure-category metric and precise definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
 
-[Teacher and student ADM: 3.35-inch-wide Pre-exec, H = 4 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
+[Teacher and student ADM: 3.35-inch-wide Pre-exec, Lookahead H = 1/2/4/6 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
 [Offline selector evaluation: half-height Rollout Collection and Action Decision Labeling schematic, expanded rollout arrows, blue train/eval split, black rollout-1 highlight and joint K=5 action inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 

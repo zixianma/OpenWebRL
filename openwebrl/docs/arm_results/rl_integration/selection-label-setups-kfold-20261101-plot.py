@@ -34,7 +34,10 @@ LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-\nexec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
+    ("H=1", "#D8877E", "teacher_post", "Ours post"),
+    ("H=2", "#A99BE3", "teacher_k1", "Ours K1"),
+    ("H=4", "#6250BE", "teacher_k3", "Ours K3"),
+    ("H=6", "#33246E", "teacher_k5", "K5"),
     ("Oracle", "#397FA3", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
@@ -64,6 +67,11 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
+    # A shared label keeps all four horizon ticks legible at column width.
+    ax.plot([0.65, 4.35], [-.19, -.19], transform=ax.get_xaxis_transform(),
+            color=MUTED, lw=.5, clip_on=False)
+    ax.text(2.5, -.24, "Lookahead", transform=ax.get_xaxis_transform(),
+            ha="center", va="top", fontsize=6, color=INK)
     ax.tick_params(axis="y", labelsize=6.5)
     ax.grid(False)
     for side in ("top", "right"):
@@ -77,6 +85,14 @@ fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
 fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.28, wspace=0.10)
+fig.canvas.draw()
+renderer = fig.canvas.get_renderer()
+for artist in [*fig.legends, *[text for ax in axes for text in
+                [ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts,
+                 *ax.get_xticklabels(), *ax.get_yticklabels()]]]:
+    if artist.get_visible() and (not hasattr(artist, "get_text") or artist.get_text()):
+        bounds = artist.get_window_extent(renderer)
+        assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), str(artist)
 output = HERE / "selection-label-setups-kfold-20261101"
 fig.savefig(output.with_suffix(".png"), dpi=300)
 fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
