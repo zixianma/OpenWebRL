@@ -4,6 +4,12 @@
 
 ## Methods
 
+### Action Decision Models: overview
+
+![Action Decision Models: overview](arm_results/methods/adm_overview/figure1.png)
+
+[PDF](arm_results/methods/adm_overview/figure1.pdf) · [SVG](arm_results/methods/adm_overview/figure1.svg) · [Plot script](arm_results/methods/adm_overview/plot_figure1.py) · [Reproduce](arm_results/methods/adm_overview/README.md)
+
 ### Rollout collection and action decision labeling
 
 ![Rollout collection and action decision labeling](arm_results/methods/selection-offline-eval-20261022.png)

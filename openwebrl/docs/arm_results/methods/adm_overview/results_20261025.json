@@ -1,0 +1,98 @@
+{
+  "rl_curves": {
+    "smoothing": {
+      "sigma_training_iterations": 10
+    },
+    "series": {
+      "outcome_only": [
+        {
+          "iteration": 10,
+          "successes": 70,
+          "valid_tasks": 234
+        },
+        {
+          "iteration": 20,
+          "successes": 95,
+          "valid_tasks": 232
+        },
+        {
+          "iteration": 30,
+          "successes": 96,
+          "valid_tasks": 248
+        },
+        {
+          "iteration": 40,
+          "successes": 100,
+          "valid_tasks": 231
+        },
+        {
+          "iteration": 50,
+          "successes": 105,
+          "valid_tasks": 234
+        },
+        {
+          "iteration": 60,
+          "successes": 105,
+          "valid_tasks": 230
+        },
+        {
+          "iteration": 70,
+          "successes": 103,
+          "valid_tasks": 229
+        },
+        {
+          "iteration": 80,
+          "successes": 114,
+          "valid_tasks": 229
+        },
+        {
+          "iteration": 90,
+          "successes": 101,
+          "valid_tasks": 222
+        }
+      ],
+      "gate_b": [
+        {
+          "iteration": 20,
+          "successes": 101,
+          "valid_tasks": 228
+        },
+        {
+          "iteration": 30,
+          "successes": 102,
+          "valid_tasks": 234
+        },
+        {
+          "iteration": 40,
+          "successes": 108,
+          "valid_tasks": 228
+        },
+        {
+          "iteration": 50,
+          "successes": 113,
+          "valid_tasks": 232
+        },
+        {
+          "iteration": 60,
+          "successes": 112,
+          "valid_tasks": 228
+        },
+        {
+          "iteration": 70,
+          "successes": 112,
+          "valid_tasks": 229
+        },
+        {
+          "iteration": 80,
+          "successes": 107,
+          "valid_tasks": 226
+        },
+        {
+          "iteration": 90,
+          "successes": 129,
+          "valid_tasks": 234
+        }
+      ]
+    }
+  }
+}

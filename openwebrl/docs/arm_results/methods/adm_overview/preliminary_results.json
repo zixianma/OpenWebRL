@@ -1,0 +1,18 @@
+{
+  "offline_policy_comparison": {
+    "rows": [
+      {
+        "key": "control",
+        "valid_success": 33.70786516853933
+      },
+      {
+        "key": "joint_sft",
+        "valid_success": 37.77777777777778
+      },
+      {
+        "key": "joint_dpo",
+        "valid_success": 40.94488188976378
+      }
+    ]
+  }
+}

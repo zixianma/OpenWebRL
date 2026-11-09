@@ -3,7 +3,7 @@
 
 Run from any directory. PNG/PDF/SVG versions of the same stem share one entry;
 all source-linked paths remain linked. Historical and collapsed source sections
-are included, and the two method diagrams remain as gallery additions.
+are included, and the method diagrams remain as gallery additions.
 """
 from __future__ import annotations
 
@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "figure1": "Action Decision Models: overview",
     "selection-offline-eval-20261022": "Rollout collection and action decision labeling",
     "selection-arch-overview-20261107": "ADM architecture",
     "selection-label-setups-kfold-20261101": "Teacher and student: offline and online",
@@ -147,13 +148,15 @@ def collect_figures() -> tuple[dict[str, list[str]], set[str]]:
     for name in ("selection-offline-eval-20261022", "selection-arch-overview-20261107"):
         stem = f"arm_results/methods/{name}"
         figures.setdefault(stem, [stem + ".png"])
+    stem = "arm_results/methods/adm_overview/figure1"
+    figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf", ".svg")])
     return figures, source_paths
 
 
 def render() -> str:
     figures, source_paths = collect_figures()
     topics = {group: [] for group in GROUPS}
-    ordered = sorted(figures.items(), key=lambda item: 0 if Path(item[0]).name == "selection-label-setups-kfold-20261101" else 1)
+    ordered = sorted(figures.items(), key=lambda item: -1 if Path(item[0]).name == "figure1" else 0 if Path(item[0]).name == "selection-label-setups-kfold-20261101" else 1)
     for stem, formats in ordered:
         name = Path(stem).name
         title = TITLES[name]
@@ -165,6 +168,10 @@ def render() -> str:
             raise FileNotFoundError(f"No embeddable image for {stem}")
         # Keep every source-linked format, without duplicating its preview.
         links = [f"[{Path(url).suffix[1:].upper()}]({url})" for url in formats if url != image]
+        if name == "figure1":
+            bundle = Path(stem).parent.as_posix()
+            links.extend([f"[Plot script]({bundle}/plot_figure1.py)",
+                          f"[Reproduce]({bundle}/README.md)"])
         block = f"### {title}\n\n![{title}]({image})\n"
         if links:
             block += "\n" + " · ".join(links) + "\n"
