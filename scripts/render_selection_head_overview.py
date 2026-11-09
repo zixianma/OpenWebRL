@@ -13,10 +13,11 @@ _paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().
                    if (p / "openwebrl/docs/paper_plot_style.py").is_file())
 _paper_sys.path.insert(0, str(_paper_docs))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 from matplotlib.patches import FancyBboxPatch
 
-INK, MUTED, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
-ACTOR, EXTRA, CHEAP = ("#e8f0fb", "#2a78d6"), ("#fdeee7", "#eb6834"), ("#e6f6ef", "#1baf7a")
+INK, MUTED, SURFACE = C["INK"], C["MUTED"], C["BACKGROUND"]
+ACTOR, EXTRA, CHEAP = (tint("BASELINE_LIGHT", .75), C["BASELINE_DARK"]), (tint("ADM_4B", .85), C["ADM_4B"]), (tint("ADM_22M", .85), C["ADM_22M"])
 
 fig, ax = plt.subplots(figsize=(11, 3.5))
 fig.patch.set_facecolor(SURFACE)
@@ -31,7 +32,7 @@ def box(x, y, w, h, title, sub, colors):
 
 
 def arrow(x0, x1, y):
-    ax.annotate("", (x1, y), (x0, y), arrowprops=dict(arrowstyle="-|>", color="#8a8f98", lw=1.4, mutation_scale=14))
+    ax.annotate("", (x1, y), (x0, y), arrowprops=dict(arrowstyle="-|>", color=C["BASELINE_DARK"], lw=1.4, mutation_scale=14))
 
 
 rows = [
@@ -44,13 +45,13 @@ rows = [
 ]
 for y, label, colors, title, sub, cost in rows:
     ax.text(1, y + 13.2, label, fontsize=11, weight="bold", color=colors[1])
-    box(1, y, 21, 11, "Browser state", "task, history,\nscreenshot", ("#f4f4f2", "#b9b8b2"))
+    box(1, y, 21, 11, "Browser state", "task, history,\nscreenshot", (tint("STATE", .60), C["STATE_BORDER"]))
     arrow(22.8, 26.2, y + 5.5)
     box(27, y, 23, 11, "SFT actor (4B)", "samples 5 candidate\nactions (shared prefix)", ACTOR)
     arrow(50.8, 54.2, y + 5.5)
     box(55, y, 25, 11, title, sub, colors)
     arrow(80.8, 84.2, y + 5.5)
-    box(85, y, 13, 11, "Execute", "highest-\nscoring action", ("#f4f4f2", "#b9b8b2"))
+    box(85, y, 13, 11, "Execute", "highest-\nscoring action", (tint("ACTION", .65), C["ACTION_INK"]))
     ax.text(100, y + 5.5, cost, fontsize=7.8, color=MUTED, va="center", ha="left")
 ax.set_xlim(0, 128)
 fig.tight_layout()

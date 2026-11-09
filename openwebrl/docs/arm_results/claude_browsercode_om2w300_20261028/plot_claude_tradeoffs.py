@@ -4,6 +4,12 @@
 Final use requires root --qualification approving the exact aggregate SHA.
 --preview permits partial private inputs with a visible preview label.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 import hashlib
@@ -27,10 +33,10 @@ from matplotlib.ticker import MaxNLocator, StrMethodFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    'opus_single': ('Opus single', '#08519C', 's'),
-    'sonnet_single': ('Sonnet single', '#08519C', 'o'),
-    'sonnet_n3': ('Sonnet N = 3', '#A50F15', 'o'),
-    'sonnet_n5': ('Sonnet N = 5', '#A50F15', 'o'),
+    'opus_single': ('Opus single', PALETTE["SINGLE_CALL_MAIN"], 's'),
+    'sonnet_single': ('Sonnet single', PALETTE["SINGLE_CALL_MAIN"], 'o'),
+    'sonnet_n3': ('Sonnet N = 3', palette_tint("ADM_DEFAULT", .25), 'o'),
+    'sonnet_n5': ('Sonnet N = 5', PALETTE["ADM_DEFAULT"], 'o'),
 }
 METRICS = (('mean_model_usd', 'Model cost / valid task ($; log)'),
            ('mean_browser_batches', 'Browser commands / valid task'),
@@ -103,7 +109,7 @@ def draw(ax, rows, key, label):
     ax.spines[['top', 'right']].set_visible(False)
     ax.tick_params(length=3, width=.6, pad=2)
     for side in ('left', 'bottom'):
-        ax.spines[side].set_color('#555555')
+        ax.spines[side].set_color(PALETTE["MUTED"])
         ax.spines[side].set_linewidth(.6)
 
 
@@ -137,7 +143,7 @@ def figure(rows, output, stem, preview):
     fig.text(.065, .035, footnote, fontsize=7.5, ha='left', va='bottom')
     if preview:
         fig.text(.76, .35, 'PRIVATE PREVIEW\nFinal audit pending',
-                 ha='left', va='top', fontsize=7, color='#A00000')
+                 ha='left', va='top', fontsize=7, color=PALETTE["MUTED"])
     for ext in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if ext == 'svg' else ({'CreationDate': None, 'ModDate': None} if ext == 'pdf' else {})
         path = output / (stem + '.' + ext)
@@ -165,7 +171,7 @@ Successes divide by valid outcomes in each arm; invalid outcomes stay in the sep
 
 ![Claude BrowserCode performance versus model cost, browser batches and latency](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs.png)
 
-*Opus 5.5 and Sonnet 5.5; 12,288 output tokens and 30 decisions. N = 3/5 samples candidates independently and executes only the selected batch. Squares identify Opus and circles Sonnet; blue denotes a single proposal and red candidates plus selection. Open red circles denote N3 and filled red circles N5. Legends sit outside on the right; cost and latency are logarithmic. All metrics use valid tasks, including valid failures. Axes are cropped; no uncertainty is inferred from aggregate points. Collections occur on live sites.*
+*Opus 5.5 and Sonnet 5.5; 12,288 output tokens and 30 decisions. N = 3/5 samples candidates independently and executes only the selected batch. Squares identify Opus and circles Sonnet; neutral mauve denotes a single proposal and purple candidates plus selection. Open purple circles denote N3 and filled purple circles N5. Legends sit outside on the right; cost and latency are logarithmic. All metrics use valid tasks, including valid failures. Axes are cropped; no uncertainty is inferred from aggregate points. Collections occur on live sites.*
 
 Model cost includes all candidate and selector calls in each included episode, including thinking output and conservative unknown reservations. Native latency measures actor-loop wall time, including online waits and browser execution, excluding browser setup, final judge-only capture, cleanup and external judging. A browser batch is one selected BrowserCode block and can contain multiple browser operations. GPT-5.6 Terra grades terminal success; historical GPT figures using another judge remain separately labeled.
 
@@ -239,7 +245,7 @@ def main():
         'input_sha256': sha(args.aggregate), 'plot_script_sha256': sha(__file__),
         'qualification_sha256': sha(args.qualification) if args.qualification else None,
         'private_preview': args.preview,
-        'style': 'Blue single proposals, red candidates plus selection; Opus squares, Sonnet circles; open red N3, filled red N5; outside legends; logarithmic cost/latency; no frontier or point labels',
+        'style': 'Neutral mauve single proposals, purple candidates plus selection; Opus squares, Sonnet circles; open purple N3, filled purple N5; outside legends; logarithmic cost/latency; no frontier or point labels',
         'matplotlib_version': matplotlib.__version__,
         'plot_order': ['model cost', 'selected browser batches', 'native latency'],
     }, indent=2) + '\n')

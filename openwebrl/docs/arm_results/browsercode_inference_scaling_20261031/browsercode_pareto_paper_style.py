@@ -1,4 +1,10 @@
 """Shared compact paper styling; preserves every plotted coordinate and axis range."""
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 FOCUS = "parallel5_select_high_60steps"
 LONG = {"luna_single_high_60steps", "luna_single_high_120steps", FOCUS, "sol_single_high60"}
 FOOTER = "GPT-6 Luna & Sol. Luna baseline: high effort · 12,288 max tokens · 30 steps. N=candidates."
@@ -72,4 +78,4 @@ def apply_style(fig, methods_per_panel, styles, label_to_method, *, weighted):
                frameon=False, fontsize=8, handlelength=1.8, handletextpad=.35, borderaxespad=0)
     for text in list(fig.texts):
         text.remove()
-    fig.text(.32, .065 / fig.get_figheight(), FOOTER, fontsize=7.2, color="#555555", va="bottom")
+    fig.text(.32, .065 / fig.get_figheight(), FOOTER, fontsize=7.2, color=PALETTE["MUTED"], va="bottom")

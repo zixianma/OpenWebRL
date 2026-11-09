@@ -5,6 +5,12 @@ Bootstrap differences resample paired outcomes within each benchmark, then
 apply the original fixed 300/595/150 weights. Intervals are pointwise and
 conditional on the common-valid cohort; they exclude live-window uncertainty.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 from pathlib import Path
 import argparse
 import hashlib
@@ -95,7 +101,7 @@ def theme():
 
 def style(ax):
     ax.spines[['top', 'right']].set_visible(False)
-    ax.grid(axis='y', color='#e4e4e4', linewidth=.4, zorder=0)
+    ax.grid(axis='y', color=PALETTE["BORDER"], linewidth=.4, zorder=0)
     ax.tick_params(length=2.5, width=.6, pad=2)
 
 
@@ -105,7 +111,7 @@ def dot(ax, point, key, method, label=None, offset=(3, 5)):
                edgecolors=color, facecolors=color if filled else 'white', linewidths=.9, zorder=4)
     if label:
         ax.annotate(label, (point[key], 100*point['success_rate']), xytext=offset,
-                    textcoords='offset points', fontsize=6.5, color=color)
+                    textcoords='offset points', fontsize=6.5, color=PALETTE['ADM_DEFAULT'] if method.startswith('parallel') else PALETTE['MUTED'])
 
 
 def save(fig, stem):
@@ -124,13 +130,13 @@ def render_selection(data, points, paired):
     fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.65))
     fig.subplots_adjust(left=.075, right=.86, top=.78, bottom=.30, wspace=.55)
     fig.suptitle('Action selection at a fixed 30-decision limit', x=.075, y=.98, ha='left', fontsize=9)
-    fig.text(.075, .87, 'Luna high · 12K output cap · one selected action per decision', fontsize=7.2, color='#555555')
+    fig.text(.075, .87, 'Luna high · 12K output cap · one selected action per decision', fontsize=7.2, color=PALETTE["MUTED"])
     gain = {p['left_method']: p for p in paired if p['right_method'] == BASE}
     ax = axes[0]
-    ax.axhline(0, color='#999999', linewidth=.7)
+    ax.axhline(0, color=PALETTE["BORDER"], linewidth=.7)
     ns = [1, 2, 3, 5]
     gains = [0]+[gain[m]['difference_pp'] for m in SELECTION[1:]]
-    ax.plot(ns, gains, color='#c94b4b', linewidth=.9, zorder=2)
+    ax.plot(ns, gains, color=PALETTE["ADM_DEFAULT"], linewidth=.9, zorder=2)
     for n, m, y in zip(ns, SELECTION, gains):
         color = C.SCALING.STYLES[m][2]
         if m != BASE:
@@ -146,7 +152,7 @@ def render_selection(data, points, paired):
     for ax, key, title, xlabel in zip(axes[1:], ['actor_usd', 'actor_seconds'],
             ['(b) Cost trade-off', '(c) Latency trade-off'], ['Actor cost ($/task, log)', 'Actor latency (s/task)']):
         ax.plot([points[m][key] for m in SELECTION], [100*points[m]['success_rate'] for m in SELECTION],
-                color='#c94b4b', linewidth=.9, zorder=2)
+                color=PALETTE["ADM_DEFAULT"], linewidth=.9, zorder=2)
         for m, label, off in zip(SELECTION, labels, offsets):
             dot(ax, points[m], key, m, label, off)
         dot(ax, points['serial_high'], key, 'serial_high', 'Sol', (2, 4))
@@ -161,13 +167,13 @@ def render_selection(data, points, paired):
             ax.set_xticks([90, 135, 180]); ax.set_xlim(80, 200)
     for ax in axes:
         style(ax)
-    handles = [Line2D([], [], marker='o', linestyle='none', color='#4299c4', label='N1 single'),
-               Line2D([], [], marker='o', linestyle='-', color='#b41620', label='Selection'),
-               Line2D([], [], marker='s', linestyle='none', color='#125aa0', label='Sol high')]
+    handles = [Line2D([], [], marker='o', linestyle='none', color=PALETTE["SINGLE_CALL_MAIN"], label='N1 single'),
+               Line2D([], [], marker='o', linestyle='-', color=PALETTE["ADM_DEFAULT"], label='Selection'),
+               Line2D([], [], marker='s', linestyle='none', color=PALETTE["SINGLE_CALL_MAIN"], label='Sol high')]
     fig.legend(handles=handles, loc='center left', bbox_to_anchor=(.87, .52), frameon=False,
                fontsize=6.3, handlelength=1.2, handletextpad=.3, borderaxespad=0)
-    fig.text(.075, .12, 'Same 744 common-valid tasks: OM2W 226 · WebVoyager 387 · DeepShop 131', fontsize=6.8, color='#555555')
-    fig.text(.075, .045, 'Fixed planned weights 300/595/150 · Terra judged · Actor metrics exclude judging', fontsize=6.8, color='#555555')
+    fig.text(.075, .12, 'Same 744 common-valid tasks: OM2W 226 · WebVoyager 387 · DeepShop 131', fontsize=6.8, color=PALETTE["MUTED"])
+    fig.text(.075, .045, 'Fixed planned weights 300/595/150 · Terra judged · Actor metrics exclude judging', fontsize=6.8, color=PALETTE["MUTED"])
     save(fig, 'browsercode_selection_scaling')
     plt.close(fig)
 
@@ -178,14 +184,14 @@ def render_families(data, points):
     fig, axes = plt.subplots(2, 3, figsize=(7.2, 4.2), sharey=True)
     fig.subplots_adjust(left=.085, right=.97, top=.81, bottom=.21, wspace=.38, hspace=.48)
     fig.suptitle('Different scaling controls, compared on the same tasks', x=.085, y=.98, ha='left', fontsize=9)
-    fig.text(.085, .90, 'Luna high · separate intended controls · shared cost and latency axes', fontsize=7, color='#555555')
+    fig.text(.085, .90, 'Luna high · separate intended controls · shared cost and latency axes', fontsize=7, color=PALETTE["MUTED"])
     for col, (name, methods, labels) in enumerate(FAMILIES):
         subtitle = ['N1 · 30 decisions', 'N1 and N5 · 12K cap', '30 decisions · 12K cap'][col]
         axes[0, col].set_title(name+'\n'+subtitle, fontsize=7.6, pad=8)
         for row, key in enumerate(['actor_usd', 'actor_seconds']):
             ax = axes[row, col]
             ax.plot([points[m][key] for m in methods], [100*points[m]['success_rate'] for m in methods],
-                    color='#c94b4b' if col == 2 else '#4385b4', linewidth=.9, zorder=2)
+                    color=PALETTE["ADM_DEFAULT"] if col == 2 else PALETTE["SINGLE_CALL_MAIN"], linewidth=.9, zorder=2)
             for m, label in zip(methods, labels):
                 off = (3, -11) if m == BASE else (3, 4)
                 if m == 'parallel3_select_high': off = (-9, -11)
@@ -194,7 +200,7 @@ def render_families(data, points):
             if col == 1:
                 extra = ['parallel5_select_high', 'parallel5_select_high_60steps']
                 ax.plot([points[m][key] for m in extra], [100*points[m]['success_rate'] for m in extra],
-                        color='#b41620', linewidth=.9, zorder=2)
+                        color=PALETTE["ADM_DEFAULT"], linewidth=.9, zorder=2)
                 for m, label in zip(extra, ['N5/30', 'N5/60']):
                     dot(ax, points[m], key, m, label, (3, 4))
             ax.set_ylim(79, 88)
@@ -207,8 +213,8 @@ def render_families(data, points):
             else:
                 ax.set_xlabel('Actor latency (s/task)'); ax.xaxis.set_major_locator(MaxNLocator(3))
                 ax.set_xlim(85, 200); ax.set_xticks([90, 135, 180])
-    fig.text(.085, .075, 'Common-valid OM2W 226 / WebVoyager 387 / DeepShop 131 · Fixed planned weights 300/595/150', fontsize=6.8, color='#555555')
-    fig.text(.085, .025, 'Historical single/60 enforced 60 but advertised 30 · Live windows differ · Actor metrics exclude judging', fontsize=6.8, color='#555555')
+    fig.text(.085, .075, 'Common-valid OM2W 226 / WebVoyager 387 / DeepShop 131 · Fixed planned weights 300/595/150', fontsize=6.8, color=PALETTE["MUTED"])
+    fig.text(.085, .025, 'Historical single/60 enforced 60 but advertised 30 · Live windows differ · Actor metrics exclude judging', fontsize=6.8, color=PALETTE["MUTED"])
     save(fig, 'browsercode_scaling_by_family')
     plt.close(fig)
 
@@ -226,18 +232,18 @@ def render_compact(data, points):
     sol = points['serial_high']
     fig.text(.075, .91, f"Sol high / 30 reference: {100*sol['success_rate']:.2f}% success · "
              f"${sol['actor_usd']:.4f}/task · {sol['actor_seconds']:.1f} s/task", fontsize=7,
-             color='#08519c')
+             color=PALETTE["SINGLE_CALL_MAIN"])
     axes[0, 0].set_title('Single-run scaling', loc='left', fontsize=8.1, pad=17)
     axes[0, 1].set_title('Action-selection scaling', loc='left', fontsize=8.1, pad=17)
     axes[0, 0].legend(handles=[
-        Line2D([], [], color='#4385b4', linewidth=.9, label='Steps'),
-        Line2D([], [], color='#4385b4', linewidth=.9, linestyle=':', label='Output cap'),
-        Line2D([], [], color='#08306b', linewidth=.9, linestyle='-.', label='Effort')],
+        Line2D([], [], color=PALETTE["SINGLE_CALL_MAIN"], linewidth=.9, label='Steps'),
+        Line2D([], [], color=PALETTE["SINGLE_CALL_MAIN"], linewidth=.9, linestyle=':', label='Output cap'),
+        Line2D([], [], color=PALETTE["BASELINE_DARK"], linewidth=.9, linestyle='-.', label='Effort')],
         loc='lower left', bbox_to_anchor=(0, 1.00), ncol=3, frameon=False,
         borderaxespad=0, columnspacing=.9, handlelength=1.7, handletextpad=.35, fontsize=6.1)
     axes[0, 1].legend(handles=[
-        Line2D([], [], color='#b41620', linewidth=.9, label='30 steps'),
-        Line2D([], [], color='#b41620', linewidth=.9, linestyle='--', label='60 steps')],
+        Line2D([], [], color=PALETTE["ADM_DEFAULT"], linewidth=.9, label='30 steps'),
+        Line2D([], [], color=PALETTE["ADM_DEFAULT"], linewidth=.9, linestyle='--', label='60 steps')],
         loc='lower left', bbox_to_anchor=(0, 1.00), ncol=2, frameon=False,
         borderaxespad=0, columnspacing=1.5, handlelength=1.7, handletextpad=.35, fontsize=6.1)
     singles = [BASE, 'luna_single_high_6144', 'luna_single_high_24576',
@@ -250,12 +256,12 @@ def render_compact(data, points):
         for col, methods in enumerate([singles, selection]):
             ax = axes[row, col]
             curves = [
-                ([BASE, 'luna_single_high_60steps', 'luna_single_high_120steps'], '#4385b4', '-'),
-                (['luna_single_high_6144', BASE, 'luna_single_high_24576'], '#4385b4', ':'),
-                ([BASE, 'luna_single_xhigh_12288'], '#08306b', '-.')
+                ([BASE, 'luna_single_high_60steps', 'luna_single_high_120steps'], PALETTE["SINGLE_CALL_MAIN"], '-'),
+                (['luna_single_high_6144', BASE, 'luna_single_high_24576'], PALETTE["SINGLE_CALL_MAIN"], ':'),
+                ([BASE, 'luna_single_xhigh_12288'], PALETTE["BASELINE_DARK"], '-.')
             ] if col == 0 else [
-                (SELECTION, '#c94b4b', '-'),
-                (['luna_single_high_60steps', 'parallel5_select_high_60steps'], '#b41620', '--')
+                (SELECTION, PALETTE["ADM_DEFAULT"], '-'),
+                (['luna_single_high_60steps', 'parallel5_select_high_60steps'], PALETTE["ADM_DEFAULT"], '--')
             ]
             for members, color, linestyle in curves:
                 ax.plot([points[m][key] for m in members],
@@ -295,9 +301,9 @@ def render_compact(data, points):
                 ax.set_xticks([90, 105, 120, 135] if col == 0 else [90, 120, 150, 180, 205])
                 ax.set_xlabel('Actor latency (s/task)', fontsize=7, labelpad=2)
     fig.text(.075, .075, '10 Luna settings + Sol reference · Same 744 valid tasks · Terra judged · Planned benchmark weights',
-             fontsize=6.3, color='#555555')
+             fontsize=6.3, color=PALETTE["MUTED"])
     fig.text(.075, .025, 'Local x-axis ranges · Single/60 advertised 30 · Live windows differ · Actor metrics exclude judging',
-             fontsize=6.3, color='#555555')
+             fontsize=6.3, color=PALETTE["MUTED"])
     save(fig, 'browsercode_scaling_strategies_compact')
     plt.close(fig)
     coverage = dict(schema='browsercode-compact-scaling-coverage-v1',

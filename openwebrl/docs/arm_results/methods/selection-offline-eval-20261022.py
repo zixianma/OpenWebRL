@@ -81,10 +81,10 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
 
 def state_card(x, y, step, color, candidate):
     width, height = 0.28, 0.18
-    box(x - width / 2, y - height / 2, width, height, edge=color)
+    box(x - width / 2, y - height / 2, width, height, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
-                           facecolor=color, edgecolor="none", alpha=0.15, zorder=2))
-    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=color, ha="center")
+                           facecolor=C["STATE"], edgecolor="none", alpha=0.65, zorder=2))
+    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["STATE_INK"], ha="center")
 
 
 def percent(rate):
@@ -129,7 +129,7 @@ text(0.64, 1.60, r"$K=5$ actions", size=6.5, color=MUTED, ha="center")
 text(1.73, 1.79, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 1.60,
-         rf"$a_{{t+{k}}}^{{i}}$", size=6.5, color=MUTED, ha="center")
+         rf"$a_{{t+{k}}}^{{i}}$", size=6.5, color=C["ACTION_INK"], ha="center")
 for x, title, split, color, fill, width in (
         (3.82, "Train %", "1–3", OUTCOME, LABEL_BG, 0.34),
         (4.20, "Eval %", "4–8", HELD, HELD_BG, 0.28)):
@@ -138,15 +138,15 @@ for x, title, split, color, fill, width in (
     ax.add_patch(Rectangle((x - width / 2, y_low), width, y_high - y_low,
                            facecolor=fill, edgecolor="none", zorder=0))
 mid = sum(ys) / len(ys)
-box(0.03, mid - 0.12, 0.24, 0.24, edge=INK)
-text(0.15, mid, r"$s_t$", size=9, ha="center")
+box(0.03, mid - 0.12, 0.24, 0.24, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+text(0.15, mid, r"$s_t$", size=9, color=C["STATE_INK"], ha="center")
 rollout_box = box(0.94, y_low - 0.02, xs[0] + rollout_pitch / 2 - 0.94,
                   y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG, lw=1.0)
 rollout_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.28, mid, 0.465, y, color=MUTED, lw=.75, head=5)
-    box(0.47, y - 0.09, 0.34, 0.18)
-    text(0.64, y, rf"$a_t^{{{i + 1}}}$", size=7.5, ha="center")
+    box(0.47, y - 0.09, 0.34, 0.18, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+    text(0.64, y, rf"$a_t^{{{i + 1}}}$", size=7.5, color=C["ACTION_INK"], ha="center")
     arrow(0.815, y, 0.950, y, color=IMMEDIATE, lw=.75, head=5)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
@@ -196,9 +196,9 @@ for y, key, label, color, evidence in lanes:
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
     text(teacher_x + teacher_w / 2, y, "Teacher", color=color, ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
-    box(pick_x, y - 0.115, pick_w, 0.23, edge=color)
+    box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
     pick = PICKS[key]
-    text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=color, ha="center")
+    text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=C["ACTION_INK"], ha="center")
     arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
     text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=INK,
          weight="bold", ha="center")
@@ -211,8 +211,8 @@ arrow(5.97, y, teacher_x - 0.01, y, color=ORACLE)
 box(teacher_x, y - 0.115, teacher_w, 0.23, edge=ORACLE)
 text(teacher_x + teacher_w / 2, y, "Argmax", color=INK, ha="center")
 arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
-box(pick_x, y - 0.115, pick_w, 0.23, edge=ORACLE)
-text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=INK, ha="center")
+box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=C["ACTION_INK"], ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
 text(eval_x, y, "80", color=INK, weight="bold", ha="center")
 

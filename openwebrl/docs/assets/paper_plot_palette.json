@@ -1,6 +1,6 @@
 {
   "schema": "paper-plot-palette-roles-v1",
-  "status": "Selected palette under trial in the listed first-batch renderers; other figures retain their earlier palette",
+  "status": "Shared paper palette: consistent semantic roles across method diagrams and result plots",
   "base_color_count": 7,
   "families": {
     "adm": {
@@ -12,24 +12,32 @@
       "meaning": "Teacher evidence horizon, distinct from the ADM method identity."
     },
     "oracle": {
-      "color": null,
+      "color": "#EDB774",
       "meaning": "Outcome-based oracle and outcome-label supervision; train/eval use related shades."
     },
     "single_call": {
-      "color": null,
+      "color": "#847D98",
       "meaning": "Single-call inference scaling; effort, tokens and browser-step budgets use shades/line styles."
     },
     "success": {
-      "color": null,
-      "meaning": "Successful rollout outcomes only."
+      "color": "#74EDC3",
+      "meaning": "Explicit successful terminal-outcome markers; diagram action tokens use the same mint family in a separate labeled context."
     },
     "failure": {
-      "color": null,
+      "color": "#7C7887",
       "meaning": "Failed rollout outcomes; keep hollow marks where already established."
     },
     "attention": {
-      "color": null,
+      "color": "#74EDC3",
       "meaning": "Allowed attention connections, confined to attention grids."
+    },
+    "state": {
+      "color": "#EDE374",
+      "meaning": "Observation/state tokens in method diagrams; yellow fill with dark text."
+    },
+    "action": {
+      "color": "#74EDC3",
+      "meaning": "Candidate and selected-action tokens in method diagrams; mint fill with dark green text."
     }
   },
   "roles": {
@@ -124,6 +132,22 @@
     "ADM_STUDENT": {
       "family": "adm",
       "tone": "base"
+    },
+    "STATE": {
+      "family": "state",
+      "tone": "base"
+    },
+    "STATE_BORDER": {
+      "family": "oracle",
+      "tone": "base"
+    },
+    "ACTION": {
+      "family": "action",
+      "tone": "base"
+    },
+    "ACTION_INK": {
+      "family": "action",
+      "tone": "dark"
     }
   },
   "neutral_roles": {
@@ -135,7 +159,8 @@
     "BACKGROUND": "White canvas; soft fills derive from base colors rather than new hues",
     "PRE_EXEC": "Pre-execution teacher labels; explicit semantic alias of an actor-baseline neutral",
     "ATTENTION_MASKED": "Masked attention connections; derive from the neutral background/border",
-    "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role"
+    "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role",
+    "STATE_INK": "Readable dark text on yellow observation/state cards."
   },
   "non_color_encodings": {
     "teacher_vs_student": "Teachers use hollow circles colored by label source. Students use light-purple fills with thick warm label-source outlines: yellow Pre-exec, salmon-orange Lookahead, amber Oracle. Explicit H labels distinguish horizons.",
@@ -166,7 +191,7 @@
   },
   "notes": [
     "Role variables remain distinct even when a chosen palette intentionally shares a family.",
-    "The selected palette is applied to the first batch listed in trial.renderers for visual review; other figures retain their earlier palette.",
+    "Shared named roles apply across method diagrams and result plots; historical figure populations and estimates remain unchanged.",
     "The H=1 role is retained for method/evidence illustrations; former post-execution result series are omitted from most plots, with the teacher/student horizon comparison explicitly restoring H=1.",
     "The seven base colors are user choices; light/dark tones are derived, not independent choices."
   ],
@@ -175,7 +200,7 @@
     "rule": "Use a figure-local ordered cycle drawn from the seven families, their tones and neutrals; no additional base-color choices required. Always label the categories explicitly."
   },
   "proposal": {
-    "status": "Selected palette applied to first-batch figures for visual review",
+    "status": "Shared paper colors applied across method and result renderers",
     "source_images": [
       "AdobeColor-My Color Theme (1).jpeg",
       "AdobeColor-My Color Theme (2).jpeg",
@@ -189,7 +214,9 @@
       "single_call": "#847D98",
       "success": "#74EDC3",
       "failure": "#7C7887",
-      "attention": "#74EDC3"
+      "attention": "#74EDC3",
+      "state": "#EDE374",
+      "action": "#74EDC3"
     },
     "paper_roles": {
       "ADM_MAIN": "#9575EE",
@@ -224,7 +251,12 @@
       "ADM_4B": "#654FA1",
       "LOOKAHEAD_TEACHER": "#ED8B74",
       "LOOKAHEAD_EVIDENCE": "#ED8B74",
-      "ADM_STUDENT": "#9575EE"
+      "ADM_STUDENT": "#9575EE",
+      "STATE": "#EDE374",
+      "STATE_INK": "#211A33",
+      "STATE_BORDER": "#EDB774",
+      "ACTION": "#74EDC3",
+      "ACTION_INK": "#489379"
     },
     "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
@@ -232,7 +264,8 @@
       "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple. Student fills keep purple, with thick warm outlines to identify label sources (yellow Pre-exec, salmon-orange Lookahead, amber Oracle).",
       "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
-      "Teacher/student fill, actor-model shapes and cached shading remain independent of hue."
+      "Teacher/student fill, actor-model shapes and cached shading remain independent of hue.",
+      "Diagram tokens keep yellow states and mint-green candidate/selected actions across every method figure. Text stays dark enough to read; lookahead remains a salmon enclosure and ADM retains purple."
     ],
     "previews": [
       "assets/paper_plot_palette_preview.png",
@@ -262,10 +295,15 @@
     "ADM_4B": "#654FA1",
     "LOOKAHEAD_TEACHER": "#ED8B74",
     "LOOKAHEAD_EVIDENCE": "#ED8B74",
-    "ADM_STUDENT": "#9575EE"
+    "ADM_STUDENT": "#9575EE",
+    "STATE": "#EDE374",
+    "STATE_INK": "#211A33",
+    "STATE_BORDER": "#EDB774",
+    "ACTION": "#74EDC3",
+    "ACTION_INK": "#489379"
   },
   "trial": {
-    "status": "Applied to a first batch for visual review; no numerical or scientific changes",
+    "status": "Applied across all registered paper figures; frozen scientific inputs and estimates preserved",
     "colors": {
       "ADM_MAIN": "#9575EE",
       "ADM_LIGHT": "#9575EE",
@@ -299,16 +337,96 @@
       "ADM_4B": "#654FA1",
       "LOOKAHEAD_TEACHER": "#ED8B74",
       "LOOKAHEAD_EVIDENCE": "#ED8B74",
-      "ADM_STUDENT": "#9575EE"
+      "ADM_STUDENT": "#9575EE",
+      "STATE": "#EDE374",
+      "STATE_INK": "#211A33",
+      "STATE_BORDER": "#EDB774",
+      "ACTION": "#74EDC3",
+      "ACTION_INK": "#489379"
     },
     "renderers": [
-      "arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py",
-      "arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py",
-      "arm_results/rl_final_20261108/plot_rl_learning_compact.py",
-      "arm_results/methods/selection-offline-eval-20261022.py",
-      "arm_results/methods/selection-arch-overview-20261107.py",
-      "arm_results/methods/adm_overview/plot_figure1.py"
+      "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
+      "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/plot_gap_repaired_scaling.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_pareto_paper_style.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_average.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_common_valid.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_preview.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_right_legend_preview.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py",
+      "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/plot_selection_strength_variants.py",
+      "openwebrl/docs/arm_results/browsercode_us_stealth_full300_20261102/plot_stealth_costs.py",
+      "openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py",
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/common_valid111/plot_om2w_harness_tradeoffs.py",
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py",
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py",
+      "openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_terra_benchmark_tradeoffs.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/compact_examples.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/plot.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/render_examples.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/student_examples.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/student_minority_examples.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/student_minority_figure.py",
+      "openwebrl/docs/arm_results/luna_pre_post_k3_20261105/student_outcome_examples.py",
+      "openwebrl/docs/arm_results/methods/adm_overview/plot_figure1.py",
+      "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.py",
+      "openwebrl/docs/arm_results/methods/selection-head-joint-independent-20261026.py",
+      "openwebrl/docs/arm_results/methods/selection-head-variants-20261022.py",
+      "openwebrl/docs/arm_results/methods/selection-offline-eval-20261022.py",
+      "openwebrl/docs/arm_results/rl_final_20261108/plot_rl_learning_compact.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_eval_learning_curves.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_loops_iter90.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_loops_iter90_bars_preview.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_repetition_incidence.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_repetition_success.py",
+      "openwebrl/docs/arm_results/rl_integration/behavior/plot_rl_repetition_success_robustness.py",
+      "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/plot.py",
+      "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/plot_bars.py",
+      "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/plot_fixedfit.py",
+      "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/plot_piotr_single.py",
+      "openwebrl/docs/arm_results/rl_integration/lookahead-draw-split-20261013/style.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-data-scale-benchmarks-20261026-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-data-scale-paired-20261026-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-ablation-vs-sft-20261027-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-20261027-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-kfold-20261101-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-setups-20261027-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-stages-20261027-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-label-stages-kfold-20261101-plot.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-n3-om2w-vs-cost-20261021.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-ablations-20261105.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py",
+      "openwebrl/docs/arm_results/rl_integration/selection-state-scale-1panel-paired-20261027-plot.py",
+      "openwebrl/docs/arm_results/sol6_luna_three_benchmarks_20261019/plot_api_tradeoffs.py",
+      "openwebrl/docs/assets/preview_paper_palette.py",
+      "scripts/plot_arm_final_results.py",
+      "scripts/plot_arm_reward_hacking.py",
+      "scripts/render_arm_method_guides.py",
+      "scripts/render_selection_designs_figure.py",
+      "scripts/render_selection_designs_v2.py",
+      "scripts/render_selection_head_figure.py",
+      "scripts/render_selection_head_method.py",
+      "scripts/render_selection_head_overview.py"
     ],
-    "student_label_outline": "Student ADM-22M uses light-purple fills and thick warm outlines: yellow for Pre-exec labels, salmon-orange for Lookahead labels, amber for Oracle labels. Explicit H labels distinguish horizons."
+    "student_label_outline": "Student ADM-22M uses light-purple fills and thick warm outlines: yellow for Pre-exec labels, salmon-orange for Lookahead labels, amber for Oracle labels. Explicit H labels distinguish horizons.",
+    "renderer_path_base": "repository root",
+    "coverage": {
+      "registered_figure_families": 142,
+      "gallery_figures": 61,
+      "registered_artifact_files": 332
+    }
+  },
+  "diagram_roles": {
+    "state": "Yellow observation/state cards; dark text and amber borders for contrast.",
+    "action": "Mint-green candidate/selected-action cards; darker related green for text and connectors.",
+    "lookahead": "Salmon enclosure and teacher/evidence cues; state/action tokens retain yellow/green identity.",
+    "adm": "Light purple default/22M; dark purple only for 4B selector size where applicable.",
+    "status": "Explicit success markers may use green; hollow gray indicates failure. Diagram token colors never denote terminal outcomes.",
+    "attention": "Mint attention cells remain a structural matrix encoding; masks are neutral."
   }
 }

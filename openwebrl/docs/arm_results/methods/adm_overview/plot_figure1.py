@@ -50,8 +50,8 @@ plt.rcParams.update({"font.family": "Albert Sans", "font.size": 6.8,
 # Semantic roles match the collection, architecture and result figures.
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
 GRAY, PALE_GRAY = C["BASELINE_DARK"], tint("BASELINE_LIGHT", .92)
-STATE, STATE_INK, PALE_STATE = C["SUCCESS_FILL"], C["SUCCESS"], tint("SUCCESS_FILL", .90)
-ACTION, ACTION_EDGE, PALE_ACTION = C["TRAIN"], C["ORACLE"], tint("TRAIN", .62)
+STATE_INK, STATE_EDGE, PALE_STATE = C["STATE_INK"], C["STATE_BORDER"], tint("STATE", .65)
+ACTION_EDGE, PALE_ACTION = C["ACTION_INK"], tint("ACTION", .65)
 TEACHER, PALE_TEACHER = C["LOOKAHEAD_TEACHER"], tint("LOOKAHEAD_EVIDENCE", .90)
 PURPLE, PALE_PURPLE = C["ADM_DEFAULT"], tint("ADM_DEFAULT", .92)
 RULE = tint("BORDER", .55)
@@ -119,14 +119,14 @@ def arrow(start, end, color=MUTED, lw=0.75, dashed=False, scale=6):
 
 
 def browser(x, y, w=25, h=36, label=None):
-    box(x-w/2, y, w, h, PALE_STATE, STATE_INK, radius=3, lw=0.5)
-    line([(x-w/2+2, y+9), (x+w/2-2, y+9)], STATE_INK, lw=0.4)
+    box(x-w/2, y, w, h, PALE_STATE, STATE_EDGE, radius=3, lw=0.5)
+    line([(x-w/2+2, y+9), (x+w/2-2, y+9)], STATE_EDGE, lw=0.4)
     if label is not None:
         text(x, y+23, label, size=5.2, color=STATE_INK)
         return
     for dy, frac in [(17, 0.6), (25, 0.4)]:
         line([(x-w/2+5, y+dy), (x-w/2+5+w*frac, y+dy)],
-             STATE_INK, lw=0.45)
+             STATE_EDGE, lw=0.45)
 
 
 def web_frame(x, y, w, filename):
@@ -152,20 +152,20 @@ panel(1206, 582, "(c) Applications")
 
 # (a) Conceptual supervision: proposals + privileged evidence -> teacher choice.
 # Detailed rollout/evaluation mechanics belong to the separate data figure.
-box(34, 116, 582, 162, PALE_STATE, STATE_INK)
+box(34, 116, 582, 162, PALE_STATE, STATE_EDGE)
 web_frame(49, 132, 230, "state.jpg")
 text(447, 171, r"Web state $s_t$", size=8.5, color=STATE_INK)
 text(447, 224, "Task + browser history", size=6.5, color=MUTED)
 arrow((322, 278), (322, 317), GRAY)
 text(369, 298, r"$\pi_\theta$", size=7.7, color=GRAY)
 
-box(34, 317, 582, 105, tint("TRAIN", .87), ACTION_EDGE, radius=7, lw=0.5)
+box(34, 317, 582, 105, tint("ACTION", .93), ACTION_EDGE, radius=7, lw=0.5)
 text(54, 341, r"Actions $\mathcal{A}_t$", size=6.8, ha="left")
 text(596, 341, "Reasoning + operation", size=6.0, color=MUTED, ha="right")
 centers = [122, 322, 522]
 for cx, i in zip(centers, ["1", "2", "K"]):
     box(cx-66, 366, 132, 49, PALE_ACTION, ACTION_EDGE, radius=6)
-    text(cx, 391, rf"$a_t^{{({i})}}$", size=8.3)
+    text(cx, 391, rf"$a_t^{{({i})}}$", size=8.3, color=ACTION_EDGE)
     arrow((cx, 422), (cx, 445), TEACHER, scale=5)
 text(422, 391, r"$\cdots$", size=6.5, color=MUTED)
 
@@ -181,15 +181,15 @@ text(322, 598, "Teacher", size=8.5, color=TEACHER, weight="bold")
 text(322, 637, r"$\mathcal{T}(s_t,\mathcal{A}_t,\mathcal{E}_t)$", size=9.5, color=TEACHER)
 arrow((322, 660), (322, 700), ACTION_EDGE, scale=4)
 box(243, 700, 158, 64, PALE_ACTION, ACTION_EDGE, radius=8)
-text(322, 732, r"$a_t^{+}$", size=12.2, color=INK)
+text(322, 732, r"$a_t^{+}$", size=12.2, color=ACTION_EDGE)
 
 # (b) Only state and proposals are available to the student.
 for cx, label, fill, color in [
-    (804, r"$s_t$", PALE_STATE, STATE_INK),
+    (804, r"$s_t$", PALE_STATE, STATE_EDGE),
     (1040, r"$\mathcal{A}_t$", PALE_ACTION, ACTION_EDGE),
 ]:
     box(cx-90, 139, 180, 84, fill, color, radius=7)
-    text(cx, 181, label, size=11.5, color=STATE_INK if cx == 804 else INK)
+    text(cx, 181, label, size=11.5, color=STATE_INK if cx == 804 else ACTION_EDGE)
     line([(cx, 223), (cx, 264), (922, 264)], PURPLE)
 arrow((922, 264), (922, 286), PURPLE, lw=0.85)
 box(676, 286, 492, 186, PALE_PURPLE, PURPLE, lw=1.3)
@@ -206,7 +206,7 @@ for cx, score, label in [(745, 0.12, "1"), (850, 0.24, "2"), (1100, 0.42, "K")]:
 text(975, 642, r"$\cdots$", size=7.2, color=MUTED)
 line([(711, 620), (1135, 620)], LINE, lw=0.55)
 box(843, 700, 158, 64, PALE_ACTION, ACTION_EDGE)
-text(922, 732, r"$\hat a_t$", size=12.2, color=INK)
+text(922, 732, r"$\hat a_t$", size=12.2, color=ACTION_EDGE)
 arrow((922, 666), (922, 700), color=PURPLE, lw=0.85, scale=5)
 text(944, 683, "argmax", size=6.2, color=PURPLE, ha="left")
 
@@ -223,7 +223,7 @@ text(1288, 211, r"$\pi_\theta$", size=7.6, color=GRAY)
 arrow((1321, 211), (1339, 211), GRAY, scale=4)
 for cx, label in [(1363, r"$a_t^{(1)}$"), (1433, r"$\cdots$"), (1503, r"$a_t^{(K)}$")]:
     box(cx-24, 190, 48, 42, PALE_ACTION, ACTION_EDGE, radius=5, lw=0.5)
-    text(cx, 211, label, size=6.2, color=MUTED)
+    text(cx, 211, label, size=6.2, color=ACTION_EDGE)
     line([(cx, 232), (cx, 247)], ACTION_EDGE, lw=0.55)
 line([(1310, 247), (1503, 247)], ACTION_EDGE, lw=0.55)
 box(1264, 263, 92, 43, PALE_PURPLE, PURPLE, radius=5)
@@ -231,10 +231,10 @@ text(1310, 284, r"$f_\phi$", size=8.5, color=PURPLE)
 arrow((1310, 247), (1310, 263), PURPLE, scale=4)
 arrow((1356, 284), (1391, 284), PURPLE, scale=4)
 box(1392, 263, 74, 43, PALE_ACTION, ACTION_EDGE, radius=5)
-text(1429, 284, r"$\hat a_t$", size=8.0, color=INK)
-arrow((1466, 284), (1496, 284), STATE_INK, scale=4)
+text(1429, 284, r"$\hat a_t$", size=8.0, color=ACTION_EDGE)
+arrow((1466, 284), (1496, 284), ACTION_EDGE, scale=4)
 browser(1518, 265, 34, 43)
-text(1518, 334, "Execute", size=5.8, color=STATE_INK)
+text(1518, 334, "Execute", size=5.8, color=MUTED)
 # Selection outputs a decision; the browser icon denotes its execution.
 
 text(1662, 183, "Mean valid-only (%)", size=5.5, color=MUTED)
@@ -272,7 +272,7 @@ for yy, method, label in [
     text(1400, yy-15, method, size=6.0, color=PURPLE)
     arrow((1337, yy+24), (1347, yy+24), PURPLE, scale=3)
     box(1348, yy, 104, 48, PALE_ACTION, ACTION_EDGE, radius=5)
-    text(1400, yy+24, label, size=6.7, color=INK)
+    text(1400, yy+24, label, size=6.7, color=ACTION_EDGE)
     arrow((1452, yy+24), (1473, yy+24), ACTION_EDGE, scale=4)
     box(1474, yy, 64, 48, PALE_GRAY, GRAY, radius=5)
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
@@ -301,7 +301,7 @@ box(1256, 704, 70, 48, PALE_PURPLE, PURPLE, radius=5)
 text(1291, 730, r"$f_\phi$", size=8.0, color=PURPLE)
 arrow((1326, 730), (1347, 730), PURPLE, scale=4)
 box(1348, 704, 104, 48, PALE_ACTION, ACTION_EDGE, radius=5)
-text(1400, 730, r"$\hat a_t$", size=8.0, color=INK)
+text(1400, 730, r"$\hat a_t$", size=8.0, color=ACTION_EDGE)
 arrow((1452, 730), (1473, 730), ACTION_EDGE, scale=4)
 box(1474, 704, 64, 48, PALE_GRAY, GRAY, radius=5)
 text(1506, 730, r"$\pi_\theta$", size=7.6, color=GRAY)

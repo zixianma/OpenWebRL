@@ -25,6 +25,18 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
+
+def student_outline(source_color):
+    return C["TRAIN"] if source_color == C["PRE_EXEC"] else source_color
+
 
 from matplotlib.lines import Line2D
 
@@ -32,17 +44,17 @@ HERE = Path(__file__).resolve().parent
 TEACH = json.loads((HERE / "lookahead-draw-split-20261013/curve_fixedfit_main.json").read_text())["valid_only"]["3-7"]["pooled"]["minus_actor"]
 STAGES = json.loads((HERE / "selection-label-stages-20261027.json").read_text())   # head offline (+ post-execution live)
 LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
-INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
 ROWS = [  # label, colour, teacher key, head-offline key, live key
-    ("Pre-exec", "#4B5563", "Before execution", "teacher_pre", "Ours pre"),
-    ("Lookahead\nH = 2", "#A99BE3", "Lookahead K=1", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 4", "#6250BE", "Lookahead K=3", "teacher_k3", "Ours K3"),
-    ("Oracle", "#ED7D00", "Best on observed draws", "outcome", "Ours outcome"),
-    ("Web-\nArbiter", "#8c6d31", "WebArbiter formulation", None, None),
-    ("Web-\nShepherd", "#b5a33a", "WebShepherd formulation", None, None),
-    ("PRO-\nCUA", "#4a8c8c", "PRO-CUA formulation", None, None)]
+    ("Pre-exec", C["PRE_EXEC"], "Before execution", "teacher_pre", "Ours pre"),
+    ("Lookahead\nH = 2", C["LOOKAHEAD_TEACHER"], "Lookahead K=1", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", C["LOOKAHEAD_TEACHER"], "Lookahead K=3", "teacher_k3", "Ours K3"),
+    ("Oracle", C["ORACLE"], "Best on observed draws", "outcome", "Ours outcome"),
+    ("Web-\nArbiter", C["PRE_EXEC"], "WebArbiter formulation", None, None),
+    ("Web-\nShepherd", C["PRE_EXEC"], "WebShepherd formulation", None, None),
+    ("PRO-\nCUA", C["PRE_EXEC"], "PRO-CUA formulation", None, None)]
 MARK = [("Teacher's pick, offline (held-out rollouts, 1,010 states)", "o", "hollow"),
-        ("Head trained on the labels, offline (fixed five, 348 test states)", "s", "hollow"),
+        ("Head trained on the labels, offline (fixed five, 348 test states)", "s", "filled"),
         ("Same head, live (mean of 3 benchmarks, 1,045 tasks)", "D", "filled")]
 DX = (-0.24, 0, 0.24)
 
@@ -65,9 +77,10 @@ for x, row in enumerate(ROWS):
                 ax.text(x + dx, 0.4, "not\nrun", ha="center", va="bottom", fontsize=6, color=MUTED)
             continue
         d, lo, hi = v
-        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6.5, color=color, ecolor="#555555", capsize=2,
-                    lw=0.9, zorder=3, markeredgewidth=1.4,
-                    markerfacecolor=color if fill == "filled" else "white", markeredgecolor=color)
+        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6.5, color=color, ecolor=C["BASELINE_DARK"], capsize=2,
+                    lw=0.9, zorder=3, markeredgewidth=1.7,
+                    markerfacecolor=C["ADM_STUDENT"] if fill == "filled" else "white",
+                    markeredgecolor=student_outline(color) if fill == "filled" else color)
         ax.text(x + dx, hi + 0.25, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.3, color=INK)
 ax.axvline(4.5, color=GRID, lw=1)
 ax.text(6, 9.3, "prior judge formulations\n(teacher only)", ha="center", va="top", fontsize=7, color=MUTED)
@@ -76,11 +89,12 @@ ax.set_ylim(-5, 10); ax.set_ylabel("Gain over one SFT 4B actor sample (pp)", fon
 ax.grid(axis="y", alpha=.25)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)
-handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
-                  markerfacecolor="#555555" if f == "filled" else "white") for _, m, f in MARK]
+handles = [Line2D([], [], marker=m, ls="", color=C["BASELINE_DARK"], ms=6.5, markeredgewidth=1.4,
+                  markerfacecolor=C["ADM_STUDENT"] if f == "filled" else "white",
+                  markeredgecolor=C["TRAIN"] if f == "filled" else C["BASELINE_DARK"]) for _, m, f in MARK]
 ax.legend(handles, [l for l, _, _ in MARK], frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=1)
 fig.text(0.01, 0.01, "Bars: paired 95% intervals (bootstrap over tasks). Stages use different states and tasks: compare orderings "
          "within a stage, not magnitudes across stages.\nOne training seed per head. Oracle = best action on rollouts 1–3 (observed "
          "outcome); its head is trained on those labels. Rollouts numbered 1–8 as in the methods figure.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.05, 1, 1))
-fig.savefig(HERE / "selection-label-stages-20261027.png", dpi=160); plt.close(fig)
+_paper_save(fig, HERE / "selection-label-stages-20261027.png", dpi=160); plt.close(fig)

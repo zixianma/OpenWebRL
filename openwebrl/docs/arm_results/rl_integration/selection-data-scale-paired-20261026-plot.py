@@ -21,12 +21,20 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
 
 
 HERE = Path(__file__).resolve().parent
 T = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
-INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
-BLUE, ORANGE, AQUA, GRAY = "#2a78d6", "#eb6834", "#1baf7a", "#444444"
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
+BLUE, ORANGE, AQUA, GRAY = C["ADM_22M"], C["ADM_22M"], C["ADM_22M"], C["ADM_22M"]
 
 
 def style(ax, axis="y"):
@@ -65,7 +73,7 @@ fig.text(0.01, 0.01, "Bars: paired 95% bootstrap of the gain over SFT 4B on the 
          "SFT 4B. One training seed per point;\nheads run 10-23/24, SFT 4B 10-18 (DeepShop drifts between dates). "
          "Online-Mind2Web judged by gpt-5.6-terra, the others by GPT-4o.", fontsize=7.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.08, 1, 0.95))
-fig.savefig(HERE / "selection-data-scale-paired-20261026.png"); plt.close(fig)
+_paper_save(fig, HERE / "selection-data-scale-paired-20261026.png"); plt.close(fig)
 
 # ---- (2) data-scaling heads only (label-ablation heads have their own figure,
 # selection-label-ablation-vs-sft-20261027.png), three-benchmark mean, absolute; wide y range (25-50%) so the intervals
@@ -78,7 +86,7 @@ ax.axhline(sft, color=MUTED, lw=1, ls="--", zorder=0)
 ax.text(-0.45, sft - 0.5, f"SFT 4B, one sample: {sft:.1f}", ha="left", va="top", fontsize=7.5, color=MUTED)
 for x, (_, n) in enumerate(ROWS):
     y = T[n]["mean_overall"]; d, lo, hi = T[n]["minus_sft4b"]; hollow = "one-panel" in n
-    ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=BLUE, ecolor="#333333", capsize=3, lw=1, zorder=3,
+    ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=BLUE, ecolor=C["INK"], capsize=3, lw=1, zorder=3,
                 markerfacecolor="white" if hollow else BLUE, markeredgecolor=BLUE if hollow else "white",
                 markeredgewidth=1.6 if hollow else 1)
     ax.text(x, y + hi - d + .4, f"{y:.1f}\n({d:+.1f})".replace("-", "\u2212"), ha="center", va="bottom", fontsize=8)
@@ -91,4 +99,4 @@ fig.text(0.01, 0.01, "Heads trained on Piotr's GPT-5.5 panels (every panel unles
          "WebVoyager 595, DeepShop 150 (GPT-4o), equal weight. Heads 10-23/24, SFT 4B 10-18 (DeepShop drifts).",
          fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.13, 1, 1))
-fig.savefig(HERE / "selection-heads-vs-sft-20261026.png", dpi=160); plt.close(fig)
+_paper_save(fig, HERE / "selection-heads-vs-sft-20261026.png", dpi=160); plt.close(fig)

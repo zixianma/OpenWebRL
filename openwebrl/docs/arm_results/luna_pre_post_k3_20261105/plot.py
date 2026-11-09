@@ -17,20 +17,21 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style  # noqa: E402,F401
+from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 S = json.loads((HERE / "stats.json").read_text())
-INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
-SRC = [("pre", "Pre-exec", "#4B5563"), ("k3", "Lookahead H = 4", "#6250BE")]
-ORACLE = "#397FA3"
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
+SRC = [("pre", "Pre-exec", C["PRE_EXEC"]), ("k3", "Lookahead H = 4", C["LOOKAHEAD_TEACHER"])]
+ORACLE = C["ORACLE"]
 
 
 def style(ax):
-    ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+    ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#555555"); ax.spines[side].set_linewidth(0.6)
+        ax.spines[side].set_color(C["BASELINE_DARK"]); ax.spines[side].set_linewidth(0.6)
 
 
 def title(ax, s, text):
@@ -50,11 +51,11 @@ def main():
     ax = fig.add_subplot(gs[0, 0]); A = S["agreement"]["all"]
     keys = [k for k, *_ in SRC]; names = [n.replace("Lookahead ", "Lookahead\n") for _, n, _ in SRC]
     M = [[A.get(f"{a}~{b}", A.get(f"{b}~{a}")) for b in keys] for a in keys]
-    im = ax.imshow(M, cmap="Purples", vmin=30, vmax=95)
+    im = ax.imshow(M, cmap=__import__("matplotlib.colors", fromlist=["LinearSegmentedColormap"]).LinearSegmentedColormap.from_list("teacher_evidence", ["white", C["LOOKAHEAD_TEACHER"]]), vmin=30, vmax=95)
     for i in range(len(SRC)):
         for j in range(len(SRC)):
             ax.text(j, i, f"{M[i][j]:.0f}%", ha="center", va="center", fontsize=7.4,
-                    color="white" if M[i][j] > 72 else INK, fontweight="bold" if i == j else "normal")
+                    color=INK, fontweight="bold" if i == j else "normal")
     ax.set_xticks(range(len(SRC)), names); ax.set_yticks(range(len(SRC)), names)
     ax.tick_params(length=0, pad=3)
     for sp in ax.spines.values():
@@ -64,11 +65,11 @@ def main():
     # (b) agreement by number of distinct actions
     ax = fig.add_subplot(gs[0, 1]); style(ax); by = S["agreement"]["by_actions"]; n = sorted(by, key=int)
     x = [int(k) for k in n]
-    for pair, label, c, m in (("pre~k3", "Pre-exec ~ H = 4", "#4B5563", "D"),):
+    for pair, label, c, m in (("pre~k3", "Pre-exec ~ H = 4", C["PRE_EXEC"], "D"),):
         ax.plot(x, [by[k][pair] for k in n], marker=m, ms=3.6, lw=1.1, color=c, label=label)
     ax.plot(x, [by[k]["chance pair"] for k in n], ls="--", lw=0.9, color=MUTED, label="Chance (1 / actions)")
     ax.fill_between(x, [min(by[k][f"{s}~{s}"] for s in keys) for k in n], [max(by[k][f"{s}~{s}"] for s in keys) for k in n],
-                    color="#cfcfe6", alpha=0.6, lw=0, label="Same teacher, two calls")
+                    color=tint("LOOKAHEAD_TEACHER", 0.65), alpha=0.6, lw=0, label="Same teacher, two calls")
     ax.set_xticks(x, [f"{k}\n({by[k]['states']:,})" for k in n]); ax.set_xlabel("Distinct candidate actions (states)")
     ax.set_ylabel("Same pick (%)"); ax.set_ylim(10, 122); ax.set_yticks(range(20, 101, 20)); ax.spines["left"].set_bounds(10, 100); ax.grid(axis="y", color=GRID, lw=0.6); ax.set_axisbelow(True)
     ax.legend(frameon=False, fontsize=6.0, loc="upper left", handlelength=1.6, labelspacing=0.25, columnspacing=1.0, ncol=2, borderaxespad=0.1)
@@ -90,7 +91,7 @@ def main():
     # (d) outcomes
     ax = fig.add_subplot(gs[1, 1]); style(ax); O = S["outcomes"]; H = O["head_to_head"]
     rows = [(f"{n} − SFT sample", O[k]["minus_sft"], c) for k, n, c in SRC] + [("Oracle − SFT sample", O["oracle"]["minus_sft"], ORACLE)]
-    rows += [(f"H = 4 − Pre  ({H['k3-pre']['states']} states)", H["k3-pre"]["diff"], "#6250BE")]
+    rows += [(f"H = 4 − Pre  ({H['k3-pre']['states']} states)", H["k3-pre"]["diff"], C["LOOKAHEAD_TEACHER"])]
     ys = [0, 1, 2, 4.0]
     for y, (label, (m, lo, hi), c) in zip(ys, rows):
         ax.plot([lo, hi], [y, y], color=c, lw=1.4, solid_capstyle="round")

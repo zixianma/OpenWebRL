@@ -16,13 +16,14 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 from matplotlib.ticker import MultipleLocator
 
 HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-recipe3-data-ablations-20261105.json").read_text())
 runs = {k: len(v) for k, v in d["sources"].items()}
 y = {k: v["mean_valid_only"] for k, v in d["rates"].items()}
-ADM_GPT55 = "#6250BE"
+ADM_GPT55 = C["ADM_4B"]
 FIGS = [("selection-recipe3-data-states-20261105", "Training states", [("s250", 252), ("s500", 500), ("s1000", 1001), ("full", 2112)],
          ["252", "500", "1,001", "2,112"]),
         ("selection-recipe3-data-panels-20261105", "Panels per state", [("pps1", 1), ("pps2", 2), ("pps4", 4), ("full", 18786 / 2112)],
@@ -36,18 +37,21 @@ for name, xlabel, pts, ticks in FIGS:
     for (k, x), v in zip(pts, ys):
         one = runs[k] == 1
         ax.scatter(x, v, s=30, marker="D", zorder=3, facecolor="white" if one else ADM_GPT55, edgecolor=ADM_GPT55, linewidth=1.1)
-        ax.annotate(f"{v:.1f}", (x, v), textcoords="offset points", xytext=(0, 6), ha="center", fontsize=7, color="#444444")
-    for key, color, ls, label in (("sft", "#898781", "--", "SFT 4B"),):
+        ax.annotate(f"{v:.1f}", (x, v), textcoords="offset points", xytext=(0, 6), ha="center", fontsize=7, color=C["MUTED"])
+    for key, color, ls, label in (("sft", C["BASELINE_LIGHT"], "--", "SFT 4B"),):
         ax.axhline(y[key], color=color, linestyle=ls, linewidth=0.9, zorder=1)
         ax.text(xs[-1] * 1.3, y[key] + 0.2, label, fontsize=7, color=color, va="bottom", ha="right")
     ax.set_xscale("log"); ax.set_xticks(xs); ax.set_xticklabels(ticks); ax.minorticks_off()
     ax.set_xlim(xs[0] / 1.35, xs[-1] * 1.35); ax.set_ylim(lo, hi)
     ax.set_xlabel(xlabel); ax.set_ylabel("Mean valid-only success (%)")
     ax.yaxis.set_major_locator(MultipleLocator(2))
-    ax.grid(axis="y", color="#e6e6e6", linewidth=0.6, zorder=0)
-    ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+    ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
+    ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
     for s in ("top", "right"): ax.spines[s].set_visible(False)
     fig.tight_layout()
     for ext in ("png", "pdf", "svg"):
-        fig.savefig(HERE / f"{name}.{ext}", dpi=220 if ext == "png" else None, bbox_inches="tight")
+        output = HERE / f"{name}.{ext}"
+        fig.savefig(output, dpi=220 if ext == "png" else None, bbox_inches="tight")
+        if ext == "svg":
+            output.write_text("\n".join(line.rstrip() for line in output.read_text().splitlines()) + "\n")
     plt.close(fig)

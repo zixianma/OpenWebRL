@@ -23,7 +23,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style  # noqa: F401
-from paper_plot_palette import COLORS as C
+from paper_plot_palette import COLORS as C, tint
 
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
@@ -79,14 +79,14 @@ CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
 
 # One actor proposes actions for either selector. Head tokens s/c_i are projected
 # actor features, whereas the separate decoder reads prompt/action content.
-box(.08, 3.21, 1.02, .28, edge=SHARED, fill=SHARED_BG)
-text(.59, 3.35, "Context", color=SHARED, ha="center")
+box(.08, 3.21, 1.02, .28, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+text(.59, 3.35, "Context", color=C["STATE_INK"], ha="center")
 arrow(1.11, 3.35, 1.35, 3.35)
 box(1.36, 3.21, 1.32, .28, edge=INK, fill=SHARED_BG, lw=.95)
 text(2.02, 3.35, "Frozen actor", size=8, ha="center")
 arrow(2.69, 3.35, 4.01, 3.35)
-box(4.02, 3.21, 2.17, .28, edge=SHARED, fill=SHARED_BG)
-text(5.105, 3.35, r"$K=5$ candidates: reasoning + $a_t^i$", color=SHARED, ha="center")
+box(4.02, 3.21, 2.17, .28, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(5.105, 3.35, r"$K=5$ candidates: reasoning + $a_t^i$", color=C["ACTION_INK"], ha="center")
 arrow(5.105, 3.20, 5.105, 3.10, color=DECODER)
 text(5.105, 2.99, r"Prompt $p$ + candidates", color=DECODER, ha="center")
 arrow(5.105, 2.90, 5.105, 2.80, color=DECODER)
@@ -96,9 +96,9 @@ actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01, color=HEAD)
 box(.50, 2.58, 3.28, .42, edge=SHARED, fill=SHARED_BG)
 text(2.14, 2.91, "a)  ADM head", size=8, color=HEAD,
      weight="medium", ha="center")
-text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5,
+text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5, color=C["STATE_INK"],
      ha="center", linespacing=1.05)
-text(2.97, 2.73, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5,
+text(2.97, 2.73, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5, color=C["ACTION_INK"],
      ha="center", linespacing=1.05)
 # Short shared-input connectors replace the long per-input routing buses.
 for center in (1.285, 2.875):
@@ -119,7 +119,9 @@ for name, x0 in COLS.items():
     joint = name == "Joint"
     # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
     matrix(x0, TTOP, STATE + CANDS, STATE + CANDS, CELL,
-           lambda r, c, j=joint: ALLOWED_FILL if j or r == c or (r > 0 and c == 0) else MASKED_FILL)
+           lambda r, c, j=joint: ALLOWED_FILL if j or r == c or (r > 0 and c == 0) else MASKED_FILL,
+           row_color=lambda r: C["STATE_INK"] if r == 0 else C["ACTION_INK"],
+           col_color=lambda c: C["STATE_INK"] if c == 0 else C["ACTION_INK"])
 
 # MLP: show computation rather than token connectivity. Each column uses the
 # same MLP weights for every candidate. The joint difference excludes c_i from
@@ -146,7 +148,9 @@ DCELL, DX, DTOP = .17, 4.51, 2.16
 # Label each candidate-text block by its proposed action. The decoder receives
 # full candidate reasoning/action text, never the head's projected c_i vectors.
 TOKENS = [r"$p$"] + [rf"$a_t^{{{i}}}$" for i in range(1, K + 1)] + [r"$y$"]
-matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL)
+matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL,
+       row_color=lambda r: C["STATE_INK"] if r == 0 else C["ACTION_INK"] if r <= K else DECODER,
+       col_color=lambda c: C["STATE_INK"] if c == 0 else C["ACTION_INK"] if c <= K else DECODER)
 mid = DX + len(TOKENS) * DCELL / 2
 arrow(mid, DTOP - len(TOKENS) * DCELL - .04, mid, .25, color=DECODER)
 box(mid - .70, .02, 1.40, .22, edge=DECODER)
@@ -155,8 +159,8 @@ text(mid, .13, r"$y\rightarrow i^*$", color=DECODER, ha="center")
 # Both alternatives execute one of the actor's original candidate actions.
 arrow(2.02, .01, 3.02, -.10, color=HEAD)
 arrow(mid, .01, 3.82, -.10, color=DECODER)
-box(2.62, -.33, 1.60, .22, edge=SHARED, fill=SHARED_BG)
-text(3.42, -.22, r"Execute $a_t^{i^*}$", ha="center")
+box(2.62, -.33, 1.60, .22, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(3.42, -.22, r"Execute $a_t^{i^*}$", color=C["ACTION_INK"], ha="center")
 
 # Right-aligned legend; cells encode connectivity, not values.
 legend_right = 6.20

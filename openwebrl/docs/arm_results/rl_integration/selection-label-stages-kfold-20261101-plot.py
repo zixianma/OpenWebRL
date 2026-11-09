@@ -25,6 +25,18 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
+
+def student_outline(source_color):
+    return C["TRAIN"] if source_color == C["PRE_EXEC"] else source_color
+
 
 from matplotlib.lines import Line2D
 
@@ -33,15 +45,15 @@ K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())["pool
 LIVE3 = json.loads((HERE / "selection-label-live-3run-20261103.json").read_text())  # same-day 3-run batch
 LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "teacher_k3": "h3",
              "teacher_k5": "h5", "outcome": "oracle"}
-INK, MUTED = "#222222", "#666666"
+INK, MUTED = C["INK"], C["MUTED"]
 ROWS = [  # tick label, colour, source key, live key
-    ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Lookahead\nH = 2", "#A99BE3", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Lookahead\nH = 6", "#33246E", "teacher_k5", "K5"),
-    ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
+    ("Pre-exec", C["PRE_EXEC"], "teacher_pre", "Ours pre"),
+    ("Lookahead\nH = 2", C["LOOKAHEAD_TEACHER"], "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", C["LOOKAHEAD_TEACHER"], "teacher_k3", "Ours K3"),
+    ("Lookahead\nH = 6", C["LOOKAHEAD_TEACHER"], "teacher_k5", "K5"),
+    ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 MARK = [(f"Teacher's pick, offline ({K['states']:,} states, 5-fold)", "o", False),
-        ("Head trained on the labels, offline (out-of-fold, 3 seeds)", "s", False),
+        ("Head trained on the labels, offline (out-of-fold, 3 seeds)", "s", True),
         ("Head, live (seed 0, 3 runs; task-weighted, 1,045 tasks)", "D", True)]
 DX = (-0.24, 0, 0.24)
 
@@ -59,21 +71,22 @@ for x, (_, color, src, live) in enumerate(ROWS):
             ax.text(x + dx, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6, color=MUTED)
             continue
         d, lo, hi = v
-        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6.5, color=color, ecolor="#555555", capsize=2,
-                    lw=0.9, zorder=3, markeredgewidth=1.4, markerfacecolor=color if filled else "white",
-                    markeredgecolor=color)
+        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6.5, color=color, ecolor=C["BASELINE_DARK"], capsize=2,
+                    lw=0.9, zorder=3, markeredgewidth=1.7, markerfacecolor=C["ADM_STUDENT"] if filled else "white",
+                    markeredgecolor=student_outline(color) if filled else color)
         ax.text(x + dx, hi + 0.25, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.3, color=INK)
 ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=8); ax.set_xlim(-0.55, len(ROWS) - 0.45)
 ax.set_ylim(-4, 10); ax.set_ylabel("Gain over one SFT 4B actor sample (pp)", fontsize=9)
 ax.grid(axis="y", alpha=.25)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)
-handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
-                  markerfacecolor="#555555" if f else "white") for _, m, f in MARK]
+handles = [Line2D([], [], marker=m, ls="", color=C["BASELINE_DARK"], ms=6.5, markeredgewidth=1.4,
+                  markerfacecolor=C["ADM_STUDENT"] if f else "white",
+                  markeredgecolor=C["TRAIN"] if f else C["BASELINE_DARK"]) for _, m, f in MARK]
 ax.legend(handles, [l for l, _, _ in MARK], frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=1)
 fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, held-out rollouts 4–8 (labels used rollouts 1–3; Oracle = best "
          f"action on rollouts 1–3); one SFT sample = {K['sft_sample']:.1f}%. Live: one SFT sample = "
          f"{LIVE3['weighted']['sft']['overall']:.1f}%.\nBars: 95% intervals, task-clustered bootstrap (offline) or paired over tasks "
          "(live). Offline and live use different tasks: compare orderings, not sizes.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.07, 1, 1))
-fig.savefig(HERE / "selection-label-stages-kfold-20261101.png", dpi=160); plt.close(fig)
+_paper_save(fig, HERE / "selection-label-stages-kfold-20261101.png", dpi=160); plt.close(fig)

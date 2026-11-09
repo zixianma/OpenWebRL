@@ -3,6 +3,12 @@
 Requires matplotlib. Uses aggregate-only JSON; no private task data is needed.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 import hashlib
@@ -26,10 +32,10 @@ from matplotlib.ticker import PercentFormatter, StrMethodFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    "serial_high": ("Sol single", "#0072B2", "s"),
-    "luna_single_high": ("Luna single", "#0072B2", "o"),
-    "parallel3_select_high": ("Luna N3", "#E6B800", "o"),
-    "parallel5_select_high": ("Luna N5", "#E87500", "o"),
+    "serial_high": ("Sol single", PALETTE["SINGLE_CALL_MAIN"], "s"),
+    "luna_single_high": ("Luna single", PALETTE["SINGLE_CALL_MAIN"], "o"),
+    "parallel3_select_high": ("Luna N3", palette_tint("ADM_DEFAULT", .25), "o"),
+    "parallel5_select_high": ("Luna N5", PALETTE["ADM_DEFAULT"], "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
@@ -95,10 +101,10 @@ def draw(ax, means, metric, native):
         ax.set_xlim(max(0, min(xs) - 2), max(xs) + 2)
     else:
         ax.set_xlim(min(xs) / 1.4, max(xs) * 1.5)
-    ax.grid(True, color="#E2E6EA", linewidth=0.7, zorder=0)
+    ax.grid(True, color=PALETTE["BORDER"], linewidth=0.7, zorder=0)
     ax.spines[["top", "right"]].set_visible(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#B7BEC7")
+        ax.spines[side].set_color(PALETTE["BORDER"])
 
 
 def legends(fig, x=0.835, y=0.70):
@@ -107,10 +113,10 @@ def legends(fig, x=0.835, y=0.70):
     fig.legend(handles=methods, title="Method (all high)", loc="upper left",
                bbox_to_anchor=(x, y), frameon=False, fontsize=10, title_fontsize=11,
                labelspacing=1.1)
-    harnesses = [Line2D([], [], linestyle="", marker="o", color="#5A6470", markersize=8,
+    harnesses = [Line2D([], [], linestyle="", marker="o", color=PALETTE["MUTED"], markersize=8,
                         label="BrowserCode · OM2W"),
                  Line2D([], [], linestyle="", marker="o", markerfacecolor="white",
-                        markeredgecolor="#5A6470", markeredgewidth=2, markersize=8,
+                        markeredgecolor=PALETTE["MUTED"], markeredgewidth=2, markersize=8,
                         label="Native CUAWright · OM2W\nAll 300 collected; same fresh tasks")]
     fig.legend(handles=harnesses, title="Harness / cohort", loc="upper left",
                bbox_to_anchor=(x, y - .29), frameon=False, fontsize=9, title_fontsize=11,
@@ -149,7 +155,7 @@ def main():
         fig.subplots_adjust(left=.09, right=.66, bottom=.33, top=.88)
         legends(fig, x=.68, y=.91)
         fig.text(.09, .025, footer.replace('; external judging excluded.', '; external judging excluded.\n'),
-                 fontsize=7.3, color="#5A6470", linespacing=1.6)
+                 fontsize=7.3, color=PALETTE["MUTED"], linespacing=1.6)
         for ext in ("png", "svg", "pdf"):
             save_figure(fig, args.output_dir / f"om2w_harness_vs_{suffix}.{ext}")
         plt.close(fig)
@@ -162,7 +168,7 @@ def main():
     fig.suptitle("Online-Mind2Web · BrowserCode and native CUAWright", x=.05, ha="left", fontsize=17, y=.97)
     fig.subplots_adjust(left=.05, right=.80, bottom=.33, top=.85, wspace=.24)
     legends(fig, x=.815, y=.89)
-    fig.text(.05, .025, footer, fontsize=8.5, color="#5A6470", linespacing=1.7)
+    fig.text(.05, .025, footer, fontsize=8.5, color=PALETTE["MUTED"], linespacing=1.7)
     for ext in ("png", "svg", "pdf"):
         save_figure(fig, args.output_dir / f"om2w_harness_tradeoffs.{ext}")
     plt.close(fig)

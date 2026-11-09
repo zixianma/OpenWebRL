@@ -18,14 +18,15 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
-INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-JOINT, INDEPENDENT = "#168C9E", "#4B5563"
-SHARED, SHARED_BG = "#737A83", "#F3F4F5"
-ALLOWED_FILL, MASKED_FILL = "#81CCD7", "#F5F6F7"
+INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
+JOINT, INDEPENDENT = C["ADM_22M"], C["ADM_22M"]
+SHARED, SHARED_BG = C["BASELINE_DARK"], "white"
+ALLOWED_FILL, MASKED_FILL = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
 K = 5
 plt.rcParams.update({
     "font.family": "Albert Sans", "font.size": 7,
@@ -80,7 +81,7 @@ for x0, name, color in ((1.24, "joint", JOINT), (4.59, "independent", INDEPENDEN
          ha="center", rotation=90)
     names = [r"$s$"] + [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
     for row, label in enumerate(names):
-        label_color = INDEPENDENT if row == 0 else color
+        label_color = C["STATE_INK"] if row == 0 else C["ACTION_INK"]
         text(x0 - 0.055, MATRIX_TOP - (row + 0.5) * CELL,
              label, color=label_color, ha="right")
         text(x0 + (row + 0.5) * CELL, MATRIX_TOP + 0.105,

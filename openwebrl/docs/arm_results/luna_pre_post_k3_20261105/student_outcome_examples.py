@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Review sheets: eval states where the pre and H = 4 students split and both picks were played out live (student_outcomes.py).
 
-Each sheet: the task, the current screen with the pre pick (grey box) and the H = 4 pick (purple box), and how many matched
+Each sheet: the task, the current screen with the pre pick (yellow source outline) and the H = 4 pick (salmon source outline), and how many matched
 episodes succeeded after each. Then, per side, one real matched episode whose outcome matches that side's majority: the
-next three screens with the action taken on each (orange box) and the judged outcome. W = the H = 4 pick did better,
+next three screens with the action taken on each (green box) and the judged outcome. W = the H = 4 pick did better,
 L = worse. Pick labels are written by hand; later actions are summarised from their tool calls.
 
   student_outcome_examples.py  (CPU only; writes outcome-review-*.jpg next to this file)
@@ -17,6 +17,9 @@ import textwrap
 from urllib.parse import urlparse
 
 from PIL import Image, ImageDraw, ImageFont
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as C, tint
 
 RD = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/label-kfold-20261101/pre-post-k3/student-replay")
 HERE = Path(__file__).resolve().parent
@@ -30,10 +33,11 @@ EX = [  # name, state, site, pre pick, H = 4 pick
     ("alt-W", 3610, "Hugging Face", "search on the 429 page", "go back"),
     ("alt-L", 3000, "arXiv", 'click "General information"', "scroll down"),
 ]
-FONT = "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans{}.ttf"
-F = lambda n, b=False: ImageFont.truetype(FONT.format("-Bold" if b else ""), n)  # noqa: E731
-INK, MUTED, PRE, K3, NEXT = (25, 25, 25), (110, 110, 110), (75, 85, 99), (98, 80, 190), (230, 120, 0)
-GOOD, BAD = (27, 127, 59), (179, 38, 30)
+FONT_DIR = next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_style.py").is_file()) / "assets/fonts/albert-sans"
+FONT = str(FONT_DIR / "AlbertSans{}.ttf")
+F = lambda n, b=False: ImageFont.truetype(FONT.format("-Bold" if b else "-Regular"), n)  # noqa: E731
+INK, MUTED, PRE, K3, NEXT = C["INK"], C["MUTED"], C["TRAIN"], C["LOOKAHEAD_TEACHER"], C["ACTION_INK"]
+GOOD, BAD = C["SUCCESS"], C["FAILURE"]
 W = 1800
 
 
@@ -120,11 +124,11 @@ def main():
             d.text((24, y), ln, fill=INK, font=F(34)); y += 46
         y += 14
         cw = 980; c = fit(cur, cw); canvas.paste(c, (24, y))
-        d.rectangle([24, y, 24 + cw, y + c.size[1]], outline=(160, 160, 160), width=2)
+        d.rectangle([24, y, 24 + cw, y + c.size[1]], outline=C["STATE_BORDER"], width=2)
         x0 = 24 + cw + 40; yy = y + 10
         for side, label, col in (("pre", pre_label, PRE), ("k3", k3_label, K3)):
             k, n = r[side]["success"], r[side]["n"]
-            d.text((x0, yy), "Pre-exec students pick" if side == "pre" else "Lookahead H = 4 students pick", fill=col, font=F(32, True))
+            d.text((x0, yy), "Pre-exec students pick" if side == "pre" else "Lookahead H = 4 students pick", fill=C["ADM_4B"], font=F(32, True))
             yy += 46
             for ln in textwrap.wrap(label, 30):
                 d.text((x0, yy), ln, fill=INK, font=F(38, True)); yy += 50
@@ -136,8 +140,8 @@ def main():
             e = next((e for e in eps if (e["reward"] == 1) == good), eps[0])
             ims = images(e["trace"]); es = {x["turn"]: x for x in map(json.loads, open(e["trace"]))}
             ok = e["reward"] == 1
-            d.line([24, y, W - 24, y], fill=(200, 200, 200), width=2); y += 16
-            d.text((24, y), f"After the {'pre-exec' if side == 'pre' else 'lookahead H = 4'} pick, one episode:", fill=col, font=F(34, True))
+            d.line([24, y, W - 24, y], fill=C["BORDER"], width=2); y += 16
+            d.text((24, y), f"After the {'pre-exec' if side == 'pre' else 'lookahead H = 4'} pick, one episode:", fill=C["ADM_4B"], font=F(34, True))
             d.text((780, y), "SUCCESS" if ok else "FAILURE", fill=GOOD if ok else BAD, font=F(34, True))
             y += 56
             tw, gap, hmax = (W - 48 - 2 * 24) // 3, 24, 0
@@ -147,7 +151,7 @@ def main():
                     continue
                 a = es[t]["candidates"][es[t]["selected_index"]]["action"] if t in es else ""
                 p = fit(mark(p, a, NEXT, 10), tw); x = 24 + k * (tw + gap)
-                canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=(170, 170, 170), width=2)
+                canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=C["STATE_BORDER"], width=2)
                 cap = textwrap.wrap(f"then: {say(a)}" if a else "(episode ended)", 30)[:3]
                 for q, ln in enumerate(cap):
                     d.text((x, y + p.size[1] + 10 + 40 * q), ln, fill=INK, font=F(30))

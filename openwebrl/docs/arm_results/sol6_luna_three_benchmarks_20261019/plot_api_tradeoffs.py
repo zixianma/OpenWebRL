@@ -7,6 +7,12 @@ Online-Mind2Web, WebVoyager and DeepShop common-valid efficiency cohorts.
 Judge-only work is excluded from cost and task latency. No task payloads needed.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 import hashlib
@@ -30,10 +36,10 @@ from matplotlib.ticker import MaxNLocator, StrMethodFormatter
 
 BENCHMARKS = ("Online-Mind2Web", "WebVoyager", "DeepShop")
 METHODS = {
-    "serial_high": ("Sol single high", "#0072B2", "o"),
-    "luna_single_high": ("Luna single high", "#009E73", "s"),
-    "parallel3_select_high": ("Luna N3 high + high", "#D55E00", "^"),
-    "parallel5_select_high": ("Luna N5 high + high", "#CC79A7", "D"),
+    "serial_high": ("Sol single high", PALETTE["SINGLE_CALL_MAIN"], "s"),
+    "luna_single_high": ("Luna single high", PALETTE["SINGLE_CALL_MAIN"], "o"),
+    "parallel3_select_high": ("Luna N3 high + high", palette_tint("ADM_DEFAULT", .25), "o"),
+    "parallel5_select_high": ("Luna N5 high + high", PALETTE["ADM_DEFAULT"], "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
@@ -109,7 +115,7 @@ def draw(ax, means, metric):
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(length=3, width=0.6, pad=2)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_color(PALETTE["MUTED"])
         ax.spines[side].set_linewidth(0.6)
 
 

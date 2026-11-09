@@ -4,6 +4,12 @@
 Requires numpy2.0.2 and matplotlib3.9.4. Task identities and raw trajectories are
 not inputs. Historical744-task figures are preserved as separate snapshots.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 from pathlib import Path
 import argparse,hashlib,importlib.util,json,math,os
 os.environ.setdefault('MPLCONFIGDIR','/tmp/openwebrl-gap-repaired-mpl')
@@ -67,26 +73,26 @@ def render(d,points,out):
  fig,axes=plt.subplots(2,2,figsize=(7.2,3.55),sharey=True)
  fig.subplots_adjust(left=.08,right=.97,bottom=.24,top=.78,wspace=.17,hspace=.42)
  fig.suptitle('Inference scaling after one-pass gap recovery',x=.08,y=.99,ha='left',fontsize=9)
- sol=points['serial_high'];fig.text(.08,.91,f"Sol high / 30 reference: {100*sol['success_rate']:.2f}% · ${sol['actor_usd']:.4f}/task · {sol['actor_seconds']:.1f} s/task",fontsize=7,color='#08519c')
+ sol=points['serial_high'];fig.text(.08,.91,f"Sol high / 30 reference: {100*sol['success_rate']:.2f}% · ${sol['actor_usd']:.4f}/task · {sol['actor_seconds']:.1f} s/task",fontsize=7,color=PALETTE["SINGLE_CALL_MAIN"])
  axes[0,0].set_title('Single-run scaling',loc='left',fontsize=8,pad=17);axes[0,1].set_title('Action-selection scaling',loc='left',fontsize=8,pad=17)
  base=F.BASE
  singles=[base,'luna_single_high_6144','luna_single_high_24576','luna_single_xhigh_12288','luna_single_high_60steps','luna_single_high_120steps'];selection=F.SELECTION+['luna_single_high_60steps','parallel5_select_high_60steps']
- axes[0,0].legend(handles=[Line2D([],[],color='#4385b4',label='Steps'),Line2D([],[],color='#4385b4',linestyle=':',label='Output cap'),Line2D([],[],color='#08306b',linestyle='-.',label='Effort')],loc='lower left',bbox_to_anchor=(0,1),ncol=3,frameon=False,borderaxespad=0,columnspacing=.9,handlelength=1.5,fontsize=6.1)
- axes[0,1].legend(handles=[Line2D([],[],color='#b41620',label='30 steps'),Line2D([],[],color='#b41620',linestyle='--',label='60 steps')],loc='lower left',bbox_to_anchor=(0,1),ncol=2,frameon=False,borderaxespad=0,fontsize=6.1)
+ axes[0,0].legend(handles=[Line2D([],[],color=PALETTE["SINGLE_CALL_MAIN"],label='Steps'),Line2D([],[],color=PALETTE["SINGLE_CALL_MAIN"],linestyle=':',label='Output cap'),Line2D([],[],color=PALETTE["BASELINE_DARK"],linestyle='-.',label='Effort')],loc='lower left',bbox_to_anchor=(0,1),ncol=3,frameon=False,borderaxespad=0,columnspacing=.9,handlelength=1.5,fontsize=6.1)
+ axes[0,1].legend(handles=[Line2D([],[],color=PALETTE["ADM_DEFAULT"],label='30 steps'),Line2D([],[],color=PALETTE["ADM_DEFAULT"],linestyle='--',label='60 steps')],loc='lower left',bbox_to_anchor=(0,1),ncol=2,frameon=False,borderaxespad=0,fontsize=6.1)
  labels={base:'high / 30','luna_single_high_6144':'0.5× cap','luna_single_high_24576':'2× cap','luna_single_xhigh_12288':'xhigh','luna_single_high_60steps':'60 steps','luna_single_high_120steps':'120 steps','parallel2_select_high':'N2','parallel3_select_high':'N3','parallel5_select_high':'N5 / 30','parallel5_select_high_60steps':'N5 / 60'}
  offsets={base:(4,-2),'luna_single_high_6144':(-23,3),'luna_single_high_24576':(4,6),'luna_single_xhigh_12288':(4,-3),'luna_single_high_60steps':(-29,-3),'luna_single_high_120steps':(4,3),'parallel2_select_high':(-18,3),'parallel3_select_high':(-8,-11),'parallel5_select_high':(5,-1),'parallel5_select_high_60steps':(5,0)}
  rates=[100*p['success_rate']for p in points.values()];lo=max(0,2*math.floor((min(rates)-1)/2));hi=min(100,2*math.ceil((max(rates)+1)/2))
  ranges=[]
  for row,key in enumerate(['actor_usd','actor_seconds']):
   for col,methods in enumerate([singles,selection]):
-   ax=axes[row,col];curves=[([base,'luna_single_high_60steps','luna_single_high_120steps'],'#4385b4','-'),(['luna_single_high_6144',base,'luna_single_high_24576'],'#4385b4',':'),([base,'luna_single_xhigh_12288'],'#08306b','-.')]if col==0 else[(F.SELECTION,'#c94b4b','-'),(['luna_single_high_60steps','parallel5_select_high_60steps'],'#b41620','--')]
+   ax=axes[row,col];curves=[([base,'luna_single_high_60steps','luna_single_high_120steps'],PALETTE["SINGLE_CALL_MAIN"],'-'),(['luna_single_high_6144',base,'luna_single_high_24576'],PALETTE["SINGLE_CALL_MAIN"],':'),([base,'luna_single_xhigh_12288'],PALETTE["BASELINE_DARK"],'-.')]if col==0 else[(F.SELECTION,PALETTE["ADM_DEFAULT"],'-'),(['luna_single_high_60steps','parallel5_select_high_60steps'],PALETTE["ADM_DEFAULT"],'--')]
    for members,color,line in curves:ax.plot([points[m][key]for m in members],[100*points[m]['success_rate']for m in members],color=color,linestyle=line,linewidth=.85,zorder=2)
    for m in methods:
     label='N1 / 30'if col==1 and m==base else'N1 / 60'if col==1 and m=='luna_single_high_60steps'else labels[m];off=(4,2)if col==1 and m=='luna_single_high_60steps'else offsets[m]
     if col==0 and row==1 and m=='luna_single_high_60steps':off=(-32,-9)
     if col==0 and row==1 and m=='luna_single_high_6144':off=(-26,3)
     F.dot(ax,points[m],key,m)
-    ax.annotate(label,(points[m][key],100*points[m]['success_rate']),xytext=off,textcoords='offset points',fontsize=6.5,color=S.STYLES[m][2],bbox=dict(facecolor='white',edgecolor='none',alpha=.88,pad=.1),zorder=5)
+    ax.annotate(label,(points[m][key],100*points[m]['success_rate']),xytext=off,textcoords='offset points',fontsize=6.5,color=PALETTE['ADM_DEFAULT'] if m.startswith('parallel') else PALETTE['MUTED'],bbox=dict(facecolor='white',edgecolor='none',alpha=.88,pad=.1),zorder=5)
    F.style(ax);ax.set_ylim(lo,hi);ax.yaxis.set_major_locator(MaxNLocator(5,integer=True))
    if col==0:ax.set_ylabel('Success (%)',labelpad=3)
    xs=[points[m][key]for m in methods];left=min(xs);right=max(xs)
@@ -99,9 +105,9 @@ def render(d,points,out):
     span=max(right-left,10);ax.set_xlim(left-.13*span,right+.32*span);ax.xaxis.set_major_locator(MaxNLocator(4));ax.set_xlabel('Actor latency (s/task)',fontsize=7,labelpad=2)
    ranges.append(dict(row=row,column=col,metric=key,xlim=list(ax.get_xlim())))
  n=sum(c['common_valid']for c in d['benchmark_counts'].values());coverage=' · '.join(f'{S.BENCHMARKS[b][0]} {c["common_valid"]}'for b,c in d['benchmark_counts'].items())
- fig.text(.08,.13,f'Same {n} common-valid tasks: {coverage}',fontsize=6.4,color='#555555')
- fig.text(.08,.075,'Fixed planned weights 300/595/150 · Local x ranges · Actor metrics exclude Terra',fontsize=6.4,color='#555555')
- fig.text(.08,.02,'Original valid outcomes retained · Single/60 advertised 30 · Live windows differ · Cached/Sol60 excluded',fontsize=6.1,color='#555555')
+ fig.text(.08,.13,f'Same {n} common-valid tasks: {coverage}',fontsize=6.4,color=PALETTE["MUTED"])
+ fig.text(.08,.075,'Fixed planned weights 300/595/150 · Local x ranges · Actor metrics exclude Terra',fontsize=6.4,color=PALETTE["MUTED"])
+ fig.text(.08,.02,'Original valid outcomes retained · Single/60 advertised 30 · Live windows differ · Cached/Sol60 excluded',fontsize=6.1,color=PALETTE["MUTED"])
  F.save(fig,'browsercode_scaling_gap_repaired_compact');plt.close(fig)
  return ranges
 

@@ -14,11 +14,14 @@ from pathlib import Path
 import textwrap
 
 from PIL import Image, ImageDraw
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as C, tint
 
 from student_outcome_examples import F, INK, K3, MUTED, PRE, RD, calls, fit, images, png
 
 HERE = Path(__file__).resolve().parent
-MIN, MAJ = (13, 148, 136), (217, 119, 6)
+MIN, MAJ = C["ACTION"], tint("ACTION", 0.4)
 WHO = {"gpt55-pre": ("Pre GPT-5.5", PRE), "luna-pre": ("Pre Luna", PRE), "gpt55-k3": ("Lookahead GPT-5.5", K3),
        "luna-k3": ("Lookahead Luna", K3)}
 EX = [  # state, title, minority pick, majority action, minority excerpt, majority excerpt, (episode root, run) for the next screen
@@ -47,13 +50,13 @@ def mark(im, a, col, tag):
         if c.get("name") == "click" and g.get("point_2d"):
             x, y = g["point_2d"][0] * X / 1000, g["point_2d"][1] * Y / 1000
             d.rectangle([x - 70, y - 26, x + 70, y + 26], outline=col, width=9)
-            d.rectangle([x + 70, y - 26, x + 110, y + 18], fill=col); d.text((x + 80, y - 26), tag, fill="white", font=F(36, True))
+            d.rectangle([x + 70, y - 26, x + 110, y + 18], fill=col); d.text((x + 80, y - 26), tag, fill=INK, font=F(36, True))
         elif c.get("name") == "scroll":
-            t = f"{tag}  scroll ↓"; w = d.textlength(t, font=F(44, True)) + 40
-            d.rectangle([X - 20 - w, Y - 90, X - 20, Y - 20], fill=col); d.text((X - w, Y - 82), t, fill="white", font=F(44, True))
+            t = f"{tag}  scroll down"; w = d.textlength(t, font=F(44, True)) + 40
+            d.rectangle([X - 20 - w, Y - 90, X - 20, Y - 20], fill=col); d.text((X - w, Y - 82), t, fill=INK, font=F(44, True))
         elif c.get("name") == "go_back":
-            t = f"{tag}  ← go back"; w = d.textlength(t, font=F(44, True)) + 40
-            d.rectangle([20, 20, 20 + w, 90], fill=col); d.text((40, 28), t, fill="white", font=F(44, True))
+            t = f"{tag}  go back"; w = d.textlength(t, font=F(44, True)) + 40
+            d.rectangle([20, 20, 20 + w, 90], fill=col); d.text((40, 28), t, fill=INK, font=F(44, True))
     return im
 
 
@@ -63,7 +66,7 @@ def badges(d, x, y, who, wmax):
         t, c = WHO[s]; w = d.textlength(t, font=F(26, True)) + 18
         if bx + w > wmax:
             bx, y = x, y + 40
-        d.rounded_rectangle([bx, y, bx + w, y + 34], 8, fill=c); d.text((bx + 9, y + 2), t, fill="white", font=F(26, True)); bx += w + 10
+        d.rounded_rectangle([bx, y, bx + w, y + 34], 8, fill=C["ADM_4B"], outline=c, width=3); d.text((bx + 9, y + 2), t, fill="white", font=F(26, True)); bx += w + 10
     return y + 46
 
 
@@ -86,15 +89,15 @@ def row(i, title, pick_lbl, maj_lbl, pick_q, maj_q, ep):
     canvas = Image.new("RGB", (W, 2200), "white"); d = ImageDraw.Draw(canvas)
     y = para(d, 30, 20, title, 95, F(40, True), INK) + 10
     sw = 820; a = fit(cur, sw); b = fit(nxt, 520)
-    canvas.paste(a, (30, y)); d.rectangle([30, y, 30 + sw, y + a.size[1]], outline=(160, 160, 160), width=2)
+    canvas.paste(a, (30, y)); d.rectangle([30, y, 30 + sw, y + a.size[1]], outline=C["STATE_BORDER"], width=2)
     d.text((30, y + a.size[1] + 8), "Current screen (A = minority pick, B = most-proposed action)", fill=MUTED, font=F(26))
     bx = 30 + sw + 30
-    canvas.paste(b, (bx, y)); d.rectangle([bx, y, bx + 520, y + b.size[1]], outline=(160, 160, 160), width=2)
+    canvas.paste(b, (bx, y)); d.rectangle([bx, y, bx + 520, y + b.size[1]], outline=C["STATE_BORDER"], width=2)
     for k, ln in enumerate(textwrap.wrap("Next screen after A, from one live episode", 26)):
         d.text((bx, y + b.size[1] + 8 + 34 * k), ln, fill=MUTED, font=F(26))
     tx = bx + 520 + 40; tw = W - tx - 30; yy = y
     for tag, col, lbl, g, q in (("A", MIN, pick_lbl, pick, pick_q), ("B", MAJ, maj_lbl, maj, maj_q)):
-        d.rectangle([tx, yy, tx + 44, yy + 44], fill=col); d.text((tx + 10, yy), tag, fill="white", font=F(36, True))
+        d.rectangle([tx, yy, tx + 44, yy + 44], fill=col); d.text((tx + 10, yy), tag, fill=INK, font=F(36, True))
         yy = para(d, tx + 58, yy, lbl, 21, F(34, True), INK)
         d.text((tx + 58, yy), f"{g['size']} of 5 proposals · picked by", fill=MUTED, font=F(26)); yy += 40
         yy = badges(d, tx + 58, yy, g["picked_by"], W - 30)
@@ -110,7 +113,7 @@ def main():
     for k, p in enumerate(parts):
         out.paste(p, (0, y)); y += p.size[1]
         if k < len(parts) - 1:
-            d.line([30, y + 14, W - 30, y + 14], fill=(200, 200, 200), width=3); y += 30
+            d.line([30, y + 14, W - 30, y + 14], fill=C["BORDER"], width=3); y += 30
     out.thumbnail((1600, 10000))
     out.save(Path(os.environ.get("OUT_DIR", HERE)) / "minority-examples.png", optimize=True)
 

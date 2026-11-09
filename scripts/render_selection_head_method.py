@@ -13,11 +13,13 @@ _paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().
                    if (p / "openwebrl/docs/paper_plot_style.py").is_file())
 _paper_sys.path.insert(0, str(_paper_docs))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 from matplotlib.patches import FancyBboxPatch
 
-INK, MUTED, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
-FROZEN, LEARNED, DATA, NEUTRAL = ("#e8f0fb", "#2a78d6"), ("#fdeee7", "#eb6834"), ("#f1ecfb", "#6250d6"), ("#f4f4f2", "#b9b8b2")
+INK, MUTED, SURFACE = C["INK"], C["MUTED"], C["BACKGROUND"]
+FROZEN, LEARNED, DATA, NEUTRAL = (tint("BASELINE_LIGHT", .75), C["BASELINE_DARK"]), (tint("ADM_22M", .85), C["ADM_22M"]), (tint("LOOKAHEAD_TEACHER", .85), C["LOOKAHEAD_TEACHER"]), ("white", C["BORDER"])
 
+plt.rcParams["font.family"] = ["Albert Sans", "DejaVu Sans"]
 fig, ax = plt.subplots(figsize=(11, 4.2))
 fig.patch.set_facecolor(SURFACE)
 ax.set_xlim(0, 124); ax.set_ylim(0, 41.5); ax.axis("off")
@@ -32,7 +34,7 @@ def box(x, y, w, h, title, sub, colors, dashed=False):
 
 
 def arrow(x0, x1, y):
-    ax.annotate("", (x1, y), (x0, y), arrowprops=dict(arrowstyle="-|>", color="#8a8f98", lw=1.4, mutation_scale=14))
+    ax.annotate("", (x1, y), (x0, y), arrowprops=dict(arrowstyle="-|>", color=C["BASELINE_DARK"], lw=1.4, mutation_scale=14))
 
 
 # A: inference
@@ -44,7 +46,7 @@ box(28, y, 28, 11.5, "Hidden states, captured", "layers 18 / 27 / 36, during gen
 arrow(56.8, 60.2, y + 5.75)
 box(61, y, 24, 11.5, "Selection head", "standardize → small MLP\nper candidate → 5 scores", LEARNED)
 arrow(85.8, 89.2, y + 5.75)
-box(90, y, 18, 11.5, "Execute", "highest-scoring\ncandidate", NEUTRAL)
+box(90, y, 18, 11.5, "Execute", "highest-scoring\ncandidate", (tint("ACTION", .65), C["ACTION_INK"]))
 ax.text(110, y + 5.75, "no second model,\nno extra pass", fontsize=8, color=MUTED, va="center")
 
 # B: training

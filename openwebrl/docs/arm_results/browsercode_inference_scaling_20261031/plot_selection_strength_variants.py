@@ -4,6 +4,12 @@
 Keeps the existing compact figure unchanged. Reuses audited paired intervals;
 no new bootstrap, model calls, task payloads or experimental runs are needed.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import hashlib
 import importlib.util
 import json
@@ -28,7 +34,7 @@ HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location('scaling_families', HERE / 'plot_browsercode_scaling_families.py')
 F = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(F)
-BLUE, RED, GRAY, INK = '#3187B3', '#B41620', '#8C929A', '#24272B'
+BLUE, RED, GRAY, INK = PALETTE["SINGLE_CALL_MAIN"], PALETTE["ADM_DEFAULT"], PALETTE["BASELINE_LIGHT"], PALETTE["INK"]
 BENCHMARKS = [('online_mind2web', 'OM2W'), ('webvoyager', 'WebVoyager'), ('deepshop', 'DeepShop')]
 PAIRS = [(30, 'parallel5_select_high', 'luna_single_high'),
          (60, 'parallel5_select_high_60steps', 'luna_single_high_60steps')]
@@ -48,7 +54,7 @@ def style(ax):
     ax.grid(False, which='both')
     ax.spines[['top', 'right']].set_visible(False)
     for side in ['left', 'bottom']:
-        ax.spines[side].set_color('#555555')
+        ax.spines[side].set_color(PALETTE["MUTED"])
         ax.spines[side].set_linewidth(.6)
     ax.tick_params(length=3, width=.6, pad=2)
 
@@ -101,7 +107,7 @@ def interaction_view(points, contrasts):
            xlabel='Executed browser batches / task', ylabel='Common-valid success (%)')
     ax.set_title('a)  Success vs browser interaction', loc='left', pad=9)
     ax = axes[1]
-    ax.axvline(0, color='#A1A6AD', linewidth=.7, linestyle='--', zorder=0)
+    ax.axvline(0, color=PALETTE["BORDER"], linewidth=.7, linestyle='--', zorder=0)
     for y, (budget, left, right) in zip([1, 0], PAIRS):
         result = contrasts[left, right]
         gain = result['difference_pp']
@@ -145,7 +151,7 @@ def paired_outcomes_view(data, groups):
                                  n5_only_success_percent=100 * win,
                                  n1_only_success_percent=100 * loss,
                                  net_gain_pp=100 * (win - loss)))
-        ax.axvline(0, color='#A1A6AD', linewidth=.7, zorder=0)
+        ax.axvline(0, color=PALETTE["BORDER"], linewidth=.7, zorder=0)
         ax.set(xlim=(-15, 15), xticks=[-15, -10, -5, 0, 5, 10, 15],
                ylim=(-.55, 3.55), yticks=[3, 2, 1, 0],
                yticklabels=['Weighted mean', 'OM2W', 'WebVoyager', 'DeepShop'],

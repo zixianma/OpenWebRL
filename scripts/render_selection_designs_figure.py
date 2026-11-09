@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from render_selection_head_figure import DEST, INK, MUTED, Figure, render_png  # noqa: E402
+from render_selection_head_figure import DEST, INK, MUTED, Figure, render_png, C  # noqa: E402
 
 COLUMNS = [
     ('Piotr SelectionARM', 'baseline', 'plain'),
@@ -46,7 +46,8 @@ MASKS = [
     ([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [1, 1, 1, 1]], True, ['<decide> reads all,', 'in every layer']),
     ([[1, 0, 0, 0], [1, 1, 0, 0], [1, 1, 1, 0], [1, 1, 1, 1]], True, ['later options see', 'earlier + <decide>']),
 ]
-FILL = {'frozen': '#2563b0', 'train': '#ad5b13', 'plain': '#7d8fa3'}
+ATTENTION_ALLOWED, ATTENTION_MASKED = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
+FILL = {"frozen": C["ADM_22M"], "train": C["ADM_22M"], "plain": C["BASELINE_DARK"]}
 
 
 def mask_glyph(f, x, y, cells, decide, color):
@@ -58,7 +59,7 @@ def mask_glyph(f, x, y, cells, decide, color):
         for j in range(n):
             on = cells[i][j]
             f.parts.append(f'<rect x="{x + j * size}" y="{y + i * size}" width="{size - 2}" height="{size - 2}" rx="3" '
-                           f'fill="{color if on else "#eef2f7"}" stroke="none"/>')
+                           f'fill="{ATTENTION_ALLOWED if on else ATTENTION_MASKED}" stroke="none"/>')
 
 
 def figure():

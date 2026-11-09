@@ -12,15 +12,18 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "openwebrl/docs"))
+import paper_plot_style  # noqa: F401
+from paper_plot_palette import COLORS as C
 
 OUT = Path(__file__).resolve().parents[1] / 'openwebrl/docs/arm_results/rl_final_20261108'
 DATA = json.loads((OUT / 'arm_final_results_data.json').read_text())
 RUNS = {r['key']: r for r in DATA['runs']}
 
-# Fixed identities: outcome-only references in neutral ink, Gate B in slot-1 blue,
-# the panel's ablation in slot-2 orange (reference palette, adjacent-safe order).
-OUTCOME48, OUTCOME56, GATE_B, ABLATION = '#8a8984', '#3b3a37', '#2a78d6', '#eb6834'
-INK, MUTED, GRID = '#0b0b0b', '#52514e', '#e4e3df'
+# Shared identities: outcome-only controls neutral; ADM reference and ablations purple.
+OUTCOME48, OUTCOME56, GATE_B, ABLATION = C["BASELINE_LIGHT"], C["BASELINE_DARK"], C["ADM_DEFAULT"], C["ADM_DEFAULT"]
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
 ABLATIONS = [
     ('additive', 'Strict gate (D = 5)'),
     ('mixed_bonus', 'No failure groups'),
@@ -92,7 +95,7 @@ def figure(kind):
         ax = axes[i]
         draw(ax, 'outcome56', OUTCOME56, 'Outcome-only, 56 groups', kind, width=1.4)
         draw(ax, 'gate_b', GATE_B, 'Gate B', kind, width=1.6)
-        draw(ax, key, ABLATION, RUNS[key]['label'], kind, width=2.2)
+        draw(ax, key, ABLATION, RUNS[key]['label'], kind, dashed=True, width=2.2)
         style(ax, title, ylabel if i == 4 else None)
     legend = axes[7]
     legend.axis('off')
@@ -100,7 +103,7 @@ def figure(kind):
         plt.Line2D([], [], color=OUTCOME48, linestyle=(0, (4, 2)), linewidth=2, label='Outcome-only, 48 groups'),
         plt.Line2D([], [], color=OUTCOME56, linewidth=2, label='Outcome-only, 56 groups'),
         plt.Line2D([], [], color=GATE_B, linewidth=2.4, label='Gate B (ours)'),
-        plt.Line2D([], [], color=ABLATION, linewidth=2.2, label='Ablation named in panel title'),
+        plt.Line2D([], [], color=ABLATION, linestyle=(0, (4, 2)), linewidth=2.2, label='Ablation named in panel title'),
     ]
     if kind == 'validation':
         handles.append(plt.Line2D([], [], color=MUTED, marker='X', linestyle='none', markersize=8,

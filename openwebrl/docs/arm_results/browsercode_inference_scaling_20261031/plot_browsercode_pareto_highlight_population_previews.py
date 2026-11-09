@@ -5,6 +5,7 @@ Reuses published counts, coordinates and paper styling. No experiment calls.
 """
 import argparse
 import copy
+import hashlib
 import importlib.util
 import json
 import math
@@ -49,7 +50,15 @@ def common_points(source_rows):
     data = json.loads((HERE / "common16_aggregate.json").read_text())
     assert data["schema"] == "browsercode-sixteen-method-common-valid-aggregate-v1"
     assert data["methods"] == [r["method"] for r in source_rows]
-    assert data["source_sha256"]["own_valid_report"] == BASE.sha(HERE / (RIGHT.STEM + ".json"))
+    report_sha = BASE.sha(HERE / (RIGHT.STEM + ".json"))
+    # The aggregate pins the pre-palette report. Permit only its identical numeric
+    # points when style metadata/output hashes have changed; retain the original
+    # source aggregate and its exact historical binding without rewriting it.
+    if data["source_sha256"]["own_valid_report"] != report_sha:
+        assert data["source_sha256"]["own_valid_report"] == "5e6ee9945e1d69f917d4997169af3a3da9ce80d9259924619b405e12fb518535"
+        scientific_sha = hashlib.sha256(json.dumps(source_rows, sort_keys=True,
+            separators=(",", ":")).encode()).hexdigest()
+        assert scientific_sha == "8ecc393a3b4d5a31b0d377cc069dfe30e9dbef75d20c680202cbab4f5e56eff5"
     weights = {"online_mind2web": 300, "webvoyager": 595, "deepshop": 150}
     assert data["benchmark_weights"] == weights
     lookup = {(r["benchmark"], r["method"]): r for r in data["points"]}
@@ -130,7 +139,7 @@ def build(population="overall"):
                 point.set_linewidths([0])
                 point.set_hatch(RIGHT.CACHE_HATCH)
     previous = list(fig.legends)
-    height = 2.75
+    height = 2.838128654970761
     for _ in range(4):
         RIGHT.right_layout(fig, previous=previous, height=height)
         for text in fig.texts:

@@ -5,6 +5,7 @@ Fonts are bundled under the SIL Open Font License; no system install is needed.
 """
 from pathlib import Path
 from matplotlib import font_manager, rcParams
+from paper_plot_palette import COLORS
 
 FONT_DIRECTORY = Path(__file__).resolve().parent / "assets/fonts/albert-sans"
 FONT_FAMILY = "Albert Sans"
@@ -17,6 +18,12 @@ def use_paper_style():
             font_manager.fontManager.addfont(str(path))
     rcParams.update({
         "font.family": FONT_FAMILY,
+        "text.color": COLORS["INK"],
+        "axes.labelcolor": COLORS["INK"],
+        "axes.edgecolor": COLORS["BORDER"],
+        "xtick.color": COLORS["MUTED"],
+        "ytick.color": COLORS["MUTED"],
+        "grid.color": COLORS["BORDER"],
         "font.sans-serif": [FONT_FAMILY, "DejaVu Sans"],
         "mathtext.fontset": "custom",
         "mathtext.rm": FONT_FAMILY,

@@ -4,6 +4,12 @@
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
 ranges, colors and observed frontiers. Cached markers use shaded circles. No experiment calls.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import copy
 import importlib.util
 import json
@@ -29,7 +35,7 @@ CACHE_SIZE = 36
 CACHE_HATCH = "////////"
 
 
-def cache_handle(color="#8b8b8b"):
+def cache_handle(color=PALETTE["BASELINE_LIGHT"]):
     return Circle((0, 0), radius=1, facecolor=color, edgecolor="white",
                   linewidth=0, hatch=CACHE_HATCH)
 
@@ -39,7 +45,7 @@ def legend_circle(legend, orig_handle, xdescent, ydescent, width, height, fontsi
                   radius=min(width, height) * .46)
 
 
-def right_layout(fig, previous=None, height=2.25):
+def right_layout(fig, previous=None, height=2.4451461988304095):
     previous = list(fig.legends) if previous is None else previous
     assert len(previous) == 3
     for legend in list(fig.legends):
@@ -83,7 +89,7 @@ def right_layout(fig, previous=None, height=2.25):
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
              "GPT-6 high unless xhigh. N=candidates.\nLuna baseline: 12,288 tokens · 30 steps.",
-             fontsize=7.2, color="#555555", va="top")
+             fontsize=7.2, color=PALETTE["MUTED"], va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     footer_box = fig.texts[0].get_window_extent(renderer)
@@ -149,7 +155,7 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
-                              cached="Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+                              cached="Light/base purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Original gray solid rings and dashed links, unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),

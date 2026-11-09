@@ -4,6 +4,12 @@
 The private adapter must qualify source endpoints before producing aggregate.json.
 This renderer verifies aggregate consistency; it does not certify native runs.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 from pathlib import Path
 import argparse,csv,hashlib,json,math,os
 os.environ.setdefault('MPLCONFIGDIR','/tmp/openwebrl-browsercode14-mpl')
@@ -15,20 +21,20 @@ PROTOCOL=dict(model='gpt-5.6-terra',reasoning_effort='medium',max_completion_tok
 BASELINE='One-pass gap-repaired eleven-method baseline; original valid outcomes and first prespecified repair outcomes preserved.'
 CAVEATS=['Gap-repaired baseline, Sol high/60 and cached selection use different live collection windows. Matching task identity does not control collection time.','Own-valid points use each method valid cohort; common-valid points use the same newly intersected fourteen-method tasks within each benchmark.','Fixed planned weights300/1045,595/1045,150/1045 apply to success and all within-benchmark actor means; this is not pooled-valid success.','Actor pricing preserves frozen source usage/upper-bound definitions, excludes Terra and hosting, and is not an invoice. Latency is elapsed actor-loop seconds per task, including valid failures; parallel call times are not summed.','Historical Luna single/60 enforced60 but advertised30; single/120 advertised120. Cached selectors retain full native context; uncached selectors use their historical protocol.','A browser-code batch is one selected nonempty code batch and may contain multiple browser/CDP operations. No hosting-cost panel or significance claim is inferred.']
 STYLES={
- 'serial_high':('Sol high /30','s','#08519c',True),
- 'luna_single_high':('Luna high /30','o','#4292c6',True),
- 'parallel3_select_high':('Luna N3 /30','o','#ef8a8a',True),
- 'parallel5_select_high':('Luna N5 /30','o','#a50f15',True),
- 'luna_single_xhigh_12288':('Luna xhigh /30','o','#08306b',True),
- 'luna_single_high_24576':('Luna high 2x tokens','o','#2171b5',True),
- 'luna_single_high_6144':('Luna high 0.5x tokens','o','#9ecae1',True),
- 'luna_single_high_60steps':('Luna high /60','o','#4292c6',False),
- 'parallel2_select_high':('Luna N2 /30','o','#fb6a4a',True),
- 'parallel5_select_high_60steps':('Luna N5 /60','o','#a50f15',False),
- 'luna_single_high_120steps':('Luna high /120','o','#08519c',False),
- 'sol_single_high60':('Sol high /60','s','#08519c',False),
- 'luna_n3_cached_high30':('Luna N3 /30 cached','o','#ef8a8a',True),
- 'luna_n5_cached_high60':('Luna N5 /60 cached','o','#a50f15',False)}
+ 'serial_high':('Sol high /30','s',PALETTE["SINGLE_CALL_MAIN"],True),
+ 'luna_single_high':('Luna high /30','o',PALETTE["SINGLE_CALL_MAIN"],True),
+ 'parallel3_select_high':('Luna N3 /30','o',palette_tint("ADM_DEFAULT", .25),True),
+ 'parallel5_select_high':('Luna N5 /30','o',PALETTE["ADM_DEFAULT"],True),
+ 'luna_single_xhigh_12288':('Luna xhigh /30','o',PALETTE["BASELINE_DARK"],True),
+ 'luna_single_high_24576':('Luna high 2x tokens','o',PALETTE["SINGLE_CALL_MAIN"],True),
+ 'luna_single_high_6144':('Luna high 0.5x tokens','o',palette_tint("SINGLE_CALL_MAIN", .35),True),
+ 'luna_single_high_60steps':('Luna high /60','o',PALETTE["SINGLE_CALL_MAIN"],False),
+ 'parallel2_select_high':('Luna N2 /30','o',palette_tint("ADM_DEFAULT", .45),True),
+ 'parallel5_select_high_60steps':('Luna N5 /60','o',PALETTE["ADM_DEFAULT"],False),
+ 'luna_single_high_120steps':('Luna high /120','o',PALETTE["SINGLE_CALL_MAIN"],False),
+ 'sol_single_high60':('Sol high /60','s',PALETTE["SINGLE_CALL_MAIN"],False),
+ 'luna_n3_cached_high30':('Luna N3 /30 cached','o',palette_tint("ADM_DEFAULT", .25),True),
+ 'luna_n5_cached_high60':('Luna N5 /60 cached','o',PALETTE["ADM_DEFAULT"],False)}
 CACHED=set(METHODS[-2:])
 def need(v,message):
  if not v:raise ValueError(message)
@@ -78,9 +84,11 @@ def render(d,out):
  matplotlib.use('Agg')
  import matplotlib.pyplot as plt
  from matplotlib.lines import Line2D
- from matplotlib.legend_handler import HandlerTuple
+ from matplotlib.legend_handler import HandlerTuple, HandlerPatch
+ from matplotlib.patches import Circle
+ import paper_plot_style as _paper_style
  from matplotlib.ticker import MaxNLocator,NullFormatter
- out=Path(out);out.mkdir(parents=True,exist_ok=True);plt.rcParams.update({'font.family':'DejaVu Sans','font.size':7,'axes.linewidth':.6,'svg.fonttype':'none','pdf.fonttype':42,'svg.hashsalt':'browsercode-fourteen-method-v1'})
+ out=Path(out);out.mkdir(parents=True,exist_ok=True);plt.rcParams.update({'font.family':'Albert Sans','font.size':7,'axes.linewidth':.6,'svg.fonttype':'none','pdf.fonttype':42,'svg.hashsalt':'browsercode-fourteen-method-v1'})
  allpoints={p:average(d,p)for p in ['own_valid','common_valid']};ys=[100*r['success_rate']for rows in allpoints.values()for r in rows];limits=max(0,5*math.floor((min(ys)-1)/5)),min(100,5*math.ceil((max(ys)+1)/5));outputs=[]
  for population,rows in allpoints.items():
   stem='browsercode_scaling14_'+population+'_weighted';fig,axes=plt.subplots(1,3,figsize=(7.7,2.9),sharey=True);fig.subplots_adjust(left=.07,right=.745,top=.84,bottom=.26,wspace=.30)
@@ -90,21 +98,23 @@ def render(d,out):
    if metric=='actor_usd':ax.set_xscale('log');ax.xaxis.set_minor_formatter(NullFormatter())
    else:ax.xaxis.set_major_locator(MaxNLocator(nbins=3))
    edge=frontier(rows,metric)
-   if len(edge)>1:ax.plot([p[metric]for p in edge],[100*p['success_rate']for p in edge],'--',lw=.65,color='#777777',zorder=1)
+   if len(edge)>1:ax.plot([p[metric]for p in edge],[100*p['success_rate']for p in edge],'--',lw=.65,color=PALETTE["FRONTIER"],zorder=1)
    for p in rows:
     name,marker,color,filled=STYLES[p['method']]
-    if p['method']in CACHED:ax.scatter(p[metric],100*p['success_rate'],marker=marker,s=49,facecolors='none',edgecolors='#222222',linewidths=.8,zorder=3)
-    ax.scatter(p[metric],100*p['success_rate'],marker=marker,s=28,facecolors=color if filled else'white',edgecolors=color,linewidths=.9,zorder=4)
+    if p['method']in CACHED:ax.scatter(p[metric],100*p['success_rate'],marker=marker,s=49,facecolors=color,edgecolors='white',linewidths=0,hatch='////////',zorder=4)
+    else:ax.scatter(p[metric],100*p['success_rate'],marker=marker,s=28,facecolors=color if filled else'white',edgecolors=color,linewidths=.9,zorder=4)
   axes[0].set_ylabel('Valid success (%)'if population=='own_valid'else'Common-valid success (%)',fontsize=7)
   handles=[];labels=[]
   for m in METHODS:
    label,marker,color,filled=STYLES[m];inner=Line2D([],[],ls='none',marker=marker,markersize=4.7,markeredgecolor=color,markerfacecolor=color if filled else'white',markeredgewidth=.9)
-   handles.append((Line2D([],[],ls='none',marker=marker,markersize=6.4,markeredgecolor='#222222',markerfacecolor='none',markeredgewidth=.8),inner)if m in CACHED else inner);labels.append(label)
-  fig.legend(handles,labels,handler_map={tuple:HandlerTuple(ndivide=1,pad=0)},loc='center left',bbox_to_anchor=(.76,.54),frameon=False,fontsize=6.2,labelspacing=.45,handletextpad=.4)
+   handles.append(Circle((0,0),1,facecolor=color,edgecolor='white',linewidth=0,hatch='////////')if m in CACHED else inner);labels.append(label)
+  fig.legend(handles,labels,handler_map={Circle:HandlerPatch(patch_func=lambda legend,orig_handle,xdescent,ydescent,width,height,fontsize:Circle((width/2-xdescent,height/2-ydescent),min(width,height)*.46))},loc='center left',bbox_to_anchor=(.76,.54),frameon=False,fontsize=6.2,labelspacing=.45,handletextpad=.4)
   coverage='Own valid subsets differ'if population=='own_valid'else'Common valid: '+', '.join(str(d['common_valid_counts'][b]['common_valid'])for b in BENCHMARKS)
-  fig.text(.07,.115,'Gap-repaired baseline + Sol/60 + cached; fixed planned weights300/595/150',fontsize=6.5,color='#555555');fig.text(.07,.065,coverage+'; windows differ; black outline: cached',fontsize=6.5,color='#555555');fig.text(.07,.015,'Dashed: observed nondominated points only; no inferred superiority.',fontsize=6.2,color='#555555')
+  fig.text(.07,.115,'Gap-repaired baseline + Sol/60 + cached; fixed planned weights300/595/150',fontsize=6.5,color=PALETTE["MUTED"]);fig.text(.07,.065,coverage+'; windows differ; shaded circle: cached',fontsize=6.5,color=PALETTE["MUTED"]);fig.text(.07,.015,'Dashed: observed nondominated points only; no inferred superiority.',fontsize=6.2,color=PALETTE["MUTED"])
   for ext in ['png','pdf','svg']:
-   p=out/(stem+'.'+ext);need(not p.exists(),'Preserve prior public-stage figures');meta={'Date':None}if ext=='svg'else{'CreationDate':None,'ModDate':None}if ext=='pdf'else{};fig.savefig(p,dpi=300,metadata=meta);outputs.append(p)
+   p=out/(stem+'.'+ext);need(not p.exists(),'Preserve prior public-stage figures');meta={'Date':None}if ext=='svg'else{'CreationDate':None,'ModDate':None}if ext=='pdf'else{};fig.savefig(p,dpi=300,metadata=meta)
+   if ext=='svg':p.write_text('\n'.join(line.rstrip()for line in p.read_text().splitlines())+'\n')
+   outputs.append(p)
   plt.close(fig);p=out/(stem+'_coordinates.csv');csv_write(p,rows,['method','success_rate',*METRICS]);outputs.append(p)
  for population in ['own_valid','common_valid']:
   rows=[]

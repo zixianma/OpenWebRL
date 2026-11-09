@@ -710,7 +710,7 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
-    "cached": "Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+    "cached": "Light/base purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
       "marker": "o",
       "size_pt2": 36,
@@ -725,19 +725,19 @@
   "source_sha256": {
     "aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
     "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
-    "plot_browsercode_pareto_previews.py": "93dd5f54356a653181ed090322eb33e238d244fe139fab655e5193fbe99dcf00",
-    "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
+    "plot_browsercode_pareto_previews.py": "29df9b73ac3ad4b1723769cabba4a7dfdf94ee45266bd67bbd4e83490c02ad83",
+    "browsercode_pareto_paper_style.py": "f49ca618bca06d39a3f9c22990c21df14f49877c3ca3f99a77daff88abf19195",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0",
     "../browsercode_cached_selection_20261105/aggregate.json": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
-    "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1",
+    "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "1911888fcc28752184bcf3c641c36dab4cbf9e9c77cb982a7e47c834d318435c",
     "sol_high120_xhigh30_aggregate.json": "ff09a48d8aea21d182bb7be8efe7a7313923b6af757e2f6e78fa5c72f6cc5629",
-    "plot_browsercode_pareto_highlight_preview.py": "6aa6419abb0162acac7d831865943682dedd11687e2d9da24acf1c404e7b38d7",
-    "browsercode_scaling_weighted_pareto_highlight_preview.json": "d1a4e77a7d7b1acec031a7d91a39f4ddf313000d0ea7cc13ff9dc0c3e9851f85"
+    "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
+    "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "a2f7cacc52dac7cc95640ca77db1ad6188694b13f6cf3a63093620d2fa1c0cf3",
+  "renderer_sha256": "c26daf28aa119c4e2a65f78a9d10427e80c24119524e4531ce8ae032d047ece7",
   "output_sha256": {
-    "png": "7fd6f48b6885cdec02c11fcd808f73118eebd104c2ad819272a38f789a976c0e",
-    "pdf": "c647cb3cf6de846330f01f7c400e80840c634633cf9d80710269e752700ab79a",
-    "svg": "88488c087ec8efccda485d0ff2fd1ecb3bc076831310bfaf134746c4a5351cfb"
+    "png": "3ce0b590c6c22243b773884916035c8a3265a282914c19f58b01637aace40792",
+    "pdf": "7cbb3101a4041b5b22201b1296fa65da02dbd4a570f4daa93d80ec6f2ee30069",
+    "svg": "703247b36fdeb15204603cab0471c9cb35efed7a047b289fd21c98783c6bc874"
   }
 }

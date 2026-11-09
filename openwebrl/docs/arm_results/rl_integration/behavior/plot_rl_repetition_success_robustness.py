@@ -12,6 +12,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 from matplotlib.lines import Line2D
 import numpy as np
@@ -27,7 +28,8 @@ def render():
     success = json.loads(SUCCESS.read_text())
     assert success["repetition_aggregate_sha256"] == hashlib.sha256(REPETITION.read_bytes()).hexdigest()
     assert repetition["thresholds"] == list(THRESHOLDS) == [2, 3, 4, 5]
-    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7,
+    plt.rcParams.update({"text.color": C["INK"], "axes.labelcolor": C["INK"],
+                         "xtick.color": C["MUTED"], "ytick.color": C["MUTED"], "font.family": "Albert Sans", "font.size": 7,
                          "axes.titlesize": 7, "axes.labelsize": 7,
                          "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
@@ -70,9 +72,9 @@ def render():
         for side in ("top", "right"):
             ax.spines[side].set_visible(False)
         for side in ("left", "bottom"):
-            ax.spines[side].set_color("#666666")
+            ax.spines[side].set_color(C["BASELINE_DARK"])
             ax.spines[side].set_linewidth(0.7)
-        ax.tick_params(length=2.5, pad=2, color="#666666")
+        ax.tick_params(length=2.5, pad=2, color=C["BASELINE_DARK"])
     handles = [Line2D([], [], color=color, marker="o", linewidth=1.2, markersize=4,
                       label=label) for _, label, _, color, _ in RUNS]
     legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.54, 0.005),

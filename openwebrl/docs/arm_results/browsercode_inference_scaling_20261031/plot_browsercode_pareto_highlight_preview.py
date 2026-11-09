@@ -5,6 +5,12 @@ Adds completed cached-context and Sol own-valid points to the original twelve
 settings. Retains their coordinates, recomputes observed frontiers, and preserves
 all other published figures. No model, browser or experiment calls.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import importlib.util
 import json
 import math
@@ -38,16 +44,16 @@ CACHED_SOURCE = HERE.parent / "browsercode_cached_selection_20261105" / "aggrega
 CACHED_RENDERER = HERE.parent / "browsercode_cached_selection_20261105" / "plot_browsercode_scaling14.py"
 SOL_SOURCE = HERE / "sol_high120_xhigh30_aggregate.json"
 SOL = {
-    "sol_single_high120": ("Sol high · 120 steps", "s", "#08306b", True),
-    "sol_single_xhigh30": ("Sol xhigh · 30 steps", "s", "#08306b", False),
+    "sol_single_high120": ("Sol high · 120 steps", "s", PALETTE["BASELINE_DARK"], True),
+    "sol_single_xhigh30": ("Sol xhigh · 30 steps", "s", PALETTE["BASELINE_DARK"], False),
 }
 SOL_PROTOCOL = dict(actor_model="gpt-6-sol", candidates=1, max_output_tokens=12288,
                     actor_deadline_seconds=900, harness="browsercode",
                     judge_model="gpt-5.6-terra", judge_effort="medium",
                     judge_max_output_tokens=4096, judge_seed=42)
 CACHED = {
-    "luna_n3_cached_high30": ("N=3/30 cached", "o", "#ef8a8a", True),
-    "luna_n5_cached_high60": ("N=5/60 cached", "o", "#a50f15", True),
+    "luna_n3_cached_high30": ("N=3/30 cached", "o", palette_tint("ADM_DEFAULT", .25), True),
+    "luna_n5_cached_high60": ("N=5/60 cached", "o", PALETTE["ADM_DEFAULT"], True),
 }
 
 
@@ -146,7 +152,7 @@ def compact_layout(fig):
     for text in list(fig.texts):
         text.remove()
     footer = "GPT-6 Luna & Sol: high unless labeled xhigh.\nLuna baseline: 12,288 tokens · 30 steps. N=candidates."
-    fig.text(.40, .025 / fig.get_figheight(), footer, fontsize=7.2, color="#555555", va="bottom")
+    fig.text(.40, .025 / fig.get_figheight(), footer, fontsize=7.2, color=PALETTE["MUTED"], va="bottom")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     # Place the two groups using their measured text widths and heights.
@@ -210,21 +216,46 @@ def build():
         for row, point in zip(rows, ax.collections):
             if row["method"] in CACHED:
                 point.set_facecolor(CACHED[row["method"]][2])
-                point.set_edgecolor("#222222")
-                point.set_linewidths([1.0])
+                point.set_edgecolor("white")
+                point.set_hatch("////////")
+                point.set_linewidths([0])
     for legend in fig.legends[:2]:
         for line, text in zip(legend.get_lines(), legend.texts):
             if text.get_text() in {style[0] for style in CACHED.values()}:
                 method = label_to_method[text.get_text()]
                 line.set_markerfacecolor(CACHED[method][2])
-                line.set_markeredgecolor("#222222")
-                line.set_markeredgewidth(1.0)
+                line.set_markeredgecolor("white")
+                line.set_markeredgewidth(0)
     compact_layout(fig)
     return fig, frontier_report, rows
 
 
+def shade_cached_legends(fig):
+    label_to_method = {label: method for method, label in BASE.SINGLE_LEGEND + BASE.SELECTION_LEGEND}
+    from matplotlib.patches import Circle
+    from matplotlib.legend_handler import HandlerPatch
+    def circle_patch(legend, orig_handle, xdescent, ydescent, width, height, fontsize):
+        return Circle((width / 2 - xdescent, height / 2 - ydescent), min(width, height) * .46)
+    cached_legends = []
+    for legend in list(fig.legends[:2]):
+        labels = [text.get_text() for text in legend.texts]
+        handles = [Circle((0, 0), 1, facecolor=CACHED[label_to_method[label]][2],
+                          edgecolor="white", linewidth=0, hatch="////////")
+                   if label in {style[0] for style in CACHED.values()} else line
+                   for line, label in zip(legend.get_lines(), labels)]
+        replacement = fig.legend(handles=handles, labels=labels, title=legend.get_title().get_text(),
+            loc=legend._loc, bbox_to_anchor=legend.get_bbox_to_anchor().transformed(fig.transFigure.inverted()),
+            ncol=legend._ncols, fontsize=8, title_fontsize=9, frameon=False,
+            handlelength=.8, handletextpad=.4, columnspacing=.7, labelspacing=.3,
+            borderaxespad=0, alignment="left", handler_map={Circle: HandlerPatch(patch_func=circle_patch)})
+        cached_legends.append(replacement)
+        legend.remove()
+    fig.legends[:] = cached_legends + [legend for legend in fig.legends if legend not in cached_legends]
+
+
 def main():
     fig, frontier_report, rows = build()
+    shade_cached_legends(fig)
     report = dict(
         schema="browsercode-weighted-pareto-highlight-preview-v3",
         population="Original twelve own-valid settings plus two completed cached-context and two completed Sol own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
@@ -234,7 +265,7 @@ def main():
                            "Actor means exclude Terra, hosting and invalid-outcome spending. Latency is elapsed per task, not summed parallel call time.",
                            "Selected browser-code batches may contain multiple browser operations and are not browser resource or fee measurements."],
         points=rows,
-        styles=dict(hollow="30-decision limit, including Sol xhigh/30", filled="Historical 60/120, Sol high/120 and both cached settings; cached N3 is solid light red; Sol xhigh/30 is hollow",
+        styles=dict(hollow="30-decision limit, including Sol xhigh/30", filled="Historical 60/120, Sol high/120 and both cached settings; cached N3 uses light purple; Sol xhigh/30 is hollow",
                     highlight=FOCUS, highlight_size_points_squared=SIZE,
                     baseline_size_points_squared=27, highlight_label="Luna ADM",
                     highlight_legend_label="Luna ADM; N=5, 60 steps",
@@ -243,7 +274,7 @@ def main():
                     selection_title="Best-of-N action decision scaling",
                     actor_family="GPT-6 (Luna and Sol)",
                     baseline_definition="Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
-                    colors="Original colors retained; cached N3 solid light red and cached N5 solid dark red, both with black edges"),
+                    colors="Shared palette: neutral mauve single calls, purple selection; cached circles use white shading"),
         source_sha256={name: BASE.sha(HERE / name) for name in (
             "aggregate.json", "browsercode_scaling_weighted_average.json",
             "plot_browsercode_pareto_previews.py", "browsercode_pareto_paper_style.py",

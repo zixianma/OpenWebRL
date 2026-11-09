@@ -1,17 +1,17 @@
 {
   "schema": "browsercode-gap-repaired-render-provenance-v1",
-  "renderer_sha256": "968715b0a379af0d976a15357c9ac872e9dffb67b9b98524813c05a294ec8123",
+  "renderer_sha256": "5a709c7f7a22a3a1d80004ef376eeb7c87d93417ae9d397acb4a624a83c32413",
   "aggregate_sha256": "87f18aaf152e82c8646fdc73a7d863af8468151496c63d1fc66a1a4e9f76309b",
-  "historical_renderer_sha256": "013e46ef913db6fe1dce759e77b3993b40ed59dbac5010b7df345a1e93b22ede",
-  "historical_common_renderer_sha256": "46505f37f593f225cfaaa089b2bcf522d08392f7e4d2ce3373816b2442d5a52a",
-  "historical_style_renderer_sha256": "5b5a5c81873886773400799c75b6bfa0224f331b5a77dc3b82c838a67aded06b",
+  "historical_renderer_sha256": "9a6c2da76497206bc1ebb203f966b81ab157a361f3e008603ca847005d126e0d",
+  "historical_common_renderer_sha256": "542536b19e762b4731f89a60366ecf8a0c7e6b6b2294e1c4e9efd6ba6d37a067",
+  "historical_style_renderer_sha256": "d0b470d7d355341261e14e181ef9c19987119935bbfd5e6c298f2d4b034bcd25",
   "historical_pair_definition_sha256": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
   "weighted_summary_sha256": "339a2c50238d383ab27a04b57db769363ba711cb4988db8bab774ce7a78afe7c",
   "matplotlib_version": "3.9.4",
   "numpy_version": "2.0.2",
   "artifacts": {
-    "browsercode_scaling_gap_repaired_compact.png": "eb672813f371c2462a3627f388b2bf4d79cff5da48af36f6f8a4fc80c8caf0c8",
-    "browsercode_scaling_gap_repaired_compact.pdf": "3a74ef88452eb51a8ee58fe80108730b60722ec1f8185cd99ffb873c6f2b200a",
-    "browsercode_scaling_gap_repaired_compact.svg": "934d398072220c6c5da0b8d476e38bc55abf62fe301b41558fb6d6e36fe1d47c"
+    "browsercode_scaling_gap_repaired_compact.png": "426e8f20b083278c8dc5f98b05bf4e60e2ba8caa17fbe6fd2994c0fd215657f0",
+    "browsercode_scaling_gap_repaired_compact.pdf": "d553164205ee7d868c905c03e68d0c8fee1941afd73d0d0af1d1ec6b57262f13",
+    "browsercode_scaling_gap_repaired_compact.svg": "71ff1cbaf87c76f7e76aa25f31e7300153440c4804163881e725777d5e8f8c35"
   }
 }

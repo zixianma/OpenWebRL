@@ -416,7 +416,7 @@ remain separate below.
 
 [**Interactive curves: all nine variants, failure buffers, label coverage and smoothing**](rl_results/arm_rl_interactive.html#reward-hacking) · [PDF](rl_results/arm_reward_hacking.pdf) · [Definitions and findings](ARM_RESULTS.md#arm-reward-hacking-curves-20261003).
 
-Blue is independent GPT-4.1-judged full300 task success; orange is the mean centered ARM bonus on training turns, with separate axes. There is no clear sustained main-batch reward inflation. This **does not rule out reward hacking**: ARM ranks five same-policy candidates, so its centered mean can stay near zero as absolute action quality changes. Reweighting shows the common ARM proxy, not an additive training reward.
+Gray is independent GPT-4.1-judged full300 task success; purple is the mean centered ARM bonus on training turns, with separate axes. There is no clear sustained main-batch reward inflation. This **does not rule out reward hacking**: ARM ranks five same-policy candidates, so its centered mean can stay near zero as absolute action quality changes. Reweighting shows the common ARM proxy, not an additive training reward.
 
 </details>
 

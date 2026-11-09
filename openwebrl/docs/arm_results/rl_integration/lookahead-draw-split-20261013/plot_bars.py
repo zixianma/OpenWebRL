@@ -17,6 +17,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -31,12 +32,12 @@ NAMES = {"Best on observed draws": "Oracle\n(rollouts 0–2)", "Lookahead K=3": 
 keys = [k for k in STYLE if k in r and k != "Actor first sample"]
 a = r["Actor first sample"][0]
 fig, ax = plt.subplots(figsize=(7.6, 3.6))
-ax.axhline(a, color="#666666", lw=1, ls="--", zorder=0)
-ax.text(-0.45, a - .5, f"Actor, first sample: {a:.1f}", ha="left", va="top", fontsize=7.5, color="#666666")
+ax.axhline(a, color=C["BASELINE_DARK"], lw=1, ls="--", zorder=0)
+ax.text(-0.45, a - .5, f"Actor, first sample: {a:.1f}", ha="left", va="top", fontsize=7.5, color=C["BASELINE_DARK"])
 for i, k in enumerate(keys):
     m = r[k][0]; d = r["minus_actor"][k]; lo, hi = a + d[1], a + d[2]
     ax.errorbar(i, m, yerr=[[m - lo], [hi - m]], fmt="D" if STYLE[k][2] == "-." else "o", ms=7.5, color=STYLE[k][1],
-                ecolor="#333333", capsize=3, lw=1, markeredgecolor="white", markeredgewidth=1, zorder=3)
+                ecolor=C["MUTED"], capsize=3, lw=1, markeredgecolor="white", markeredgewidth=1, zorder=3)
     ax.text(i, hi + .3, f"{m:.1f}", ha="center", va="bottom", fontsize=8)
 ax.set_xticks(range(len(keys)), [NAMES[k] for k in keys], fontsize=8); ax.set_xlim(-0.5, len(keys) - 0.5)
 ax.set_ylabel("Success on rollouts 3–7 (%)")

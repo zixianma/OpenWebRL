@@ -7,8 +7,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT/'openwebrl/docs/arm_results/methods'
-INK, MUTED, LINE = '#182b44', '#50647a', '#d6dfeb'
-BLUE, TEAL, PURPLE, ORANGE = '#2563b0', '#14776c', '#7350a2', '#ad5b13'
+import sys
+sys.path.insert(0, str(ROOT / 'openwebrl/docs'))
+from paper_plot_palette import COLORS as C, tint
+INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
+ARROW = C["BASELINE_DARK"]
+BLUE, TEAL, PURPLE, ORANGE = C["ADM_DEFAULT"], C["ADM_DEFAULT"], C["ADM_DEFAULT"], C["ORACLE"]
 
 
 class Figure:
@@ -17,7 +21,7 @@ class Figure:
         self.parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
             f'<title id="title">{escape(title)}</title><desc id="desc">{escape(description)}</desc>',
             '<style>text{font-family:Albert Sans,sans-serif} .mono{font-family:monospace}</style>',
-            '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>']
+            f'<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="{ARROW}"/></marker></defs>']
         self.rect(0,0,width,height,'#fff',radius=0)
 
     def rect(self,x,y,w,h,fill='#fff',stroke='none',radius=14):
@@ -28,7 +32,7 @@ class Figure:
         self.parts.append(f'<text x="{x}" y="{y}" font-size="{size}" fill="{color}" font-weight="{weight}" text-anchor="{anchor}"{cls}>{escape(value)}</text>')
 
     def arrow(self,x1,y1,x2,y2):
-        self.parts.append(f'<path d="M{x1},{y1} L{x2},{y2}" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>')
+        self.parts.append(f'<path d="M{x1},{y1} L{x2},{y2}" stroke="{ARROW}" stroke-width="2.5" marker-end="url(#arrow)"/>')
 
     def write(self,name):
         path=DEST/(name+'.svg')
@@ -51,7 +55,7 @@ def stages():
         [('Actor collects fresh rollouts','terminal judge provides task outcome'),('ARM labels sampled turns','executed response + 4 alternatives'),('PPO uses outcome + ARM signal','add a bonus or reweight turn credit')],
         'Deployment: single trained actor')]
     for x,color,label,subtitle,boxes,footer in cards:
-        f.rect(x,117,436,432,'#f8fafc',LINE)
+        f.rect(x,117,436,432,tint("BASELINE_LIGHT", .94),LINE)
         f.text(x+20,152,label,21,color,700)
         f.text(x+20,184,subtitle,24,weight=700)
         for i,(a,b) in enumerate(boxes):
@@ -71,7 +75,7 @@ def rl_choices():
     f.text(40,50,'Online RL: groups, gates and credit',36,weight=700)
     f.text(40,86,'Two different sets of five: 5 trajectories per task  ≠  5 candidate responses at one state.',23,MUTED)
 
-    f.rect(40,112,726,420,'#f8fafc',LINE)
+    f.rect(40,112,726,420,tint("BASELINE_LIGHT", .94),LINE)
     f.text(62,149,'1  GROUPS — which trajectories train?',25,BLUE,700)
     f.text(62,184,'M = mixed outcomes [1, 0, 1, 0, 0]',21,BLUE)
     f.text(62,215,'F = five valid failures [0, 0, 0, 0, 0]',21,ORANGE)
@@ -86,14 +90,14 @@ def rl_choices():
         f.text(420,y+25,note,17,MUTED)
     f.text(62,516,'F is eligible only with ≥1 usable ARM label; A = 0 for F.',18,MUTED)
 
-    f.rect(792,112,768,744,'#f8fafc',LINE)
+    f.rect(792,112,768,744,tint("BASELINE_LIGHT", .94),LINE)
     f.text(816,149,'2  GATE — is this candidate set usable?',25,TEAL,700)
     f.text(816,184,'All five responses must be valid. Letters denote actions.',21,MUTED)
     for i,letter in enumerate('XXYZW'):
         x=824+i*141
-        color=BLUE if i==0 else TEAL if i==1 else MUTED
+        color=C["ACTION_INK"] if i<2 else MUTED
         f.text(x+53,223,f'response {i}',18,color,anchor='middle')
-        f.rect(x,238,106,79,'#eaf2fd' if i==0 else '#e6f5ef' if i==1 else '#fff',color)
+        f.rect(x,238,106,79,tint("ACTION", .65) if i==0 else tint("ACTION", .65) if i==1 else '#fff',color)
         f.text(x+53,290,letter,39,color,700,anchor='middle')
         if i<2:f.text(x+53,346,'executed' if i==0 else 'ARM chose',18,color,700,anchor='middle')
     f.text(816,382,'The two X responses can have different reasoning.',19,MUTED)
@@ -110,7 +114,7 @@ def rl_choices():
     f.text(838,768,'Two of five candidates contain action X.',20,MUTED)
     f.text(838,798,'b = 0.5 × (1 − 2/5) = +0.30',23,TEAL,700)
 
-    f.rect(40,552,726,304,'#f8fafc',LINE)
+    f.rect(40,552,726,304,tint("BASELINE_LIGHT", .94),LINE)
     f.text(62,589,'BONUS vs REWEIGHT — same 48M + Gate B',24,PURPLE,700)
     f.text(62,624,'Example: A = +1; three turns; valid binary outcomes.',20,MUTED)
     f.text(62,657,'ARM: executed wins / alternative wins / no label',19,MUTED)

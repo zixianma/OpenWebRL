@@ -24,11 +24,12 @@ from PIL import Image
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style  # noqa: E402,F401
+from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 RD = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/label-kfold-20261101/pre-post-k3/student-replay")
-INK, MUTED = "#222222", "#666666"
-PRE, K3 = "#4B5563", "#6250BE"
+INK, MUTED = C["INK"], C["MUTED"]
+PRE, K3 = C["TRAIN"], C["LOOKAHEAD_TEACHER"]
 R = json.loads((HERE / "student-replay.json").read_text())
 A, ST = R["after_scrolls"], R["behaviour"]
 EXAMPLES = [
@@ -62,7 +63,7 @@ def shot(i):
 
 def badge(fig, x, y, text, color, fs=5.9):
     t = fig.text(x, y, text, fontsize=fs, color="white", fontweight="bold", va="center",
-                 bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.4", fc=color, ec="none"))
+                 bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.4", fc=C["ADM_4B"], ec=color, lw=1.7))
     fig.canvas.draw()
     return t.get_window_extent().transformed(fig.transFigure.inverted()).x1 + 0.008
 
@@ -79,7 +80,7 @@ def main():
         ax = fig.add_axes([xs, y - h, ws, h])
         ax.imshow(im.crop((int(l * W), int(t * H), int(r * W), int(b * H))), aspect="auto"); ax.set_xticks([]); ax.set_yticks([])
         for sp in ax.spines.values():
-            sp.set_color("#9a9a9a"); sp.set_linewidth(0.6)
+            sp.set_color(C["BORDER"]); sp.set_linewidth(0.6)
         cw, ch = (r - l) * W, (b - t) * H
         for (x0, y0, x1, y1), c in ex["boxes"]:
             ax.add_patch(Rectangle(((x0 - l) * W, (y0 - t) * H), (x1 - x0) * W, (y1 - y0) * H, fill=False, ec=c, lw=1.6))
@@ -92,7 +93,7 @@ def main():
         for k, (label, n, who) in enumerate(ex["groups"]):
             yy = y - 0.185 - k * 0.07; c = PRE if who == "pre" else K3
             fig.add_artist(FancyBboxPatch((xr, yy - 0.024), 0.235, 0.048, boxstyle="round,pad=0,rounding_size=0.008",
-                                          fc="white", ec=c, lw=1.0, transform=fig.transFigure))
+                                          fc=tint("ACTION", 0.72), ec=C["ACTION_INK"], lw=1.0, transform=fig.transFigure))
             fig.text(xr + 0.008, yy, label, fontsize=6.4, color=INK, va="center", fontweight="bold")
             fig.text(xr + 0.227, yy, f"{n} of 5", fontsize=6.0, color=MUTED, va="center", ha="right")
             bx = xr + 0.25

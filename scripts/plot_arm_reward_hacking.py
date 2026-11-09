@@ -218,11 +218,12 @@ def render(data):
                        if (p / "openwebrl/docs/paper_plot_style.py").is_file())
     _paper_sys.path.insert(0, str(_paper_docs))
     import paper_plot_style as _paper_style
+    from paper_plot_palette import COLORS as C
     from matplotlib.lines import Line2D
     methods = ['all_failure','additive','gate_b','gate_c','mixed_bonus','mixed_reweight']
     plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.titleweight':'bold'})
     fig, axs = plt.subplots(3,2,figsize=(13,11),sharex=True)
-    blue, orange = '#2563eb','#c65b08'
+    blue, orange = C["BASELINE_DARK"], C["ADM_DEFAULT"]
     right_limit=.016
     for ax, key in zip(axs.flat, methods):
         s = next(s for s in data['series'] if s['id']==key)

@@ -20,6 +20,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 import numpy as np
 
@@ -27,9 +28,9 @@ HERE = Path(__file__).resolve().parent
 DOCS = HERE.parents[2]
 SOURCE = HERE / "rl-action-loops-20261103.json"
 INTERVALS = HERE / "rl-action-loops-iter90-ci-20261104.json"
-PURPLE = "#6250BE"
-RUNS = (("outcome48", "Outcome-only\n(48 groups)", "#9A9A9A"),
-        ("outcome56", "Outcome-only\n(56 groups)", "#666666"),
+PURPLE = C["ADM_DEFAULT"]
+RUNS = (("outcome48", "Outcome-only\n(48 groups)", C["BASELINE_LIGHT"]),
+        ("outcome56", "Outcome-only\n(56 groups)", C["BASELINE_DARK"]),
         ("gate-b", "Outcome + ADM\nrewards (ours)", PURPLE))
 DRAWS, SEED = 20000, 20261104
 
@@ -98,7 +99,8 @@ def compute_intervals(compact_dir):
 
 
 def render(intervals):
-    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 8,
+    plt.rcParams.update({"text.color": C["INK"], "axes.labelcolor": C["INK"],
+                         "xtick.color": C["MUTED"], "ytick.color": C["MUTED"], "font.family": "Albert Sans", "font.size": 8,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
                          "svg.hashsalt": "rl-action-loops-iter90-compact"})
     fig, ax = plt.subplots(figsize=(3.5, 1.85))
@@ -119,12 +121,12 @@ def render(intervals):
     ax.set_ylim(-0.5, 2.5)
     ax.set_xticks([0, 20, 40, 60, 80])
     ax.set_xlabel("Loop failures per 300 tasks", fontsize=8, labelpad=5)
-    ax.tick_params(axis="x", labelsize=7, length=3, color="#666666")
+    ax.tick_params(axis="x", labelsize=7, length=3, color=C["BASELINE_DARK"])
     ax.tick_params(axis="y", length=0, pad=7)
     ax.grid(False)
     for side in ("top", "right", "left"):
         ax.spines[side].set_visible(False)
-    ax.spines["bottom"].set_color("#666666")
+    ax.spines["bottom"].set_color(C["BASELINE_DARK"])
     ax.spines["bottom"].set_linewidth(0.7)
     fig.subplots_adjust(left=0.33, right=0.98, top=0.97, bottom=0.27)
     output = DOCS / "rl_results/rl_action_loops_iter90"

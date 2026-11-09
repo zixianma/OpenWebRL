@@ -10,13 +10,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / 'openwebrl/docs/arm_results/methods'
-INK, MUTED, LINE, ARROW = '#182b44', '#50647a', '#d6dfeb', '#7d8fa3'
+import sys
+sys.path.insert(0, str(ROOT / 'openwebrl/docs'))
+from paper_plot_palette import COLORS as C, tint
+INK, MUTED, LINE, ARROW = C["INK"], C["MUTED"], C["BORDER"], C["BASELINE_DARK"]
 STYLES = {  # fill, stroke, dashed
-    'frozen': ('#eaf1fb', '#2563b0', False),
-    'train': ('#fdf0e4', '#ad5b13', False),
-    'cache': ('#eef8f6', '#14776c', True),
-    'data': ('#f2edf8', '#7350a2', False),
-    'plain': ('#f8fafc', '#b7c4d4', False),
+    'frozen': (tint("BASELINE_LIGHT", .80), C["BASELINE_DARK"], False),
+    'train': (tint("ADM_22M", .85), C["ADM_22M"], False),
+    'cache': (tint("BASELINE_LIGHT", .90), C["BASELINE_DARK"], True),
+    'data': (tint("LOOKAHEAD_TEACHER", .85), C["LOOKAHEAD_TEACHER"], False),
+    'plain': ("white", C["BORDER"], False),
+    "state": (tint("STATE", .60), C["STATE_BORDER"], False),
     'panel': ('#ffffff', LINE, False),
 }
 
@@ -84,9 +88,9 @@ def figure():
 
     # Panel A: inference.
     f.box(24, 142, 1552, 438, 'panel', radius=14)
-    f.text(46, 176, 'A   INFERENCE · one browser step', 19, '#2563b0', 700)
+    f.text(46, 176, 'A   INFERENCE · one browser step', 19, C["INK"], 700)
     top, h = 196, 196
-    f.box(46, top, 196, h, 'plain', 'Browser state', ['task', 'action history', 'current screenshot'])
+    f.box(46, top, 196, h, 'state', 'Browser state', ['task', 'action history', 'current screenshot'])
     f.box(272, top, 268, h, 'frozen', 'Frozen SFT actor', ['Qwen3-VL-4B, 36 layers', '1. prefill prompt once', '→ prompt KV cache',
                                                            '2. sample 5 candidates', '(reasoning + action)'])
     f.box(570, top, 236, h, 'cache', 'Hidden states', ['of all 5 candidates', 'by-product of generation', 'every token, every layer', 'no extra forward pass'])
@@ -113,7 +117,7 @@ def figure():
 
     # Panel B: training.
     f.box(24, 604, 1552, 568, 'panel', radius=14)
-    f.text(46, 638, 'B   TRAINING · teacher-labeled panels; the generating actor is never updated', 19, '#ad5b13', 700)
+    f.text(46, 638, 'B   TRAINING · teacher-labeled panels; the generating actor is never updated', 19, C["ADM_22M"], 700)
     f.box(46, 664, 250, 190, 'data', 'Teacher-labeled panels', ['Piotr release, GPT-5.5 choice', 'prompt + screenshot',
                                                                 '5 sampled candidates', '35,916 train · 3,759 held-out', '(split by task group)'])
     f.box(46, 878, 250, 130, 'data', 'Soft target', ['uniform over candidates', 'action-equivalent to', "the teacher's pick"])

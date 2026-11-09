@@ -20,6 +20,7 @@ HERE = Path(__file__).resolve().parent
 DOCS = HERE.parents[2]
 sys.path.insert(0, str(DOCS))
 import paper_plot_style
+from paper_plot_palette import COLORS as C
 from plot_rl_repetition_incidence import RUNS
 
 OUTPUT = DOCS / "rl_results/rl_eval_learning_curves"
@@ -90,21 +91,21 @@ def render(data):
     assert data["schema"] == "rl-eval-learning-curves-v1"
     assert [m["id"] for m in data["methods"]] == [r[0] for r in RUNS]
     assert (data["display"]["first_iteration"], data["display"]["last_iteration"]) == (DISPLAY_START, DISPLAY_END)
-    plt.rcParams.update({"font.size": 7, "axes.labelsize": 7.5,
+    plt.rcParams.update({"text.color": C["INK"], "axes.labelcolor": C["INK"],
+                         "xtick.color": C["MUTED"], "ytick.color": C["MUTED"], "font.size": 7, "axes.labelsize": 7.5,
                          "xtick.labelsize": 7, "ytick.labelsize": 7,
                          "axes.spines.top": False, "axes.spines.right": False,
                          "svg.hashsalt": "rl-eval-learning-curves"})
     fig, ax = plt.subplots(figsize=(3.35, 2.40))
     handles = []
     for method, reference in zip(data["methods"], RUNS):
-        assert method["color"] == reference[3]
         points = display_points(method["points"])
         assert [p["iteration"] for p in points] == list(range(20, 91, 10))
         for p in points:
             assert p["planned"] == 300 and 0 <= p["successes"] <= p["valid"] <= 300
             assert abs(p["percent"] - 100 * p["successes"] / p["valid"]) < 1e-10
         assert method["smoothed"] == smooth(points)
-        color = method["color"]
+        color = reference[3]  # Shared visual roles; the frozen aggregate retains its historical colors.
         ax.scatter([p["iteration"] for p in points], [p["percent"] for p in points],
                    color=color, s=12, alpha=0.25, edgecolors="none", zorder=2)
         ax.plot([p["iteration"] for p in method["smoothed"]],
@@ -122,9 +123,9 @@ def render(data):
     ax.set_yticks([30, 40, 50, 60])
     ax.grid(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#666666")
+        ax.spines[side].set_color(C["BASELINE_DARK"])
         ax.spines[side].set_linewidth(0.7)
-    ax.tick_params(length=2.5, width=0.7, pad=2, color="#666666")
+    ax.tick_params(length=2.5, width=0.7, pad=2, color=C["BASELINE_DARK"])
     legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.55, 0.005),
                         frameon=False, ncol=1, fontsize=7, handlelength=1.7,
                         labelspacing=0.35, handletextpad=0.5)

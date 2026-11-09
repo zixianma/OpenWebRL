@@ -16,19 +16,21 @@ _paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().
                    if (p / "openwebrl/docs/paper_plot_style.py").is_file())
 _paper_sys.path.insert(0, str(_paper_docs))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 from matplotlib.patches import FancyBboxPatch, Rectangle
 
-INK, MUTED, SURFACE, LINE = "#0b0b0b", "#52514e", "#fcfcfb", "#e6e5e0"
-REUSED, EXTRA, TRAINED, EXTERNAL, HEAD, PIOTR = "#cfe0f6", "#fbd9c8", "#eb6834", "#dedcd6", "#1baf7a", "#8a8f98"
+INK, MUTED, SURFACE, LINE = C["INK"], C["MUTED"], C["BACKGROUND"], C["BORDER"]
+REUSED, EXTRA, TRAINED, EXTERNAL, HEAD, PIOTR = tint("BASELINE_LIGHT", .60), tint("BASELINE_DARK", .65), C["ADM_22M"], C["BASELINE_LIGHT"], C["ADM_22M"], C["BASELINE_DARK"]
 W = 23                                              # column width
 X0 = 15                                             # first column's left edge (row labels to its left)
 
+plt.rcParams["font.family"] = ["Albert Sans", "DejaVu Sans"]
 fig, ax = plt.subplots(figsize=(14.5, 11.5))
 fig.patch.set_facecolor(SURFACE)
 ax.axis("off")
 
 
-def stack(x, y0, y1, color, label=None, hatch=None, edge="#8a8f98", w=6):
+def stack(x, y0, y1, color, label=None, hatch=None, edge=C["BASELINE_DARK"], w=6):
     ax.add_patch(Rectangle((x, y0), w, y1 - y0, fc=color, ec=edge, lw=1.0, hatch=hatch))
     if label:
         ax.text(x + w / 2, (y0 + y1) / 2, label, rotation=90, ha="center", va="center", fontsize=7.2, color=INK)
@@ -39,7 +41,7 @@ def chip(x, y, w, text, color):
     ax.text(x + w / 2, y + 1.4, text, ha="center", va="center", fontsize=7.4, color="white", weight="bold")
 
 
-def arrow(x0, y0, x1, y1, color="#8a8f98"):
+def arrow(x0, y0, x1, y1, color=C["BASELINE_DARK"]):
     ax.annotate("", (x1, y1), (x0, y0), arrowprops=dict(arrowstyle="-|>", color=color, lw=1.1, mutation_scale=9))
 
 
@@ -54,10 +56,10 @@ def grid(cx, y, allow, labels, color):
         for j in range(n):
             ax.add_patch(FancyBboxPatch((x + j * s + 0.15, y - (i + 1) * s + 0.15), s - 0.3, s - 0.3,
                                         boxstyle="round,pad=0,rounding_size=0.3", lw=0,
-                                        fc=color if allow(i, j) else "#efeeea"))
+                                        fc=C["ATTENTION_ALLOWED"] if allow(i, j) else C["ATTENTION_MASKED"]))
 
 
-cols = [("Piotr SelectionARM", "baseline", PIOTR), ("Selection head", "ours: frozen actor + small head", "#2a78d6"),
+cols = [("Piotr SelectionARM", "baseline", PIOTR), ("Selection head", "ours: frozen actor + small head", C["ADM_22M"]),
         ("Joint top layers", "Kev-inspired, inside the actor", TRAINED), ("Kev-style pass", "Kev's design on the actor's weights", TRAINED),
         ("Kev", "external reference", PIOTR)]
 xs = [X0 + i * (W + 2) for i in range(5)]
@@ -136,7 +138,7 @@ for label, cells in rows:
     y -= 8.6
 for i, (c, t) in enumerate([(REUSED, "actor's own generation pass"), (EXTRA, "extra computation"),
                             (TRAINED, "trained (hatched = LoRA)"), (EXTERNAL, "separate model")]):
-    ax.add_patch(Rectangle((X0 + i * 30, 2.2), 2.4, 1.8, fc=c, ec="#8a8f98", lw=0.8))
+    ax.add_patch(Rectangle((X0 + i * 30, 2.2), 2.4, 1.8, fc=c, ec=C["BASELINE_DARK"], lw=0.8))
     ax.text(X0 + 3.4 + i * 30, 3.1, t, fontsize=8, color=MUTED, va="center")
 ax.set_xlim(0, xs[-1] + W + 1); ax.set_ylim(1, 115)
 fig.tight_layout()

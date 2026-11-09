@@ -20,6 +20,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 from matplotlib.lines import Line2D
 from matplotlib.ticker import MultipleLocator
 
@@ -27,8 +28,8 @@ HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-recipe3-data-ablations-20261105.json").read_text())
 SETS = {"s250": 2234, "s1000": 8875, "pps1": 2112, "pps4": 7417, "full": 18786}
 STATES = {"s250": 252, "s1000": 1001, "pps1": 2112, "pps4": 2112, "full": 2112}
-SERIES = [("Fewer states (8.9 sets/state)", "#6250BE", "o", ["s250", "s1000", "full"], "states"),
-          ("Fewer sets per state (2.1K states)", "#E07A1F", "D", ["pps1", "pps4", "full"], "sets")]
+SERIES = [("Fewer states (8.9 sets/state)", C["ADM_4B"], "o", ["s250", "s1000", "full"], "states"),
+          ("Fewer sets per state (2.1K states)", C["ADM_4B"], "D", ["pps1", "pps4", "full"], "sets")]
 BENCH = [("online_mind2web", "Online-Mind2Web"), ("webvoyager", "WebVoyager"), ("deepshop", "DeepShop")]
 
 
@@ -51,29 +52,32 @@ def draw(ax, y, fs):
             ax.scatter(SETS[k], v, s=32, marker=marker, zorder=3, color=color)
             ax.annotate(f"{name(k, var)}\n{v:.1f}" if up else f"{v:.1f}\n{name(k, var)}", (SETS[k], v), textcoords="offset points",
                         xytext=(0, 6 if up else -6), ha="center", va="bottom" if up else "top", fontsize=fs, color=color, linespacing=1.0)
-    ax.scatter(SETS["full"], y["full"], s=42, marker="s", zorder=4, color="#2b2b2b")
+    ax.scatter(SETS["full"], y["full"], s=42, marker="s", zorder=4, color=C["ADM_4B"])
     ax.annotate(f"{y['full']:.1f}", (SETS["full"], y["full"]), textcoords="offset points", xytext=(0, -7),
-                ha="center", va="top", fontsize=fs, color="#2b2b2b", linespacing=1.0)
-    ax.axhline(y["sft"], color="#898781", linestyle="--", linewidth=0.9, zorder=1)
-    ax.text(29000, y["sft"] - 0.3, f"SFT 4B alone {y['sft']:.1f}", fontsize=fs, color="#6b6963", va="top", ha="right")
+                ha="center", va="top", fontsize=fs, color=C["ADM_4B"], linespacing=1.0)
+    ax.axhline(y["sft"], color=C["BASELINE_LIGHT"], linestyle="--", linewidth=0.9, zorder=1)
+    ax.text(29000, y["sft"] - 0.3, f"SFT 4B alone {y['sft']:.1f}", fontsize=fs, color=C["MUTED"], va="top", ha="right")
     ax.set_xscale("log"); ax.set_xticks([2000, 4000, 8000, 16000]); ax.set_xticklabels(["2K", "4K", "8K", "16K"]); ax.minorticks_off()
     ax.set_xlim(1600, 30000); ax.set_ylim(min(vals) - 4.2, max(vals) + 3.6)
     ax.set_xlabel("5-action sets in training data")
     ax.yaxis.set_major_locator(MultipleLocator(2 if max(vals) - min(vals) < 12 else 4))
-    ax.grid(axis="y", color="#e6e6e6", linewidth=0.6, zorder=0)
-    ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+    ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
+    ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
     for s in ("top", "right"): ax.spines[s].set_visible(False)
 
 
 def legend(fig, ncol=3):
     h = [Line2D([], [], color=c, marker=m, markersize=5, linewidth=1.4, label=l) for l, c, m, _, _ in SERIES]
-    h += [Line2D([], [], color="#2b2b2b", marker="s", linestyle="none", markersize=5, label="Full data (2.1K states, 8.9 sets/state)")]
+    h += [Line2D([], [], color=C["ADM_4B"], marker="s", linestyle="none", markersize=5, label="Full data (2.1K states, 8.9 sets/state)")]
     fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2)
 
 
 def save(fig, name):
     for ext in ("png", "pdf", "svg"):
-        fig.savefig(HERE / f"{name}.{ext}", dpi=220 if ext == "png" else None, bbox_inches="tight")
+        output = HERE / f"{name}.{ext}"
+        fig.savefig(output, dpi=220 if ext == "png" else None, bbox_inches="tight")
+        if ext == "svg":
+            output.write_text("\n".join(line.rstrip() for line in output.read_text().splitlines()) + "\n")
     plt.close(fig)
 
 

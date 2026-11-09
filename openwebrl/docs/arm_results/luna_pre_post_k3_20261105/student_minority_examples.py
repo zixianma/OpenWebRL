@@ -19,14 +19,31 @@ import re
 import textwrap
 
 from PIL import Image, ImageDraw
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as C, tint
 
-sys.path.insert(0, "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/data-scale-20261023/source")
-from openwebrl.selection_head import parse_calls  # noqa: E402
+# Identical frozen parser, kept local so qualitative plotting does not require torch.
+TOOL_CALL = re.compile(r"<tool_call>\s*(\{.*?\})\s*</tool_call>", re.S)
+
+def parse_calls(response):
+    """Executable tool calls after the thinking block, or None if unparseable."""
+    text = response.rsplit("</think>", 1)[-1].replace("<|im_end|>", "")
+    blocks = TOOL_CALL.findall(text)
+    if not blocks or len(blocks) != text.count("<tool_call>"):
+        return None
+    try:
+        calls = [json.loads(b) for b in blocks]
+    except json.JSONDecodeError:
+        return None
+    if any(not isinstance(c, dict) or not isinstance(c.get("name"), str)
+           or not isinstance(c.get("arguments", {}), dict) for c in calls):
+        return None
+    return [{"name": c["name"], "arguments": c.get("arguments", {})} for c in calls]
 from student_outcome_examples import BAD, F, GOOD, INK, K3, MUTED, PRE, RD, W, calls, fit, images, png, say
 
 HERE = Path(__file__).resolve().parent
-COLS = [(37, 99, 235), (230, 120, 0), (13, 148, 136), (190, 24, 93), (120, 80, 40)]
-NEXT = (202, 138, 4)
+COLS = [tint("ACTION", f) for f in (0, 0.12, 0.24, 0.36, 0.48)]
+NEXT = C["ACTION_INK"]
 WHO = {"gpt55-pre": ("Pre GPT-5.5", PRE), "luna-pre": ("Pre Luna", PRE), "gpt55-k3": ("H = 4 GPT-5.5", K3),
        "luna-k3": ("H = 4 Luna", K3)}
 SITE = lambda task: task.split("/", 1)[1].split("--")[0]  # noqa: E731
@@ -62,7 +79,7 @@ def box(im, a, col, tag, w=8, taken=None):
                     ty += 38
                 taken.append((x, ty))
                 d.rectangle([x + 50, ty, x + 84, ty + 36], fill=col)
-                d.text((x + 58, ty), tag, fill="white", font=F(30, True))
+                d.text((x + 58, ty), tag, fill=INK, font=F(30, True))
     return im
 
 
@@ -101,7 +118,7 @@ def episode(d, canvas, y, g, title, col, turn, pick):
     good = g["success"] / g["n"] >= 0.5 if pick else g["success"] / g["n"] > 0.5
     e = next((e for e in g["episodes"] if (e["reward"] == 1) == good), g["episodes"][0])
     ims = images(e["trace"]); es = {x["turn"]: x for x in map(json.loads, open(e["trace"]))}; ok = e["reward"] == 1
-    d.line([24, y, W - 24, y], fill=(200, 200, 200), width=2); y += 16
+    d.line([24, y, W - 24, y], fill=C["BORDER"], width=2); y += 16
     d.text((24, y), title, fill=col, font=F(34, True))
     d.text((W - 260, y), "SUCCESS" if ok else "FAILURE", fill=GOOD if ok else BAD, font=F(34, True)); y += 56
     tw, gap, hmax = (W - 48 - 2 * 24) // 3, 24, 0
@@ -111,7 +128,7 @@ def episode(d, canvas, y, g, title, col, turn, pick):
             continue
         a = es[t]["candidates"][es[t]["selected_index"]]["action"] if t in es else ""
         p = fit(box(p, a, NEXT, None, 10), tw); x = 24 + k * (tw + gap)
-        canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=(170, 170, 170), width=2)
+        canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=C["STATE_BORDER"], width=2)
         cap = textwrap.wrap(f"then: {say(a)}" if a else "(episode ended)", 30)[:3]
         for q, ln in enumerate(cap):
             d.text((x, y + p.size[1] + 10 + 40 * q), ln, fill=INK, font=F(30))
@@ -141,12 +158,12 @@ def main():
         for ln in textwrap.wrap(f"Task: {task}", 72)[:3]:
             d.text((24, y), ln, fill=INK, font=F(34)); y += 46
         y += 14; cw = 980; c = fit(cur, cw); canvas.paste(c, (24, y))
-        d.rectangle([24, y, 24 + cw, y + c.size[1]], outline=(160, 160, 160), width=2)
+        d.rectangle([24, y, 24 + cw, y + c.size[1]], outline=C["STATE_BORDER"], width=2)
         x0, yy = 24 + cw + 30, y
         d.text((x0, yy), "All five candidates, grouped", fill=MUTED, font=F(30, True)); yy += 50
         for k, g in enumerate(gs):
             col = COLS[k]
-            d.rectangle([x0, yy, x0 + 40, yy + 40], fill=col); d.text((x0 + 9, yy + 1), tag[id(g)], fill="white", font=F(32, True))
+            d.rectangle([x0, yy, x0 + 40, yy + 40], fill=col); d.text((x0 + 9, yy + 1), tag[id(g)], fill=INK, font=F(32, True))
             lines = textwrap.wrap(label(cands[g["members"][0]]), 26)[:2]
             for q, ln in enumerate(lines):
                 d.text((x0 + 54, yy + 44 * q), ln, fill=INK, font=F(34, True))
@@ -158,7 +175,7 @@ def main():
                     t, cc = WHO[s]; wdt = d.textlength(t, font=F(24, True)) + 16
                     if bx + wdt > W - 10:
                         bx = x0 + 54; yy += 38
-                    d.rounded_rectangle([bx, yy, bx + wdt, yy + 32], 8, fill=cc); d.text((bx + 8, yy + 2), t, fill="white", font=F(24, True))
+                    d.rounded_rectangle([bx, yy, bx + wdt, yy + 32], 8, fill=C["ADM_4B"], outline=cc, width=3); d.text((bx + 8, yy + 2), t, fill="white", font=F(24, True))
                     bx += wdt + 8
                 yy += 40
             if g["n"]:

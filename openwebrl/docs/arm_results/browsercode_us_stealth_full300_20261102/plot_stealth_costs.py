@@ -9,6 +9,12 @@ conservative maxima/reserves never become observed charges or an invoice.
 No runtime imports, task IDs, credentials, API, browser or scheduler operations.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 from decimal import Decimal, InvalidOperation, localcontext
@@ -21,7 +27,7 @@ from pathlib import Path
 os.environ.setdefault('MPLCONFIGDIR','/tmp/openwebrl-stealth-cost-matplotlib')
 SCHEMA='browsercode-us-stealth-observed-costs-v1'
 ARMS=('luna_single_high','parallel5_select_high')
-STYLE={'luna_single_high':('Luna high single','#4292c6'),'parallel5_select_high':('Luna high N5','#a50f15')}
+STYLE={'luna_single_high':('Luna high single',PALETTE["SINGLE_CALL_MAIN"]),'parallel5_select_high':('Luna high N5',PALETTE["ADM_DEFAULT"])}
 PROTOCOL={'actor_model':'gpt-6-luna','reasoning_effort':'high','max_output_tokens_per_generation':12288,'max_model_decisions':30,'actor_loop_deadline_seconds':900,'harness':'BrowserCode','candidate_sampling_parallel':True,'qualified_runs_provider_allow_resizing':True,'viewport_png_pixels':[1280,1800],'browser_provider':'Browser Use V4','routing':'US residential','judge_model':'gpt-5.6-terra','judge_reasoning_effort':'medium','judge_max_output_tokens':4096,'judge_seed':42}
 METRICS=('actor_cost_usd','task_latency_seconds','selected_code_batches')
 BILLING_POPULATION='all_owned_sessions_including_probes_recoveries_and_invalid_attempts'
@@ -188,7 +194,7 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
     maxima=[];seen_components=set()
     for i,r in enumerate(rows):
         left=0
-        for name,label,color in [('hosting','Hosting','#8c8c8c'),('proxy','US proxy','#d9a441')]:
+        for name,label,color in [('hosting','Hosting',PALETTE["BASELINE_LIGHT"]),('proxy','US proxy',PALETTE["EVAL"])]:
             value=r[name+'_known_usd']
             if value is not None:
                 amount=float(usd(value));billing.barh(i,amount,left=left,height=.4,color=color,label=label if name not in seen_components else None);seen_components.add(name);left+=amount
@@ -197,12 +203,12 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
         text=('No observed fees' if r['provider_known_subtotal_usd'] is None else '$'+display(r['provider_known_subtotal_usd']))+(' (known subtotal)' if missing else '')
         billing.text(left+max(1,left)*.025,i,text,ha='left',va='center',fontsize=6.4)
     billing.set_yticks([0,1],[STYLE[r['method']][0] for r in rows]);billing.set_ylim(-.55,1.65);billing.invert_yaxis();billing.set_xlim(0,max([1]+maxima)*1.35)
-    handles=[Line2D([],[],marker='o',linestyle='none',markersize=4,color=STYLE[a][1],label=STYLE[a][0])for a in ARMS]+[Patch(facecolor='#8c8c8c',label='Hosting'),Patch(facecolor='#d9a441',label='US proxy')]
+    handles=[Line2D([],[],marker='o',linestyle='none',markersize=4,color=STYLE[a][1],label=STYLE[a][0])for a in ARMS]+[Patch(facecolor=PALETTE["BASELINE_LIGHT"],label='Hosting'),Patch(facecolor=PALETTE["EVAL"],label='US proxy')]
     fig.legend(handles=handles,loc='upper center',bbox_to_anchor=(.53,.91),ncol=4,frameon=False,fontsize=6.5,handlelength=1,handletextpad=.4,columnspacing=1.3)
     for ax in (performance,billing):ax.spines[['top','right']].set_visible(False);ax.tick_params(width=.6,length=2.5,pad=2)
     note='Performance and billing use different populations. Fees include probes, invalids and recovery attempts.\nBars show latest native fees; missing fees/reserves are separate. Latest snapshots are not final invoices.'
     if data['endpoint']['kind']!='complete':note+='  Endpoint: '+data['endpoint']['kind'].replace('_',' ')+'.'
-    fig.text(.075,.10,note,fontsize=6.3,color='#555555',va='top')
+    fig.text(.075,.10,note,fontsize=6.3,color=PALETTE["MUTED"],va='top')
     output_dir=Path(output_dir);output_dir.mkdir(parents=True,exist_ok=True)
     for suffix in ('png','svg','pdf'):
         metadata={'Date':None} if suffix=='svg' else {'CreationDate':None,'ModDate':None} if suffix=='pdf' else {}

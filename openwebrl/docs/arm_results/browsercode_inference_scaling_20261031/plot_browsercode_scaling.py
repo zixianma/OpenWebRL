@@ -10,6 +10,12 @@ completed-sweep profile requires seven methods; completed-step-sweep requires ei
 on every benchmark. Incomplete60-step outcomes are rejected.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 from decimal import Decimal, InvalidOperation
@@ -35,18 +41,18 @@ PAIRED_STATISTICS = {'population': 'common_valid_content_identical_tasks', 'inte
 PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium', 'max_completion_tokens': 4096,
             'seed': 42, 'version': 'gpt56-terra-terminal-success-v1'}
 # Model identity fixes shape: all Luna methods circles, Sol square. Color denotes
-# single/selection; blue shade/fill distinguishes effort/cap within Luna single.
-STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
-          'luna_single_high': ('Luna high (1× cap)', 'o', '#4292c6', True),
-          'parallel3_select_high': ('Luna high N3', 'o', '#ef8a8a', True),
-          'parallel5_select_high': ('Luna high N5', 'o', '#a50f15', True),
-          'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
-          'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),
-          'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', '#9ecae1', True),
-          'luna_single_high_60steps': ('Luna high (60 steps)', 'o', '#4292c6', False),
-          'parallel2_select_high': ('Luna high N2 (30 steps)', 'o', '#fb6a4a', True),
-          'parallel5_select_high_60steps': ('Luna high N5 (60 steps)', 'o', '#a50f15', False),
-          'luna_single_high_120steps': ('Luna high (120 steps)', 'o', '#08519c', False)}
+# single/selection; neutral shade/fill distinguishes effort/cap within Luna single.
+STYLES = {'serial_high': ('Sol high single', 's', PALETTE["SINGLE_CALL_MAIN"], True),
+          'luna_single_high': ('Luna high (1× cap)', 'o', PALETTE["SINGLE_CALL_MAIN"], True),
+          'parallel3_select_high': ('Luna high N3', 'o', palette_tint("ADM_DEFAULT", .25), True),
+          'parallel5_select_high': ('Luna high N5', 'o', PALETTE["ADM_DEFAULT"], True),
+          'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', PALETTE["BASELINE_DARK"], True),
+          'luna_single_high_24576': ('Luna high (2× cap)', 'o', PALETTE["SINGLE_CALL_MAIN"], True),
+          'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', palette_tint("SINGLE_CALL_MAIN", .35), True),
+          'luna_single_high_60steps': ('Luna high (60 steps)', 'o', PALETTE["SINGLE_CALL_MAIN"], False),
+          'parallel2_select_high': ('Luna high N2 (30 steps)', 'o', palette_tint("ADM_DEFAULT", .45), True),
+          'parallel5_select_high_60steps': ('Luna high N5 (60 steps)', 'o', PALETTE["ADM_DEFAULT"], False),
+          'luna_single_high_120steps': ('Luna high (120 steps)', 'o', PALETTE["SINGLE_CALL_MAIN"], False)}
 METRICS = ('actor_usd', 'browser_commands', 'actor_seconds', 'output_tokens', 'reasoning_tokens')
 COMMAND_DEFINITION = 'One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.'
 
@@ -332,7 +338,7 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
             ax.tick_params(length=2.5, width=.6, pad=2)
             ax.xaxis.set_major_formatter(StrMethodFormatter('{x:g}'))
             ax.xaxis.set_minor_formatter(NullFormatter())
-            ax.grid(axis='y', linewidth=.35, color='#dddddd', zorder=0)
+            ax.grid(axis='y', linewidth=.35, color=PALETTE["BORDER"], zorder=0)
             if name == 'actor_usd':
                 ax.set_xscale('log')
                 ax.xaxis.set_major_formatter(StrMethodFormatter('{x:g}'))
@@ -366,7 +372,7 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
         rate = browser_projection['price_assumption']['browser_usd_per_hour']
         note += '\nHosting projection only\n$' + rate + '/h; minute-rounded\nTraffic excluded'
     fig.text(side if projected is not None else .79, .26 if projected is not None and data['profile'] == 'completed-step-sweep' else .245 if projected is not None else .27 if extended else .20,
-             note, fontsize=6.5 if projected is not None else 6.8, color='#555555', va='top')
+             note, fontsize=6.5 if projected is not None else 6.8, color=PALETTE["MUTED"], va='top')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
         output = output_dir / f'{stem}.{extension}'

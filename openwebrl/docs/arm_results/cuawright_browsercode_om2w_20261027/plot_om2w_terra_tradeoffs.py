@@ -8,6 +8,12 @@ on the BrowserCode methods. Valid failures remain in every valid-task view.
 Use --high-only to show Sol single and Luna single/N3/N5 at high effort.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 
 import argparse
 import csv
@@ -19,14 +25,14 @@ from pathlib import Path
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-terra-tradeoff-matplotlib")
 
 STYLES = {
-    "serial_high": ("Sol single high", "s", "#08519C", True),
-    "luna_single_high": ("Luna single high", "o", "#08519C", True),
-    "parallel3_select_high": ("Luna N3 high", "o", "#A50F15", False),
-    "parallel5_select_high": ("Luna N5 high", "o", "#A50F15", True),
-    "luna_single_medium": ("Luna single medium", "o", "#4292C6", True),
-    "luna_single_low": ("Luna single low", "o", "#9ECAE1", True),
-    "luna_n5_medium": ("Luna N5 medium", "o", "#EF3B2C", True),
-    "luna_n5_low": ("Luna N5 low", "o", "#FC9272", True),
+    "serial_high": ("Sol single high", "s", PALETTE["SINGLE_CALL_MAIN"], True),
+    "luna_single_high": ("Luna single high", "o", PALETTE["SINGLE_CALL_MAIN"], True),
+    "parallel3_select_high": ("Luna N3 high", "o", palette_tint("ADM_DEFAULT", .25), False),
+    "parallel5_select_high": ("Luna N5 high", "o", PALETTE["ADM_DEFAULT"], True),
+    "luna_single_medium": ("Luna single medium", "o", palette_tint("SINGLE_CALL_MAIN", .18), True),
+    "luna_single_low": ("Luna single low", "o", palette_tint("SINGLE_CALL_MAIN", .35), True),
+    "luna_n5_medium": ("Luna N5 medium", "o", palette_tint("ADM_DEFAULT", .18), True),
+    "luna_n5_low": ("Luna N5 low", "o", palette_tint("ADM_DEFAULT", .4), True),
 }
 HIGH_METHODS = tuple(STYLES)[:4]
 METRICS = (

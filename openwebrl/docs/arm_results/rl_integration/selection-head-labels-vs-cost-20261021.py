@@ -16,6 +16,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
 
 from matplotlib.ticker import MaxNLocator
 
@@ -24,19 +25,19 @@ full = json.loads((HERE / "selection-head-sft-actions-full-20261021.json").read_
 new = json.loads((HERE / "selection-n3-sft8b-full-20261021.json").read_text())["rows"]
 HEAD, POINT = 4.44e9 + 22.6e6, 4.44e9 + 16.8e6
 methods = [  # label, (source, id), params, color, marker, hollow
-    ("SFT 4B, 1 sample", ("full", "SFT1"), 4.44e9, "#898781", "s", False),
-    ("SFT 8B, 1 sample", ("new", "sft8b"), 8.77e9, "#4a4844", "s", False),
-    ("Piotr SelectionARM", ("full", "Piotr"), 8.88e9, "#eb6834", "D", False),
-    ("Piotr SelectionARM, N = 3", ("new", "piotr3"), 8.88e9, "#eb6834", "v", False),
-    ("Head, Piotr's data", ("full", "Head, Piotr's data (GPT-5.5)"), HEAD, "#2a78d6", "o", False),
-    ("Head, Piotr's data, N = 3", ("new", "head3-755d4cd49137"), HEAD, "#2a78d6", "v", False),
-    ("Pointwise head, Piotr's data, N = 3", ("new", "head3-26c57559ccb4"), POINT, "#2a78d6", "v", True),
-    ("Head, outcome labels", ("full", "Head, Observed outcome, 1,380 SFT states"), HEAD, "#1baf7a", "o", False),
-    ("Head, H=4 labels", ("full", "Head, Lookahead K3, 1,380 SFT states"), HEAD, "#6250d6", "o", False),
-    ("Head, H=2 labels", ("full", "Head, Lookahead K1, 1,380 SFT states"), HEAD, "#eda100", "o", False),
-    ("Head, pre-execution labels", ("full", "Head, Pre-execution, 1,380 SFT states"), HEAD, "#e87ba4", "o", False),
+    ("SFT 4B, 1 sample", ("full", "SFT1"), 4.44e9, C["BASELINE_LIGHT"], "s", False),
+    ("SFT 8B, 1 sample", ("new", "sft8b"), 8.77e9, C["BASELINE_DARK"], "s", False),
+    ("Piotr SelectionARM", ("full", "Piotr"), 8.88e9, C["ADM_4B"], "D", False),
+    ("Piotr SelectionARM, N = 3", ("new", "piotr3"), 8.88e9, C["ADM_4B"], "v", False),
+    ("Head, Piotr's data", ("full", "Head, Piotr's data (GPT-5.5)"), HEAD, C["ADM_22M"], "o", False),
+    ("Head, Piotr's data, N = 3", ("new", "head3-755d4cd49137"), HEAD, C["ADM_22M"], "v", False),
+    ("Pointwise head, Piotr's data, N = 3", ("new", "head3-26c57559ccb4"), POINT, C["ADM_22M"], "v", True),
+    ("Head, outcome labels", ("full", "Head, Observed outcome, 1,380 SFT states"), HEAD, C["ADM_22M"], "D", False),
+    ("Head, H=4 labels", ("full", "Head, Lookahead K3, 1,380 SFT states"), HEAD, C["ADM_22M"], "o", False),
+    ("Head, H=2 labels", ("full", "Head, Lookahead K1, 1,380 SFT states"), HEAD, C["ADM_22M"], "s", False),
+    ("Head, pre-execution labels", ("full", "Head, Pre-execution, 1,380 SFT states"), HEAD, C["ADM_22M"], "P", False),
 ]
-links = [("Piotr SelectionARM", "Piotr SelectionARM, N = 3", "#eb6834"), ("Head, Piotr's data", "Head, Piotr's data, N = 3", "#2a78d6")]
+links = [("Piotr SelectionARM", "Piotr SelectionARM, N = 3", C["ADM_4B"]), ("Head, Piotr's data", "Head, Piotr's data, N = 3", C["ADM_22M"])]
 
 
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
@@ -80,14 +81,16 @@ for ax_row, bench, ylabel in ((axes[0], "mean", "3-benchmark mean\nSuccess (%)")
             if r is None:
                 continue
             ax.scatter(x_of(r, p, k), r["overall"], s=32 if marker == "v" else 24, marker=marker, zorder=4 if label.startswith("SFT 4B") else 3,
-                       facecolor="white" if hollow else color, edgecolor=color if hollow else "white", linewidth=1.0 if hollow else 0.6,
+                       facecolor="white" if hollow else color,
+                       edgecolor=(C["ORACLE"] if "outcome labels" in label else C["LOOKAHEAD_TEACHER"] if "H=" in label else C["TRAIN"] if "pre-execution labels" in label else color if hollow else "white"),
+                       linewidth=1.7 if "labels" in label else 1.0 if hollow else 0.6,
                        label=label)
         ax.grid(False, which="both")
         ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
         ax.yaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
-        ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+        ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
         for spine in ax.spines.values():
-            spine.set_color("#555555")
+            spine.set_color(C["BASELINE_DARK"])
             spine.set_linewidth(0.6)
     ax_row[0].set_ylabel(ylabel); ax_row[0].set_xlim(3.5, 9.5)
     ax_row[0].set_xticks([4.44, 6.5, 8.88], ["4.44", "6.5", "8.88"])

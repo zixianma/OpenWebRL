@@ -9,6 +9,12 @@ collection windows, actor limits, and native endpoint evidence availability diff
 Crossbenchmark shared-Terra judgments preserve earlier benchmark-native results.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 import json
@@ -27,10 +33,10 @@ METHODS = ('serial_high', 'luna_single_high', 'parallel3_select_high', 'parallel
 CROSS_METHODS_V1 = ('serial_high', 'luna_single_high', 'parallel5_select_high')
 CROSS_METHODS = METHODS
 
-STYLES = {'serial_high': ('Sol single', 's', '#08519C', True),
-          'luna_single_high': ('Luna single', 'o', '#08519C', True),
-          'parallel3_select_high': ('Luna N3', 'o', '#ef8a8a', True),
-          'parallel5_select_high': ('Luna N5', 'o', '#A50F15', True)}
+STYLES = {'serial_high': ('Sol single', 's', PALETTE["SINGLE_CALL_MAIN"], True),
+          'luna_single_high': ('Luna single', 'o', PALETTE["SINGLE_CALL_MAIN"], True),
+          'parallel3_select_high': ('Luna N3', 'o', palette_tint("ADM_DEFAULT", .25), True),
+          'parallel5_select_high': ('Luna N5', 'o', PALETTE["ADM_DEFAULT"], True)}
 
 METRICS = (('mean_model_usd_per_task', 'model_usd_excluding_judge', 'Model cost ($, log)', 'log'),
            ('mean_browser_steps', 'selected_browser_code_batches', 'Browser batches / steps', 'linear'),

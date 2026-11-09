@@ -20,19 +20,26 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
 
 
 HERE = Path(__file__).resolve().parent
 T = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
-INK, MUTED, GRID, BLUE, GRAY = "#222222", "#666666", "#e6e6e6", "#2a78d6", "#444444"
+INK, MUTED, GRID, BLUE, GRAY = C["INK"], C["MUTED"], C["BORDER"], C["ADM_22M"], C["MUTED"]
 ROWS = [("SFT 4B\n(1 sample)", "SFT 4B"), ("Observed\noutcome", "Ours outcome"), ("Lookahead\nH = 4", "Ours K3"),
         ("Lookahead\nH = 2", "Ours K1"), ("Luna,\nbefore execution", "Ours pre")]
 
 
-# dot plot (position, not bar length, encodes the value, so the cropped axis is honest); SFT 4B is the dashed reference
-# line only, so every plotted point carries an interval. Colours follow the lookahead label figure
-# (lookahead-draw-split-20261013/style.py): observed outcome green, lookahead K = 3 / K = 1 dark / light blue, pre-execution purple.
-COLORS = {"Ours outcome": "#1baf7a", "Ours K3": "#1f5fae", "Ours K1": "#93bdef", "Ours pre": "#7b4fd0"}
+# Purple fill identifies the learned 22M ADM; the thick warm outline identifies its label source.
+COLORS = {"Ours outcome": C["ORACLE"], "Ours K3": C["LOOKAHEAD_TEACHER"],
+          "Ours K1": C["LOOKAHEAD_TEACHER"], "Ours pre": C["TRAIN"]}
 HEADS = [r for r in ROWS if r[1] != "SFT 4B"]
 fig, ax = plt.subplots(figsize=(5.8, 3.6))
 sft = T["SFT 4B"]["mean_overall"]
@@ -40,8 +47,8 @@ ax.axhline(sft, color=MUTED, lw=1, ls="--", zorder=0)
 ax.text(-0.45, sft - 0.5, f"SFT 4B, one sample: {sft:.1f}", ha="left", va="top", fontsize=7.5, color=MUTED)
 for x, (_, n) in enumerate(HEADS):
     y = T[n]["mean_overall"]; d, lo, hi = T[n]["minus_sft4b"]
-    ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=COLORS[n], ecolor="#333333", capsize=3, lw=1,
-                markeredgecolor="white", markeredgewidth=1, zorder=3)
+    ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=C["ADM_STUDENT"], ecolor=C["INK"], capsize=3, lw=1,
+                markerfacecolor=C["ADM_STUDENT"], markeredgecolor=COLORS[n], markeredgewidth=1.7, zorder=3)
     ax.text(x, y + hi - d + .3, f"{y:.1f}\n({d:+.1f})".replace("-", "\u2212"), ha="center", va="bottom", fontsize=8)
 ax.set_xticks(range(len(HEADS)), [r for r, _ in HEADS], fontsize=8); ax.set_xlim(-0.5, len(HEADS) - 0.5)
 ax.set_ylabel("Overall success, mean of 3 benchmarks (%)", fontsize=9)
@@ -53,4 +60,4 @@ fig.text(0.01, 0.01, "Values: success (gain over SFT 4B, pp). Bars: paired 95% b
          "rate.\nOnline-Mind2Web 300 (gpt-5.6-terra), WebVoyager 595, DeepShop 150 (GPT-4o), equal weight.\n"
          "One training seed per head; heads 10-21, SFT 4B 10-18.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.12, 1, 1))
-fig.savefig(HERE / "selection-label-ablation-vs-sft-20261027.png", dpi=160); plt.close(fig)
+_paper_save(fig, HERE / "selection-label-ablation-vs-sft-20261027.png", dpi=160); plt.close(fig)

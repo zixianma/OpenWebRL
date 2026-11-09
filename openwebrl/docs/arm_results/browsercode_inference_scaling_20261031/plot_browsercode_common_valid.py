@@ -6,6 +6,12 @@ eleven methods within each benchmark. Benchmark weights stay 300/595/150,
 matching the original task-weighted figure. No task payloads or paid calls.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 
 import argparse
 import csv
@@ -157,7 +163,7 @@ def render(data, output, stem):
         ax.yaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
         ax.spines[['top', 'right']].set_visible(False)
         ax.tick_params(length=2.5, width=.6, pad=2)
-        ax.grid(axis='y', linewidth=.35, color='#dddddd', zorder=0)
+        ax.grid(axis='y', linewidth=.35, color=PALETTE["BORDER"], zorder=0)
         if name == 'actor_usd':
             ax.set_xscale('log')
         else:
@@ -178,9 +184,9 @@ def render(data, output, stem):
         fontsize=6.6, handletextpad=.3, labelspacing=.65, borderaxespad=0)
     coverage = ' · '.join(f'{label}: {data["benchmark_counts"][b]["common_valid"]}'
                           for b, (label, _) in SCALING.BENCHMARKS.items())
-    fig.text(.075, .095, 'Valid in all 11 methods — '+coverage, fontsize=7, color='#555555')
+    fig.text(.075, .095, 'Valid in all 11 methods — '+coverage, fontsize=7, color=PALETTE["MUTED"])
     fig.text(.075, .035, 'Planned weights: 300/595/150 · Terra judged · Actor metrics exclude Terra',
-             fontsize=7, color='#555555')
+             fontsize=7, color=PALETTE["MUTED"])
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
         path = output/f'{stem}.{extension}'

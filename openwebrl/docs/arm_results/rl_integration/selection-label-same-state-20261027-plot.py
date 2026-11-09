@@ -23,6 +23,18 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
+
+def student_outline(source_color):
+    return C["TRAIN"] if source_color == C["PRE_EXEC"] else source_color
+
 
 from matplotlib.lines import Line2D
 
@@ -30,12 +42,12 @@ HERE = Path(__file__).resolve().parent
 S = json.loads((HERE / "selection-label-same-state-20261027.json").read_text())
 LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
 EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
-INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
 ROWS = [  # label, colour, source key, live key
-    ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Lookahead\nH = 2", "#A99BE3", "teacher_k1", "Ours K1"),
-    ("Lookahead\nH = 4", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
+    ("Pre-exec", C["PRE_EXEC"], "teacher_pre", "Ours pre"),
+    ("Lookahead\nH = 2", C["LOOKAHEAD_TEACHER"], "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 4", C["LOOKAHEAD_TEACHER"], "teacher_k3", "Ours K3"),
+    ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 tr, te = S["splits"]["train"], S["splits"]["test"]
 MARK = [  # legend, marker, filled, dx
     (f"Teacher, train states ({tr['states']:,})", "o", False, -0.32),
@@ -55,15 +67,15 @@ fig, ax = plt.subplots(figsize=(9.2, 4.4))
 ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
 ax.text(-0.5, -0.3, "one SFT sample", ha="left", va="top", fontsize=7.5, color=MUTED)
 for x, (name, color, src, live) in enumerate(ROWS):
-    ax.axvspan(x + 0.22, x + 0.42, color="#f3f3f3", zorder=0, lw=0)
+    ax.axvspan(x + 0.22, x + 0.42, color=C["ATTENTION_MASKED"], zorder=0, lw=0)
     for (_, m, filled, dx), v in zip(MARK, values(src, live)):
         if v is None:
             ax.text(x + dx, 0.4, "pending", ha="center", va="bottom", fontsize=6, color=MUTED, rotation=90)
             continue
         d, lo, hi = v
-        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6, color=color, ecolor="#555555", capsize=1.8,
-                    lw=0.9, zorder=3, markeredgewidth=1.4, markerfacecolor=color if filled else "white",
-                    markeredgecolor=color)
+        ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6, color=color, ecolor=C["BASELINE_DARK"], capsize=1.8,
+                    lw=0.9, zorder=3, markeredgewidth=1.7, markerfacecolor=C["ADM_STUDENT"] if filled else "white",
+                    markeredgecolor=student_outline(color) if filled else color)
         ax.text(x + dx, hi + 0.2, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 for x in range(1, len(ROWS)):
     ax.axvline(x - 0.5, color=GRID, lw=1)
@@ -72,8 +84,9 @@ ax.set_ylim(-4.5, 10); ax.set_ylabel("Gain over one SFT 4B actor sample (pp)", f
 ax.grid(axis="y", alpha=.25)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)
-handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6, markeredgewidth=1.4,
-                  markerfacecolor="#555555" if f else "white") for _, m, f, _ in MARK]
+handles = [Line2D([], [], marker=m, ls="", color=C["BASELINE_DARK"], ms=6, markeredgewidth=1.4,
+                  markerfacecolor=C["ADM_STUDENT"] if f else "white",
+                  markeredgecolor=C["TRAIN"] if f else C["BASELINE_DARK"]) for _, m, f, _ in MARK]
 ax.legend(handles, [l for l, *_ in MARK], frameon=False, fontsize=7.3, loc="upper center", bbox_to_anchor=(0.5, -0.15),
           ncol=3, columnspacing=1.2)
 fig.text(0.01, 0.01, "Hollow = teacher, solid = student head; circle = train states, square = held-out test states; live shaded. "
@@ -82,4 +95,4 @@ fig.text(0.01, 0.01, "Hollow = teacher, solid = student head; circle = train sta
          f"sample on its own states or tasks\n(train {S['train']['sft_sample']:.1f}%, test {S['test']['sft_sample']:.1f}%, "
          f"live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%).", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.08, 1, 1))
-fig.savefig(HERE / "selection-label-same-state-20261027.png", dpi=160); plt.close(fig)
+_paper_save(fig, HERE / "selection-label-same-state-20261027.png", dpi=160); plt.close(fig)

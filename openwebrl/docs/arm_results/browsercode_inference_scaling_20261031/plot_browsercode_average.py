@@ -6,6 +6,12 @@ means separately. Use equal weights or fixed original benchmark task counts.
 No task pooling, confidence intervals, runtime imports or paid calls.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 
 import argparse
 import csv
@@ -100,7 +106,7 @@ def render(data, output_dir, stem):
         ax.yaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
         ax.spines[['top', 'right']].set_visible(False)
         ax.tick_params(length=2.5, width=.6, pad=2)
-        ax.grid(axis='y', linewidth=.35, color='#dddddd', zorder=0)
+        ax.grid(axis='y', linewidth=.35, color=PALETTE["BORDER"], zorder=0)
         if name == 'actor_usd':
             ax.set_xscale('log')
         else:
@@ -124,7 +130,7 @@ def render(data, output_dir, stem):
                frameon=False, fontsize=6.6, handletextpad=.3, labelspacing=.65, borderaxespad=0)
     note = 'Weights: 300/595/150 planned tasks · Terra judged · Own valid subsets differ' if weighted else 'Each benchmark: 1/3 weight · Terra judged · Own valid subsets differ'
     fig.text(.075, .045, note,
-             fontsize=7, color='#555555')
+             fontsize=7, color=PALETTE["MUTED"])
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
         path = output_dir / f'{stem}.{extension}'

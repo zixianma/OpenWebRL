@@ -3,6 +3,12 @@
 Requires matplotlib. Uses aggregate-only JSON; no private task data is needed.
 """
 from __future__ import annotations
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 import csv
 import hashlib
@@ -26,17 +32,17 @@ from matplotlib.ticker import StrMethodFormatter, NullFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    "serial_high": ("Sol single", "#08519C", "s"),
-    "luna_single_high": ("Luna single", "#08519C", "o"),
-    "parallel3_select_high": ("Luna N3", "#A50F15", "o"),
-    "parallel5_select_high": ("Luna N5", "#A50F15", "o"),
+    "serial_high": ("Sol single", PALETTE["SINGLE_CALL_MAIN"], "s"),
+    "luna_single_high": ("Luna single", PALETTE["SINGLE_CALL_MAIN"], "o"),
+    "parallel3_select_high": ("Luna N3", palette_tint("ADM_DEFAULT", .25), "o"),
+    "parallel5_select_high": ("Luna N5", PALETTE["ADM_DEFAULT"], "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 EFFORT_METHODS = {
-    "luna_single_medium": ("Single medium", "#4292C6", "o"),
-    "luna_single_low": ("Single low", "#9ECAE1", "o"),
-    "luna_n5_medium": ("N5 medium", "#EF3B2C", "o"),
-    "luna_n5_low": ("N5 low", "#FC9272", "o"),
+    "luna_single_medium": ("Single medium", palette_tint("SINGLE_CALL_MAIN", .18), "o"),
+    "luna_single_low": ("Single low", palette_tint("SINGLE_CALL_MAIN", .35), "o"),
+    "luna_n5_medium": ("N5 medium", palette_tint("ADM_DEFAULT", .18), "o"),
+    "luna_n5_low": ("N5 low", palette_tint("ADM_DEFAULT", .4), "o"),
 }
 EXPECTED_EFFORT_ARMS = ("luna_single_xhigh", *EFFORT_METHODS)
 EFFORT_AGGREGATE = Path(__file__).parent.parent / "luna_browsercode_effort_om2w300_20261030/aggregate.json"
@@ -115,7 +121,7 @@ def draw(ax, rows, metric, native):
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(length=3, width=0.6, pad=2)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_color(PALETTE["MUTED"])
         ax.spines[side].set_linewidth(0.6)
     if metric == "mean_model_usd_per_task":
         ax.set_xscale("log")
@@ -148,7 +154,7 @@ def draw_effort(ax, effort, metric):
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(length=3, width=0.6, pad=2)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_color(PALETTE["MUTED"])
         ax.spines[side].set_linewidth(0.6)
     if metric == "mean_model_usd_per_task":
         ax.set_xscale("log")
@@ -270,7 +276,7 @@ def main():
         "effort_aggregate_sha256": hashlib.sha256(args.effort_aggregate.read_bytes()).hexdigest(),
         "effort_status": "Provisional; collection complete, final independent audit pending",
         "excluded_from_plot": ["luna_single_xhigh"],
-        "color_encoding": {"single": {"high": "#08519C", "medium": "#4292C6", "low": "#9ECAE1"}, "candidate_plus_selection": {"high": "#A50F15", "medium": "#EF3B2C", "low": "#FC9272"}},
+        "color_encoding": {"single": {"high": PALETTE["SINGLE_CALL_MAIN"], "medium": palette_tint("SINGLE_CALL_MAIN", .18), "low": palette_tint("SINGLE_CALL_MAIN", .35)}, "candidate_plus_selection": {"high": {"N3": palette_tint("ADM_DEFAULT", .25), "N5": PALETTE["ADM_DEFAULT"]}, "medium": palette_tint("ADM_DEFAULT", .18), "low": palette_tint("ADM_DEFAULT", .4)}},
         "effort_final_audit_complete": effort_data["final_audit_complete"],
         "effort_judge": "gpt56-terra-terminal-success-v1",
         "effort_metric_coverage": {row["arm"]: {key: value for key, value in row.items() if key.endswith("_observed_tasks") or key in ("unknown_model_usage_calls", "derived_invalid_count")} for row in effort},
@@ -286,7 +292,7 @@ def main():
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
         "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
         "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
-        "visualization": "Separate figures by judge: om2w_harness_tradeoffs shows historical high-effort BrowserCode (o4-mini) and native results (original grading, including GPT-4o); om2w_terra_effort_tradeoffs shows only recent Terra-judged BrowserCode medium/low results, provisional. Luna single xhigh is omitted from plotting; the source aggregate stays complete. Every Luna method uses a circle and every Sol method a square. Blue encodes single generation and red candidates plus selection; high is dark, medium intermediate and low light. In historical panels, open red circles denote N3 and filled red circles N5. Legends sit outside on the right. No point labels, leader lines, method-connecting curves, frontiers or grid. Numeric coordinates unchanged.",
+        "visualization": "Separate figures by judge: om2w_harness_tradeoffs shows historical high-effort BrowserCode (o4-mini) and native results (original grading, including GPT-4o); om2w_terra_effort_tradeoffs shows only recent Terra-judged BrowserCode medium/low results, provisional. Luna single xhigh is omitted from plotting; the source aggregate stays complete. Every Luna method uses a circle and every Sol method a square. Neutral mauve encodes single generation and purple candidates plus selection; lighter shades distinguish effort. In historical panels, open purple circles denote N3 and filled purple circles N5. Legends sit outside on the right. No point labels, leader lines, method-connecting curves, frontiers or grid. Numeric coordinates unchanged.",
         "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. Separate judge figures do not imply paired or causal effort effects across cohorts; three-benchmark averages exclude the OM2W-only effort cohort.",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")

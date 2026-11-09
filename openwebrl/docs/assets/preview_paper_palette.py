@@ -1,7 +1,7 @@
 """Render the proposed palette and a copy of the label comparison for review.
 
 Reads only public aggregate results and writes separately named previews.
-The first-batch main figures opt into the same selected palette independently.
+Method and result renderers share the same named semantic color roles.
 """
 import json
 from pathlib import Path
@@ -34,21 +34,23 @@ def save(fig, stem):
 
 
 def palette_board():
-    fig = plt.figure(figsize=(7.4, 4.4))
+    fig = plt.figure(figsize=(7.4, 5.2))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.set(xlim=(0, 7.4), ylim=(0, 4.4))
+    ax.set(xlim=(0, 7.4), ylim=(0, 5.2))
     ax.axis("off")
     def text(x, y, s, size=8, **kwargs):
         return ax.text(x, y, s, fontsize=size, va="center", color=ROLE["INK"], **kwargs)
     def chip(x, y, color, width=.34, height=.17):
         ax.add_patch(Rectangle((x, y - height / 2), width, height,
                                facecolor=color, edgecolor="none"))
-    text(.18, 4.10, "Proposed paper palette", 12, weight="semibold")
-    text(.18, 3.83, "Purple ADM · salmon lookahead · yellow / amber oracle and outcomes · mint status / attention", 8)
-    text(.18, 3.53, "ROLE", 7, weight="semibold")
-    text(2.45, 3.53, "SOURCE SWATCH", 7, weight="semibold")
-    text(4.12, 3.53, "PAPER MARKS / VARIANTS", 7, weight="semibold")
+    text(.18, 4.90, "Shared paper palette", 12, weight="semibold")
+    text(.18, 4.63, "Purple ADM · yellow states · green actions · salmon teacher · amber oracle / eval", 8)
+    text(.18, 4.33, "ROLE", 7, weight="semibold")
+    text(2.45, 4.33, "SOURCE SWATCH", 7, weight="semibold")
+    text(4.12, 4.33, "PAPER MARKS / VARIANTS", 7, weight="semibold")
     rows = [
+        ("States / observations", "state", [("STATE", "state cards")]),
+        ("Actions / selected actions", "action", [("ACTION", "action cards")]),
         ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
         ("Lookahead teacher / evidence", "lookahead", [("LOOKAHEAD_TEACHER", "teacher"), ("LOOKAHEAD_EVIDENCE", "evidence")]),
         ("Oracle / train / eval", "oracle", [("ORACLE", "oracle"), ("TRAIN", "train"), ("EVAL", "eval")]),
@@ -58,7 +60,7 @@ def palette_board():
         ("Attention allowed", "attention", [("ATTENTION_ALLOWED", "grid fill")]),
     ]
     for i, (label, family, variants) in enumerate(rows):
-        y = 3.16 - .38 * i
+        y = 3.96 - .38 * i
         text(.18, y, label)
         chip(2.45, y, BASE[family])
         text(2.89, y, BASE[family], 7.5)

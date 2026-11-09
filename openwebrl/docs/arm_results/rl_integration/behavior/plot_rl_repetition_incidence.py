@@ -20,6 +20,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
@@ -32,9 +33,9 @@ AGGREGATE = HERE / "rl-repetition-incidence-20261104.json"
 OUTPUT = DOCS / "rl_results/rl_repetition_incidence"
 THRESHOLDS = (2, 3, 4, 5)
 RUNS = (
-    ("outcome48", "Outcome-only (48 groups)", "Outcome-only\n48 groups", "#9A9A9A", "o"),
-    ("outcome56", "Outcome-only (56 groups)", "Outcome-only\n56 groups", "#555555", "o"),
-    ("gate-b", "Outcome + ADM rewards (ours)", "Outcome + ADM\nrewards (ours)", "#6250BE", "o"),
+    ("outcome48", "Outcome-only (48 groups)", "Outcome-only\n48 groups", C["BASELINE_LIGHT"], "o"),
+    ("outcome56", "Outcome-only (56 groups)", "Outcome-only\n56 groups", C["BASELINE_DARK"], "o"),
+    ("gate-b", "Outcome + ADM rewards (ours)", "Outcome + ADM\nrewards (ours)", C["ADM_DEFAULT"], "o"),
 )
 
 
@@ -156,7 +157,8 @@ def build(compact_dir):
 def render():
     data = json.loads(AGGREGATE.read_text())
     assert data["reference_sha256"] == hashlib.sha256(REFERENCE.read_bytes()).hexdigest()
-    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 9.5,
+    plt.rcParams.update({"text.color": C["INK"], "axes.labelcolor": C["INK"],
+                         "xtick.color": C["MUTED"], "ytick.color": C["MUTED"], "font.family": "Albert Sans", "font.size": 9.5,
                          "axes.titlesize": 10, "axes.labelsize": 10,
                          "xtick.labelsize": 9, "ytick.labelsize": 9,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
@@ -174,9 +176,9 @@ def render():
                             facecolor="white", edgecolor=colors, hatch="///", linewidth=0.8,
                             zorder=3)
     left.errorbar(range(3), means, yerr=np.vstack((means - limits[:, 0], limits[:, 1] - means)),
-                  fmt="none", ecolor="#353535", elinewidth=1, capsize=3, capthick=1, zorder=4)
-    left.legend(handles=[Patch(facecolor="#777777", label="Failure"),
-                         Patch(facecolor="white", edgecolor="#777777", hatch="///", label="Success")],
+                  fmt="none", ecolor=C["MUTED"], elinewidth=1, capsize=3, capthick=1, zorder=4)
+    left.legend(handles=[Patch(facecolor=C["BASELINE_DARK"], label="Failure"),
+                         Patch(facecolor="white", edgecolor=C["BASELINE_DARK"], hatch="///", label="Success")],
                 loc="upper right", frameon=False, ncol=2, fontsize=8,
                 handlelength=1.3, columnspacing=1.2, handletextpad=0.5)
     for j, mean in enumerate(means):
@@ -212,9 +214,9 @@ def render():
         for side in ("top", "right"):
             ax.spines[side].set_visible(False)
         for side in ("left", "bottom"):
-            ax.spines[side].set_color("#666666")
+            ax.spines[side].set_color(C["BASELINE_DARK"])
             ax.spines[side].set_linewidth(0.7)
-        ax.tick_params(length=3, color="#666666")
+        ax.tick_params(length=3, color=C["BASELINE_DARK"])
     right.spines["left"].set_visible(False)
     fig.supylabel("Episodes with repeated actions (%)", x=0.008, y=0.53, fontsize=9.5)
     handles = [Line2D([], [], color=color, marker=marker, linewidth=1.5, markersize=4.5,

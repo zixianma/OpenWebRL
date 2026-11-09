@@ -2,19 +2,19 @@
   "aggregate_sha256": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    "browsercode_scaling14_common_valid_weighted.pdf": "6a215bdf3831cb32caffa09b69444aa55d623031f8d65a683b8a94605e7ad9b6",
-    "browsercode_scaling14_common_valid_weighted.png": "6ff44c66fd6f5ea034e5f2e2c04e5149ac0d0fb5676e63fe99285e70a7f400e7",
-    "browsercode_scaling14_common_valid_weighted.svg": "dff5d97b3ddad62f648c85564514cbe195071ef91527c5352cb8b9e208e27291",
+    "browsercode_scaling14_common_valid_weighted.pdf": "12cc2cd70407a0d424dd8a53f1f04bd1d93529d009eafa673b8e6d15b1c01cbf",
+    "browsercode_scaling14_common_valid_weighted.png": "fd470271f9c0450ed9d852bfe683dfa24bf06769d1a75d90f33bb0cd5c76bead",
+    "browsercode_scaling14_common_valid_weighted.svg": "bddc83a8d18bbc94ddd36e7040109466aa7399c18fc0e9895aa4d09c094f2abb",
     "browsercode_scaling14_common_valid_weighted_coordinates.csv": "fd03a8d361528902ee8579820b0a7e35a7ddb58d29bbc92f75e2990d70f66733",
-    "browsercode_scaling14_own_valid_weighted.pdf": "5934f7fddee28e11d254f68fb33186a629315d739f67624e62212b74efe26c22",
-    "browsercode_scaling14_own_valid_weighted.png": "4756c0849bf730d578dca9eb44eb4238bb819f93f2c5696ff183b9f94f95119b",
-    "browsercode_scaling14_own_valid_weighted.svg": "b693a8c9509b94cb5987042a731513d8a5ae63b627a04b3f31091ec4899a6640",
+    "browsercode_scaling14_own_valid_weighted.pdf": "49bf6c1a9952e905aa52e3e3edecec0ba8fbc410fb8841be2d783befbb83f519",
+    "browsercode_scaling14_own_valid_weighted.png": "4b9f47e0af050edfbcbe87a7a32ac494cd550252ab5ea0f3f83883895e178124",
+    "browsercode_scaling14_own_valid_weighted.svg": "379348f02e2ca7f30deb4adebee6c9e9064e4b7e1af3b60c660e280956c2b414",
     "browsercode_scaling14_own_valid_weighted_coordinates.csv": "3f2420bf9fe77b6c454a87713c15dd4880d1931bc95b60c5d898defbc682f4e9",
     "common_valid_benchmark_counts.csv": "2a4baca03b7d330acd523ee70953f3040960efa62679665818bae835a7c4da5b",
     "common_valid_per_benchmark.csv": "9ef09ff38e02908c87f3cc8d0adc0f1d3e6c0185c484ffc495f1f649aeba0f2c",
     "own_valid_per_benchmark.csv": "4834e92f8398b0727bc90c164ebff25f1541083e466811d7b37b4f8f81345fd8"
   },
-  "renderer_sha256": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1",
+  "renderer_sha256": "1911888fcc28752184bcf3c641c36dab4cbf9e9c77cb982a7e47c834d318435c",
   "schema": "browsercode-fourteen-method-render-v1",
   "source_populations": "Separate own-valid and newly recomputed fourteen-method common-valid cohorts; gap-repaired baseline explicitly labeled"
 }

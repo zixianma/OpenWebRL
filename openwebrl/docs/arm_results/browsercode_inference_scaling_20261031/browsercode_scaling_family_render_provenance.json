@@ -1,6 +1,6 @@
 {
   "schema": "browsercode-scaling-family-render-v1",
-  "renderer_sha256": "013e46ef913db6fe1dce759e77b3993b40ed59dbac5010b7df345a1e93b22ede",
+  "renderer_sha256": "9a6c2da76497206bc1ebb203f966b81ab157a361f3e008603ca847005d126e0d",
   "aggregate_sha256": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
   "paired_counts_sha256": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
   "matplotlib_version": "3.9.4",
@@ -8,14 +8,14 @@
   "bootstrap_draws": 50000,
   "compact_coverage_sha256": "1b1f9f229ea6e2d46af727de47d63dc3033161cfa85104c89e23d15bf3910b12",
   "artifacts": {
-    "browsercode_selection_scaling.png": "7d370803154690c05a1199b19243dd066962b8f73f246f7868ff6b5a699f0d9e",
-    "browsercode_selection_scaling.pdf": "46677ede4c9ac1fc6cc89573aba5d71b62fa559c187cf964372cf9f266b74e21",
-    "browsercode_selection_scaling.svg": "10431de1506c7633c14f1c029a290913099e721e715069d5eaf6c46dbf82170b",
-    "browsercode_scaling_by_family.png": "1425f0515e7975111f126ad5841a894f112cc7af5525aac74d1b86ad8c81527b",
-    "browsercode_scaling_by_family.pdf": "00d5945fefbda37414d7cfbe81be7db3e201b51ce39545abbfa4edac630777e5",
-    "browsercode_scaling_by_family.svg": "24adb2e86f95d9d72d30e02a4855fe94790ce9600dbd5354a9d325e5564fb228",
-    "browsercode_scaling_strategies_compact.png": "74c7713e220d0c9c13fdd2f8f84b5427c834d6df3fe815cd4321587859e206d1",
-    "browsercode_scaling_strategies_compact.pdf": "58740f486a739cbb0302000277f578ac36e6325505638625af667f756f9256f2",
-    "browsercode_scaling_strategies_compact.svg": "a6c4bb623b283f0a38a50650409db5d89e2119be1859011604f52ac0b52f63aa"
+    "browsercode_selection_scaling.png": "ca052087a95b49176fb9aeeff83b5b6f3c915a3857b77ee852fe4ff6dd9c7475",
+    "browsercode_selection_scaling.pdf": "ddaead5e5014f11a1c7027d282e3ab0357332d04c23c72e7be1eb4c6de26533b",
+    "browsercode_selection_scaling.svg": "4576105ac62ad9839586f3d944a3170a84a38d5363999a0ce04a778477149fbc",
+    "browsercode_scaling_by_family.png": "cc521d32db55aee1fb67bbe7d2bd36539396c15ff3b61709c55547974857d9be",
+    "browsercode_scaling_by_family.pdf": "a13b7383cd87b1b666567ed28570393341f08b061b81b96f0f3c0e4bb8662320",
+    "browsercode_scaling_by_family.svg": "1e35b991edd7189b7b779bc48795eece1308bdca211f73c3801607c5662e5469",
+    "browsercode_scaling_strategies_compact.png": "d1c9de604b5f03854e8dbd01ff149bdc411d8fa0d0e33716f71192395352c4f6",
+    "browsercode_scaling_strategies_compact.pdf": "50ba6062a7eeec57d48c45da136682a9adb318b6de7e2e18388be40686f5d4f8",
+    "browsercode_scaling_strategies_compact.svg": "31704842c269019e4b9a2fadfbf2550c46d816a6a2ab9d60f53822ae892c3935"
   }
 }

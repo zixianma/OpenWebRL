@@ -12,13 +12,14 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C
 
 
 D = Path(__file__).resolve().parent
 res = json.loads((D / "curve.json").read_text())
-STYLE = {"Uniform": ("Uniform pick", "#9a9890", "--"), "Before execution": ("Before execution", "#52514e", "-"),
-         "Lookahead K=1": ("Lookahead H = 2", "#7fb0ea", "-"),
-         "Lookahead K=3": ("Lookahead H = 4", "#2a78d6", "-"), "Best on observed draws": ("Best on observed draws 0..n−1", "#1baf7a", "-")}
+STYLE = {"Uniform": ("Uniform pick", C["BASELINE_LIGHT"], "--"), "Before execution": ("Before execution", C["PRE_EXEC"], "-"),
+         "Lookahead K=1": ("Lookahead H = 2", C["LOOKAHEAD_TEACHER"], ":"),
+         "Lookahead K=3": ("Lookahead H = 4", C["LOOKAHEAD_TEACHER"], "-"), "Best on observed draws": ("Best on observed draws 0..n−1", C["ORACLE"], "-")}
 PANELS = [("pooled", "Pooled"), ("lookahead-fast1k-20261013", "New fast1k states"), ("lookahead-v2-20261013", "Earlier states")]
 TITLES = {"invalid_as_failure": "A. Invalid draws count as failures",
           "valid_only": "B. Valid draws only (state kept when every action has a valid draw on both sides)"}
@@ -43,7 +44,7 @@ for mode, title in TITLES.items():
     fig.legend(h, l, loc="lower center", ncol=6, fontsize=8.5, frameon=False)
     fig.suptitle(f"Lookahead labels vs selecting on observed outcomes, as the draw split varies\n{title}", fontsize=11.5)
     fig.text(.5, .06, "Teacher conditions see only draw 0, so the split only changes which draws score them. Bars: 95% task-clustered bootstrap. "
-             "New states are only ones whose candidates' outcomes differ, so their rates are lower.", ha="center", fontsize=8, color="#52514e")
+             "New states are only ones whose candidates' outcomes differ, so their rates are lower.", ha="center", fontsize=8, color=C["MUTED"])
     fig.tight_layout(rect=(0, .1, 1, .93))
     for ext in ("png", "svg"):
         fig.savefig(out / f"lookahead_draw_split_{mode}.{ext}", dpi=160)

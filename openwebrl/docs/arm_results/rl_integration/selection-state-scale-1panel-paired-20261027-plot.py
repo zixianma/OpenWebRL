@@ -20,14 +20,22 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
+from paper_plot_palette import COLORS as C, tint
+
+
+def _paper_save(fig, path, **kwargs):
+    """Keep raster and vector siblings synchronized with the same layout."""
+    for suffix in (".png", ".pdf", ".svg"):
+        fig.savefig(path.with_suffix(suffix), **kwargs)
+
 
 
 HERE = Path(__file__).resolve().parent
 J = json.loads((HERE / "selection-state-scale-1panel-20261027.json").read_text())
 P = {p["a"]: p for p in J["paired"] if p["b"] == "sft1"}
 R = {r["key"]: r for r in J["rows"]}
-INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
-BLUE, ORANGE, AQUA, GRAY = "#2a78d6", "#eb6834", "#1baf7a", "#444444"
+INK, MUTED, GRID = C["INK"], C["MUTED"], C["BORDER"]
+BLUE, ORANGE, AQUA, GRAY = C["ADM_22M"], C["ADM_22M"], C["ADM_22M"], C["ADM_22M"]
 RUNS = [("n250", 254), ("n500", 501), ("n1000", 1011), ("n1393", 1393), ("nall", 2587)]
 xs = [x for _, x in RUNS]
 TICKS = ["254", "501", "1,011", "1,393", "2,587"]
@@ -70,7 +78,7 @@ fig.text(0.01, 0.01, "Bars: paired 95% bootstrap of the gain over SFT 4B on the 
          "training seed per point.\nHollow: earlier one-panel head (OM2W/WV run 10-23/24, DeepShop 10-26); others 10-26/27. "
          "DeepShop vs same-night SFT 4B (10-27).", fontsize=7.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.08, 1, 0.95))
-fig.savefig(HERE / "selection-state-scale-1panel-paired-20261027.png"); plt.close(fig)
+_paper_save(fig, HERE / "selection-state-scale-1panel-paired-20261027.png"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(5.2, 3.9), dpi=200)
 sft = draw(ax, "mean", GRAY, fs=8.5)
@@ -82,4 +90,4 @@ fig.text(0.01, 0.01, "Online-Mind2Web 300, WebVoyager 595, DeepShop 150, equal w
          "around the head's rate; one training seed per point. Hollow: earlier\none-panel head (run 10-23/24, DeepShop 10-26).",
          fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.09, 1, 1))
-fig.savefig(HERE / "selection-state-scale-1panel-mean-20261027.png"); plt.close(fig)
+_paper_save(fig, HERE / "selection-state-scale-1panel-mean-20261027.png"); plt.close(fig)

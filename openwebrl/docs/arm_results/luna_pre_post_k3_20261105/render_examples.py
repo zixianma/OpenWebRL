@@ -26,12 +26,13 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style  # noqa: E402,F401
+from paper_plot_palette import COLORS as C, tint
 
 R = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021")
 HERE = Path(__file__).resolve().parent
-SRC = [("pre", "Pre", "#4B5563"), ("k3", "H = 4", "#6250BE")]
-CAND = ["#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9"]
-INK, MUTED, GOOD, BAD = "#222222", "#666666", "#1B7F3B", "#B3261E"
+SRC = [("pre", "Pre", C["PRE_EXEC"]), ("k3", "H = 4", C["LOOKAHEAD_TEACHER"])]
+CAND = [tint("ACTION", f) for f in (0, 0.12, 0.24, 0.36, 0.48)]
+INK, MUTED, GOOD, BAD = C["INK"], C["MUTED"], C["SUCCESS"], C["FAILURE"]
 CALL = re.compile(r"<tool_call>\s*(\{.*?\})\s*</tool_call>", re.S)
 DATA_URL = re.compile(r"data:image/[a-z]+;base64,[A-Za-z0-9+/=]+")
 
@@ -128,7 +129,7 @@ def picks(x):
 
 
 def pill(ax, x, y, text, color, fs=6.0):
-    t = ax.text(x, y, text, fontsize=fs, color="white", ha="left", va="center", fontweight="bold",
+    t = ax.text(x, y, text, fontsize=fs, color="white" if color == C["PRE_EXEC"] else INK, ha="left", va="center", fontweight="bold",
                 bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.5", fc=color, ec="none"))
     return t
 
@@ -154,7 +155,7 @@ def render(sid, good, bad, slug, recs):
     # (1) the screen being judged, with candidate points
     ax = fig.add_subplot(gs[0, :2]); ax.imshow(before); ax.set_xticks([]); ax.set_yticks([])
     for sp in ax.spines.values():
-        sp.set_color("#999999"); sp.set_linewidth(0.5)
+        sp.set_color(C["BORDER"]); sp.set_linewidth(0.5)
     ax.set_title("Screen the teachers judge (pre-exec sees only this)", fontsize=6.6, color=INK, pad=3, loc="left")
     for i, (_, cs) in enumerate(labels):
         for c in cs[:1]:
@@ -163,7 +164,7 @@ def render(sid, good, bad, slug, recs):
                 px, py = pt[0] / 1000 * W, pt[1] / 1000 * H
                 dx = (i - (len(labels) - 1) / 2) * 0.012 * W if c.get("name") == "scroll" else 0
                 ax.scatter([px + dx], [py], s=70, color=CAND[i], edgecolor="white", linewidth=0.9, zorder=3)
-                ax.text(px + dx, py, str(i + 1), fontsize=5.6, color="white", ha="center", va="center", fontweight="bold", zorder=4)
+                ax.text(px + dx, py, str(i + 1), fontsize=5.6, color=INK, ha="center", va="center", fontweight="bold", zorder=4)
                 if c.get("name") == "scroll":
                     d = -1 if (c.get("arguments") or {}).get("direction") == "up" else 1
                     ax.annotate("", (px + dx, py + d * 0.09 * H), (px + dx, py + d * 0.025 * H),
@@ -176,7 +177,7 @@ def render(sid, good, bad, slug, recs):
     for i, (lab, _) in enumerate(labels):
         y = 0.86 - i * step
         ax.scatter([0.025], [y], s=70, color=CAND[i], edgecolor="white", linewidth=0.9)
-        ax.text(0.025, y, str(i + 1), fontsize=5.6, color="white", ha="center", va="center", fontweight="bold")
+        ax.text(0.025, y, str(i + 1), fontsize=5.6, color=INK, ha="center", va="center", fontweight="bold")
         ax.text(0.065, y + 0.035, short(lab, 52), fontsize=6.2, color=INK, va="center")
         s, m = held(x["actions"][i]); col = GOOD if i == good else BAD if i == bad else MUTED
         ax.text(0.98, y + 0.035, f"{s}/{m}", fontsize=6.6, color=col, va="center", ha="right", fontweight="bold")
@@ -192,7 +193,7 @@ def render(sid, good, bad, slug, recs):
         for c in range(4):
             ax = fig.add_subplot(gs[r, c]); ax.set_xticks([]); ax.set_yticks([])
             for sp in ax.spines.values():
-                sp.set_color(CAND[i] if c == 0 else "#bbbbbb"); sp.set_linewidth(1.2 if c == 0 else 0.5)
+                sp.set_color(CAND[i] if c == 0 else C["BORDER"]); sp.set_linewidth(1.2 if c == 0 else 0.5)
             if c < len(shots) and shots[c][1] is not None:
                 ax.imshow(shots[c][1]); ax.set_title(shots[c][0], fontsize=5.6, color=INK if c == 0 else MUTED, pad=2, loc="left")
             elif c < len(shots):

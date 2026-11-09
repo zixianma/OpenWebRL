@@ -5,6 +5,12 @@ Reuses the original renderers/layouts and public validators without changing
 original plots or inputs. Own-valid and common-valid populations stay separate.
 No convex-hull fit, smoothing, uncertainty calculation, model or browser calls.
 """
+# Shared semantic palette; source measurements and geometry are unchanged.
+from pathlib import Path as _PalettePath
+import sys as _palette_sys
+_palette_sys.path.insert(0, str(next(p for p in _PalettePath(__file__).resolve().parents
+                                     if (p / "paper_plot_palette.py").is_file())))
+from paper_plot_palette import COLORS as PALETTE, tint as palette_tint
 import argparse
 from pathlib import Path
 from tempfile import mkdtemp
@@ -31,7 +37,7 @@ from matplotlib.lines import Line2D
 
 HERE = Path(__file__).resolve().parent
 METRICS = ('actor_usd', 'browser_commands', 'actor_seconds')
-FRONTIER = '#596675'
+FRONTIER = PALETTE["FRONTIER"]
 
 
 def module(name, filename):
@@ -47,7 +53,7 @@ COMMON = module('pareto_common', 'plot_browsercode_common_valid.py')
 PAPER = module('pareto_paper_style', 'browsercode_pareto_paper_style.py')
 SOL60_SOURCE = HERE.parent / 'browsercode_sol_high60_20261104' / 'aggregate.json'
 SOL60_METHOD = 'sol_single_high60'
-SOL60_STYLE = ('Sol high · 60 steps', 's', '#08519c', False)
+SOL60_STYLE = ('Sol high · 60 steps', 's', PALETTE["SINGLE_CALL_MAIN"], False)
 SCALING.STYLES[SOL60_METHOD] = SOL60_STYLE
 AVERAGE.SCALING.STYLES[SOL60_METHOD] = SOL60_STYLE
 
@@ -235,7 +241,7 @@ def grouped_bottom_legends(fig, *, weighted=False):
                fontsize=6.5, handlelength=1.8, handletextpad=.35, borderaxespad=0)
     fig.text(.32, .026,
              'Luna defaults: high effort · max tokens = 12,288 · 30-step limit. N = candidates.',
-             fontsize=6.2, color='#555555', va='bottom')
+             fontsize=6.2, color=PALETTE["MUTED"], va='bottom')
     return single, selection
 
 

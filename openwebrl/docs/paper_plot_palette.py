@@ -1,6 +1,7 @@
-"""Named colors for the selected paper-palette trial.
+"""Named colors shared by paper diagrams and quantitative result plots.
 
-Renderers opt in explicitly so historical figures keep their previous colors.
+STATE is yellow, ACTION is mint, ADM is purple and lookahead teachers are salmon.
+Neutral controls, model-size shades and source-label outlines retain explicit roles.
 Color changes never affect source measurements, intervals or data populations.
 """
 import json

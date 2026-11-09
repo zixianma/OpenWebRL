@@ -160,7 +160,7 @@ These patterns cut both ways (figure (b)). The replayed eval states show what ch
 
 ![Two replayed eval states. (a) WebVoyager, a quantized Qwen3-8B model card after four alternating scrolls: four of five proposals scroll down, picked by both pre students; one proposes go back, picked by both H = 4 students. (b) Online-Mind2Web 401(k) calculator still on its defaults: two proposals set the starting balance to $0, picked by both pre students; three answer $2,496,238, picked by both H = 4 students.](arm_results/luna_pre_post_k3_20261105/student-examples.png)
 
-*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the H = 4 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the H = 4 students' answer is premature. The pre pick is not shown to succeed either: in the logged GPT-5.5 pre episode, the student set the balance to $0, then answered, and failed. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
+*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Purple badges identify ADM-4B students; yellow outlines identify pre-execution labels and salmon outlines identify H = 4 lookahead labels. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the H = 4 students' answer is premature. The pre pick is not shown to succeed either: in the logged GPT-5.5 pre episode, the student set the balance to $0, then answered, and failed. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
 
 | Same 7,999 states | Pre (Luna) | H = 4 (Luna) | Pre (GPT-5.5) | H = 4 (GPT-5.5) | Proposals |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -237,7 +237,7 @@ Eight of these states, three where the H = 4 pick did better (W) and three where
 <details>
 <summary>Review sheets: the screen, both picks, and one matched episode per side</summary>
 
-Each sheet shows the task, earlier actions, and the current screen with the pre pick (grey box) and the H = 4 pick (purple box). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (orange box), how the episode ended, and the judged outcome.
+Each sheet shows the task, earlier actions, and the current screen with the pre pick (yellow source outline) and the H = 4 pick (salmon source outline). Then, per side, one real matched episode whose outcome matches that side's majority: the next three screens with the action taken on each (green action marks; amber screenshot borders), how the episode ended, and the judged outcome.
 
 **W1.** WebVoyager HF--14, step 2 (GPT-5.5): Pricing opened a 429 rate-limit page.
 
