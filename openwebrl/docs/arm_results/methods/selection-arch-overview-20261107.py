@@ -38,10 +38,10 @@ plt.rcParams.update({
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
-W, H = 7.0, 4.55
+W, H = 6.25, 3.95
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
-ax.set(xlim=(0, W), ylim=(-0.40, 4.15))
+ax.set(xlim=(0, W), ylim=(-0.42, 3.53))
 ax.axis("off")
 
 
@@ -55,8 +55,10 @@ def box(x, y, w, h, edge=LINE, fill="white", lw=0.65):
 
 
 def arrow(x0, y0, x1, y1, color=MUTED):
-    ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=5,
-                                 shrinkA=1, shrinkB=1, linewidth=0.65, color=color))
+    patch = FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=6,
+                            shrinkA=0, shrinkB=0, linewidth=0.8, color=color, zorder=3)
+    ax.add_patch(patch)
+    return patch
 
 
 def matrix(x0, top, rows, cols, cell, fill_of, row_color=lambda r: INK, col_color=lambda c: INK):
@@ -76,37 +78,42 @@ CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
 
 # One actor proposes actions for either selector. Head tokens s/c_i are projected
 # actor features, whereas the separate decoder reads prompt/action content.
-box(0.10, 3.77, 1.10, 0.34, edge=SHARED, fill=SHARED_BG)
-text(0.65, 3.94, "Context", color=SHARED, ha="center")
-arrow(1.21, 3.94, 1.49, 3.94)
-box(1.50, 3.77, 1.50, 0.34, edge=INK, fill=SHARED_BG, lw=0.95)
-text(2.25, 3.94, "Frozen actor", size=8, weight="bold", ha="center")
-arrow(3.01, 3.94, 4.51, 3.94)
-box(4.52, 3.77, 2.33, 0.34, edge=SHARED, fill=SHARED_BG)
-text(5.685, 3.94, r"$K=5$ candidates: reasoning + $a_t^i$", color=SHARED, ha="center")
-arrow(5.685, 3.76, 5.685, 3.59, color=DECODER)
-text(5.685, 3.47, r"Prompt $p$ + candidates", color=DECODER, ha="center")
-arrow(5.685, 3.35, 5.685, 3.20, color=DECODER)
+box(.08, 3.21, 1.02, .28, edge=SHARED, fill=SHARED_BG)
+text(.59, 3.35, "Context", color=SHARED, ha="center")
+arrow(1.11, 3.35, 1.35, 3.35)
+box(1.36, 3.21, 1.32, .28, edge=INK, fill=SHARED_BG, lw=.95)
+text(2.02, 3.35, "Frozen actor", size=8, weight="bold", ha="center")
+arrow(2.69, 3.35, 4.01, 3.35)
+box(4.02, 3.21, 2.17, .28, edge=SHARED, fill=SHARED_BG)
+text(5.105, 3.35, r"$K=5$ candidates: reasoning + $a_t^i$", color=SHARED, ha="center")
+arrow(5.105, 3.20, 5.105, 3.10, color=DECODER)
+text(5.105, 2.99, r"Prompt $p$ + candidates", color=DECODER, ha="center")
+arrow(5.105, 2.90, 5.105, 2.80, color=DECODER)
 
 # --- left: ADM head on frozen actor features ---------------------------------------------------------------------
-arrow(2.25, 3.76, 2.25, 3.71)
-box(0.55, 3.22, 3.55, 0.48, edge=SHARED, fill=SHARED_BG)
-text(2.25, 3.60, "a)  ADM head", size=8,
+actor_head_arrow = arrow(2.02, 3.20, 2.02, 3.01)
+box(.50, 2.58, 3.28, .42, edge=SHARED, fill=SHARED_BG)
+text(2.14, 2.91, "a)  ADM head", size=8,
      weight="bold", ha="center")
-text(1.35, 3.37, r"$s$: context feature" + "\nlast prompt token", size=6.5,
+text(1.23, 2.73, r"$s$: context feature" + "\nlast prompt token", size=6.5,
      ha="center", linespacing=1.05)
-text(3.05, 3.37, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5,
+text(2.97, 2.73, r"$c_i$: candidate feature" + "\nreasoning · action · end", size=6.5,
      ha="center", linespacing=1.05)
 # Short shared-input connectors replace the long per-input routing buses.
-for center in (1.675, 3.375):
-    ax.plot([center, center], [3.21, 3.03], color=LINE, linewidth=.65)
-CELL = 0.125
-COLS = {"Joint": 1.30, "Independent": 3.00}
+for center in (1.285, 2.875):
+    ax.plot([center, center], [2.57, 2.49], color=LINE, linewidth=.65)
+CELL = .115
+COLS = {"Joint": .94, "Independent": 2.53}
 for name, x0 in COLS.items():
-    text(x0 + 3 * CELL, 2.92, name, size=7.5, color=HEAD if name == "Joint" else DECODER, weight="bold", ha="center")
-TTOP = 2.48
-text(0.28, TTOP - (K + 1) * CELL / 2, "Transformer", size=7.5, weight="bold", ha="center", rotation=90)
-text(0.28, 1.12, "MLP", size=7.5, weight="bold", ha="center", rotation=90)
+    text(x0 + 3 * CELL, 2.41, name, size=7.5, color=HEAD if name == "Joint" else DECODER, weight="bold", ha="center")
+# Neutral row enclosures separate attention from MLP computation.
+for y, height, fill in ((1.40, .92, "white"), (.33, .98, "#F7F8FA")):
+    ax.add_patch(FancyBboxPatch((.06, y), 3.75, height,
+        boxstyle="round,pad=0,rounding_size=.035", edgecolor=LINE,
+        facecolor=fill, linewidth=.55, zorder=.5))
+TTOP = 2.16
+text(.22, 1.86, "Transformer", size=7.5, weight="bold", ha="center", rotation=90)
+text(.22, .82, "MLP", size=7.5, weight="bold", ha="center", rotation=90)
 for name, x0 in COLS.items():
     joint = name == "Joint"
     # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
@@ -116,48 +123,48 @@ for name, x0 in COLS.items():
 # MLP: show computation rather than token connectivity. Each column uses the
 # same MLP weights for every candidate. The joint difference excludes c_i from
 # the pooled mean and concatenates c_i and s as separate inputs as well.
-box(.925, 1.45, 1.50, .20, edge=SHARED, fill=SHARED_BG)
-text(1.675, 1.55, r"$\bar c_{-i}=\mathrm{mean}_{j\ne i}\,c_j$", size=6.5, ha="center")
-arrow(1.675, 1.44, 1.675, 1.25)
-for center, inputs in ((1.675, r"$[c_i, s, c_i-\bar c_{-i}]$"),
-                       (3.375, r"$[c_i, s]$")):
-    box(center - .65, 1.00, 1.30, .24, edge=SHARED)
-    text(center, 1.12, inputs, ha="center")
-    arrow(center, .99, center, .89)
-    box(center - .50, .70, 1.00, .18, edge=SHARED)
-    text(center, .79, r"MLP $\rightarrow z_i$", ha="center")
-ax.plot([1.675, 1.675, 3.375, 3.375], [.69, .66, .66, .69], color=SHARED, linewidth=.65)
-ax.plot([2.25, 2.25], [.66, .62], color=SHARED, linewidth=.65)
-box(1.45, 0.36, 1.60, 0.26, edge=HEAD)
-text(2.25, 0.49, r"$i^*=\arg\max_i z_i$", color=HEAD, ha="center")
+box(.535, 1.05, 1.50, .18, edge=SHARED, fill=SHARED_BG)
+text(1.285, 1.14, r"$\bar c_{-i}=\mathrm{mean}_{j\ne i}\,c_j$", size=6.5, ha="center")
+arrow(1.285, 1.04, 1.285, .94)
+for center, inputs in ((1.285, r"$[c_i, s, c_i-\bar c_{-i}]$"),
+                       (2.875, r"$[c_i, s]$")):
+    box(center - .65, .73, 1.30, .20, edge=SHARED)
+    text(center, .83, inputs, ha="center")
+    arrow(center, .72, center, .59)
+    box(center - .50, .40, 1.00, .18, edge=SHARED)
+    text(center, .49, r"MLP $\rightarrow z_i$", ha="center")
+ax.plot([1.285, 1.285, 2.875, 2.875], [.39, .32, .32, .39], color=SHARED, linewidth=.65)
+ax.plot([2.02, 2.02], [.32, .24], color=SHARED, linewidth=.65)
+box(1.27, .02, 1.50, .22, edge=HEAD)
+text(2.02, .13, r"$i^*=\arg\max_i z_i$", color=HEAD, ha="center")
 
 # --- right: ADM-4B decoder ---------------------------------------------------------------------------------------
-ax.plot([4.30, 4.30], [0.36, 3.18], color=LINE, linewidth=0.6)
-text(5.68, 3.08, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
-DCELL, DX, DTOP = 0.19, 5.02, 2.48
+ax.plot([3.96, 3.96], [.02, 2.79], color=LINE, linewidth=.6)
+text(5.105, 2.72, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
+DCELL, DX, DTOP = .17, 4.51, 2.16
 # Label each candidate-text block by its proposed action. The decoder receives
 # full candidate reasoning/action text, never the head's projected c_i vectors.
 TOKENS = [r"$p$"] + [rf"$a_t^{{{i}}}$" for i in range(1, K + 1)] + [r"$y$"]
 matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL)
 mid = DX + len(TOKENS) * DCELL / 2
-arrow(mid, DTOP - len(TOKENS) * DCELL - 0.04, mid, 0.66, color=DECODER)
-box(mid - 0.80, 0.36, 1.60, 0.26, edge=DECODER)
-text(mid, 0.49, r"$y\rightarrow i^*$", color=DECODER, ha="center")
+arrow(mid, DTOP - len(TOKENS) * DCELL - .04, mid, .25, color=DECODER)
+box(mid - .70, .02, 1.40, .22, edge=DECODER)
+text(mid, .13, r"$y\rightarrow i^*$", color=DECODER, ha="center")
 
 # Both alternatives execute one of the actor's original candidate actions.
-arrow(2.25, 0.35, 3.15, -0.005, color=HEAD)
-arrow(mid, 0.35, 4.15, -0.005, color=DECODER)
-box(2.65, -0.28, 2.00, 0.26, edge=SHARED, fill=SHARED_BG)
-text(3.65, -0.15, r"Execute $a_t^{i^*}$", ha="center")
+arrow(2.02, .01, 3.02, -.10, color=HEAD)
+arrow(mid, .01, 3.82, -.10, color=DECODER)
+box(2.62, -.33, 1.60, .22, edge=SHARED, fill=SHARED_BG)
+text(3.42, -.22, r"Execute $a_t^{i^*}$", ha="center")
 
 # Right-aligned legend; cells encode connectivity, not values.
-legend_right = 6.95
+legend_right = 6.20
 renderer = fig.canvas.get_renderer()
 for label, fill in reversed((("Allowed", ALLOWED_FILL), ("Masked", MASKED_FILL))):
     width = renderer.get_text_width_height_descent(label, FontProperties(size=7), ismath=False)[0] / fig.dpi
     marker_x = legend_right - width - 0.08
-    ax.add_patch(Rectangle((marker_x - 0.03, -0.37), 0.06, 0.06, facecolor=fill, edgecolor=LINE, linewidth=0.4))
-    text(legend_right, -0.34, label, color=MUTED, ha="right")
+    ax.add_patch(Rectangle((marker_x - 0.03, -.38), .06, .06, facecolor=fill, edgecolor=LINE, linewidth=.4))
+    text(legend_right, -.35, label, color=MUTED, ha="right")
     legend_right = marker_x - 0.18
 
 fig.canvas.draw()
