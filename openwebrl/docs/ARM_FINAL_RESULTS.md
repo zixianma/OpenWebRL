@@ -1217,44 +1217,44 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 #### Recipe 3 decoder on US-residential stealth browsers (November 9)
 
-**Stealth browsers raise success on the same tasks by +12.1 [+8.5, +15.7] pp mean overall for SFT 4B and +11.6 [+7.5, +15.6] with the GPT-5.5 H = 4 4B LoRA, all of it on Online-Mind2Web (about +20 pp valid-only) and WebVoyager (about +15); DeepShop does not gain (−2 to −5, intervals cross 0). The decoder's gain over one SFT sample is unchanged: +8.3 [+3.6, +12.9] pp under stealth versus +8.9 [+6.2, +11.6] locally on the same tasks (difference −0.6 [−5.7, +4.5]). Partial coverage: one stealth run per condition, stopped when Browser Use credits ran out; 1,381 of 2,090 episodes.** Same actor, decoder, N = 5, T 1.0 / top-p 0.9, 30 steps and judges as the local [Recipe 3](#final-selection-recipe3) evaluations (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o); only the browser changes. Both stealth conditions ran in one window (November 9, 00:04–01:36 PST).
+**Stealth browsers raise success by +13.7 [+10.3, +17.1] pp mean overall for SFT 4B and +13.3 [+10.1, +16.4] with the GPT-5.5 H = 4 4B LoRA, all of it on Online-Mind2Web (about +20 pp valid-only) and WebVoyager (about +18); DeepShop does not gain (−2 to −4, intervals cross 0). The decoder's gain over one SFT sample is unchanged: +7.2 [+3.5, +10.9] pp under stealth versus +7.6 [+5.4, +9.7] locally on the same tasks (difference −0.4 [−4.5, +3.6]).** One stealth run per condition on all 1,045 tasks. Same actor, decoder, N = 5, T 1.0 / top-p 0.9, 30 steps and judges as the local [Recipe 3](#final-selection-recipe3) evaluations (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o); only the browser changes. Both stealth conditions ran in the same windows (November 9, 00:04–01:36 and 09:40–11:22 PST; Browser Use credits ran out in between).
 
-**Stealth − local, same tasks.** Each condition on every task it finished under stealth; local runs pooled.
+**Stealth − local, same tasks.** Each condition on all tasks; local runs pooled.
 
 | Condition | Benchmark | Tasks | Local runs | Local valid | Local successes | Stealth valid | Stealth successes | Local | Stealth | Stealth − local, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B alone | Online-Mind2Web | 266 | 2 | 468 | 144 | 264 | 134 | 30.8% | 50.8% | +20.0 [+13.9, +26.3] |
-| | WebVoyager | 413 | 3 | 1,221 | 557 | 409 | 248 | 45.6% | 60.6% | +15.0 [+10.0, +20.1] |
-| | DeepShop | 150 | 3 | 447 | 202 | 149 | 64 | 45.2% | 43.0% | −2.2 [−9.7, +5.2] |
-| | **Mean overall** | | | | | | | 39.0% | 51.0% | **+12.1 [+8.5, +15.7]** |
-| | Mean valid-only | | | | | | | 40.5% | 51.4% | +10.9 [+7.2, +14.6] |
-| + GPT-5.5 H = 4 4B LoRA | Online-Mind2Web | 154 | 3 | 399 | 151 | 150 | 83 | 37.8% | 55.3% | +17.5 [+9.8, +25.4] |
-| | WebVoyager | 276 | 3 | 757 | 450 | 269 | 198 | 59.4% | 73.6% | +14.2 [+7.9, +20.5] |
-| | DeepShop | 122 | 3 | 361 | 188 | 122 | 58 | 52.1% | 47.5% | −4.5 [−11.3, +2.1] |
-| | **Mean overall** | | | | | | | 46.1% | 57.7% | **+11.6 [+7.5, +15.6]** |
-| | Mean valid-only | | | | | | | 49.8% | 58.8% | +9.0 [+4.9, +13.1] |
+| SFT 4B alone | Online-Mind2Web | 300 | 2 | 531 | 161 | 298 | 153 | 30.3% | 51.3% | +21.0 [+15.3, +26.7] |
+| | WebVoyager | 595 | 3 | 1,744 | 780 | 591 | 374 | 44.7% | 63.3% | +18.6 [+14.2, +22.9] |
+| | DeepShop | 150 | 3 | 447 | 202 | 149 | 64 | 45.2% | 43.0% | −2.2 [−10.0, +5.4] |
+| | **Mean overall** | | | | | | | 38.5% | 52.2% | **+13.7 [+10.3, +17.1]** |
+| | Mean valid-only | | | | | | | 40.1% | 52.5% | +12.4 [+9.0, +16.0] |
+| + GPT-5.5 H = 4 4B LoRA | Online-Mind2Web | 300 | 3 | 779 | 312 | 291 | 170 | 40.1% | 58.4% | +18.4 [+12.6, +24.1] |
+| | WebVoyager | 595 | 3 | 1,619 | 919 | 585 | 433 | 56.8% | 74.0% | +17.3 [+13.0, +21.5] |
+| | DeepShop | 150 | 3 | 444 | 234 | 150 | 73 | 52.7% | 48.7% | −4.0 [−10.4, +2.0] |
+| | **Mean overall** | | | | | | | 46.1% | 59.4% | **+13.3 [+10.1, +16.4]** |
+| | Mean valid-only | | | | | | | 49.8% | 60.4% | +10.5 [+7.4, +13.6] |
 
-*Benchmark rows are valid-only success (successes / valid episodes); differences on them are valid-only. Mean overall is the equal-weight 3-benchmark mean of overall success (invalid episodes count as failures). Local references: SFT Online-Mind2Web November 8 (2 runs), SFT WebVoyager and DeepShop November 6 (3 runs), decoder November 9, 03:30–07:00 (3 runs). The SFT comparison is therefore cross-day. Its gaps of 15–20 pp are far above the SFT references' day-to-day drift (−0.1 [−2.2, +1.9] pp mean overall, November 3 vs 6). Several local Online-Mind2Web failures are sites that never load in the local browser (e.g. bestbuy.com timing out at reset), which the stealth browser completes. DeepShop (amazon.com) loads locally, so stealth does not help there.*
+*Benchmark rows are valid-only success (successes / valid episodes); differences on them are valid-only. Mean overall is the equal-weight 3-benchmark mean of overall success (invalid episodes count as failures). Local references: SFT Online-Mind2Web November 8 (2 runs), SFT WebVoyager and DeepShop November 6 (3 runs), decoder November 9, 03:30–07:00 (3 runs). The SFT comparison is therefore cross-day; its 19–21 pp gaps are far above the SFT references' day-to-day drift (−0.1 [−2.2, +1.9] pp mean overall, November 3 vs 6). Several local Online-Mind2Web failures are sites that never load in the local browser (e.g. bestbuy.com timing out at reset), which the stealth browser completes. DeepShop (amazon.com) loads locally, so stealth does not help there.*
 
-**Selector gain, local vs stealth.** Decoder − SFT on the tasks finished by all four cells (both conditions, both browsers).
+**Selector gain, local vs stealth.** Decoder − SFT, all tasks.
 
 | Benchmark | Tasks | Gain local, pp [95% CI] | Gain stealth, pp [95% CI] | Stealth − local, pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: |
-| Online-Mind2Web | 154 | +10.0 [+4.8, +15.4] | +6.6 [−1.2, +14.4] | −3.4 [−12.3, +5.8] |
-| WebVoyager | 276 | +15.8 [+11.9, +19.6] | +14.3 [+7.8, +20.9] | −1.5 [−8.8, +5.9] |
-| DeepShop | 122 | +7.7 [+2.5, +13.3] | +6.2 [−3.5, +16.1] | −1.5 [−12.2, +8.9] |
-| **Mean overall** | | **+8.9 [+6.2, +11.6]** | **+8.3 [+3.6, +12.9]** | **−0.6 [−5.7, +4.5]** |
-| Mean valid-only | | +11.2 [+8.3, +14.0] | +9.0 [+4.4, +13.7] | −2.1 [−7.2, +3.1] |
+| Online-Mind2Web | 300 | +9.7 [+6.1, +13.6] | +7.1 [+1.4, +12.8] | −2.7 [−9.1, +3.6] |
+| WebVoyager | 595 | +12.0 [+9.4, +14.7] | +10.7 [+6.6, +14.8] | −1.3 [−6.2, +3.4] |
+| DeepShop | 150 | +7.5 [+2.5, +12.5] | +5.7 [−3.0, +14.7] | −1.8 [−11.5, +7.8] |
+| **Mean overall** | | **+7.6 [+5.4, +9.7]** | **+7.2 [+3.5, +10.9]** | **−0.4 [−4.5, +3.6]** |
+| Mean valid-only | | +9.8 [+7.5, +12.0] | +7.8 [+4.2, +11.6] | −1.9 [−6.1, +2.2] |
 
-*Benchmark rows are valid-only gains. Stealth rates on these tasks: SFT 48.7 / 59.3 / 41.3% valid-only (Online-Mind2Web / WebVoyager / DeepShop; 154 / 273 / 121 valid, 75 / 162 / 50 successes), decoder 55.3 / 73.6 / 47.5% (150 / 269 / 122 valid, 83 / 198 / 58 successes); mean overall 49.5% vs 57.7%. The tasks are the decoder's finished ones, the earliest in the shared task order, so absolute rates may not hold for the full benchmarks. All intervals: paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over a cell's runs); one stealth run, so they exclude stealth run-to-run variance. All 1,381 stealth episodes were judged; none was refused.*
+*Benchmark rows are valid-only gains. Stealth rates: SFT 51.3 / 63.3 / 43.0% valid-only (Online-Mind2Web / WebVoyager / DeepShop; 298 / 591 / 149 valid, 153 / 374 / 64 successes), decoder 58.4 / 74.0 / 48.7% (291 / 585 / 150 valid, 170 / 433 / 73 successes); mean overall 52.2% vs 59.4%. All intervals: paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over a cell's runs); one stealth run, so they exclude stealth run-to-run variance. All 2,090 stealth episodes were judged; none was refused.*
 
 - **Setup.** Native `browser-use` mode (`openwebrl/env/browser_use_env.py`), through a wrapper that changes only the browser.
   - Browser Use cloud browsers with stealth, a US residential proxy (`proxy_country_code: us`) and CAPTCHA solving on.
   - `allow_resizing` on, so the viewport can be pinned to 1280 × 1000 at DPR 1 over CDP; the remote compositor otherwise renders at a random scale. Every screenshot is Lanczos-downscaled to 1280 × 1000.
   - Rollouts ran with judging deferred and were judged afterwards by the native judges.
-  - Cost: 6 jobs, 1 H200 each, 8.1 H200-hours (urgent QoS, billed 2×), and about $140 of Browser Use credit (≈ $0.10 per episode).
-- **Coverage.** SFT finished 266 / 300, 413 / 595 and 150 / 150 tasks (Online-Mind2Web / WebVoyager / DeepShop); the decoder finished 154, 276 and 122. The remaining 709 episodes need about $75–80 of credit. Resubmitting the same launch scripts resumes from the saved records.
-- Evidence: [rates, coverage, stealth − local and gain comparisons](arm_results/rl_integration/selection-recipe3-stealth-20261109.json) · [script](arm_results/rl_integration/selection-recipe3-stealth-20261109.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/stealth/` (wrapper `xbench_stealth.py`, viewport and credit guard `viewport.py`, `submit.sh`, plans and records `run1/<benchmark>/<condition>/`, job log `jobs.txt`).
+- **Cost.** 11 jobs (6 plus 5 resumes), 1 H200 each, 12.0 H200-hours (urgent QoS, billed 2×), and about $210 of Browser Use credit (≈ $0.10 per episode). About 99% of that credit is residential-proxy traffic ($5 per GB, about 20 MB per episode); browser time is about 1%.
+- **Cheaper setting (pilot, SFT 4B, 119 Online-Mind2Web tasks).** Without the residential proxy (stealth fingerprint and CAPTCHA solving only), an episode costs $0.003. On 40 random tasks it succeeded on 57.5%, against 35.0% with the proxy above and 36.2% locally. On the 79 tasks selected because the proxy run succeeded and the local runs failed, it succeeded on 62.0% (local 10.8%). Keeping the proxy but blocking video and ad/tracker hosts cut the cost to $0.041 per episode with similar success (47.5% / 63.3%). The pilot is small and one run, but it gives no sign that the proxy itself is needed. Runtime: `stealth/pilot-cost/` (wrapper `xbench_pilot.py`, task list `parent/`, plans and records `{noproxy,block}/`).
+- Evidence: [rates, stealth − local and gain comparisons](arm_results/rl_integration/selection-recipe3-stealth-20261109.json) · [script](arm_results/rl_integration/selection-recipe3-stealth-20261109.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/stealth/` (wrapper `xbench_stealth.py`, viewport and credit guard `viewport.py`, `submit.sh`, plans and records `run1/<benchmark>/<condition>/`, job log `jobs.txt`).
 
 <a id="final-selection-head-ablations-20261021"></a>
 

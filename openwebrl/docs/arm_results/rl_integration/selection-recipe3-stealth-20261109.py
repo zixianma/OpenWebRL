@@ -1,7 +1,7 @@
 """SFT 4B vs SFT 4B + Recipe 3 GPT-5.5 K=3 decoder on Browser Use stealth browsers (US residential proxy), November 8-9.
 
-One run per condition; the run stopped when Browser Use credits ran out, so the paired comparison uses each benchmark's
-tasks finished by both conditions. Also compares with local-browser runs on the same tasks: stealth - local per condition, and the selector gain
+One run per condition on all tasks (rolled out November 9 in two windows; credits ran out in between and the same plans
+resumed). Paired comparisons use each benchmark's tasks finished by both conditions (all of them at full coverage). Also compares with local-browser runs on the same tasks: stealth - local per condition, and the selector gain
 (decoder - SFT) local vs stealth. Local SFT references are from other days (Nov 6 / Nov 8); the local decoder ran Nov 9.
 Refuses records whose judge_text is still DEFERRED or a dead-key retry message. Writes the adjacent JSON.
 """
