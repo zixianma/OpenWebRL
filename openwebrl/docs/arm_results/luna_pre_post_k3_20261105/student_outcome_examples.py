@@ -151,7 +151,7 @@ def main():
                     continue
                 a = es[t]["candidates"][es[t]["selected_index"]]["action"] if t in es else ""
                 p = fit(mark(p, a, NEXT, 10), tw); x = 24 + k * (tw + gap)
-                canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=C["FUTURE_STATE_BORDER"], width=2)
+                canvas.paste(p, (x, y)); d.rectangle([x, y, x + tw, y + p.size[1]], outline=C["STATE_BORDER"], width=2)
                 cap = textwrap.wrap(f"then: {say(a)}" if a else "(episode ended)", 30)[:3]
                 for q, ln in enumerate(cap):
                     d.text((x, y + p.size[1] + 10 + 40 * q), ln, fill=INK, font=F(30))

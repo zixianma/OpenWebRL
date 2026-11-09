@@ -1,7 +1,7 @@
 {
   "schema": "paper-plot-palette-roles-v1",
   "status": "Shared paper palette: consistent semantic roles across method diagrams and result plots",
-  "base_color_count": 4,
+  "base_color_count": 7,
   "families": {
     "adm": {
       "color": "#9575EE",
@@ -9,14 +9,14 @@
     },
     "lookahead": {
       "color": "#ED8B74",
-      "meaning": "Future rollout observations and teacher/evidence paths use salmon. Action tokens retain purple, including inside teacher inputs."
+      "meaning": "Teacher evidence horizon, distinct from the ADM method identity."
     },
     "oracle": {
-      "color": "#EDE374",
+      "color": "#EDB774",
       "meaning": "Outcome-based oracle and outcome-label supervision; train/eval use related shades."
     },
     "single_call": {
-      "color": "#7C7887",
+      "color": "#847D98",
       "meaning": "Single-call inference scaling; effort, tokens and browser-step budgets use shades/line styles."
     },
     "success": {
@@ -33,7 +33,7 @@
     },
     "state": {
       "color": "#74EDC3",
-      "meaning": "Current observation/context s_t only; green fill with dark text and darker green borders. Future rollout states are lookahead evidence and use salmon."
+      "meaning": "Observation/state tokens; green fill with dark text and darker green borders."
     },
     "action": {
       "color": "#9575EE",
@@ -148,26 +148,6 @@
     "ACTION_INK": {
       "family": "action",
       "tone": "dark"
-    },
-    "FUTURE_STATE": {
-      "family": "lookahead",
-      "tone": "base"
-    },
-    "FUTURE_STATE_BORDER": {
-      "family": "lookahead",
-      "tone": "base"
-    },
-    "FUTURE_STATE_INK": {
-      "family": "lookahead",
-      "tone": "dark"
-    },
-    "LOOKAHEAD_INK": {
-      "family": "lookahead",
-      "tone": "dark"
-    },
-    "ADM_INK": {
-      "family": "adm",
-      "tone": "dark"
     }
   },
   "neutral_roles": {
@@ -180,13 +160,13 @@
     "PRE_EXEC": "Pre-execution teacher labels; explicit semantic alias of an actor-baseline neutral",
     "ATTENTION_MASKED": "Masked attention connections; derive from the neutral background/border",
     "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role",
-    "STATE_INK": "Readable dark text on current-context cards; FUTURE_STATE_INK provides contrast on salmon future-evidence cards."
+    "STATE_INK": "Readable dark text on yellow observation/state cards."
   },
   "non_color_encodings": {
-    "teacher_vs_student": "Teachers use hollow circles colored by source. Students use light-purple fills and thick source outlines: yellow for Pre-exec and Oracle, salmon for Lookahead; marker shape distinguishes the two yellow sources.",
+    "teacher_vs_student": "Teachers use hollow circles colored by label source. Students use light-purple fills with thick warm label-source outlines: yellow Pre-exec, salmon-orange Lookahead, amber Oracle. Explicit H labels distinguish horizons.",
     "actor_model_family": "Marker shape in model comparisons; add a shape rather than a new color per model",
     "cached": "Shaded/hatched symbol, without dark outlines",
-    "configuration": "Use line style, marker shape, fill and light tints within the same semantic family; define each figure legend explicitly.",
+    "configuration": "Line style, fill and ordered tones within the same semantic family; define each figure legend explicitly",
     "raw_vs_smoothed": "Opacity and line weight",
     "frontier": "Neutral ring and dashed link",
     "lookahead_horizon": "Explicit H labels and x-axis positions distinguish horizons; all lookahead teachers/evidence share salmon."
@@ -231,7 +211,7 @@
       "adm": "#9575EE",
       "lookahead": "#ED8B74",
       "oracle": "#EDE374",
-      "single_call": "#7C7887",
+      "single_call": "#847D98",
       "success": "#74EDC3",
       "failure": "#7C7887",
       "attention": "#9575EE",
@@ -248,11 +228,11 @@
       "LOOKAHEAD_H3": "#ED8B74",
       "LOOKAHEAD_H4": "#ED8B74",
       "LOOKAHEAD_H6": "#ED8B74",
-      "ORACLE": "#EDE374",
-      "ORACLE_FILL": "#EDE374",
+      "ORACLE": "#EDB774",
+      "ORACLE_FILL": "#EDB774",
       "TRAIN": "#EDE374",
-      "EVAL": "#EDE374",
-      "SINGLE_CALL_MAIN": "#7C7887",
+      "EVAL": "#EDB774",
+      "SINGLE_CALL_MAIN": "#847D98",
       "BASELINE_DARK": "#7C7887",
       "BASELINE_LIGHT": "#B0AEB7",
       "PRE_EXEC": "#7C7887",
@@ -276,21 +256,16 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1",
-      "FUTURE_STATE": "#ED8B74",
-      "FUTURE_STATE_BORDER": "#ED8B74",
-      "FUTURE_STATE_INK": "#A15F4F",
-      "LOOKAHEAD_INK": "#A15F4F",
-      "ADM_INK": "#654FA1"
+      "ACTION_INK": "#654FA1"
     },
-    "derived_colors": "Use tints of the four accent colors for fills. Single-call controls and failures use neutral gray.",
+    "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
-      "Use one shared purple for ADM and all action tokens; lighter fills may separate boxes from selected actions. Use a darker purple only when model size is explicitly encoded.",
-      "Use salmon for lookahead, future states and teacher evidence. Use explicit H labels and line/marker styles to distinguish horizons or conditions.",
-      "Use green for current state/context and successful outcomes; labels and marker shapes keep these meanings clear.",
-      "Use one yellow for oracle, train and eval labels. Distinguish train/eval with position, labels, line style or fill tint, not a second warm hue.",
-      "Use neutral gray for single-call controls, failures, text and structural marks. Teacher/student fill and cached shading remain non-color encodings.",
-      "Across each figure, use only the semantic accent colors needed; gray is neutral structure, not an additional series color."
+      "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
+      "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple. Student fills keep purple, with thick warm outlines to identify label sources (yellow Pre-exec, salmon-orange Lookahead, amber Oracle).",
+      "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
+      "Keep failure marks hollow gray.",
+      "Teacher/student fill, actor-model shapes and cached shading remain independent of hue.",
+      "Primary purple identifies ADM, action tokens, scoring paths and allowed attention cells. Secondary salmon identifies teacher/lookahead evidence. Tertiary green identifies state/context cards. Yellow and its amber blend identify outcome-label train/eval accents. Green success dots and hollow gray failures remain explicitly labeled."
     ],
     "previews": [
       "assets/paper_plot_palette_preview.png",
@@ -304,12 +279,12 @@
         "color": "#EDE374"
       },
       "EVAL": {
-        "salmon_fraction": 0.0,
-        "color": "#EDE374"
+        "salmon_fraction": 0.5,
+        "color": "#EDB774"
       },
       "ORACLE": {
-        "salmon_fraction": 0.0,
-        "color": "#EDE374"
+        "salmon_fraction": 0.5,
+        "color": "#EDB774"
       }
     }
   },
@@ -326,12 +301,7 @@
     "STATE_BORDER": "#489379",
     "ACTION": "#9575EE",
     "ACTION_INK": "#654FA1",
-    "ATTENTION_ALLOWED": "#9575EE",
-    "FUTURE_STATE": "#ED8B74",
-    "FUTURE_STATE_BORDER": "#ED8B74",
-    "FUTURE_STATE_INK": "#A15F4F",
-    "LOOKAHEAD_INK": "#A15F4F",
-    "ADM_INK": "#654FA1"
+    "ATTENTION_ALLOWED": "#9575EE"
   },
   "trial": {
     "status": "Applied across all registered paper figures; frozen scientific inputs and estimates preserved",
@@ -345,11 +315,11 @@
       "LOOKAHEAD_H3": "#ED8B74",
       "LOOKAHEAD_H4": "#ED8B74",
       "LOOKAHEAD_H6": "#ED8B74",
-      "ORACLE": "#EDE374",
-      "ORACLE_FILL": "#EDE374",
+      "ORACLE": "#EDB774",
+      "ORACLE_FILL": "#EDB774",
       "TRAIN": "#EDE374",
-      "EVAL": "#EDE374",
-      "SINGLE_CALL_MAIN": "#7C7887",
+      "EVAL": "#EDB774",
+      "SINGLE_CALL_MAIN": "#847D98",
       "BASELINE_DARK": "#7C7887",
       "BASELINE_LIGHT": "#B0AEB7",
       "PRE_EXEC": "#7C7887",
@@ -373,12 +343,7 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1",
-      "FUTURE_STATE": "#ED8B74",
-      "FUTURE_STATE_BORDER": "#ED8B74",
-      "FUTURE_STATE_INK": "#A15F4F",
-      "LOOKAHEAD_INK": "#A15F4F",
-      "ADM_INK": "#654FA1"
+      "ACTION_INK": "#654FA1"
     },
     "renderers": [
       "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
@@ -458,12 +423,11 @@
     }
   },
   "diagram_roles": {
-    "state": "Current observation/context s_t: green cards. Future rollout states s_(t+h): salmon evidence cards, using FUTURE_STATE roles.",
+    "state": "Green observation/state cards with dark text and darker green borders.",
     "action": "Purple candidate/selected-action cards and connectors.",
-    "lookahead": "Salmon future-state/evidence enclosure and teacher cues. Candidate/continuation action tokens retain purple, including teacher-input formulas.",
+    "lookahead": "Secondary salmon teacher/evidence cues; state/action cards retain green/purple identity.",
     "adm": "Light purple default/22M; dark purple only for 4B selector size where applicable.",
     "status": "Filled green dots mean success; hollow gray dots mean failure. State/action cards identify content, not outcomes.",
     "attention": "Primary purple cells encode allowed attention; neutral masks."
-  },
-  "student_label_outline": "Student ADM-22M uses light-purple fills and thick source outlines: yellow for Pre-exec and Oracle, salmon for Lookahead. Marker shape distinguishes the yellow sources."
+  }
 }

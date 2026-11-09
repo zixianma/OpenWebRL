@@ -4,8 +4,8 @@
   "source_sha256": "bcd713b2bb925f308efca3810991f813d3420a6a58c53c2e56efecfc25765ef7",
   "validation_source": "rl_results/rl_eval_learning_curves.json",
   "validation_source_sha256": "527156c4faf3894bdf2c948a83f6b118deacac0f9c51cc99795581fde79c56cd",
-  "palette_sha256": "3dcf301ad42d999a2e0851eaa189450aaeb28452857b242802d3c41312ecb7bc",
-  "palette_colors_sha256": "67da004083e90c188b04cdc733a0f275619203888a31fff2aa759ebda70d33ff",
+  "palette_sha256": "465930b2a58137ac282e6958ad2e89c744f45027d520ee770cd3c803a2189d24",
+  "palette_colors_sha256": "b16f95485348f5a63959bb5592ad15c8fcbb1b0f332b710dd6b03ef468bee8a5",
   "renderer_sha256": "d2daac3855b02e51abc4005558fb9a10351e01bb169672a4946fa3735f4369c0",
   "methods": {
     "outcome48": [
@@ -1462,6 +1462,6 @@
   "output_sha256": {
     "png": "a7465b27b542fe16c972750afb92b5ad903e95b33f73a1666243d4b5e1e07c72",
     "pdf": "cc997f492b219ae728d094d415b3ccf953cda06eb587f09f4be71f6a16b3383a",
-    "svg": "9a7662f06ae64305d8b692430b01994f18255dcbd655731f571bfd0b9a015873"
+    "svg": "68d0a51a08c0633ac58c4e9d114e7a27637b4b033682d7aee1dc76787276361d"
   }
 }

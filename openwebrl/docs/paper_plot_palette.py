@@ -1,7 +1,6 @@
 """Named colors shared by paper diagrams and quantitative result plots.
 
-STATE is current context (green); FUTURE_STATE and lookahead evidence are salmon.
-ACTION and ADM are purple. Action tokens keep purple inside teacher evidence.
+STATE is green, ACTION is purple, ADM is purple and lookahead teachers are salmon.
 Neutral controls, model-size shades and source-label outlines retain explicit roles.
 Color changes never affect source measurements, intervals or data populations.
 """

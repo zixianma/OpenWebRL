@@ -92,7 +92,7 @@ def row(i, title, pick_lbl, maj_lbl, pick_q, maj_q, ep):
     canvas.paste(a, (30, y)); d.rectangle([30, y, 30 + sw, y + a.size[1]], outline=C["STATE_BORDER"], width=2)
     d.text((30, y + a.size[1] + 8), "Current screen (A = minority pick, B = most-proposed action)", fill=MUTED, font=F(26))
     bx = 30 + sw + 30
-    canvas.paste(b, (bx, y)); d.rectangle([bx, y, bx + 520, y + b.size[1]], outline=C["FUTURE_STATE_BORDER"], width=2)
+    canvas.paste(b, (bx, y)); d.rectangle([bx, y, bx + 520, y + b.size[1]], outline=C["STATE_BORDER"], width=2)
     for k, ln in enumerate(textwrap.wrap("Next screen after A, from one live episode", 26)):
         d.text((bx, y + b.size[1] + 8 + 34 * k), ln, fill=MUTED, font=F(26))
     tx = bx + 520 + 40; tw = W - tx - 30; yy = y

@@ -245,7 +245,7 @@ def main():
         'input_sha256': sha(args.aggregate), 'plot_script_sha256': sha(__file__),
         'qualification_sha256': sha(args.qualification) if args.qualification else None,
         'private_preview': args.preview,
-        'style': 'Neutral gray single proposals, purple candidates plus selection; Opus squares, Sonnet circles; open purple N3, filled purple N5; outside legends; logarithmic cost/latency; no frontier or point labels',
+        'style': 'Neutral mauve single proposals, purple candidates plus selection; Opus squares, Sonnet circles; open purple N3, filled purple N5; outside legends; logarithmic cost/latency; no frontier or point labels',
         'matplotlib_version': matplotlib.__version__,
         'plot_order': ['model cost', 'selected browser batches', 'native latency'],
     }, indent=2) + '\n')
