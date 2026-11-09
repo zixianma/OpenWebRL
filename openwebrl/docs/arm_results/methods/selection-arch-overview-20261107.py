@@ -74,31 +74,24 @@ STATE = [r"$s$"]
 CANDS = [rf"$c_{{{i}}}$" for i in range(1, K + 1)]
 
 
-def axes_labels(x0, top, n_rows, n_cols, cell, row_name, col_name, col_offset=.20):
-    text(x0 + n_cols * cell / 2, top + col_offset, col_name, color=MUTED, ha="center")
-    text(x0 - 0.30, top - n_rows * cell / 2, row_name, color=MUTED, ha="center", rotation=90)
-
-
 # One actor proposes actions for either selector. Head tokens s/c_i are projected
 # actor features, whereas the separate decoder reads prompt/action content.
 box(0.10, 3.77, 1.10, 0.34, edge=SHARED, fill=SHARED_BG)
-text(0.65, 3.94, "Context\n(task · history · image)", size=6.5,
-     color=SHARED, ha="center", linespacing=1.05)
+text(0.65, 3.94, "Context", color=SHARED, ha="center")
 arrow(1.21, 3.94, 1.49, 3.94)
 box(1.50, 3.77, 1.50, 0.34, edge=INK, fill=SHARED_BG, lw=0.95)
 text(2.25, 3.94, "Frozen actor", size=8, weight="bold", ha="center")
 arrow(3.01, 3.94, 4.51, 3.94)
-text(3.76, 4.055, "Sample", size=6.5, color=MUTED, ha="center")
 box(4.52, 3.77, 2.33, 0.34, edge=SHARED, fill=SHARED_BG)
-text(5.685, 3.94, r"$K=5$ candidates: reasoning + action $a_t^i$", color=SHARED, ha="center")
+text(5.685, 3.94, r"$K=5$ candidates: reasoning + $a_t^i$", color=SHARED, ha="center")
 arrow(5.685, 3.76, 5.685, 3.59, color=DECODER)
-text(5.685, 3.47, r"Selection prompt $p$ + candidate text", color=DECODER, ha="center")
+text(5.685, 3.47, r"Prompt $p$ + candidates", color=DECODER, ha="center")
 arrow(5.685, 3.35, 5.685, 3.20, color=DECODER)
 
 # --- left: ADM head on frozen actor features ---------------------------------------------------------------------
 arrow(2.25, 3.76, 2.25, 3.71)
 box(0.55, 3.22, 3.55, 0.48, edge=SHARED, fill=SHARED_BG)
-text(2.25, 3.60, "a)  ADM head · projected actor features", size=8,
+text(2.25, 3.60, "a)  ADM head", size=8,
      weight="bold", ha="center")
 text(1.35, 3.37, r"$s$: context feature" + "\nlast prompt token", size=6.5,
      ha="center", linespacing=1.05)
@@ -119,46 +112,43 @@ for name, x0 in COLS.items():
     # transformer: attention over [s, c_1..c_K]; independent masks candidate-candidate links
     matrix(x0, TTOP, STATE + CANDS, STATE + CANDS, CELL,
            lambda r, c, j=joint: ALLOWED_FILL if j or r == c or (r > 0 and c == 0) else MASKED_FILL)
-    axes_labels(x0, TTOP, K + 1, K + 1, CELL, "Queries", "Keys")
 
 # MLP: show computation rather than token connectivity. Each column uses the
 # same MLP weights for every candidate. The joint difference excludes c_i from
 # the pooled mean and concatenates c_i and s as separate inputs as well.
 box(.925, 1.45, 1.50, .20, edge=SHARED, fill=SHARED_BG)
-text(1.675, 1.55, r"$\bar c_{-i}=\mathrm{Mean}_{j\ne i}(c_j)$", size=6.5, ha="center")
-arrow(1.675, 1.44, 1.675, 1.31)
+text(1.675, 1.55, r"$\bar c_{-i}=\mathrm{mean}_{j\ne i}\,c_j$", size=6.5, ha="center")
+arrow(1.675, 1.44, 1.675, 1.25)
 for center, inputs in ((1.675, r"$[c_i, s, c_i-\bar c_{-i}]$"),
                        (3.375, r"$[c_i, s]$")):
-    box(center - .65, .98, 1.30, .32, edge=SHARED)
-    text(center, 1.14, "Concat\n" + inputs, size=6.5, ha="center", linespacing=1.1)
-    arrow(center, .97, center, .89)
+    box(center - .65, 1.00, 1.30, .24, edge=SHARED)
+    text(center, 1.12, inputs, ha="center")
+    arrow(center, .99, center, .89)
     box(center - .50, .70, 1.00, .18, edge=SHARED)
-    text(center, .79, r"Shared MLP $\rightarrow z_i$", size=6.5, ha="center")
+    text(center, .79, r"MLP $\rightarrow z_i$", ha="center")
 ax.plot([1.675, 1.675, 3.375, 3.375], [.69, .66, .66, .69], color=SHARED, linewidth=.65)
 ax.plot([2.25, 2.25], [.66, .62], color=SHARED, linewidth=.65)
 box(1.45, 0.36, 1.60, 0.26, edge=HEAD)
-text(2.25, 0.49, r"$z_i \rightarrow i^*=\arg\max_i z_i$", color=HEAD, ha="center")
+text(2.25, 0.49, r"$i^*=\arg\max_i z_i$", color=HEAD, ha="center")
 
 # --- right: ADM-4B decoder ---------------------------------------------------------------------------------------
 ax.plot([4.30, 4.30], [0.36, 3.18], color=LINE, linewidth=0.6)
 text(5.68, 3.08, "b)  ADM-4B decoder", size=8.5, color=DECODER, weight="bold", ha="center")
-text(5.68, 2.92, "separate 4B (LoRA)", size=7.5, color=DECODER, weight="bold", ha="center")
 DCELL, DX, DTOP = 0.19, 5.02, 2.48
 # Label each candidate-text block by its proposed action. The decoder receives
 # full candidate reasoning/action text, never the head's projected c_i vectors.
 TOKENS = [r"$p$"] + [rf"$a_t^{{{i}}}$" for i in range(1, K + 1)] + [r"$y$"]
 matrix(DX, DTOP, TOKENS, TOKENS, DCELL, lambda r, c: ALLOWED_FILL if c <= r else MASKED_FILL)
-axes_labels(DX, DTOP, len(TOKENS), len(TOKENS), DCELL, "Queries", "Keys", col_offset=.27)
 mid = DX + len(TOKENS) * DCELL / 2
 arrow(mid, DTOP - len(TOKENS) * DCELL - 0.04, mid, 0.66, color=DECODER)
 box(mid - 0.80, 0.36, 1.60, 0.26, edge=DECODER)
-text(mid, 0.49, r'$y \rightarrow$ {"selection": $i^*$}', color=DECODER, ha="center")
+text(mid, 0.49, r"$y\rightarrow i^*$", color=DECODER, ha="center")
 
 # Both alternatives execute one of the actor's original candidate actions.
 arrow(2.25, 0.35, 3.15, -0.005, color=HEAD)
 arrow(mid, 0.35, 4.15, -0.005, color=DECODER)
 box(2.65, -0.28, 2.00, 0.26, edge=SHARED, fill=SHARED_BG)
-text(3.65, -0.15, r"Execute actor action $a_t^{i^*}$", ha="center")
+text(3.65, -0.15, r"Execute $a_t^{i^*}$", ha="center")
 
 # Right-aligned legend; cells encode connectivity, not values.
 legend_right = 6.95
