@@ -11,7 +11,7 @@
     "AlbertSans-SemiBoldItalic.ttf": "2dcb1616712e5bf1563cc45085edea373db1529eaf6f0b3fc319f6bfd64dbfdb",
     "AlbertSans[wght].ttf": "8fe5d4cf5822d7096d4d17ad781c90f97c745ac13a22be619db74966fba45fda"
   },
-  "updated_figure_count": 70,
+  "updated_figure_count": 71,
   "output_sha256": {
     "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.pdf": "3a74ef88452eb51a8ee58fe80108730b60722ec1f8185cd99ffb873c6f2b200a",
     "openwebrl/docs/arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.png": "eb672813f371c2462a3627f388b2bf4d79cff5da48af36f6f8a4fc80c8caf0c8",
@@ -192,7 +192,10 @@
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.svg": "06c2c9b86d85565b2e0a632d9fd7f66e60ded160c4c137af0729b3d7e81983d1",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.png": "b62320aff6fc6439eded85aa8e299f3c2c0e0f546af1a46219c4d7d2097cad42",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.pdf": "2b3ea54e31dbd130dfdc2fa2c3547995622b74ebc4dc07e2cf87c2465a000885",
-    "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.svg": "7ba7b33b3850e941156ad5e01719bb0fbe288f80174dd6899968eead56ffe68c"
+    "openwebrl/docs/arm_results/methods/selection-arch-overview-20261107.svg": "7ba7b33b3850e941156ad5e01719bb0fbe288f80174dd6899968eead56ffe68c",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.png": "622cb4e410af6d2d0a6c5d758fd0b126d76e0f078b89c493b1ea821f8daf2f35",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.pdf": "86c439e40343d1aaafe8bcec9f2fd11b8052ba028f776d0f48f9dc853c290042",
+    "openwebrl/docs/arm_results/rl_final_20261108/rl_learning_compact.svg": "ba306f85b302c8e5e779e319cdc87afc80326bcf0c8719b012547b4eb45ce802"
   },
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied."

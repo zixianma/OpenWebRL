@@ -1646,7 +1646,7 @@ batch 256, 2 PPO epochs, LR 1e−6, GPT-4.1 training judge and 15 browser turns.
 | Additive | 48 | ≤ 8, separate loss, coef. N/48 | D = 5 | `A + b`; `b` on F | 100 | Does relaxing the gate matter? |
 | Mixed-only bonus | 48 | 0 | D ≥ 2 | `A + b` | 90 | Do failure groups matter? |
 | Mixed-only reweight | 48 | 0 | D ≥ 2 | `A × w` (λ = 0.5) | 90 | Bonus versus redistributing `A` |
-| All-failure | 48 − N | N, inside main batch | D = 5 | `A + b`; `b` on F | 100 | Replace versus add failure groups |
+| Failures in main batch | 48 − N | N, inside main batch | D = 5 | `A + b`; `b` on F | 100 | Replace versus add failure groups |
 | Gate B · 40M + 16F | 40 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
 | Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 70 (→ 90 Nov 9) | Larger ARM-only share |
 
@@ -1667,7 +1667,7 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 | Additive | 90 | 30.00 | 118 | 216 | 39.33 | 54.63 | 37.89 | — | 58.44 |
 | Mixed-only bonus | 113 | 37.67 | 122 | 233 | 40.67 | 52.36 | 38.33 | — | **59.00** |
 | Mixed-only reweight | 110 | 36.67 | 113 | 227 | 37.67 | 49.78 | 38.56 | — | 56.22 |
-| All-failure | 100 | 33.33 | 101 | 217 | 33.67 | 46.54 | 33.22 | — | — |
+| Failures in main batch | 100 | 33.33 | 101 | 217 | 33.67 | 46.54 | 33.22 | — | — |
 | Gate B · 40M + 16F | 108 | 36.00 | 103 | 227 | 34.33 | 45.37 | 34.89 | — | — |
 | Gate B · 48M + 16F | 99 | 33.00 | pending | pending | pending | pending | 33.00 (iter. 70 only) | — | — |
 
@@ -1688,6 +1688,21 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
   DeepShop show no ARM gain ([details](ARM_SUMMARY.md#arm-localbench90-summary-20261008)).
 - **Not established:** training-seed variability. Every number comes from one training run per method.
 
+<a id="final-rl-learning-compact"></a>
+
+### Compact learning curves and matched evaluation
+
+![Compact RL training and validation curves for both outcome-only controls, Outcome plus ADM, failures in the main batch and 40 mixed plus 16 failure groups; matched iteration-90 gains have paired task confidence intervals](arm_results/rl_final_20261108/rl_learning_compact.png)
+
+*(a) Binary success among valid collected training trajectories, before dynamic-sampling filtering and excluding the ADM bonus. Lines average the last five per-iteration valid-only rates, not pooled counts; dots mark every tenth iteration. (b) Unsmoothed overall success on all 300 Online-Mind2Web tasks; invalid episodes count as failures. Historical evaluation dates differ. Both the 48-group and 56-group outcome-only controls appear in both panels. (c) Matched October 25 evaluations of iteration-90 checkpoints, three repeats each: ADM gains +6.44 pp [+2.67, +10.22] over outcome-48 and +5.22 pp [+1.56, +8.89] over outcome-56. Whiskers are paired 95% task intervals, not training-seed uncertainty. Five selected recipes appear here; all-run views remain below.*
+
+**Failures in main batch** replaces mixed groups: $(48-N)$ mixed groups plus $N$ all-failure groups share one 48-group batch. Outcome + ADM keeps 48 mixed groups and adds failure groups through a separate loss. This comparison also changes the gate ($D=5$ versus $D\ge2$), so it does not isolate batch placement. `M` and `F` in 40M + 16F mean mixed and all-failure groups. Collected training success is policy-dependent, not a fixed-task held-out measure; the matched checkpoint comparison is the supported improvement.
+
+[PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
+
+<details>
+<summary>All runs: full training and validation curves</summary>
+
 ### Validation success across iterations
 
 ![Full-300 validation success every ten iterations: Gate B versus outcome-only, and each ablation against Gate B and outcome-only 56](arm_results/rl_final_20261108/validation_success.png)
@@ -1707,6 +1722,8 @@ not included. Valid-only rates remove infrastructure incidents: for example, at 
 iterations 21–24 and 76–77, 42–90% of episodes were invalid, against a usual 6%.
 Overall rates and invalid rates are in the data file. [PDF](arm_results/rl_final_20261108/training_success.pdf).
 
+</details>
+
 <details>
 <summary>Sources and reproduction</summary>
 
@@ -1718,6 +1735,6 @@ Overall rates and invalid rates are in the data file. [PDF](arm_results/rl_final
   outcome-only 48 continued at 30 turns, while Gate B and additive continued at 15.
 - **Training curves:** W&B `train/task_success_rate` and `train/task_invalid_rate` on
   `train/reward_iteration`, in project `openwebrl`. Where a resumed run logged an iteration twice, the last value is kept.
-- **Figures:** `python scripts/plot_arm_final_results.py` (matplotlib).
+- **Figures:** `python scripts/plot_arm_final_results.py` (matplotlib). Compact view: `python openwebrl/docs/arm_results/rl_final_20261108/plot_rl_learning_compact.py`. Both renderers use only the published aggregate; no API or browser calls.
 
 </details>
