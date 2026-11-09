@@ -1,10 +1,10 @@
-"""Compact RL curves and the independently matched checkpoint comparison.
+"""Compact RL curves and absolute matched-checkpoint success bars.
 
 Reads only the published aggregate. Original all-run figures stay unchanged.
 Training is a trailing-five mean of valid-only collected binary success rates;
 validation uses a trailing-two-checkpoint mean of overall success on 300 tasks,
 with raw checkpoint dots retained. Matched intervals are
-the published paired task intervals from repeated evaluations of one checkpoint,
+the published pointwise task-cluster intervals from repeated evaluations of one checkpoint,
 not uncertainty across training seeds. No training, browser or API calls.
 """
 import hashlib
@@ -24,6 +24,8 @@ import paper_plot_style  # noqa: E402,F401
 
 DATA_PATH = HERE / "arm_final_results_data.json"
 DATA = json.loads(DATA_PATH.read_text())
+ABSOLUTE_CI_PATH = HERE.parent / "rl_integration/behavior/rl-repetition-success-20261104.json"
+ABSOLUTE_CI = json.loads(ABSOLUTE_CI_PATH.read_text())
 RUNS = {r["key"]: r for r in DATA["runs"]}
 STEM = "rl_learning_compact"
 WINDOW = 5
@@ -105,26 +107,30 @@ def build():
     axes[1].set_ylabel("Overall success (%)", fontsize=8.5)
 
     matched = DATA["matched_iter90_local"]
-    paired = {row["comparison"]: row for row in matched["paired"]}
-    gains = []
-    for y, key in ((1, "outcome48"), (0, "outcome56")):
-        row = paired["Gate B − " + key]
-        gain, (lo, hi) = row["diff_pp"], row["ci"]
-        axes[2].barh(y, gain, left=0, height=.36, color=METHODS["gate_b"][1],
-                     alpha=.65, edgecolor="none", zorder=2)
-        axes[2].errorbar(gain, y, xerr=[[gain - lo], [hi - gain]],
-                         fmt="none", ecolor="#4B4566", elinewidth=1.1,
-                         capsize=2.4, capthick=.8, zorder=3)
-        axes[2].text(gain, y + .23, f"+{gain:.2f}", ha="center", va="bottom",
-                     fontsize=8, color=METHODS["gate_b"][1])
-        gains.append(dict(reference=key, difference_pp=gain, ci95_pp=[lo, hi],
-                          holm_p=row["holm_p"]))
-    axes[2].set_xlim(0, 11)
-    axes[2].set_xticks([0, 5, 10])
-    axes[2].set_ylim(-.5, 1.65)
-    axes[2].set_yticks([1, 0], ["vs. 48 groups", "vs. 56 groups"], fontsize=7.5)
-    axes[2].tick_params(axis="y", length=0, pad=4)
-    axes[2].set_xlabel("Gain (pp)", fontsize=8.5)
+    absolute = []
+    for x, key in enumerate(("outcome48", "outcome56", "gate_b")):
+        ci_key = "gate-b" if key == "gate_b" else key
+        row = ABSOLUTE_CI["methods"][ci_key]["overall_success"]
+        counts = matched["runs"][key]["successes"]
+        assert row["repeat_successes"] == counts
+        assert row["planned_episodes"] == 900
+        mean, (lo, hi) = row["percent"], row["ci95_percent"]
+        assert abs(mean - 100 * sum(counts) / 900) < 1e-10
+        color = METHODS[key][1]
+        axes[2].bar(x, mean, bottom=0, width=.62, color=color,
+                    alpha=.85, edgecolor="none", zorder=2)
+        axes[2].errorbar(x, mean, yerr=[[mean - lo], [hi - mean]],
+                         fmt="none", ecolor=MUTED, elinewidth=1,
+                         capsize=2.2, capthick=.8, zorder=3)
+        axes[2].text(x, hi + .8, f"{mean:.1f}", ha="center", va="bottom",
+                     fontsize=7.5, color=color)
+        absolute.append(dict(method=key, overall_percent=mean, ci95_percent=[lo, hi],
+                             repeat_successes=counts, planned_episodes=900))
+    axes[2].set_xlim(-.6, 2.6)
+    axes[2].set_xticks([0, 1, 2], ["48\ngroups", "56\ngroups", "ADM"], fontsize=7.5)
+    axes[2].set_ylim(0, 52)
+    axes[2].set_yticks([0, 25, 50])
+    axes[2].set_ylabel("Overall success (%)", fontsize=8.5)
     handles = [Line2D([], [], color=color, linestyle=ls,
                       linewidth=1.8 if key == "gate_b" else 1.2,
                       label=label) for key, (label, color, ls) in METHODS.items()]
@@ -145,11 +151,11 @@ def build():
         assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label
     assert not [(a, b) for i, (a, x) in enumerate(boxes)
                 for b, y in boxes[i + 1:] if x.overlaps(y)]
-    return fig, points, gains
+    return fig, points, absolute
 
 
 def main():
-    fig, points, gains = build()
+    fig, points, absolute = build()
     for ext in ("png", "pdf", "svg"):
         metadata = ({"Date": None} if ext == "svg" else
                     {"CreationDate": None, "ModDate": None} if ext == "pdf" else {})
@@ -157,7 +163,9 @@ def main():
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-compact-v2", source_sha256=sha(DATA_PATH),
+    report = dict(schema="rl-learning-compact-v3", source_sha256=sha(DATA_PATH),
+                  absolute_interval_source=str(ABSOLUTE_CI_PATH.relative_to(DOCS)),
+                  absolute_interval_source_sha256=sha(ABSOLUTE_CI_PATH),
                   renderer_sha256=sha(__file__), methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 smoothing="Trailing 5 recorded iterations, arithmetic mean of per-iteration valid-only rates; not pooled counts.",
@@ -167,9 +175,14 @@ def main():
                                   raw_overlay="Faint dots at every raw checkpoint; connected circles show smoothed values."),
                   matched=dict(date=DATA["matched_iter90_local"]["date"],
                                protocol=DATA["matched_iter90_local"]["protocol"],
-                               training_iteration=90, differences=gains,
-                               display="Horizontal gain bars from zero, with paired 95% confidence intervals.",
-                               uncertainty="Paired task intervals from evaluation repeats of one trained checkpoint, not training seeds."),
+                               training_iteration=90, absolute_success=absolute,
+                               differences=DATA["matched_iter90_local"]["paired"],
+                               display="Three vertical absolute overall-success bars from zero with pointwise 95% task-cluster intervals.",
+                               uncertainty=dict(method="Percentile bootstrap of 300 task clusters, preserving all three repeats and methods; recompute overall success with 900 planned episodes per method.",
+                                                tasks=300, repeats=3,
+                                                draws=ABSOLUTE_CI["uncertainty"]["draws"],
+                                                seed=ABSOLUTE_CI["uncertainty"]["seed"],
+                                                scope="Conditional on these fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty.")),
                   caveats=["Historical validation curves use mixed dates and method-specific valid subsets; overall rates use all 300 tasks.",
                            "Training trajectories are collected by each policy; valid-only collection success is not fixed-task held-out accuracy.",
                            "Failures in main batch is excluded from the compact curves and retained in the results table and all-run archive.",
