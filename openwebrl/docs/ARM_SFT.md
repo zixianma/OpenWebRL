@@ -19,8 +19,9 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 <a id="arm-sft-soft-mtp-20261030"></a>
 ## Soft-MTP for the OpenWebRL SFT actor — 2026-10-30
 
-**Matched NTP-only and Soft-MTP training jobs were submitted on 2026-11-07;
-judged evaluation is on hold.** The [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
+**Both matched SFT runs completed all 579 optimizer steps and passed final
+checkpoint reload; no task-success comparison has run.** The
+[Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
 gradient routing for an existing MTP architecture with a shared linear output
 head. Its math/code fine-tuning results **discard the MTP heads and use NTP
 only**. Training MTP during our multimodal SFT and keeping the heads for action
@@ -56,14 +57,30 @@ training path is in [`sft/qwen3vl_mtp.py`](../../sft/qwen3vl_mtp.py) and
 [`sft/train_soft_mtp_with_llamafactory.py`](../../sft/train_soft_mtp_with_llamafactory.py).
 Serving and exact speculative verification are not implemented.
 
-The exact training allocation was approved on 2026-11-07. Slurm jobs
-`430260` (NTP-only) and `430261` (Soft-MTP) were submitted for eight H200s,
-64 CPUs, 960 GiB and at most eight hours each, including their GPU gates.
-Both were pending for scheduler priority at first check; no training result is
-yet verified. The user then instructed us to **hold off from the judge**.
-No judged evaluation was submitted, its approval gate remains closed, and no
-judge API calls were made for this pilot. The paired evaluation protocol below
-is a prepared plan, not active work.
+### Matched training results — 2026-11-08
+
+Both jobs used account `vlm` with urgent QoS, eight H200s, 64 CPUs and 960 GiB
+each. Each included a one-step image-bearing gate, postprocessing, final
+checkpoint save and independent actor reload. The Soft-MTP sidecar also reloaded
+with nine tensors. Total scheduled use was **6.44 H200-hours** (48m18s across
+the two eight-GPU jobs), within the approved 128-H200-hour cap.
+
+| Arm | Slurm job | Optimizer steps | Epochs | Total job time | Trainer runtime | Final actor reload |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| NTP-only SFT | `430260` | 579 | 3 | 24m33s | 21m25s | Passed |
+| Soft-MTP SFT | `430261` | 579 | 3 | 23m45s | 21m37s | Passed; nine draft-head tensors also reloaded |
+
+The NTP training-objective loss was 0.485 and Soft-MTP's combined-objective loss
+was 4.013. These values **are not directly comparable** because Soft-MTP adds
+an auxiliary loss; no held-out likelihood or task-success result is available.
+The final checkpoints, trainer states, reload receipts and Slurm logs are under
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/`.
+Training W&B run IDs are `vywjx30e` (NTP) and `dssthz8l` (Soft-MTP).
+
+The user instructed us to **hold off from the judge**. No judged evaluation
+was submitted, its approval gate remains closed, and no judge API calls were
+made for this pilot. The paired evaluation protocol below is a prepared plan,
+not active work.
 
 The first controlled pilot trains **two fresh actors**, ordinary NTP-only SFT
 and Soft-MTP SFT, from the same base and 3,085 prepared records. Their YAML
