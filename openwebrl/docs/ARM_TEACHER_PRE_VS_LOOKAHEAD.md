@@ -194,6 +194,11 @@ H = 4 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post
 
 *Proposals: the share of the five proposals in that option on the same states. Rates are over the replayed states where the option is offered and not unanimous ([student-behaviors.json](arm_results/luna_pre_post_k3_20261105/student-behaviors.json), [script](arm_results/luna_pre_post_k3_20261105/student_behaviors.py)). Rates within a row are on the same states. These are pick tendencies, not outcomes: the under-stopping, for example, is consistent with the teacher labels penalizing premature answers, but the replay cannot say whether each stop would have been right.*
 
+- **They rarely stop.** This is the largest departure: 9–24% against a 42% proposal share. It holds late in the episode (5–20% at step ≥ 10), when stopping is more often right, so it is a bias toward continuing, not caution early on.
+- **They prefer decisive actions.** Opening a URL or new tab (75–83% vs 41%) and compound actions such as click + type + Enter (62–72% vs 43%) are picked well above their share. Plain scrolls sit near their share.
+- **They are not majority voters.** They pick the unique most-proposed action less often than chance (41–52% vs 59%) and avoid repeating the previous action (31–40% vs 44%).
+- **H = 4 differs from pre in two ways.** Both H = 4 students go back more (40–42% vs 27–30%, about the proposal share) and pick fewer multi-call actions. H = 4 GPT-5.5 also stops and repeats the most of the four. The rise in go-back matches the live trajectories (collapsed notes below).
+
 <details>
 <summary>Replay protocol, fidelity and live behaviour</summary>
 
@@ -294,7 +299,7 @@ Each sheet shows the task, earlier actions, and the current screen with the pre 
 *Each row: the shared screen (A = minority pick, B = most-proposed action), the next screen after A from one matched live episode, and excerpts of each action's own reasoning, with the students that picked it. These are sheets [M2](arm_results/luna_pre_post_k3_20261105/minority-review-M2-2809.jpg) and [M5](arm_results/luna_pre_post_k3_20261105/minority-review-M5-7700.jpg) below ([script](arm_results/luna_pre_post_k3_20261105/student_minority_figure.py)).*
 
 **Few outcome splits survive a check of the final answers.** There are 9 states where a student-picked action succeeded on ≥ 75% of its matched episodes and another action on ≤ 25%, with at least 5 episodes between them. After reading the final answers, the verdicts look reliable in only three: the losing side mostly ran out of steps, and the winning side gives consistent, task-complete answers.
-- Apple--34, step 1 ([L3](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)): the site search icon (pre students) 24/24, all reporting the same dimensions, against the "Entertainment" menu (H = 4 GPT-5.5) 2/8, with 4 timeouts and one answer that gives the Siri Remote's height as the box's.
+- Apple--34, step 1 ([L3](arm_results/luna_pre_post_k3_20261105/outcome-review-L3-6795.jpg)): the site search icon (pre Luna, H = 4 Luna, pre GPT-5.5) 24/24, 23 reporting the same box size, against the "Entertainment" menu (H = 4 GPT-5.5) 2/8: 3 timeouts, 2 answers that give the Siri Remote's height as the box's, and one correct answer judged a failure.
 - Online-Mind2Web arXiv search for reinforcement-learning papers, step 1: typing the query into search (pre Luna) 6/7, and an unpicked equivalent 7/7, against clicking the "Computer Science" heading (both H = 4 students) 0/2, both timeouts.
 - Online-Mind2Web Amazon Jobs pharmacy posting, step 1: the job-site search (pre GPT-5.5) 4/4, against a new tab to indeed.com (no student) 0/2.
 
