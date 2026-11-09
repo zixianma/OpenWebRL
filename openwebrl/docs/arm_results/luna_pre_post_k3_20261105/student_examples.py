@@ -80,7 +80,7 @@ def main():
         ax = fig.add_axes([xs, y - h, ws, h])
         ax.imshow(im.crop((int(l * W), int(t * H), int(r * W), int(b * H))), aspect="auto"); ax.set_xticks([]); ax.set_yticks([])
         for sp in ax.spines.values():
-            sp.set_color(C["BORDER"]); sp.set_linewidth(0.6)
+            sp.set_color(C["STATE_BORDER"]); sp.set_linewidth(0.6)
         cw, ch = (r - l) * W, (b - t) * H
         for (x0, y0, x1, y1), c in ex["boxes"]:
             ax.add_patch(Rectangle(((x0 - l) * W, (y0 - t) * H), (x1 - x0) * W, (y1 - y0) * H, fill=False, ec=c, lw=1.6))

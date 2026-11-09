@@ -194,7 +194,7 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
     maxima=[];seen_components=set()
     for i,r in enumerate(rows):
         left=0
-        for name,label,color in [('hosting','Hosting',PALETTE["BASELINE_LIGHT"]),('proxy','US proxy',PALETTE["EVAL"])]:
+        for name,label,color in [('hosting','Hosting',PALETTE["BASELINE_LIGHT"]),('proxy','US proxy',PALETTE["BASELINE_DARK"])]:
             value=r[name+'_known_usd']
             if value is not None:
                 amount=float(usd(value));billing.barh(i,amount,left=left,height=.4,color=color,label=label if name not in seen_components else None);seen_components.add(name);left+=amount
@@ -203,7 +203,7 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
         text=('No observed fees' if r['provider_known_subtotal_usd'] is None else '$'+display(r['provider_known_subtotal_usd']))+(' (known subtotal)' if missing else '')
         billing.text(left+max(1,left)*.025,i,text,ha='left',va='center',fontsize=6.4)
     billing.set_yticks([0,1],[STYLE[r['method']][0] for r in rows]);billing.set_ylim(-.55,1.65);billing.invert_yaxis();billing.set_xlim(0,max([1]+maxima)*1.35)
-    handles=[Line2D([],[],marker='o',linestyle='none',markersize=4,color=STYLE[a][1],label=STYLE[a][0])for a in ARMS]+[Patch(facecolor=PALETTE["BASELINE_LIGHT"],label='Hosting'),Patch(facecolor=PALETTE["EVAL"],label='US proxy')]
+    handles=[Line2D([],[],marker='o',linestyle='none',markersize=4,color=STYLE[a][1],label=STYLE[a][0])for a in ARMS]+[Patch(facecolor=PALETTE["BASELINE_LIGHT"],label='Hosting'),Patch(facecolor=PALETTE["BASELINE_DARK"],label='US proxy')]
     fig.legend(handles=handles,loc='upper center',bbox_to_anchor=(.53,.91),ncol=4,frameon=False,fontsize=6.5,handlelength=1,handletextpad=.4,columnspacing=1.3)
     for ax in (performance,billing):ax.spines[['top','right']].set_visible(False);ax.tick_params(width=.6,length=2.5,pad=2)
     note='Performance and billing use different populations. Fees include probes, invalids and recovery attempts.\nBars show latest native fees; missing fees/reserves are separate. Latest snapshots are not final invoices.'
@@ -213,6 +213,9 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
     for suffix in ('png','svg','pdf'):
         metadata={'Date':None} if suffix=='svg' else {'CreationDate':None,'ModDate':None} if suffix=='pdf' else {}
         fig.savefig(output_dir/f'{stem}.{suffix}',dpi=300,metadata=metadata)
+        if suffix=='svg':
+            svg=output_dir/f'{stem}.svg'
+            svg.write_text('\n'.join(line.rstrip()for line in svg.read_text().splitlines())+'\n')
     plt.close(fig)
     with (output_dir/f'{stem}.csv').open('w',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)

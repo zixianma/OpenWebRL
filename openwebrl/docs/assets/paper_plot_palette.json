@@ -9,7 +9,7 @@
     },
     "lookahead": {
       "color": "#ED8B74",
-      "meaning": "Teacher evidence horizon, distinct from the ADM method identity."
+      "meaning": "Future rollout observations and teacher/evidence paths use salmon. Action tokens retain purple, including inside teacher inputs."
     },
     "oracle": {
       "color": "#EDB774",
@@ -33,7 +33,7 @@
     },
     "state": {
       "color": "#74EDC3",
-      "meaning": "Observation/state tokens; green fill with dark text and darker green borders."
+      "meaning": "Current observation/context s_t only; green fill with dark text and darker green borders. Future rollout states are lookahead evidence and use salmon."
     },
     "action": {
       "color": "#9575EE",
@@ -148,6 +148,26 @@
     "ACTION_INK": {
       "family": "action",
       "tone": "dark"
+    },
+    "FUTURE_STATE": {
+      "family": "lookahead",
+      "tone": "base"
+    },
+    "FUTURE_STATE_BORDER": {
+      "family": "lookahead",
+      "tone": "base"
+    },
+    "FUTURE_STATE_INK": {
+      "family": "lookahead",
+      "tone": "dark"
+    },
+    "LOOKAHEAD_INK": {
+      "family": "lookahead",
+      "tone": "dark"
+    },
+    "ADM_INK": {
+      "family": "adm",
+      "tone": "dark"
     }
   },
   "neutral_roles": {
@@ -160,7 +180,7 @@
     "PRE_EXEC": "Pre-execution teacher labels; explicit semantic alias of an actor-baseline neutral",
     "ATTENTION_MASKED": "Masked attention connections; derive from the neutral background/border",
     "FRONTIER": "Pareto-frontier rings and dashed links; neutral structural role",
-    "STATE_INK": "Readable dark text on yellow observation/state cards."
+    "STATE_INK": "Readable dark text on current-context cards; FUTURE_STATE_INK provides contrast on salmon future-evidence cards."
   },
   "non_color_encodings": {
     "teacher_vs_student": "Teachers use hollow circles colored by label source. Students use light-purple fills with thick warm label-source outlines: yellow Pre-exec, salmon-orange Lookahead, amber Oracle. Explicit H labels distinguish horizons.",
@@ -256,7 +276,12 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1"
+      "ACTION_INK": "#654FA1",
+      "FUTURE_STATE": "#ED8B74",
+      "FUTURE_STATE_BORDER": "#ED8B74",
+      "FUTURE_STATE_INK": "#A15F4F",
+      "LOOKAHEAD_INK": "#A15F4F",
+      "ADM_INK": "#654FA1"
     },
     "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
@@ -265,7 +290,7 @@
       "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue.",
-      "Primary purple identifies ADM, action tokens, scoring paths and allowed attention cells. Secondary salmon identifies teacher/lookahead evidence. Tertiary green identifies state/context cards. Yellow and its amber blend identify outcome-label train/eval accents. Green success dots and hollow gray failures remain explicitly labeled."
+      "Purple identifies ADM, all candidate/continuation/selected action tokens, scoring paths and allowed attention. Salmon identifies future rollout states, lookahead evidence and teacher paths. Green identifies CURRENT state/context only. Yellow/amber identify outcome-label train/eval accents. Green success dots and hollow gray failures use explicit status labels."
     ],
     "previews": [
       "assets/paper_plot_palette_preview.png",
@@ -301,7 +326,12 @@
     "STATE_BORDER": "#489379",
     "ACTION": "#9575EE",
     "ACTION_INK": "#654FA1",
-    "ATTENTION_ALLOWED": "#9575EE"
+    "ATTENTION_ALLOWED": "#9575EE",
+    "FUTURE_STATE": "#ED8B74",
+    "FUTURE_STATE_BORDER": "#ED8B74",
+    "FUTURE_STATE_INK": "#A15F4F",
+    "LOOKAHEAD_INK": "#A15F4F",
+    "ADM_INK": "#654FA1"
   },
   "trial": {
     "status": "Applied across all registered paper figures; frozen scientific inputs and estimates preserved",
@@ -343,7 +373,12 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1"
+      "ACTION_INK": "#654FA1",
+      "FUTURE_STATE": "#ED8B74",
+      "FUTURE_STATE_BORDER": "#ED8B74",
+      "FUTURE_STATE_INK": "#A15F4F",
+      "LOOKAHEAD_INK": "#A15F4F",
+      "ADM_INK": "#654FA1"
     },
     "renderers": [
       "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
@@ -423,9 +458,9 @@
     }
   },
   "diagram_roles": {
-    "state": "Green observation/state cards with dark text and darker green borders.",
+    "state": "Current observation/context s_t: green cards. Future rollout states s_(t+h): salmon evidence cards, using FUTURE_STATE roles.",
     "action": "Purple candidate/selected-action cards and connectors.",
-    "lookahead": "Secondary salmon teacher/evidence cues; state/action cards retain green/purple identity.",
+    "lookahead": "Salmon future-state/evidence enclosure and teacher cues. Candidate/continuation action tokens retain purple, including teacher-input formulas.",
     "adm": "Light purple default/22M; dark purple only for 4B selector size where applicable.",
     "status": "Filled green dots mean success; hollow gray dots mean failure. State/action cards identify content, not outcomes.",
     "attention": "Primary purple cells encode allowed attention; neutral masks."

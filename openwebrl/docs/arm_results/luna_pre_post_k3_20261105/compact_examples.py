@@ -26,7 +26,7 @@ from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "H = 4"
-BAND, BANDEDGE = tint("STATE", 0.62), C["STATE"]
+BAND, BANDEDGE = tint("FUTURE_STATE", 0.62), C["FUTURE_STATE_BORDER"]
 GOODC, BADC = C["SUCCESS"], C["FAILURE"]
 EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
@@ -106,7 +106,7 @@ def main():
                                       boxstyle="round,pad=0,rounding_size=0.01", fc=BAND, ec=BANDEDGE, lw=0.8,
                                       transform=fig.transFigure, zorder=-5))
         fig.text(bx1 - 0.006, y - block_h - 0.04, "decides", fontsize=6.2, color=C["INK"], fontweight="bold", ha="right", va="bottom")
-        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
+        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]), edge=C["STATE_BORDER"])
         for k, (i, label, caps) in enumerate(ex["cands"]):
             col = C["ACTION"]
             c = calls(anc["candidates"][x["actions"][i]["teacher_exec"]]["output"][0])[0]
@@ -127,7 +127,7 @@ def main():
                 rx = xt + j * (wt + gt)
                 if j < len(shots):
                     key = j in ex["decide"]
-                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=C["STATE_BORDER"] if key else C["BORDER"],
+                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=C["FUTURE_STATE_BORDER"],
                              lw=1.3 if key else 0.5)
                     if not key:                    # fade evidence that does not decide this example
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.55, ec="none"))

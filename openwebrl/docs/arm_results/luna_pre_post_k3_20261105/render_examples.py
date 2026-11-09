@@ -155,7 +155,7 @@ def render(sid, good, bad, slug, recs):
     # (1) the screen being judged, with candidate points
     ax = fig.add_subplot(gs[0, :2]); ax.imshow(before); ax.set_xticks([]); ax.set_yticks([])
     for sp in ax.spines.values():
-        sp.set_color(C["BORDER"]); sp.set_linewidth(0.5)
+        sp.set_color(C["STATE_BORDER"]); sp.set_linewidth(0.5)
     ax.set_title("Screen the teachers judge (pre-exec sees only this)", fontsize=6.6, color=INK, pad=3, loc="left")
     for i, (_, cs) in enumerate(labels):
         for c in cs[:1]:
@@ -193,7 +193,7 @@ def render(sid, good, bad, slug, recs):
         for c in range(4):
             ax = fig.add_subplot(gs[r, c]); ax.set_xticks([]); ax.set_yticks([])
             for sp in ax.spines.values():
-                sp.set_color(CAND[i] if c == 0 else C["BORDER"]); sp.set_linewidth(1.2 if c == 0 else 0.5)
+                sp.set_color(C["FUTURE_STATE_BORDER"]); sp.set_linewidth(1.2 if c == 0 else 0.5)
             if c < len(shots) and shots[c][1] is not None:
                 ax.imshow(shots[c][1]); ax.set_title(shots[c][0], fontsize=5.6, color=INK if c == 0 else MUTED, pad=2, loc="left")
             elif c < len(shots):

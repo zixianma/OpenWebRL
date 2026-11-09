@@ -26,7 +26,7 @@ from paper_plot_palette import COLORS as C, tint
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
-PRE, IMMEDIATE, LOOK, OUTCOME, HELD = (C["PRE_EXEC"], C["LOOKAHEAD_EVIDENCE"], C["LOOKAHEAD_TEACHER"], C["TRAIN"], C["EVAL"])
+PRE, LOOK, OUTCOME, HELD = (C["PRE_EXEC"], C["LOOKAHEAD_TEACHER"], C["TRAIN"], C["EVAL"])
 ORACLE = C["ORACLE"]
 ROLLOUT, ROLLOUT_BG = C["INK"], tint("BASELINE_LIGHT", .88)
 SHARED, SHARED_BG = C["BASELINE_DARK"], tint("BASELINE_LIGHT", .92)
@@ -79,12 +79,12 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
     ax.plot([x0, x1], [y, y], color=color, linewidth=lw, zorder=1)
 
 
-def state_card(x, y, step, color, candidate):
+def state_card(x, y, step, candidate):
     width, height = 0.28, 0.18
-    box(x - width / 2, y - height / 2, width, height, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+    box(x - width / 2, y - height / 2, width, height, edge=C["FUTURE_STATE_BORDER"], fill=tint("FUTURE_STATE", .60))
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
-                           facecolor=C["STATE"], edgecolor="none", alpha=0.65, zorder=2))
-    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["STATE_INK"], ha="center")
+                           facecolor=C["FUTURE_STATE"], edgecolor="none", alpha=0.65, zorder=2))
+    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["FUTURE_STATE_INK"], ha="center")
 
 
 def percent(rate):
@@ -150,7 +150,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.815, y, 0.950, y, color=C["ACTION_INK"], lw=.75, head=5)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
-            state_card(x, y, k + 1, IMMEDIATE if k == 0 else LOOK, i + 1)
+            state_card(x, y, k + 1, i + 1)
             if k:
                 arrow(trajectory_x[k - 1] + 0.142, y, x - 0.142, y,
                       color=C["ACTION_INK"], lw=.75, head=5)
@@ -187,14 +187,23 @@ lanes = ((1.27, "Pre-execution", "Pre-exec", PRE, "—"),
          (0.83, "Lookahead K = 3", "Lookahead\nH = 4", LOOK,
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
-    text(method_x, y, label, color=color, linespacing=1.0)
-    text(evidence_x, y, evidence, color=color, ha="center", linespacing=0.95)
+    teacher_ink = C["LOOKAHEAD_INK"] if key == "Lookahead K = 3" else color
+    text(method_x, y, label, color=teacher_ink, linespacing=1.0)
+    evidence_label = text(evidence_x, y, evidence, color=color, ha="center", linespacing=0.95)
+    if "\n" in evidence:
+        # Preserve the original multiline baselines while distinguishing states from actions.
+        anchor = ax.transData.transform((evidence_x, y))
+        layout = evidence_label._get_layout(fig.canvas.get_renderer())[1]
+        evidence_label.remove()
+        for (line, _, dx, dy), ink in zip(layout, (C["FUTURE_STATE_INK"], C["ACTION_INK"])):
+            lx, ly = ax.transData.inverted().transform(anchor + (dx, dy))
+            text(lx, ly, line, color=ink, ha="left", va="baseline")
     rule(5.99, shared_x, y, color=color)
     ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
-    text(teacher_x + teacher_w / 2, y, "Teacher", color=color, ha="center")
+    text(teacher_x + teacher_w / 2, y, "Teacher", color=teacher_ink, ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
     box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]
