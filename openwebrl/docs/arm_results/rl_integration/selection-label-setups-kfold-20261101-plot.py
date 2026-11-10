@@ -59,15 +59,15 @@ fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
-        outline = color
+        outline = C["ADM_STUDENT"]
         if kind == "live":
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True, outline=outline)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", True)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
+            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True, outline=outline)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -87,8 +87,8 @@ axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
 handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
-    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
-           markeredgewidth=1.0, markerfacecolor=C["ADM_STUDENT"]),
+    Line2D([], [], marker="o", ls="", color=C["ADM_STUDENT"], ms=4.1,
+           markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
 ]
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
