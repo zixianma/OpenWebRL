@@ -184,13 +184,14 @@ text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
 eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=INK, ha="center")
 shared_x = 6.08
-ax.plot([shared_x, shared_x], [1.67, 0.72], color=SHARED, linewidth=0.9, zorder=1)
+method_ys = (1.34, 0.83, 0.32)  # Uniform 0.51-inch row-center spacing.
+ax.plot([shared_x, shared_x], [1.67, method_ys[1]], color=SHARED, linewidth=0.9, zorder=1)
 ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.28,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 # H counts the candidate action; the legacy K=3 source now displays H=4.
 # The immediate-only (H=1) teacher result is retained in source tables, not plotted.
-lanes = ((1.34, "Pre-execution", "Pre-execution", PRE, "—"),
-         (0.72, "Lookahead H = 4", "Lookahead\nH = 4", LOOK,
+lanes = ((method_ys[0], "Pre-execution", "Pre-execution", PRE, "—"),
+         (method_ys[1], "Lookahead H = 4", "Lookahead\nH = 4", LOOK,
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     is_lookahead = key.startswith("Lookahead")
@@ -210,7 +211,7 @@ for y, key, label, color, evidence in lanes:
     arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
     text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=INK, ha="center")
 # The yellow input box refers to the complete five-action Train % column in (a).
-y = 0.32
+y = method_ys[2]
 text(method_x, y, "Oracle", color=INK)
 box(5.15, y - 0.105, 0.80, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
 text(evidence_x, y, "Train %", color=INK, ha="center")
