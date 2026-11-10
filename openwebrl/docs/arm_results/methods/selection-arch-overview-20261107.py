@@ -70,11 +70,10 @@ box(.025, 1.735, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(.29, 1.83, "Context", ha="center")
 arrow(.565, 1.83, .665, 1.83, color=MUTED)
 box(.675, 1.735, .80, .19, edge=INK)
-text(1.075, 1.83, r"Frozen actor $\theta_0$", size=6.0, ha="center")
+text(1.075, 1.83, r"Frozen actor $\theta$", size=6.0, ha="center")
 arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
 box(1.66, 1.735, 1.66, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(2.49, 1.868, r"$K=5$ responses $c_i$", size=5.8, color=C["ACTION_INK"], ha="center")
-text(2.49, 1.792, r"thought + action $a_t^i$", size=5.6, color=C["ACTION_INK"], ha="center")
+text(2.49, 1.83, r"$K=5$ responses $c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
 arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
 arrow(2.80, 1.725, 2.80, 1.655, color=DECODER, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
@@ -109,9 +108,9 @@ text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
 text(2.80, 1.565, "b) ADM-4B", size=6.8, color="black", ha="center")
-# Matching theta_0 symbols encode shared initialization without a long arrow.
+# Matching theta symbols encode shared initialization without a long arrow.
 box(2.44, 1.355, .29, .12, edge=LINE)
-text(2.585, 1.415, r"$\theta_0$", size=6.4, ha="center")
+text(2.585, 1.415, r"$\theta$", size=6.4, ha="center")
 text(2.585, 1.310, "Frozen", size=5.2, color=MUTED, ha="center")
 text(2.81, 1.415, "+", size=7, color=DECODER, ha="center")
 box(2.90, 1.355, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
