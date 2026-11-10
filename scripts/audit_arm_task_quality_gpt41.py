@@ -110,7 +110,7 @@ async def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', type=Path, default=jev.ROOT/'jev-pilot-10.jsonl')
-    parser.add_argument('--output', type=Path, default=jev.ROOT/'gpt41-quality-pilot-v1')
+    parser.add_argument('--output', type=Path, default=jev.ROOT/'gpt41-quality-pilot-v2')
     parser.add_argument('--execute', action='store_true')
     args = parser.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
