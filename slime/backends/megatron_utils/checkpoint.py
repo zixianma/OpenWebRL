@@ -104,10 +104,13 @@ def load_checkpoint(ddp_model, optimizer, opt_param_scheduler, checkpointing_con
     ), f"{args.load=} does not exist or is an empty directory. Did you specify the wrong folder?"
 
     if _is_megatron_checkpoint(load_path):
+        # Source-local proxy preserves cold loads and also makes live-instance
+        # restores absolute. No-op when native flags skip scheduler loading.
+        from openwebrl.action_credit_checkpoint_semantics import native_checkpoint_scheduler
         return _load_checkpoint_megatron(
             ddp_model=ddp_model,
             optimizer=optimizer,
-            opt_param_scheduler=opt_param_scheduler,
+            opt_param_scheduler=native_checkpoint_scheduler(opt_param_scheduler),
             checkpointing_context=checkpointing_context,
             skip_load_to_model_and_opt=skip_load_to_model_and_opt,
         )

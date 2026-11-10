@@ -485,6 +485,10 @@ async def generate_rollout_async(
     dynamic_filter = (
         load_function(args.dynamic_sampling_filter_path) if args.dynamic_sampling_filter_path is not None else None
     )
+    rescue_enabled = bool(os.environ.get("OPENWEBRL_ARM_RESCUE_CONFIG"))
+    if rescue_enabled:
+        # The rescue filter launches guided attempts for valid all-failure groups of this rollout.
+        args._arm_rescue_rollout_id = rollout_id
 
     metric_gatherer = MetricGatherer()
 
@@ -587,6 +591,11 @@ async def generate_rollout_async(
             log_progress("collect")
             last_progress_log = now
 
+    if rescue_enabled:
+        # Await bounded in-flight rescues before aborting leftover generation; successful
+        # rescues join as extra mixed groups beyond the native quota.
+        from openwebrl.arm_rescue_rl import collect as collect_rescued
+        data.extend(await collect_rescued(args, rollout_id))
     pbar.close()
     log_progress("done")
     sample = data[-1][0][0] if isinstance(data[-1][0], list) else data[-1][0]
@@ -597,7 +606,10 @@ async def generate_rollout_async(
     # there are still some unfinished requests, abort them
     aborted_samples = await abort(args, rollout_id)
 
-    assert len(data) == args.rollout_batch_size, f"Got {len(data)} samples, expected {args.rollout_batch_size}"
+    if rescue_enabled:
+        assert len(data) >= args.rollout_batch_size, f"Got {len(data)} groups, expected >= {args.rollout_batch_size}"
+    else:
+        assert len(data) == args.rollout_batch_size, f"Got {len(data)} samples, expected {args.rollout_batch_size}"
     data = sorted(data, key=lambda group: group[0][0].index if isinstance(group[0], list) else group[0].index)
     all_samples = sorted(
         all_data, key=lambda group: group[0][0].index if isinstance(group[0], list) else group[0].index

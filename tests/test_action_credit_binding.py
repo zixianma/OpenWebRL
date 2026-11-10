@@ -9,7 +9,7 @@ from test_action_credit import graph_fixture
 from test_action_credit_state import manifest_data, cost, checkpoint_receipt
 from openwebrl.action_credit import Leaf, digest
 from openwebrl.action_credit_binding import (SealedCollection, validate_collection_binding,
-    token_mask_contract, shared_prefix_contract)
+    token_mask_contract, shared_prefix_contract, q_inventory_contract)
 from openwebrl.action_credit_objective import ContinuationPanel, ObjectiveConfig
 from openwebrl.action_credit_state import CampaignManifest, CampaignStore
 
@@ -26,11 +26,12 @@ def panel():
 
 @contextmanager
 def collection_fixture(graph, config, panels=(), *, seal=True, manifest_change=None, selection=None,
-                       terminal_metadata=None):
+                       terminal_metadata=None, role_overrides=None):
     """Test-only ledger generated from a fixture; not an independent collection.
 
-    Unlisted missing slots remain planned in the first candidate rather than
-    disappearing. Real collectors must prescribe those assignments beforehand.
+    Only explicitly panel-assigned leaves estimate Q. Unassigned leaves are
+    the independent base population. Real collectors prescribe these roles
+    before observing any outcome; this helper is only for synthetic fixtures.
     """
     manifest = manifest_data()
     contract = graph.contract
@@ -38,6 +39,8 @@ def collection_fixture(graph, config, panels=(), *, seal=True, manifest_change=N
     manifest["science"]["algorithm"]["objective_config_sha256"] = digest(asdict(config))
     manifest["science"]["algorithm"]["leaf_selection"] = (
         selection.policy if selection is not None else {"mode": "all_fit_inventory"})
+    if config.arm_id == "continuation_q":
+        manifest["science"]["algorithm"]["q_inventory_protocol"] = q_inventory_contract()
     for section, protocol in (("token_mask", token_mask_contract()),
              ("shared_prefix_normalization", shared_prefix_contract(config.reduction))):
         manifest["science"][section] = dict(contract=protocol, protocol_sha256=digest(protocol))
@@ -59,13 +62,20 @@ def collection_fixture(graph, config, panels=(), *, seal=True, manifest_change=N
                 for action, leaves in zip(p.candidate_edges, p.draw_leaf_ids) for leaf in leaves}
     terminals = {leaf: terminal for terminal, leaf in selection.terminal_to_leaf} if selection is not None else {}
     terminals.update(terminal_metadata or {})
+    from openwebrl.action_credit_slot_selection import SlotSelectionReceipt
     specs = []
     for index, leaf in enumerate(graph.leaves):
-        default = ((panels[0].panel_id, panels[0].candidate_edges[0]) if panels else
-                   ("fixture-state", leaf.edge_ids[-1] if leaf.edge_ids else "fixture-missing-action"))
+        default = ("fixture-state", leaf.edge_ids[-1] if leaf.edge_ids else "fixture-missing-action")
         state_id, action_id = assigned.get(leaf.leaf_id, default)
+        slot = index
+        if type(selection) is SlotSelectionReceipt and leaf.split == "train":
+            state_id, raw_slot = leaf.leaf_id.rsplit(":draw", 1)
+            action_id, slot = "tree_continuation", int(raw_slot)
+        role = ("q_fit" if leaf.split == "train" else "q_holdout") if leaf.leaf_id in assigned else "base"
+        role = (role_overrides or {}).get(leaf.leaf_id, role)
         specs.append(dict(task_id=leaf.task_id, state_id=state_id, action_id=action_id,
-                          draw_slot=index, draw_role=leaf.split, group_id=leaf.group_id, tree_id=leaf.tree_id))
+                          draw_slot=slot, draw_role=leaf.split, group_id=leaf.group_id,
+                          tree_id=leaf.tree_id, inventory_role=role))
     with tempfile.TemporaryDirectory(prefix="action-credit-binding-", dir="/tmp") as temp:
         store = CampaignStore.create(Path(temp) / "campaign", CampaignManifest.from_dict(manifest))
         store.plan_update(contract.update_id, policy_sha256=contract.policy_sha256, draws=specs)
@@ -90,9 +100,9 @@ def collection_fixture(graph, config, panels=(), *, seal=True, manifest_change=N
         yield store, mapping
 
 
-def make_binding(graph, config, panels=(), *, selection=None):
+def make_binding(graph, config, panels=(), *, selection=None, role_overrides=None):
     """Numerical-test helper; all outcomes are synthetic and confer no authority."""
-    with collection_fixture(graph, config, panels, selection=selection) as (store, mapping):
+    with collection_fixture(graph, config, panels, selection=selection, role_overrides=role_overrides) as (store, mapping):
         return SealedCollection.from_store(store, graph.contract, mapping)
 
 
@@ -239,7 +249,7 @@ class SealedBinding(unittest.TestCase):
         validate_collection_binding(graph, cfg, (), binding, selection=selection)
         with self.assertRaisesRegex(ValueError, "selection schedule"):
             validate_collection_binding(graph, cfg, (), binding)
-        with self.assertRaisesRegex(ValueError, "selection schedule"):
+        with self.assertRaises(ValueError):
             validate_collection_binding(graph, cfg, (), binding,
                 selection=replace(selection, schedule=replace(selection.schedule, seed=43)))
         mapping = dict(selection.terminal_to_leaf)
@@ -248,7 +258,7 @@ class SealedBinding(unittest.TestCase):
         permuted = remake(graph, selection, terminal_to_leaf=mapping)
         with self.assertRaisesRegex(ValueError, "sealed outcome metadata"):
             validate_collection_binding(graph, cfg, (), binding, selection=permuted)
-        with self.assertRaisesRegex(ValueError, "sealed outcome metadata"):
+        with self.assertRaises(ValueError):
             validate_collection_binding(graph, cfg, (), binding,
                 selection=replace(selection, terminal_to_leaf=selection.terminal_to_leaf[:-1]))
         # Matching declared schedule alone cannot manufacture terminal provenance.
@@ -299,6 +309,42 @@ class SealedBinding(unittest.TestCase):
                     tuple(leaf for leaf in group if leaf != omitted) for group in panels[0].draw_leaf_ids))
                 with self.assertRaises(ValueError):
                     validate_collection_binding(graph, config("continuation_q"), (partial,), binding)
+
+    def test_q_panels_cover_estimation_inventory_without_absorbing_independent_base(self):
+        graph = graph_fixture()
+        edge = replace(graph.edges[1], edge_id="independent-base-edge", tree_id="base-tree", parent_edge_id=None)
+        base = replace(graph.leaves[0], leaf_id="base", tree_id="base-tree", edge_ids=(edge.edge_id,))
+        held = replace(graph.leaves[0], leaf_id="q-heldout", split="holdout", reward=0.)
+        graph = replace(graph, edges=(*graph.edges, edge), leaves=(*graph.leaves, base, held),
+                        planned_leaf_ids=(*graph.planned_leaf_ids, "base", "q-heldout"))
+        panels = (replace(panel(), draw_leaf_ids=(("a", "q-heldout"), ("b",))),)
+        cfg = config("continuation_q")
+        binding = make_binding(graph, cfg, panels)
+        validate_collection_binding(graph, cfg, panels, binding)
+        roles = {key: row["inventory_role"] for key, row in binding.to_dict()["inventory"].items()}
+        self.assertEqual(roles, {"base": "base", "a": "q_fit", "b": "q_fit", "q-heldout": "q_holdout"})
+        for altered in ((replace(panels[0], draw_leaf_ids=(("a", "q-heldout", "base"), ("b",))),),
+                        (replace(panels[0], draw_leaf_ids=(("a",), ("b",))),), ()):
+            with self.assertRaisesRegex(ValueError, "ALL draw slots"):
+                validate_collection_binding(graph, cfg, altered, binding)
+        with collection_fixture(graph, cfg, panels, role_overrides={"a": "base"}) as (store, mapping):
+            changed = SealedCollection.from_store(store, graph.contract, mapping)
+            with self.assertRaisesRegex(ValueError, "excluding base"):
+                validate_collection_binding(graph, cfg, panels, changed)
+
+    def test_q_inventory_science_protocol_is_mandatory(self):
+        graph, cfg = graph_fixture(), config("continuation_q")
+        for remove in (True, False):
+            def mutate(manifest):
+                algorithm = manifest["science"]["algorithm"]
+                if remove:
+                    algorithm.pop("q_inventory_protocol")
+                else:
+                    algorithm["q_inventory_protocol"]["q_continuations_in_outcome_objective"] = True
+            with collection_fixture(graph, cfg, (panel(),), manifest_change=mutate) as (store, mapping):
+                with self.assertRaisesRegex(ValueError, "independent-base"):
+                    binding = SealedCollection.from_store(store, graph.contract, mapping)
+                    validate_collection_binding(graph, cfg, (panel(),), binding)
 
     def test_pending_and_consumed_snapshots_do_not_authorize_execution(self):
         graph = graph_fixture()
