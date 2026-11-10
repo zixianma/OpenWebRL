@@ -49,7 +49,7 @@ PANELS = [
 def point(ax, x, v, color, marker, filled, outline=None):
     d, lo, hi = v
     ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
-                zorder=3, markeredgewidth=1.7 if filled else 1.0,
+                zorder=3, markeredgewidth=1.0,
                 markerfacecolor=color if filled else "white",
                 markeredgecolor=outline if outline is not None else color)
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
@@ -88,7 +88,7 @@ handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor="white"),
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
-           markeredgewidth=1.7, markerfacecolor=C["ADM_STUDENT"]),
+           markeredgewidth=1.0, markerfacecolor=C["ADM_STUDENT"]),
 ]
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
