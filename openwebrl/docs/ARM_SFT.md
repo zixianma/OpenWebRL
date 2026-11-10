@@ -121,6 +121,22 @@ full-task success in this frozen actor-only serving setup. It does not test
 multi-token inference speed or isolate Soft-MTP gradient routing from adding
 an MTP objective at all.
 
+A paired failure audit narrows the interpretation. Among the 28 tasks solved
+only by NTP, Soft-MTP ended with 14 context-limit aborts, five per-response
+4,096-token generation limits, one three-consecutive-parse-failure format
+error, three environment-step errors and five completed but unsuccessful
+episodes. Across all 300 tasks, the per-response generation limit occurred
+21 times for Soft-MTP versus twice for NTP, and the format failure occurred
+17 times versus zero. Among the 51 tasks **completed by both actors**, NTP
+solved 18 and Soft-MTP solved 16; their median assistant-output sizes were
+similar (1,377 versus 1,184 characters per turn). These conditional subsets
+are selected by each actor's behavior and do not estimate what a longer-context
+rerun would achieve. The saved context-abort result rows omit the partial
+trajectory, so they also cannot establish that Soft-MTP's context errors came
+from longer generated actions. The SGLang logs confirm all 77 versus 140
+HTTP 400s requested 4,096 completion tokens, causing the combined input and
+requested output to exceed the 32,768-token cap.
+
 [Aggregate results and uncertainty](arm_results/soft_mtp_sft_terra_full300_20261109.json)
 link to the local task-level audit, frozen plan and saved rollouts/verdicts.
 Evaluation W&B runs `sbi1rfpw` (NTP) and `fsd94wxo` (Soft) synced in
