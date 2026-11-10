@@ -1,0 +1,96 @@
+{
+ "runs": 3,
+ "slugs": {
+  "full": "arm5-9fadc8dc4655",
+  "pps4": "arm5-9117fa5a37bb",
+  "pps1": "arm5-9f25a8bd0da7",
+  "s1000": "arm5-fc760b23e227"
+ },
+ "pending": [
+  "pps1",
+  "s1000"
+ ],
+ "rates": {
+  "full": {
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 779,
+    "successes": 312,
+    "overall": 34.666666666666664,
+    "valid_only": 40.05134788189987
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1619,
+    "successes": 919,
+    "overall": 51.484593837535016,
+    "valid_only": 56.76343421865349
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 444,
+    "successes": 234,
+    "overall": 52.0,
+    "valid_only": 52.7027027027027
+   },
+   "mean_overall": 46.05042016806723,
+   "mean_valid_only": 49.83916160108535
+  },
+  "pps4": {
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 787,
+    "successes": 331,
+    "overall": 36.77777777777778,
+    "valid_only": 42.058449809402795,
+    "diff_overall_vs_full_pp": [
+     2.1111111111111143,
+     -0.6694444444444461,
+     4.999999999999999
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1616,
+    "successes": 919,
+    "overall": 51.484593837535016,
+    "valid_only": 56.868811881188115,
+    "diff_overall_vs_full_pp": [
+     0.0,
+     -2.2408963585434205,
+     2.1848739495798353
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 446,
+    "successes": 230,
+    "overall": 51.111111111111114,
+    "valid_only": 51.5695067264574,
+    "diff_overall_vs_full_pp": [
+     -0.8888888888888857,
+     -6.000000000000005,
+     4.4444444444444455
+    ]
+   },
+   "mean_overall": 46.45782757547463,
+   "mean_valid_only": 50.16558947234944,
+   "diff_mean_overall_vs_full_pp": [
+    0.4074074074074048,
+    -1.669172113289757,
+    2.5188375350140064
+   ],
+   "diff_mean_valid_only_vs_full_pp": [
+    0.32642787126408734,
+    -1.864576935428234,
+    2.539168537437506
+   ]
+  }
+ }
+}
