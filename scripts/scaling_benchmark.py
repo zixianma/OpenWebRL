@@ -63,7 +63,7 @@ def resources(info, job, now=None):
     return base
 
 
-def case_plan(job, output, name, tp, browsers, replay):
+def case_plan(job, output, name, tp, browsers, replay, *, fresh_sft=False):
     if tp not in (1, 2, 4, 8) or browsers not in (64, 96, 128, 192, 256):
         raise ValueError('Unsupported benchmark candidate')
     output = Path(output).resolve()
@@ -71,7 +71,7 @@ def case_plan(job, output, name, tp, browsers, replay):
         raise ValueError('Benchmark artifacts must remain in runtime storage')
     # Exact matching checkpoint/batch pair, shared across optimizer topology cases.
     index = 60 if replay else 61
-    return {'job_id': str(job), 'name': name, 'output': str(output), 'source': str(SOURCE),
+    plan = {'job_id': str(job), 'name': name, 'output': str(output), 'source': str(SOURCE),
         'checkpoint': str(ANCESTOR / f'iter_{index:07d}'), 'checkpoint_index': index,
         'start_adam_updates': 720 if replay else 732, 'rollout_id': index + 1,
         'replay_batch': str(ANCESTOR / 'rollout_recovery/61.pt') if replay else None,
@@ -79,6 +79,13 @@ def case_plan(job, output, name, tp, browsers, replay):
         'tensor_parallel': tp, 'data_parallel': 8 // tp, 'gpus': 8, 'browsers': browsers,
         'wandb_run_id': f'qcq7i4ug-scale-{job}-{name}', 'writes_main_run_pointer': False,
         'case_timeout_seconds': 1800 if replay else 2400}
+    if fresh_sft:
+        if replay:
+            raise ValueError('Fresh SFT trials cannot replay a previous policy batch')
+        plan.update(checkpoint=None, checkpoint_index=-1, start_adam_updates=0, rollout_id=0,
+                    wandb_run_id=f'browser-scale-{job}-{name}', fresh_sft=True,
+                    case_timeout_seconds=1500)
+    return plan
 
 
 def parse_result(text, plan):
@@ -125,13 +132,16 @@ def worker(plan):
         raise ValueError('Worker must execute inside its authorized Slurm step')
     info = subprocess.check_output(['scontrol', 'show', 'job', job, '-o'], text=True)
     budget = resources(info, job)
-    source, out, checkpoint = map(Path, [plan['source'], plan['output'], plan['checkpoint']])
+    source, out = map(Path, [plan['source'], plan['output']])
     validate_benchmark_source(source)
-    view = out / 'checkpoint-view'
-    view.mkdir(parents=True, exist_ok=False)
-    (view / checkpoint.name).symlink_to(checkpoint, target_is_directory=True)
-    (view / 'rollout').symlink_to(checkpoint.parent / 'rollout', target_is_directory=True)
-    (view / 'latest_checkpointed_iteration.txt').write_text(str(plan['checkpoint_index'])+'\n')
+    view = None
+    if not plan.get('fresh_sft'):
+        checkpoint = Path(plan['checkpoint'])
+        view = out / 'checkpoint-view'
+        view.mkdir(parents=True, exist_ok=False)
+        (view / checkpoint.name).symlink_to(checkpoint, target_is_directory=True)
+        (view / 'rollout').symlink_to(checkpoint.parent / 'rollout', target_is_directory=True)
+        (view / 'latest_checkpointed_iteration.txt').write_text(str(plan['checkpoint_index'])+'\n')
     run = out / 'run'
     env = clean_environment()
     env.update(OPENWEBRL_BENCHMARK_OUTPUT=str(run), OPENWEBRL_STOP_AFTER_SAVED_ROLLOUT=str(plan['rollout_id']),
@@ -145,7 +155,9 @@ def worker(plan):
     argv = ['timeout', '--signal=INT', '--kill-after=90', str(seconds), sys.executable,
             str(source / 'scripts/run_small_baseline.py'), '--profile', 'reference', '--gpus', '8',
             '--tensor-parallel', str(plan['tensor_parallel']), '--browser-concurrency', str(plan['browsers']),
-            '--resume-from', str(view), '--wandb-run-id', plan['wandb_run_id'], '--env-file', str(REPO / '.env')]
+            '--wandb-run-id', plan['wandb_run_id'], '--env-file', str(REPO / '.env')]
+    if view is not None:
+        argv += ['--resume-from', str(view)]
     start = time.monotonic()
     monitor = None
     with (out / 'launcher.log').open('w') as log, (out / 'monitor.log').open('w') as health, (out / 'cpu.jsonl').open('w', buffering=1) as cpu:
@@ -165,7 +177,11 @@ def worker(plan):
         write_json(out / 'result.json', {'complete': False, 'returncode': proc.returncode, 'wall_seconds': time.monotonic()-start})
         return proc.returncode
     text = (run / 'training.log').read_text(errors='replace')
-    if f'at iteration {plan["checkpoint_index"]}' not in text or 'successfully loaded checkpoint' not in text:
+    manifest = json.loads((run / 'launch_manifest.json').read_text())
+    if plan.get('fresh_sft'):
+        if not manifest['fresh_sft_start'] or manifest['resume_from'] is not None:
+            raise ValueError('Fresh benchmark unexpectedly resumed a previous RL run')
+    elif f'at iteration {plan["checkpoint_index"]}' not in text or 'successfully loaded checkpoint' not in text:
         raise ValueError('Missing GPU restore evidence')
     result = parse_result(text, plan)
     result.update(health_result(run / 'health.jsonl', budget['allocated_memory_gib']))
@@ -176,7 +192,7 @@ def worker(plan):
         raise ValueError('Expected completed benchmark checkpoint was not saved')
     inspection = [sys.executable, str(REPO / 'scripts/inspect_training_checkpoint.py'), str(run),
                   '--expected-updates', str(plan['start_adam_updates'] + result['optimizer_updates']),
-                  '--expected-scheduler-offset-updates', '1', '--report', str(out / 'checkpoint_validation.json')]
+                  '--expected-scheduler-offset-updates', '0' if plan.get('fresh_sft') else '1', '--report', str(out / 'checkpoint_validation.json')]
     subprocess.run(inspection, check=True, stdout=subprocess.DEVNULL)
     result.update(complete=True, returncode=0, wall_seconds=time.monotonic()-start, **plan)
     write_json(out / 'result.json', result)
@@ -184,10 +200,12 @@ def worker(plan):
     return 0
 
 
-def controller(job, *, topology_only=False):
+def controller(job, *, topology_only=False, browser_pair=False):
+    if topology_only and browser_pair:
+        raise ValueError('Select either topology replay or the fresh browser pair')
     info = subprocess.check_output(['scontrol', 'show', 'job', job, '-o'], text=True)
     budget = resources(info, job)
-    root = RUNTIME / 'benchmarks' / f'qcq7i4ug-scaling-{job}'
+    root = RUNTIME / 'benchmarks' / (f'browser-scale-{job}' if browser_pair else f'qcq7i4ug-scaling-{job}')
     root.mkdir(parents=True, exist_ok=False)
     results = []
 
@@ -196,7 +214,7 @@ def controller(job, *, topology_only=False):
             return None
         out = root / name
         out.mkdir()
-        plan = case_plan(job, out, name, tp, browsers, replay)
+        plan = case_plan(job, out, name, tp, browsers, replay, fresh_sft=browser_pair)
         path = out / 'plan.json'; write_json(path, plan)
         command = ['srun', f'--jobid={job}', '--nodes=1', '--ntasks=1', '--cpus-per-task=64',
                    '--gres=gpu:h200:8', '--cpu-bind=none', '--exact',
@@ -209,27 +227,28 @@ def controller(job, *, topology_only=False):
         return result if code == 0 and result.get('complete') else None
 
     topology = []
-    for tp in (4, 2, 8, 1):
+    for tp in (() if browser_pair else (4, 2, 8, 1)):
         result = execute(f'tp{tp}-replay', tp, 64, True)
         if result:
             topology.append(result)
-    if not topology:
+    if not topology and not browser_pair:
         raise SystemExit('No topology completed the optimizer correctness checks')
-    winner = min(topology, key=lambda x: x['seconds_per_update'])['tensor_parallel']
+    winner = 4 if browser_pair else min(topology, key=lambda x: x['seconds_per_update'])['tensor_parallel']
     browser_results = []
-    for count in (() if topology_only else (64, 96, 128, 192, 256)):
+    for count in ((256, 192) if browser_pair else (() if topology_only else (64, 96, 128, 192, 256))):
         result = execute(f'tp{winner}-b{count}', winner, count, False)
         if result:
             browser_results.append(result)
-            if not result['safe_to_increase_browsers']:
+            if not browser_pair and not result['safe_to_increase_browsers']:
                 break
-        elif count >= 128:
+        elif count >= 128 and not browser_pair:
             break
         if len(browser_results) >= 2 and count >= 128:
             previous = min(x['iteration_seconds'] for x in browser_results[:-1])
             if result and result['iteration_seconds'] >= previous:
                 break
-    write_json(root / 'summary.json', {'topology_only': topology_only, 'topology_winner_tp': winner, 'results': results,
+    write_json(root / 'summary.json', {'topology_only': topology_only, 'fresh_browser_pair': browser_pair,
+        'actor_tensor_parallel': winner, 'topology_winner_tp': None if browser_pair else winner, 'results': results,
         'browser_winner': min(browser_results, key=lambda x: x['iteration_seconds'])['browsers'] if browser_results else None,
         'selection_is_provisional': True, 'notes': (
             'Saved-batch optimizer comparison only; browser throughput and full-cycle scaling remain unmeasured.'
@@ -243,9 +262,10 @@ if __name__ == '__main__':
     mode.add_argument('--worker', type=Path)
     mode.add_argument('--controller', metavar='JOB_ID')
     p.add_argument('--topology-only', action='store_true', help='Replay saved batches only; do not start browser trials.')
+    p.add_argument('--browser-pair', action='store_true', help='Fresh SFT runs at 256 then 192 browsers, fixed TP4/DP2, 25 minutes each.')
     a = p.parse_args()
-    if a.worker and a.topology_only:
-        p.error('--topology-only is a controller option')
+    if (a.worker and (a.topology_only or a.browser_pair)) or (a.topology_only and a.browser_pair):
+        p.error('Controller modes are mutually exclusive and cannot be passed to a worker')
     if a.worker:
         raise SystemExit(worker(json.loads(a.worker.read_text())))
-    controller(a.controller, topology_only=a.topology_only)
+    controller(a.controller, topology_only=a.topology_only, browser_pair=a.browser_pair)

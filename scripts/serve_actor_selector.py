@@ -35,9 +35,14 @@ def build(args):
     state = dict(processor=processor, tokenizer=tokenizer, model=model, vision_params=vision, language_params=language)
     if args.mode == "head":
         saved = torch.load(args.head, map_location="cpu")
+        objective = saved.get("objective", "soft_ce")
+        if objective not in ("soft_ce", "pairwise_teacher"):
+            raise ValueError(f"Unsupported saved head objective: {objective}")
         config = HeadConfig.from_json(saved["config"])
         head = CandidateSetHead(config); head.load_state_dict(saved["state_dict"]); head.to("cuda:0").eval()
-        state.update(head=head, config=config, identity=dict(head=str(args.head), head_sha256=hashlib.sha256(Path(args.head).read_bytes()).hexdigest()))
+        state.update(head=head, config=config, score_head="value" if objective == "pairwise_teacher" else "select",
+                     identity=dict(head=str(args.head), objective=objective,
+                                   head_sha256=hashlib.sha256(Path(args.head).read_bytes()).hexdigest()))
     else:
         from peft import set_peft_model_state_dict
         from safetensors.torch import load_file
@@ -74,7 +79,8 @@ def score(state, args, prompt_text, image, candidate_ids):
                                pad_id=tok.pad_token_id or 0)
             # offline features were stored as float16 before scoring; round identically
             feats, s = feats.to(torch.float16).to(torch.float32), s.to(torch.float16).to(torch.float32)
-            logits = state["head"](feats.reshape(1, len(cands), -1), s.reshape(1, -1))[0][0]
+            outputs = state["head"](feats.reshape(1, len(cands), -1), s.reshape(1, -1))
+            logits = outputs[1 if state["score_head"] == "value" else 0][0]
         else:
             logits = state["scorer"](prefix, [cands])[0]
     torch.cuda.synchronize(); seconds = time.monotonic() - started
