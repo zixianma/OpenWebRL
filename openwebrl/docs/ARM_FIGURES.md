@@ -88,6 +88,18 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg)
 
+### Training data ablations: matched-window rerun
+
+![Training data ablations: matched-window rerun](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-20261109.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-20261109.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-20261109.svg)
+
+### Training data ablations: matched-window rerun by benchmark
+
+![Training data ablations: matched-window rerun by benchmark](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-per-benchmark-20261109.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-per-benchmark-20261109.pdf)
+
 ## RL training and evaluation
 
 ### Training and validation: valid-only success

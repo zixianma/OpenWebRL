@@ -32,6 +32,8 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-recipe3-data-ablations-rerun-per-benchmark-20261109": "Training data ablations: matched-window rerun by benchmark",
+    "selection-recipe3-data-ablations-rerun-20261109": "Training data ablations: matched-window rerun",
     "figure1": "Action Decision Models: overview",
     "selection-offline-eval-20261022": "Rollout collection and action decision labeling",
     "selection-arch-overview-20261107": "ADM architecture",
