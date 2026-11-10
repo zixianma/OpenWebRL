@@ -131,11 +131,22 @@ episodes. Across all 300 tasks, the per-response generation limit occurred
 solved 18 and Soft-MTP solved 16; their median assistant-output sizes were
 similar (1,377 versus 1,184 characters per turn). These conditional subsets
 are selected by each actor's behavior and do not estimate what a longer-context
-rerun would achieve. The saved context-abort result rows omit the partial
-trajectory, so they also cannot establish that Soft-MTP's context errors came
-from longer generated actions. The SGLang logs confirm all 77 versus 140
-HTTP 400s requested 4,096 completion tokens, causing the combined input and
-requested output to exceed the 32,768-token cap.
+rerun would achieve.
+
+The context errors were SGLang HTTP 400 rejections **before generation**:
+input tokens plus the reserved 4,096 completion tokens exceeded the 32,768
+server cap. Rejected input sizes had medians of 29,523 tokens (NTP) and
+29,456 (Soft); all 217 requests were between 28,689 and 30,925 input tokens.
+The rollout guard checked the input against 32,768 but did not reserve the
+completion budget. Saved failure artifacts retain screenshot counts even
+though the result rows omit partial text: every rejected rollout had 12–18
+accumulated screenshots, median 16 in both arms. The launcher specified
+`--context-num-screenshots 1`, but that option applies only to the **turn-level**
+generator; these evaluations used the trajectory generator, which accumulated
+all screenshots and action history. Of the 90 Soft-only context failures, NTP
+had already completed 62 tasks (median seven steps). This is consistent with
+Soft-MTP more often continuing until it hit the boundary; the saved evidence
+does not establish larger typical per-turn outputs.
 
 [Aggregate results and uncertainty](arm_results/soft_mtp_sft_terra_full300_20261109.json)
 link to the local task-level audit, frozen plan and saved rollouts/verdicts.
