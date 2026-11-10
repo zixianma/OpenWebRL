@@ -58,13 +58,14 @@ def load(args, torch, panels=None, features=None):
     return out, layers_all
 
 
-def predict(head, split, device, torch, batch=512):
+def predict(head, split, device, torch, batch=512, score_head="select"):
     head.eval()
     logits = []
     with torch.no_grad():
         for i in range(0, len(split["state"]), batch):
-            logits.append(head(split["candidates"][i:i + batch].to(device),
-                               split["state"][i:i + batch].to(device))[0].float().cpu())
+            selection, value = head(split["candidates"][i:i + batch].to(device),
+                                    split["state"][i:i + batch].to(device))
+            logits.append((value if score_head == "value" else selection).float().cpu())
     return torch.cat(logits)
 
 
@@ -120,9 +121,9 @@ def evaluate_agreement(choosers, split, reference):
     return out
 
 
-def evaluate(head, split, device, torch, batch=512):
+def evaluate(head, split, device, torch, batch=512, score_head="select"):
     from openwebrl.selection_head import topk_agreement
-    logits = predict(head, split, device, torch, batch)
+    logits = predict(head, split, device, torch, batch, score_head)
     t, inf = split["target"], split["informative"]
     hit = lambda l, m: topk_agreement(l[m], t[m])
     plural = split["plurality"] + 1e-3 * torch.rand_like(split["plurality"])  # random tie-break
@@ -138,7 +139,10 @@ def score_branch(head, args, torch, result):
     """Branch-state picks and outcomes; branch states never enter training or checkpoint selection."""
     branch, _ = load(args, torch, args.branch_panels, args.branch_features)
     (branch,) = branch.values()   # one split per branch panel file
-    picks = predict(head, branch, args.device, torch).argmax(-1).tolist()
+    picks = predict(head, branch, args.device, torch, score_head=args.score_head).argmax(-1).tolist()
+    result["branch_head_picks"] = dict(zip([r["state_id"] for r in branch["rows"]], picks))
+    if args.branch_picks_only:
+        return
     external = {}
     for path in args.external_picks:
         with open(path) as stream:
@@ -146,7 +150,6 @@ def score_branch(head, args, torch, result):
             external[path.stem] = {r["state_id"]: r["selected_index"] for r in map(json.loads, stream)
                                    if r["selected_index"] is not None}
     result["branch_outcomes"] = evaluate_outcomes(picks, branch, external)
-    result["branch_head_picks"] = dict(zip([r["state_id"] for r in branch["rows"]], picks))
     if args.reference_picks:
         with open(args.reference_picks) as stream:
             reference = {r["state_id"]: r["selected_indices"] for r in map(json.loads, stream)}
@@ -164,6 +167,8 @@ def main():
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--branch-panels", type=Path, help="Outcome-labeled branching panels")
     ap.add_argument("--branch-features", type=Path)
+    ap.add_argument("--branch-picks-only", action="store_true",
+                    help="save picks without computing historical invalid-as-failure outcome rates")
     ap.add_argument("--external-picks", type=Path, action="append", default=[],
                     help="JSONL of {state_id, selected_index} from another selector (name = file stem)")
     ap.add_argument("--reference-picks", type=Path,
@@ -180,15 +185,19 @@ def main():
     ap.add_argument("--weight-decay", type=float, default=0.05)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--objective", choices=("soft_ce", "pairwise_teacher"), default="soft_ce",
+                    help="Pairwise uses only the GPT-5.5 winner class versus non-equivalent candidates")
     ap.add_argument("--load-head", type=Path,
                     help="score the branch panels with this saved head.pt instead of training (--panels/--features unused)")
     args = ap.parse_args()
 
     import torch
-    from openwebrl.selection_head import CandidateSetHead, HeadConfig, selection_loss
+    from openwebrl.selection_head import CandidateSetHead, HeadConfig, pairwise_teacher_loss, selection_loss
 
     if args.load_head:
         saved = torch.load(args.load_head, map_location="cpu")
+        args.objective = saved.get("objective", "soft_ce")
+        args.score_head = "value" if args.objective == "pairwise_teacher" else "select"
         config = HeadConfig.from_json(saved["config"])
         args.layers, args.pools = ",".join(map(str, config.layers)), ",".join(config.pools)
         head = CandidateSetHead(config)
@@ -201,6 +210,7 @@ def main():
         return
 
     torch.manual_seed(args.seed)
+    args.score_head = "value" if args.objective == "pairwise_teacher" else "select"
     data, _ = load(args, torch)
     train, val = data["train"], data["validation"]
     hidden = train["state"].shape[-1] // len(args.layers.split(","))
@@ -226,22 +236,26 @@ def main():
             perm = torch.argsort(torch.rand(len(idx), 5), -1)
             cands = train["candidates"][idx].gather(1, perm[..., None].expand(-1, -1, train["candidates"].shape[-1]))
             target = train["target"][idx].gather(1, perm)
-            logits, _ = head(cands.to(args.device), train["state"][idx].to(args.device))
-            loss = selection_loss(logits, target.to(args.device), mask[:len(idx)])
+            logits, values = head(cands.to(args.device), train["state"][idx].to(args.device))
+            loss = (pairwise_teacher_loss(values, target.to(args.device), mask[:len(idx)])
+                    if args.objective == "pairwise_teacher"
+                    else selection_loss(logits, target.to(args.device), mask[:len(idx)]))
             opt.zero_grad(); loss.backward()
             torch.nn.utils.clip_grad_norm_(head.parameters(), 1.)
             opt.step(); sched.step()
             total += loss.item() * len(idx)
         metrics = {"epoch": epoch + 1, "train_loss": total / len(order),
-                   "seconds": round(time.time() - started, 1), "validation": evaluate(head, val, args.device, torch)}
+                   "seconds": round(time.time() - started, 1),
+                   "validation": evaluate(head, val, args.device, torch, score_head=args.score_head)}
         history.append(metrics)
         print(json.dumps(metrics), flush=True)
         if best is None or metrics["validation"]["head"] > best["validation"]["head"]:
             best = metrics
-            torch.save({"config": config.to_json(), "state_dict": head.state_dict()}, args.output / "head.pt")
+            torch.save({"config": config.to_json(), "state_dict": head.state_dict(),
+                        "objective": args.objective}, args.output / "head.pt")
     head.load_state_dict(torch.load(args.output / "head.pt")["state_dict"])
     result = {"args": {k: str(v) for k, v in vars(args).items()}, "best": best, "history": history,
-              "train": evaluate(head, train, args.device, torch),
+              "train": evaluate(head, train, args.device, torch, score_head=args.score_head),
               "note": "validation selects the checkpoint; not an untouched test score"}
     if args.branch_panels:
         score_branch(head, args, torch, result)
