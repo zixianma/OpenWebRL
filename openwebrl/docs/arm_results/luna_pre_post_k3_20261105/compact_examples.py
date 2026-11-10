@@ -73,7 +73,7 @@ def pic(fig, rect, im, edge=C["BORDER"], lw=0.6):
 def chip(fig, x, y, w, h, action_id, label, color, fs=6.0):
     fig.add_artist(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.008",
                                   fc=tint("ACTION", .72), ec=color, lw=.85, transform=fig.transFigure))
-    fig.text(x + w / 2, y + h * .76, rf"$a_t^{{{action_id}}}$", fontsize=10, color=color,
+    fig.text(x + w / 2, y + h * .76, action_id, fontsize=10, color=color,
              fontweight="bold", ha="center", va="center")
     fig.text(x + w / 2, y + h * .23, label, fontsize=fs, color=INK, ha="center", va="center",
              linespacing=1.05)
@@ -97,9 +97,13 @@ def main():
              (xp + 0.07, "Teacher choice")]
     for x, t in heads:
         is_math = t.startswith("$")
-        fig.text(x, .956 if is_math else .993, t, fontsize=10 if is_math else 7.5,
-                 color=C["STATE_BORDER"] if t == r"$s_t$" else INK,
-                 ha="center", va="top", fontweight="bold", linespacing=1.1)
+        is_state = t == r"$s_t$"
+        color = C["STATE_INK"] if is_state else C["ACTION_INK"] if is_math else INK
+        bbox = (dict(boxstyle="round,pad=.22", fc=tint("STATE" if is_state else "ACTION", .65),
+                     ec=C["STATE_BORDER"] if is_state else C["ACTION_INK"], lw=.7)
+                if is_math else None)
+        fig.text(x, .945 if is_math else .993, t, fontsize=10 if is_math else 7.5,
+                 color=color, bbox=bbox, ha="center", va="top", fontweight="bold", linespacing=1.1)
     fig.text(xa + wa / 2, .993, r"$K=5$ (2 shown)", fontsize=6.2,
              color=MUTED, ha="center", va="top")
     fig.add_artist(FancyBboxPatch((xc, .972), .015, .017,
@@ -108,9 +112,10 @@ def main():
     fig.text(xc + .023, .9805, "Decisive states", fontsize=6.5, color=INK, va="center")
     for j in range(3):
         label = rf"$s_{{t+{j + 1}}}^i$"
-        fig.text(xt + j * (wt + gt) + wt / 2, .956, label,
-                 fontsize=10, color=C["STATE_BORDER"], ha="center", va="top")
-    y = 0.840
+        fig.text(xt + j * (wt + gt) + wt / 2, .945, label,
+                 fontsize=10, color=C["STATE_INK"], ha="center", va="top",
+                 bbox=dict(boxstyle="round,pad=.22", fc=tint("STATE", .65), ec=C["STATE_BORDER"], lw=.7))
+    y = 0.828
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
@@ -124,7 +129,7 @@ def main():
         fig.add_artist(FancyBboxPatch((bx0, y - block_h - 0.045), bx1 - bx0, block_h + 0.05,
                                       boxstyle="round,pad=0,rounding_size=0.01", fc=BAND, ec=BANDEDGE, lw=0.8,
                                       transform=fig.transFigure, zorder=-5))
-        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
+        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]), edge=C["STATE_BORDER"], lw=.8)
         for k, (i, label, caps) in enumerate(ex["cands"]):
             action_id = str(k + 1)
             col = C["ACTION_INK"] if k == 0 else C["ACTION"]
@@ -155,7 +160,7 @@ def main():
                 rx = xt + j * (wt + gt)
                 if j < len(shots):
                     key = j in ex["decide"]
-                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=BANDEDGE if key else C["BORDER"],
+                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=BANDEDGE if key else C["STATE_BORDER"],
                              lw=1.3 if key else 0.5)
                     if not key:                    # fade evidence that does not decide this example
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.25, ec="none"))
@@ -168,9 +173,18 @@ def main():
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
             bx = xp
             for kk in [kk for kk in ("pre", "k3") if p[kk].count(i) == 2]:
-                t_ = fig.text(bx, ry + th * 0.7, NAME[kk] + ": " + rf"$a_t^{{{action_id}}}$", fontsize=7.2, color="white" if kk == "pre" else INK, fontweight="bold", va="center",
+                cy = ry + th * .75
+                t_ = fig.text(bx, cy, NAME[kk], fontsize=7.2, color="white" if kk == "pre" else INK, fontweight="bold", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
-                fig.canvas.draw(); bx = t_.get_window_extent().transformed(fig.transFigure.inverted()).x1 + 0.006
+                fig.canvas.draw()
+                method_right = t_.get_bbox_patch().get_window_extent().transformed(fig.transFigure.inverted()).x1
+                arrow(fig, method_right + .004, .945, cy, COLOR[kk])
+                fig.add_artist(FancyBboxPatch((.949, cy - .025), .030, .050,
+                                              boxstyle="round,pad=0,rounding_size=.005",
+                                              fc=tint("ACTION", .65), ec=col, lw=1,
+                                              transform=fig.transFigure))
+                fig.text(.964, cy, action_id, fontsize=10.5, color=col,
+                         weight="bold", ha="center", va="center")
             s, n = held(x["actions"][i])
             fig.text(xp, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, va="center")
@@ -178,10 +192,13 @@ def main():
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for i, label in enumerate(fig.texts):
-        bounds = label.get_window_extent(renderer)
+        bounds = (label.get_bbox_patch().get_window_extent(renderer) if label.get_bbox_patch()
+                  else label.get_window_extent(renderer))
         assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label.get_text()
         for other in fig.texts[:i]:
-            assert not bounds.overlaps(other.get_window_extent(renderer)), (label.get_text(), other.get_text())
+            other_bounds = (other.get_bbox_patch().get_window_extent(renderer) if other.get_bbox_patch()
+                            else other.get_window_extent(renderer))
+            assert not bounds.overlaps(other_bounds), (label.get_text(), other.get_text())
     for ext in ("png", "pdf"):
         metadata = {"CreationDate": None, "ModDate": None} if ext == "pdf" else {}
         fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.09, metadata=metadata)
