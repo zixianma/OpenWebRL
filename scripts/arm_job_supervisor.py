@@ -280,6 +280,16 @@ def continuation_prompt(root):
     return prompt
 
 
+def continuation_command(registry, prompt):
+    command = ['codex']
+    sqlite_home = registry.get('codex_sqlite_home')
+    if sqlite_home is not None:
+        if not isinstance(sqlite_home, str) or not Path(sqlite_home).is_absolute():
+            raise ValueError('codex_sqlite_home must be an absolute path')
+        command += ['-c', 'sqlite_home=' + json.dumps(sqlite_home)]
+    return command + ['queue', '--thread', registry['thread_id'], '--message', prompt]
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root', type=Path, default=DEFAULT)
@@ -318,7 +328,7 @@ def main():
                                 urgent=any(urgent_issue(r) for r in rows),
                                 notify_on_change=registry.get('notify_on_state_change', True)):
                 prompt = continuation_prompt(root)
-                result = subprocess.run(['codex', 'queue', '--thread', registry['thread_id'], '--message', prompt],
+                result = subprocess.run(continuation_command(registry, prompt),
                     capture_output=True, text=True, timeout=45)
                 if result.returncode:
                     raise RuntimeError(f'Agent continuation rejected: {result.stderr[:600]}')
