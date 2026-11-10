@@ -1,7 +1,7 @@
 {
-  "schema": "openwebrl8b-luna-n5-completed-repeat-v1",
-  "snapshot_time": "2026-11-09T12:04:32-08:00",
-  "status": "one_completed_repeat_per_cell_three_repeat_campaign_ongoing",
+  "schema": "native-actors-n5-completed-repeat-v2",
+  "snapshot_time": "2026-11-09T19:18:19-08:00",
+  "status": "one_completed_repeat_per_cell_remaining_repeats_incomplete",
   "completed_repeat_seeds": [
     42
   ],
@@ -16,25 +16,62 @@
     "browser": "local_process",
     "candidates": 5,
     "candidate_requests_parallel": true,
-    "actor_temperature": 0.7,
-    "actor_top_p": 0.9,
-    "actor_max_new_tokens": 1024,
     "max_steps": 30,
-    "selector_model": "gpt-6-luna",
-    "selector_reasoning_effort": "medium",
-    "selector_max_output_tokens": 2048,
     "judge_model": "gpt-5.6-terra",
     "judge_reasoning_effort": "medium",
     "judge_max_output_tokens": 4096,
     "judge_seed": 42
   },
+  "protocols_by_method": {
+    "sft8b_luna5": {
+      "actor": "SFT 8B",
+      "actor_temperature": 0.7,
+      "actor_top_p": 0.9,
+      "actor_max_new_tokens": 1024,
+      "selector_type": "API",
+      "selector_model": "gpt-6-luna",
+      "selector_reasoning_effort": "medium",
+      "selector_max_output_tokens": 2048
+    },
+    "rl8b_luna5": {
+      "actor": "RL 8B",
+      "actor_temperature": 0.7,
+      "actor_top_p": 0.9,
+      "actor_max_new_tokens": 1024,
+      "selector_type": "API",
+      "selector_model": "gpt-6-luna",
+      "selector_reasoning_effort": "medium",
+      "selector_max_output_tokens": 2048
+    },
+    "luna_learned5": {
+      "actor_model": "gpt-6-luna",
+      "actor_reasoning_effort": "high",
+      "actor_max_output_tokens": 12288,
+      "api_temperature": null,
+      "api_top_p": null,
+      "api_sampling_seed": null,
+      "api_null_sampling_fields": "omitted from native Responses requests",
+      "repeat_seed_realization": "cohort label only; API seed omitted",
+      "selector_type": "local learned 4B",
+      "selector_model": "zixianma/action-selection-heads",
+      "selector_revision": "2be6aadaf3743bd2c143d5c356adf0ba1d041f54",
+      "selector_subfolder": "decoder-4b-lora-gpt55-k3-p16",
+      "selector_temperature": 0,
+      "selector_max_new_tokens": 128,
+      "selector_history": "published last five selected visible actions",
+      "private_actor_reasoning_to_selector": false
+    }
+  },
   "denominators": {
     "overall_success": "successes / scheduled tasks in the completed cell",
     "valid_only_success": "successes / valid outcomes in the completed cell"
   },
+  "comparability": "Complete systems comparison; Luna high + learned N5 changes actor and selector relative to the 8B + Luna systems. Valid cohorts differ. One repeat does not establish the three-repeat mean or uncertainty.",
+  "canonical_record_set_encoding": "SHA256 of compact UTF-8 JSON array of [record filename, SHA256(record bytes)] pairs sorted by filename; private task records are not published.",
   "cells": [
     {
       "actor": "SFT 8B",
+      "selector": "Luna N5",
       "method": "sft8b_luna5",
       "benchmark": "online_mind2web",
       "repeat_seed": 42,
@@ -47,11 +84,12 @@
       "overall_success": 0.4,
       "valid_only_success": 0.4444444444444444,
       "protocol_sha256": "da75db877a27ea28f9bbfd61a5e5d1ad8e725ee85350b02f21960cdea1bdff11",
-      "canonical_record_set_sha256": "bd65159c8ae1402fc4843f52bf70bafa76ee8bf2c0d38000a34ad030b71a9cc5",
+      "canonical_record_set_sha256": "c728334b1da1e215f5c714a76490b9e088e5d372307cef07472e732bdbf3eb74",
       "native_endpoint_sha256": "354700bad2f43bea9445978947f04c600aa4af1911b561c45fee2591042ce5ff"
     },
     {
       "actor": "RL 8B",
+      "selector": "Luna N5",
       "method": "rl8b_luna5",
       "benchmark": "online_mind2web",
       "repeat_seed": 42,
@@ -64,11 +102,30 @@
       "overall_success": 0.48,
       "valid_only_success": 0.5373134328358209,
       "protocol_sha256": "611f31f5f558582f0b6e1fbe005186908fc873fc913d2078708569c7b2cb24de",
-      "canonical_record_set_sha256": "451d606f3c8dd676e5228d0cc9d3b57d852d6d9f0825a67b3ea2fa0b41c2eb36",
+      "canonical_record_set_sha256": "c83e775ca406ca4332082d5558b2fdaa446c7e7303015184a22fdf1b4ebba8f7",
       "native_endpoint_sha256": "b1a3e754e2bd0fe226487f8ab2974243d92cd5d3c009d7b4f02e567dfd9d18e1"
     },
     {
+      "actor": "Luna high",
+      "selector": "Learned N5",
+      "method": "luna_learned5",
+      "benchmark": "online_mind2web",
+      "repeat_seed": 42,
+      "actor_revision": "gpt-6-luna",
+      "scheduled": 300,
+      "recorded": 300,
+      "valid": 273,
+      "invalid": 27,
+      "successes": 164,
+      "overall_success": 0.5466666666666666,
+      "valid_only_success": 0.6007326007326007,
+      "protocol_sha256": "e7f578e37279ccd3fde12db0526e886ad8273bb027e45b843c8cea5bd4eb27cd",
+      "canonical_record_set_sha256": "e6076619dfea80fdbca378e536c4cf4bc2219c5efcc6560618af77db1439dfd3",
+      "native_endpoint_sha256": "f6c8fcff024165ce35d1e026245bce6b3370053707e7019b1d70e9eb6b5e4fd4"
+    },
+    {
       "actor": "SFT 8B",
+      "selector": "Luna N5",
       "method": "sft8b_luna5",
       "benchmark": "webvoyager",
       "repeat_seed": 42,
@@ -81,11 +138,12 @@
       "overall_success": 0.4890756302521008,
       "valid_only_success": 0.5339449541284403,
       "protocol_sha256": "e386495cdd10fada26e48ea3fd93083b26f96c21255ab5ad069157c681a1d4a2",
-      "canonical_record_set_sha256": "eed8d5ccc9659b120ad7da03b83f39cbccee6cd3c6a4b734192472142adc894d",
+      "canonical_record_set_sha256": "c0fc2914703d7517bbb88486f37e58fa0794a293761eb45e0fb13a2461d49271",
       "native_endpoint_sha256": "20768d17ec46889d3df38e68cd054fddb3a9e6155f18cc97978357d59163a75d"
     },
     {
       "actor": "RL 8B",
+      "selector": "Luna N5",
       "method": "rl8b_luna5",
       "benchmark": "webvoyager",
       "repeat_seed": 42,
@@ -98,11 +156,30 @@
       "overall_success": 0.5142857142857142,
       "valid_only_success": 0.5604395604395604,
       "protocol_sha256": "516df2f41e5b4be96038ceb4071d1aa81196c5d2208766cd1fc583e20aee1a4d",
-      "canonical_record_set_sha256": "b5cc96b7bc8cd81ae45197fd50ef1ad4ff6227e9a50708bab26ed514fc25dec9",
+      "canonical_record_set_sha256": "e2b337a3b56bcf44bd54795143c58f9f357998d818fa4b537dafbc4fa24857ca",
       "native_endpoint_sha256": "69ab78f3d4b176aa47b49c72b82ac122e4f371193163b2554bdb440f61c9d520"
     },
     {
+      "actor": "Luna high",
+      "selector": "Learned N5",
+      "method": "luna_learned5",
+      "benchmark": "webvoyager",
+      "repeat_seed": 42,
+      "actor_revision": "gpt-6-luna",
+      "scheduled": 595,
+      "recorded": 595,
+      "valid": 545,
+      "invalid": 50,
+      "successes": 373,
+      "overall_success": 0.626890756302521,
+      "valid_only_success": 0.6844036697247706,
+      "protocol_sha256": "4453a7eae9b63eb4503b73ce38748fb219b3f37c0dd9da55de2e71ad2ac1c2aa",
+      "canonical_record_set_sha256": "585d7ebb2cec040671ac3b1d7bd6abcb6ff6bae40678dc75389d783f331089f6",
+      "native_endpoint_sha256": "f50318d264c220ad10a712558542494d5aba643bae32dcfa5cdeebc427e3af1f"
+    },
+    {
       "actor": "SFT 8B",
+      "selector": "Luna N5",
       "method": "sft8b_luna5",
       "benchmark": "deepshop",
       "repeat_seed": 42,
@@ -115,11 +192,12 @@
       "overall_success": 0.4266666666666667,
       "valid_only_success": 0.43537414965986393,
       "protocol_sha256": "99bb0247dca2c541db192836ad451cce8780a74067a1ef110b2f7c3eb6db5030",
-      "canonical_record_set_sha256": "e117a17485bd10c6e6f982ff932937d15f29a23668e45314fbd9b822b8801b5c",
+      "canonical_record_set_sha256": "86d667a8077977de34d5558f3419bbaebaa9b5fe4b8a399bea3ed0d92f14483d",
       "native_endpoint_sha256": "e8e263c54bf10e2aaee1efb38990499cd3700a205ad1b0effab49a6a54d3b33a"
     },
     {
       "actor": "RL 8B",
+      "selector": "Luna N5",
       "method": "rl8b_luna5",
       "benchmark": "deepshop",
       "repeat_seed": 42,
@@ -132,8 +210,26 @@
       "overall_success": 0.47333333333333333,
       "valid_only_success": 0.47651006711409394,
       "protocol_sha256": "8dbd8ff7dc660fc34cbfbcea57fd046a5fb153d1db94afc3ec2e16b87009bd82",
-      "canonical_record_set_sha256": "b5d50f9581826c3acd7a8d9b9c8577eff2bfd94f758343fca5a04ca13ffb36a8",
+      "canonical_record_set_sha256": "c9a963fdad3b349997530ce82862050f3ebe4f32312588bbc5f7a4cbda747db5",
       "native_endpoint_sha256": "19f6367eb950c92d68373cff94bb3085d2fe690288a36628a6f39bc7c1acac71"
+    },
+    {
+      "actor": "Luna high",
+      "selector": "Learned N5",
+      "method": "luna_learned5",
+      "benchmark": "deepshop",
+      "repeat_seed": 42,
+      "actor_revision": "gpt-6-luna",
+      "scheduled": 150,
+      "recorded": 150,
+      "valid": 143,
+      "invalid": 7,
+      "successes": 77,
+      "overall_success": 0.5133333333333333,
+      "valid_only_success": 0.5384615384615384,
+      "protocol_sha256": "a8f9edf608ad0542df47c39174845b64dcaebda03a1329a253b7aed1b49aad96",
+      "canonical_record_set_sha256": "82fd84e6cb07b9bdecfe6490d658f89a52fcce2a0d1faa0afad578b42514eef4",
+      "native_endpoint_sha256": "10dab729abdf89c28f8dd68a4910be1a2e271e180b2def3bfebc9babfff827fe"
     }
   ]
 }

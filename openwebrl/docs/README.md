@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[OpenWebRL SFT/RL 8B + Luna N5: Terra-judged overall and valid-only results from the completed first repeat; three-repeat campaigns ongoing](ARM_FINAL_RESULTS.md#openwebrl8b-luna-n5-20261109).
+[Native actors + N5 selectors: SFT/RL 8B + Luna and Luna high + learned N5, with Terra-judged overall and valid-only success from the completed first repeat](ARM_FINAL_RESULTS.md#openwebrl8b-luna-n5-20261109).
 
 [Figures-only gallery: all final-results figures, including historical and supplementary views](ARM_FIGURES.md).
 

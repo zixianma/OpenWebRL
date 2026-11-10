@@ -3,29 +3,34 @@
 <!-- openwebrl8b-luna-n5-20261109:start -->
 <a id="openwebrl8b-luna-n5-20261109"></a>
 
-## OpenWebRL 8B actors with Luna N5 selection: completed first repeat
+## Native actors and N5 selectors: completed first repeat
 
-**RL 8B + Luna N5 records higher success than SFT 8B + Luna N5 on all three benchmarks in the first completed repeat. The three-repeat campaigns are still running.** These are native coordinate-action results with GPT-5.6 Terra grading.
+**Luna high + learned N5 records the highest success on all three benchmarks in the first completed repeat; RL 8B + Luna N5 exceeds SFT 8B + Luna N5.** These are native coordinate-action results with GPT-5.6 Terra grading. The Luna-high comparison changes both actor and selector, so it does not isolate a learned-selector gain. Remaining repeats are incomplete.
 
-| Benchmark | Actor + Luna N5 selector | Successes | Valid | Invalid | Total | Overall success | Valid-only success |
+| Benchmark | Actor + selector | Successes | Valid | Invalid | Total | Overall success | Valid-only success |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Online-Mind2Web | SFT 8B + Luna N5 | 120 | 270 | 30 | 300 | 40.0% | 44.4% |
 | Online-Mind2Web | RL 8B + Luna N5 | 144 | 268 | 32 | 300 | 48.0% | 53.7% |
+| Online-Mind2Web | Luna high + Learned N5 | 164 | 273 | 27 | 300 | 54.7% | 60.1% |
 | WebVoyager | SFT 8B + Luna N5 | 291 | 545 | 50 | 595 | 48.9% | 53.4% |
 | WebVoyager | RL 8B + Luna N5 | 306 | 546 | 49 | 595 | 51.4% | 56.0% |
+| WebVoyager | Luna high + Learned N5 | 373 | 545 | 50 | 595 | 62.7% | 68.4% |
 | DeepShop | SFT 8B + Luna N5 | 64 | 147 | 3 | 150 | 42.7% | 43.5% |
 | DeepShop | RL 8B + Luna N5 | 71 | 149 | 1 | 150 | 47.3% | 47.7% |
+| DeepShop | Luna high + Learned N5 | 77 | 143 | 7 | 150 | 51.3% | 53.8% |
 
-Overall success divides successes by all assigned tasks; valid-only success divides by valid outcomes. All six cells above contain their full assigned cohort. Valid subsets differ between methods. One completed repeat does not establish the final three-repeat mean or uncertainty.
+Overall success divides successes by all assigned tasks; valid-only success divides by valid outcomes. All nine cells contain their full assigned cohort. Valid subsets differ between methods. One completed repeat does not establish the final three-repeat mean or uncertainty.
 
-[Aggregate counts, protocol and source fingerprints](arm_results/openwebrl8b_luna_n5_20261109/aggregate.json).
+[Aggregate counts, method-specific protocols and source fingerprints](arm_results/openwebrl8b_luna_n5_20261109/aggregate.json).
 
 <details>
-<summary>Protocol, completed scope and remaining repeats</summary>
+<summary>Actor/selector protocols, completed scope and remaining repeats</summary>
 
-Each state samples five independent actor candidates in parallel, then GPT-6 Luna selects one using medium reasoning effort and a 2,048-token response ceiling. Both 8B actors use temperature 0.7, top-p 0.9, a 1,024-token response ceiling and at most 30 steps. Browser execution uses the native coordinate-action harness with local browsers. Terra uses medium effort and a 4,096-token response ceiling with each benchmark's native success protocol. These settings differ from the BrowserCode API-actor scaling experiments elsewhere on this page.
+Each state samples five independent actor candidates in parallel, then executes only the selected action. Both 8B actors use temperature 0.7, top-p 0.9 and a 1,024-token response ceiling; their GPT-6 Luna selector uses medium effort and a 2,048-token response ceiling. The Luna-high API actor instead uses high effort and a 12,288-token response ceiling, with temperature, top-p and API seed omitted. Its local learned 4B selector is [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/2be6aadaf3743bd2c143d5c356adf0ba1d041f54/decoder-4b-lora-gpt55-k3-p16), at revision `2be6aadaf3743bd2c143d5c356adf0ba1d041f54`, with temperature 0 and at most 128 output tokens. It receives visible candidate actions and the last five selected actions, without private actor reasoning; K3 identifies training lookahead, while evaluation uses N5 candidates.
 
-The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per actor, or 1,045 outcomes each. Seeds 43 and 44 remain in progress or pending, for a planned 3,135 outcomes per actor. Interrupted work resumes without replacing any committed valid or invalid outcome. Separate temperature-1.0 trial results are excluded. This table covers only the two 8B actors.
+All methods use at most 30 steps and local browsers through the native coordinate-action harness. Terra uses medium effort and a 4,096-token response ceiling with each benchmark's native success protocol. These settings differ from the BrowserCode API-actor scaling experiments elsewhere on this page.
+
+The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per method, or 1,045 outcomes each. Seeds 43 and 44 are incomplete, for a planned 3,135 outcomes per method. For the API actor, seeds identify repeat cohorts rather than seeded API sampling. Interrupted work preserves every committed valid or invalid outcome. Separate temperature-1.0 trials and the requested SFT 4B/T1.0 experiments are excluded.
 
 </details>
 <!-- openwebrl8b-luna-n5-20261109:end -->
