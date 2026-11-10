@@ -97,6 +97,32 @@ def unique_process_attempt(root, manifest, i):
 
 
 class ActionCreditStateTests(unittest.TestCase):
+    def test_q_inventory_roles_are_explicit_immutable_and_disjoint(self):
+        data = manifest_data()
+        data["arm_id"] = "continuation_q"
+        with tempfile.TemporaryDirectory(prefix="action-credit-q-roles-", dir="/tmp") as temp:
+            store = CampaignStore.create(Path(temp)/"ledger", CampaignManifest.from_dict(data))
+            with self.assertRaisesRegex(StateError, "explicitly prescribe"):
+                store.plan_update(0, policy_sha256=sha("actor"), draws=[spec()])
+            for inventory_role, draw_role in (("unknown", "train"), ("q_fit", "holdout"), ("q_holdout", "train")):
+                with self.assertRaises(StateError):
+                    store.plan_update(0, policy_sha256=sha("actor"), draws=[
+                        dict(spec(), draw_role=draw_role, inventory_role=inventory_role)])
+            specs = [dict(spec(0), inventory_role="base"), dict(spec(1), inventory_role="q_fit"),
+                     dict(spec(2, role="holdout"), inventory_role="q_holdout")]
+            store.plan_update(0, policy_sha256=sha("actor"), draws=specs)
+            changed = [dict(x) for x in specs]
+            changed[1]["inventory_role"] = "base"
+            with self.assertRaisesRegex(StateError, "immutable"):
+                store.plan_update(0, policy_sha256=sha("actor"), draws=changed)
+            with self.assertRaisesRegex(StateError, "Unplanned"):
+                store.reserve_draw("relabelled", update_id=0, policy_sha256=sha("actor"), **changed[1])
+            for i, planned in enumerate(specs):
+                draw = store.reserve_draw(str(i), update_id=0, policy_sha256=sha("actor"), **planned)["draw_id"]
+                store.mark_missing_draw(draw, reason="CPU fixture admission unavailable")
+            store.seal_update(0)
+            self.assertEqual({row["inventory_role"] for row in store.training_draws(0)}, {"base", "q_fit"})
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="action-credit-", dir="/tmp")
         self.addCleanup(self.temp.cleanup)
