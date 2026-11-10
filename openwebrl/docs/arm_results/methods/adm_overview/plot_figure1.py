@@ -164,7 +164,6 @@ text(369, 298, r"$\pi_\theta$", size=7.7, color=GRAY)
 
 box(34, 317, 582, 105, tint("ACTION", .93), ACTION_EDGE, radius=7, lw=0.5)
 text(54, 341, r"Actions $\mathcal{A}_t$", size=6.8, ha="left")
-text(596, 341, "Reasoning + operation", size=6.0, color=MUTED, ha="right")
 centers = [122, 322, 522]
 for cx, i in zip(centers, ["1", "2", "K"]):
     box(cx-66, 366, 132, 49, PALE_ACTION, ACTION_EDGE, radius=6)
