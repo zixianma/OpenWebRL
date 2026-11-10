@@ -6,7 +6,7 @@ One column grid for both examples: current screen (what every teacher sees) | ca
 action | the actor's next two actions and their screens (lookahead H = 4) | teacher picks and
 held-out success. Success = successful share of held-out continuations (draws 4-8, valid only); an action the actor
 proposed k times (merged duplicates) has 5k held-out continuations. Same saved screenshots as render_examples.py.
-A/B label the two displayed candidate rows, independently within each example;
+Indices 1/2 label the two displayed candidate rows, independently within each example;
 they do not replace the saved candidate indices. Salmon frames mark the evidence
 that separates the choices. Only two later actions are shown; the ellipsis retains
 the remaining H=4 continuation.
@@ -44,7 +44,7 @@ EXAMPLES = [
          task="Find recent machine learning and deep learning papers.", site="arxiv.org",
          sid="72dbd347d60817b95b0e603b", cur=(0.0, 0.0, 0.86, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
          decide=[1, 2],
-         cands=[(1, "Click search", ["Search box opens", "Type “machine learning”", "Enter: 353,132 results"]),
+         cands=[(1, "Click search", ["Search box opens", "Type “machine\nlearning”", "353,132 results"]),
                 (0, "Go back", ["arXiv home page", "Same listing again", "Back again: loop"])]),
 ]
 
@@ -73,9 +73,9 @@ def pic(fig, rect, im, edge=C["BORDER"], lw=0.6):
 def chip(fig, x, y, w, h, action_id, label, color, fs=6.0):
     fig.add_artist(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.008",
                                   fc=tint("ACTION", .72), ec=color, lw=.85, transform=fig.transFigure))
-    fig.text(x + w / 2, y + h * .80, action_id, fontsize=7, color=color,
+    fig.text(x + w / 2, y + h * .76, rf"$a_t^{{{action_id}}}$", fontsize=8, color=color,
              fontweight="bold", ha="center", va="center")
-    fig.text(x + w / 2, y + h * .35, label, fontsize=fs, color=INK, ha="center", va="center",
+    fig.text(x + w / 2, y + h * .23, label, fontsize=fs, color=INK, ha="center", va="center",
              linespacing=1.05)
 
 
@@ -86,21 +86,23 @@ def arrow(fig, x0, x1, y, color=C["BASELINE_DARK"]):
 
 def main():
     plt.rcParams.update({"font.family": "Albert Sans", "savefig.facecolor": "white", "pdf.fonttype": 42})
-    fig = plt.figure(figsize=(7.2, 3.35))
-    xc, wc = 0.0, 0.215                 # current screen
-    xa, wa = 0.229, 0.112              # action chip
-    xt, wt, gt = 0.365, 0.143, 0.008   # three screens: right after the action, next action 1, next action 2
-    xp = xt + 3 * wt + 2 * gt + 0.03   # picks / success (after a "…" marking further lookahead)
-    th, rowgap = 0.13, 0.06
-    heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Candidate action"),
-             (xt + (3 * wt + 2 * gt) / 2, "Lookahead evidence (H = 4)"),
-             (xp + 0.065, "Teacher choice")]
+    fig = plt.figure(figsize=(7.2, 3.6))
+    xc, wc = 0.02, 0.185               # current screen
+    xa, wa = 0.227, 0.108              # action chip
+    xt, wt, gt = 0.365, 0.127, 0.016   # three screens: candidate result and two later states
+    xp = 0.815                         # picks / success; generous label column
+    th, rowgap = 0.115, 0.07
+    heads = [(xc + wc / 2, r"$s_t$"), (xa + wa / 2, r"$a_t^i$"),
+             (xt + (3 * wt + 2 * gt) / 2, "Lookahead (H = 4)"),
+             (xp + 0.07, "Teacher choice")]
     for x, t in heads:
-        fig.text(x, 0.995, t, fontsize=6.7, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
-    for j, label in enumerate(("After candidate", "+1 actor action", "+2 actor actions")):
-        fig.text(xt + j * (wt + gt) + wt / 2, .955, label,
-                 fontsize=5.9, color=MUTED, ha="center", va="top")
-    y = 0.885
+        fig.text(x, .950 if t.startswith("$") else .993, t, fontsize=7.5,
+                 color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
+    for j in range(3):
+        label = rf"$s_{{t+{j + 1}}}^i$"
+        fig.text(xt + j * (wt + gt) + wt / 2, .950, label,
+                 fontsize=7.5, color=MUTED, ha="center", va="top")
+    y = 0.855
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
@@ -116,7 +118,7 @@ def main():
                                       transform=fig.transFigure, zorder=-5))
         ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
         for k, (i, label, caps) in enumerate(ex["cands"]):
-            action_id = "AB"[k]
+            action_id = str(k + 1)
             col = C["ACTION_INK"] if k == 0 else C["ACTION"]
             c = calls(anc["candidates"][x["actions"][i]["teacher_exec"]]["output"][0])[0]
             pt = (c.get("arguments") or {}).get("point_2d")
@@ -136,7 +138,7 @@ def main():
                         color="white", fontsize=6.5, weight="bold",
                         bbox=dict(boxstyle="round,pad=.15", fc=col, ec="white", lw=.5))
             ry = y - (k + 1) * th - k * rowgap
-            chip(fig, xa, ry + th * 0.05, wa, th * 0.90, action_id, label, col)
+            chip(fig, xa, ry + th * 0.02, wa, th * 0.96, action_id, label, col)
             arrow(fig, xa + wa + 0.002, xt - 0.004, ry + th / 2, col)
             att, imm = attempt_for(root, ex["sid"], x["actions"][i]["teacher_exec"])
             shots = [img(imm["observation"]["screenshot"]["path"])]
@@ -149,21 +151,22 @@ def main():
                              lw=1.3 if key else 0.5)
                     if not key:                    # fade evidence that does not decide this example
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.25, ec="none"))
-                    fig.text(rx + 0.003, ry - 0.006, caps[j], fontsize=6.0,
-                             color=INK if key else C["MUTED"], va="top", fontweight="bold" if key else "normal")
+                    if key:
+                        fig.text(rx + 0.003, ry - 0.006, caps[j], fontsize=6.0,
+                                 color=INK, va="top", fontweight="bold")
                 elif j == 1:
                     fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
             bx = xp
             for kk in [kk for kk in ("pre", "k3") if p[kk].count(i) == 2]:
-                t_ = fig.text(bx, ry + th * 0.7, f"{NAME[kk]}: {action_id}", fontsize=6.0, color="white" if kk == "pre" else INK, fontweight="bold", va="center",
+                t_ = fig.text(bx, ry + th * 0.7, NAME[kk] + ": " + rf"$a_t^{{{action_id}}}$", fontsize=7.2, color="white" if kk == "pre" else INK, fontweight="bold", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
                 fig.canvas.draw(); bx = t_.get_window_extent().transformed(fig.transFigure.inverted()).x1 + 0.006
             s, n = held(x["actions"][i])
             fig.text(xp, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, va="center")
-        y = y - block_h - 0.125
+        y = y - block_h - 0.15
     fig.text(xc, .025, "Success: successful valid held-out continuations (rollouts 4–8).",
              fontsize=5.8, color=MUTED, va="bottom")
     fig.canvas.draw()
@@ -175,7 +178,7 @@ def main():
             assert not bounds.overlaps(other.get_window_extent(renderer)), (label.get_text(), other.get_text())
     for ext in ("png", "pdf"):
         metadata = {"CreationDate": None, "ModDate": None} if ext == "pdf" else {}
-        fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.02, metadata=metadata)
+        fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.09, metadata=metadata)
     plt.close(fig)
 
 
