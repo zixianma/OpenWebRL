@@ -6,10 +6,7 @@
   "pps1": "arm5-9f25a8bd0da7",
   "s1000": "arm5-fc760b23e227"
  },
- "pending": [
-  "pps1",
-  "s1000"
- ],
+ "pending": [],
  "rates": {
   "full": {
    "online_mind2web": {
@@ -90,6 +87,112 @@
     0.32642787126408734,
     -1.864576935428234,
     2.539168537437506
+   ]
+  },
+  "pps1": {
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 782,
+    "successes": 338,
+    "overall": 37.55555555555556,
+    "valid_only": 43.22250639386189,
+    "diff_overall_vs_full_pp": [
+     2.888888888888893,
+     -0.22222222222222365,
+     6.0
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1616,
+    "successes": 879,
+    "overall": 49.2436974789916,
+    "valid_only": 54.39356435643565,
+    "diff_overall_vs_full_pp": [
+     -2.2408963585434165,
+     -4.649859943977591,
+     0.11204481792717047
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 237,
+    "overall": 52.666666666666664,
+    "valid_only": 53.258426966292134,
+    "diff_overall_vs_full_pp": [
+     0.6666666666666643,
+     -4.222222222222227,
+     5.777777777777771
+    ]
+   },
+   "mean_overall": 46.4886399004046,
+   "mean_valid_only": 50.291499238863224,
+   "diff_mean_overall_vs_full_pp": [
+    0.4382197323373731,
+    -1.7488484282601962,
+    2.5686274509803915
+   ],
+   "diff_mean_valid_only_vs_full_pp": [
+    0.45233763777787317,
+    -1.8792694085628785,
+    2.704273389240167
+   ]
+  },
+  "s1000": {
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 770,
+    "successes": 312,
+    "overall": 34.666666666666664,
+    "valid_only": 40.51948051948052,
+    "diff_overall_vs_full_pp": [
+     0.0,
+     -3.3333333333333326,
+     3.2222222222222205
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1612,
+    "successes": 861,
+    "overall": 48.23529411764706,
+    "valid_only": 53.411910669975185,
+    "diff_overall_vs_full_pp": [
+     -3.249299719887958,
+     -5.49019607843137,
+     -1.064425770308125
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 444,
+    "successes": 234,
+    "overall": 52.0,
+    "valid_only": 52.7027027027027,
+    "diff_overall_vs_full_pp": [
+     0.0,
+     -4.888888888888893,
+     4.888888888888893
+    ]
+   },
+   "mean_overall": 44.96732026143791,
+   "mean_valid_only": 48.87803129738614,
+   "diff_mean_overall_vs_full_pp": [
+    -1.0830999066293145,
+    -3.176851851851851,
+    0.9950202303143474
+   ],
+   "diff_mean_valid_only_vs_full_pp": [
+    -0.961130303699214,
+    -3.1720989600549068,
+    1.2966553236845502
    ]
   }
  }

@@ -5,7 +5,7 @@ Same axes and encoding as selection-recipe3-data-ablations-compact-20261105.py (
 circles = fewer states, diamonds = fewer sets per state, square = full data). Solid: November 8-9 rerun, 3 runs per point, all
 conditions in one window. Faded: the November 4-6 batch (subsets November 4-5, full data November 6), joined to the rerun of the
 same LoRA by a thin gray line; only rerun points carry names (faded: circles at 2.2K / 8.9K sets = 252 / 1,001 states, diamonds at
-2.1K / 7.4K = 1 / 3.5 sets per state). Subsets not yet judged in the rerun appear faded only. Dashed: SFT 4B alone (3 runs, November 6; not
+2.1K / 7.4K = 1 / 3.5 sets per state). The 252-state subset was not rerun and appears faded only. Dashed: SFT 4B alone (3 runs, November 6; not
 rerun). Data: selection-recipe3-data-ablations-rerun-20261109-analysis.json and selection-recipe3-data-ablations-20261105.json."""
 import json
 import os
@@ -55,8 +55,12 @@ def draw(ax, yo, yn, sft, fs):
             ax.scatter(SETS[k], yn[k], s=40 if k == "full" else 32, marker=MARK[k], color=COL, zorder=4)
             up = yn[k] >= yo[k]
             lab = f"{yn[k]:.1f}" if k == "full" else f"{name(k)}\n{yn[k]:.1f}" if up else f"{yn[k]:.1f}\n{name(k)}"
-            ax.annotate(lab, (SETS[k], yn[k]), textcoords="offset points", xytext=(0, 6 if up else -6), ha="center",
-                        va="bottom" if up else "top", fontsize=fs, color=COL, linespacing=1.0)
+            if MARK[k] == "o":                                       # right of the point: clear of the diamond at 7.4K sets
+                ax.annotate(f"{name(k)}\n{yn[k]:.1f}" if up else f"{yn[k]:.1f}\n{name(k)}", (SETS[k], yn[k]), textcoords="offset points",
+                            xytext=(7, 3 if up else -10), ha="left", va="bottom" if up else "top", fontsize=fs, color=COL, linespacing=1.0)
+            else:
+                ax.annotate(lab, (SETS[k], yn[k]), textcoords="offset points", xytext=(0, 6 if up else -6), ha="center",
+                            va="bottom" if up else "top", fontsize=fs, color=COL, linespacing=1.0)
     ax.axhline(sft, color=C["BASELINE_LIGHT"], linestyle="--", linewidth=0.9, zorder=0)
     ax.text(29000, sft - 0.3, f"SFT 4B alone (Nov 6) {sft:.1f}", fontsize=fs, color=C["MUTED"], va="top", ha="right")
     ax.set_xscale("log"); ax.set_xticks([2000, 4000, 8000, 16000]); ax.set_xticklabels(["2K", "4K", "8K", "16K"]); ax.minorticks_off()
