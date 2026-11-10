@@ -261,8 +261,89 @@ class CampaignStore:
 
     @staticmethod
     def _totals(state):
-        return {key: sum(a["charged"][key] for a in state["attempts"].values())
+        # HTTP retries are separately reserved before each actual transport
+        # call. Their parent episode carries no duplicate API reservation.
+        entries = (*state["attempts"].values(), *state.get("subrequests", {}).values(),
+                   *state.get("evaluation_attempts", {}).values())
+        return {key: sum(a["charged"][key] for a in entries)
                 for key in COST_DIMENSIONS}
+
+    def reserve_subrequest(self, request_id, *, parent_attempt_id, payload_sha256, reserved_cost):
+        """Reserve exactly one judge HTTP attempt; created=False forbids send.
+
+        This ledger operation grants no API permission. The caller separately
+        binds an approved provider/model/pricing/output-limit protocol. A crash
+        retains the complete reservation, including unknown provider charges.
+        """
+        _ident(request_id, "request_id")
+        _ident(parent_attempt_id, "parent_attempt_id")
+        _sha(payload_sha256, "payload_sha256")
+        reserved = _cost(reserved_cost)
+        _require(reserved["api_requests"] == 1 and reserved["gpu_seconds"] == 0
+                 and reserved["browser_dispatches"] == 0,
+                 "Judge subrequest reserves one HTTP attempt and explicit API cost only")
+        identity = dict(parent_attempt_id=parent_attempt_id, payload_sha256=payload_sha256,
+                        reserved=reserved)
+        with self._transaction() as state:
+            calls = state.setdefault("subrequests", {})
+            if request_id in calls:
+                _require(all(calls[request_id][k] == v for k, v in identity.items()),
+                         "Subrequest reused with different payload/parent/reservation")
+                return dict(created=False, request_id=request_id, status=calls[request_id]["status"])
+            _require(not state["halt"], "Campaign halted")
+            parent = (state["attempts"].get(parent_attempt_id)
+                      or state.get("evaluation_attempts", {}).get(parent_attempt_id))
+            _require(parent is not None and parent["status"] == "active", "Active parent attempt required")
+            _require(parent["reserved"]["api_requests"] == parent["reserved"]["api_microdollars"] == 0,
+                     "Per-HTTP accounting requires zero duplicate episode API reservation")
+            caps = self.manifest.to_dict()["budget_caps"]
+            total = self._totals(state)
+            if any(total[k] + reserved[k] > caps[k] for k in COST_DIMENSIONS):
+                raise BudgetExceeded("HTTP reservation exceeds explicit remaining resource caps")
+            calls[request_id] = dict(identity, charged=reserved.copy(), actual=None,
+                                     status="reserved", completion=None)
+        return dict(created=True, request_id=request_id, status="reserved")
+
+    def settle_subrequest(self, request_id, *, status, actual_cost, response_sha256=None, reason=None):
+        """Charge metered successes exactly; retain failed/unknown liabilities.
+
+        Releasing an unused successful-response reservation never refunds a
+        consumed token or HTTP attempt. Failed or ambiguous requests retain
+        their full reservation until an explicit external reconciliation.
+        """
+        _ident(request_id, "request_id")
+        _require(status in ("succeeded", "failed", "unknown"), "Explicit HTTP disposition required")
+        actual = _cost(actual_cost)
+        _require(actual["api_requests"] == 1 and actual["gpu_seconds"] == actual["browser_dispatches"] == 0,
+                 "HTTP actual cost must account for its one transport attempt")
+        if status == "succeeded":
+            _sha(response_sha256, "response_sha256")
+            _require(reason is None, "Successful HTTP response cannot have a failure reason")
+        else:
+            _ident(reason, "HTTP failure/unknown reason")
+            if response_sha256 is not None:
+                _sha(response_sha256, "response_sha256")
+        completion = dict(status=status, actual_cost=actual,
+                          response_sha256=response_sha256, reason=reason)
+        exceeded = False
+        with self._transaction() as state:
+            call = state.get("subrequests", {}).get(request_id)
+            _require(call is not None, "Unknown HTTP reservation")
+            if call["completion"] is not None:
+                _require(call["completion"] == completion, "Settled HTTP attempt cannot be rewritten")
+                return dict(recorded=False, request_id=request_id)
+            charged = (actual.copy() if status == "succeeded" else
+                       {k: max(actual[k], call["reserved"][k]) for k in COST_DIMENSIONS})
+            call.update(status=status, actual=actual, completion=completion, charged=charged)
+            caps = self.manifest.to_dict()["budget_caps"]
+            total = self._totals(state)
+            exceeded = (any(total[k] > caps[k] for k in COST_DIMENSIONS)
+                        or any(actual[k] > call["reserved"][k] for k in COST_DIMENSIONS))
+            if exceeded:
+                state["halt"] = "Actual HTTP cost exceeded its reservation or approved resource caps"
+        if exceeded:
+            raise BudgetExceeded("Actual HTTP overrun recorded; campaign halted")
+        return dict(recorded=True, request_id=request_id)
 
     def snapshot(self):
         with self._lock():
@@ -270,14 +351,51 @@ class CampaignStore:
             state["charged_resources"] = self._totals(state)
             return state
 
+    def register_evaluation_cohort(self, cohort_id, request_ref):
+        from .action_credit_eval_budget import register_cohort
+        return register_cohort(self, cohort_id, request_ref)
+
+    def start_evaluation_attempt(self, cohort_id, task_id, attempt_id):
+        from .action_credit_eval_budget import start_attempt
+        return start_attempt(self, cohort_id, task_id, attempt_id)
+
+    def finish_evaluation_attempt(self, attempt_id, *, status, outcome=None, reason=None):
+        from .action_credit_eval_budget import finish_attempt
+        return finish_attempt(self, attempt_id, status=status, outcome=outcome, reason=reason)
+
+    def reserve_evaluation_actor_request(self, actor_attempt_id, *, parent_attempt_id, task_id,
+                                         policy_sha256, payload_sha256, turn):
+        from .action_credit_eval_budget import reserve_actor_request
+        return reserve_actor_request(self, actor_attempt_id, parent_attempt_id=parent_attempt_id,
+            task_id=task_id, policy_sha256=policy_sha256, payload_sha256=payload_sha256, turn=turn)
+
+    def settle_evaluation_actor_request(self, actor_attempt_id, *, status, response_sha256=None, reason=None):
+        from .action_credit_eval_budget import settle_actor_request
+        return settle_actor_request(self, actor_attempt_id, status=status,
+                                    response_sha256=response_sha256, reason=reason)
+
     def _draw_identity(self, update_id, policy_sha256, spec):
         required = {"task_id", "state_id", "action_id", "draw_slot", "draw_role", "group_id", "tree_id"}
-        _require(isinstance(spec, dict) and set(spec) == required, "Incomplete planned draw identity")
+        _require(isinstance(spec, dict) and set(spec) in (required, required | {"inventory_role"}),
+                 "Incomplete planned draw identity")
+        spec = dict(spec)
+        arm = self.manifest.to_dict()["arm_id"]
+        _require(arm != "continuation_q" or "inventory_role" in spec,
+                 "Continuation-Q must explicitly prescribe base/q_fit/q_holdout inventory roles")
+        # Published non-Q fixtures omitted this field. Their only supported
+        # population is base, never an implicitly inferred Q continuation.
+        spec.setdefault("inventory_role", "base")
         for key in ("task_id", "state_id", "action_id", "group_id", "tree_id"):
             _ident(spec[key], key)
         _integer(spec["draw_slot"], "draw_slot")
         role = spec["draw_role"]
         _require(role in ("train", "holdout"), "Unknown continuation draw role")
+        inventory_role = spec["inventory_role"]
+        _require(inventory_role in ("base", "q_fit", "q_holdout"), "Unknown inventory role")
+        _require(inventory_role == "base" or arm == "continuation_q",
+                 "Only continuation-Q may prescribe Q-estimation draws")
+        _require(inventory_role != "q_fit" or role == "train", "Q-fit must have train draw role")
+        _require(inventory_role != "q_holdout" or role == "holdout", "Q-holdout must have holdout draw role")
         task_split = self.manifest.to_dict()["task_splits"].get(spec["task_id"])
         _require(task_split in ("train", "holdout"), "Task absent from frozen membership")
         _require(task_split != "holdout" or role == "holdout", "Heldout tasks cannot supply training draws")
@@ -324,14 +442,17 @@ class CampaignStore:
         return dict(created=True, plan_sha256=plan_sha, draw_ids=sorted(expected))
 
     def reserve_draw(self, request_id, *, update_id, policy_sha256, task_id, state_id,
-                     action_id, draw_slot, draw_role, group_id, tree_id):
+                     action_id, draw_slot, draw_role, group_id, tree_id, inventory_role=None):
         """Persist one slot from the frozen panel before any attempt."""
         _ident(request_id, "request_id")
         _integer(update_id, "update_id")
         _sha(policy_sha256, "policy_sha256")
-        identity = self._draw_identity(update_id, policy_sha256, dict(task_id=task_id,
+        spec = dict(task_id=task_id,
             state_id=state_id, action_id=action_id, draw_slot=draw_slot, draw_role=draw_role,
-            group_id=group_id, tree_id=tree_id))
+            group_id=group_id, tree_id=tree_id)
+        if inventory_role is not None:
+            spec["inventory_role"] = inventory_role
+        identity = self._draw_identity(update_id, policy_sha256, spec)
         draw_id = digest(identity)
         with self._transaction() as state:
             if request_id in state["requests"]:
@@ -354,6 +475,8 @@ class CampaignStore:
         _ident(attempt_id, "attempt_id")
         reserved = _cost(reserved_cost)
         with self._transaction() as state:
+            _require(attempt_id not in state.get("evaluation_attempts", {}),
+                     "Attempt ID already belongs to evaluation")
             if attempt_id in state["attempts"]:
                 old = state["attempts"][attempt_id]
                 _require(old["draw_id"] == draw_id and old["reserved"] == reserved,
@@ -412,6 +535,12 @@ class CampaignStore:
         with self._transaction() as state:
             _require(attempt_id in state["attempts"], "Unknown attempt")
             attempt = state["attempts"][attempt_id]
+            children = [x for x in state.get("subrequests", {}).values()
+                        if x["parent_attempt_id"] == attempt_id]
+            _require(not any(x["status"] == "reserved" for x in children),
+                     "Resolve every dispatched HTTP request before closing its episode")
+            _require(not children or actual["api_requests"] == actual["api_microdollars"] == 0,
+                     "Episode actual cost must exclude separately recorded HTTP costs")
             if attempt["completion"] is not None:
                 _require(attempt["completion"] == completion, "Completed attempt cannot be rewritten")
                 return dict(attempt_id=attempt_id, recorded=False)
@@ -459,7 +588,8 @@ class CampaignStore:
             rows.append(dict(draw_id=key, update_id=update_id, policy_sha256=draw["policy_sha256"],
                 task_id=draw["task_id"], state_id=draw["state_id"], action_id=draw["action_id"],
                 group_id=draw["group_id"], tree_id=draw["tree_id"],
-                draw_slot=draw["draw_slot"], draw_role=draw["draw_role"], status=draw["status"],
+                draw_slot=draw["draw_slot"], draw_role=draw["draw_role"],
+                inventory_role=draw["inventory_role"], status=draw["status"],
                 sampling_terminal_node_id=completion.get("sampling_terminal_node_id") if completion else None,
                 valid=draw["status"] == "valid", outcome=completion["outcome"] if completion else None,
                 reason=completion["reason"] if completion else draw["missing_reason"]))
