@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Compact two-example figure (paper, about 1/3 page): (a) the screen right after an action already separates the
 candidates (Netflix help page); (b) only the actor's next steps do (arXiv search box vs going back).
-The displayed lookahead picks use the saved H=1 teacher for (a) and H=4 teacher
-for (b), each agreeing across both recorded calls; pre-execution is the control.
+Both examples show the saved pre-execution, H=1 and H=4 teacher picks,
+each agreeing across both recorded calls.
 
 One column grid for both examples: current screen (what every teacher sees) | candidate action | screen right after the
 action | the actor's next two actions and their screens (lookahead H = 4) | teacher picks and
@@ -40,13 +40,13 @@ EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
          task="Find Netflix's accepted payment methods.", site="help.netflix.com",
          sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.56, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
-         decide=[0], lookahead_source="post", horizon=1,
+         decide=[0],
          cands=[(1, "Click “Netflix\npayment options”", ["Answer page opens", "Scroll down", "Scroll down"]),
                 (0, "Scroll down", ["More billing text", "Scroll up", "Site unavailable"])]),
     dict(letter="b", title="Only the next steps decide",
          task="Find recent machine learning and deep learning papers.", site="arxiv.org",
          sid="72dbd347d60817b95b0e603b", cur=(0.0, 0.0, 0.86, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
-         decide=[1, 2], lookahead_source="k3", horizon=4,
+         decide=[1, 2],
          cands=[(1, "Click search", ["Search box opens", "Type “machine\nlearning”", "353,132 results"]),
                 (0, "Go back", ["arXiv home page", "Same listing again", "Back again: loop"])]),
 ]
@@ -107,7 +107,7 @@ def main():
                 if is_math else None)
         fig.text(x, .945 if is_math else .993, t, fontsize=10 if is_math else 7.5,
                  color=color, bbox=bbox, ha="center", va="top", fontweight="bold", linespacing=1.1)
-    fig.text(xa, .005, r"$K=5$ (2 shown)", fontsize=6.2,
+    fig.text(xa, .005, r"$K=5$ actions (2 shown)", fontsize=6.2,
              color=MUTED, ha="left", va="bottom")
     fig.add_artist(FancyBboxPatch((xc, .0095), .015, .017,
                                   boxstyle="round,pad=0,rounding_size=.003",
@@ -121,12 +121,12 @@ def main():
     y = 0.828
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
-        source = ex["lookahead_source"]
+        source = "post"
         if source not in p:
             where = {a["teacher_exec"]: i for i, a in enumerate(x["actions"])}
             p[source] = [where[j["candidate"]] for j in read(
                 R / "labels" / source / "judgments" / f"{ex['sid']}.json") if j.get("valid")]
-        assert all(len(p[key]) == 2 and len(set(p[key])) == 1 for key in ("pre", source))
+        assert all(len(p[key]) == 2 and len(set(p[key])) == 1 for key in ("pre", "post", "k3"))
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
         block_h = 2 * th + rowgap
         fig.text(xc, y + 0.008, ex["letter"] + ")", fontsize=8.2, fontweight="bold", color=INK, va="bottom")
@@ -181,14 +181,17 @@ def main():
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
             bx = xp + .07
-            for kk in [kk for kk in ("pre", source) if p[kk].count(i) == 2]:
-                cy = ry + th * .75
-                method_label = NAME[kk] if kk == "pre" else f"Lookahead H={ex['horizon']}"
+            selected_by = [key for key in ("pre", "post", "k3") if p[key].count(i) == 2]
+            positions = [.93, .54] if len(selected_by) == 2 else [.75]
+            assert 1 <= len(selected_by) <= 2
+            for kk, position in zip(selected_by, positions):
+                cy = ry + th * position
+                method_label = NAME[kk] if kk == "pre" else f"Lookahead H={1 if kk == 'post' else 4}"
                 fig.text(bx, cy, method_label, fontsize=7.2, color="white" if kk == "pre" else INK,
                          fontweight="bold", ha="center", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
             s, n = held(x["actions"][i])
-            fig.text(bx, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
+            fig.text(bx, ry + th * (.10 if len(selected_by) == 2 else .25), f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, ha="center", va="center")
         y = y - block_h - 0.15
     fig.canvas.draw()
