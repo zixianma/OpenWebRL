@@ -141,11 +141,12 @@ for x, title, split, color, fill, width in (
 mid = sum(ys) / len(ys)
 box(0.03, mid - 0.12, 0.24, 0.24, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(0.15, mid, r"$s_t$", size=9, color=C["STATE_INK"], ha="center")
-# Keep rollout identity neutral; reserve salmon for the lookahead state/action path.
-rollout_box = box(xs[0] - rollout_pitch / 2, y_low, rollout_pitch, y_high - y_low,
-                  edge=ROLLOUT, fill="none", lw=0.85)
-lookahead_box = box(0.94, y_low - 0.02, 2.69 - 0.94,
-                    1.70 - (y_low - 0.02), edge=LOOK,
+# The outer neutral frame marks Rollout 1; the nested salmon frame isolates
+# the lookahead state/action path from its binary outcome column.
+rollout_box = box(0.92, y_low - 0.06, xs[0] + rollout_pitch / 2 + 0.02 - 0.92,
+                  1.72 - (y_low - 0.06), edge=ROLLOUT, fill="none", lw=0.85)
+lookahead_box = box(0.99, y_low, 2.68 - 0.99,
+                    1.67 - y_low, edge=LOOK,
                     fill=tint("LOOKAHEAD_EVIDENCE", .93), lw=1.25)
 lookahead_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
