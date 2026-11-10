@@ -66,7 +66,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
                 continue
             point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
         else:
-            point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
+            point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", True)
             point(ax, x + 0.17, P[src]["head_minus_sft"], C["ADM_STUDENT"], "o", True, outline=outline)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
@@ -86,7 +86,7 @@ axes[0].set_yticks([-2, 0, 2, 4])
 axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
 handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
-           markeredgewidth=1.0, markerfacecolor="white"),
+           markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["ADM_STUDENT"]),
 ]

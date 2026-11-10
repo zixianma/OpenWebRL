@@ -182,14 +182,14 @@ def main():
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
             bx = xp + .07
             selected_by = [key for key in ("pre", "post", "k3") if p[key].count(i) == 2]
-            positions = [.93, .54] if len(selected_by) == 2 else [.75]
+            positions = [.97, .49] if len(selected_by) == 2 else [.75]
             assert 1 <= len(selected_by) <= 2
             for kk, position in zip(selected_by, positions):
                 cy = ry + th * position
                 method_label = NAME[kk] if kk == "pre" else f"Lookahead H={1 if kk == 'post' else 4}"
                 fig.text(bx, cy, method_label, fontsize=7.2, color="white" if kk == "pre" else INK,
                          fontweight="bold", ha="center", va="center",
-                              bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
+                              bbox=dict(boxstyle="round,pad=0.40,rounding_size=0.4", fc=COLOR[kk], ec="none"))
             s, n = held(x["actions"][i])
             fig.text(bx, ry + th * (.10 if len(selected_by) == 2 else .25), f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, ha="center", va="center")
