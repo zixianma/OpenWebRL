@@ -34,12 +34,20 @@ Checkpoint directories are zero-based (`iter_0000089` = 90 completed iterations)
 | Starting model OpenWebRL-4B-SFT | HF `OpenWebRL/OpenWebRL-4B-SFT` @ `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a` | All runs |
 | SelectionARM (per-turn credit teacher) | HF `PTeterwak/OpenWebRL-4B-SelectionARM` @ `81b452d800d9f859687074f82680dd5257e02d89` | ARM runs |
 | SelectionARM prompt builder | GitHub `piotr-teterwak/action-reward-models` @ `02276b0ff3b9048d34e6a2afdcb9042dd9018c8c` (`inference/selection_prompt.py`); local copy `RT/arm-reproduction/source` | ARM runs |
-| **Exact code each run used** | **Cluster-only:** frozen trees `RT/reference-*` (about 17 MB each). Relative to `origin/arm`, the Gate B 48M+16F tree has 36 changed files (`train.py`, `slime/`, `openwebrl/arm_*.py`, `scripts/run_h200_browser.sh`, `scripts/serve_arm.py`, …) and 18 files not in git. | Reproducing or continuing any run |
-| Per-run settings (`launch_manifest.json`, `arm-config.json`, `browser-training-config.json`, controller `*-plan.json`) | Cluster-only, beside each run (`RT/evaluations/<run>/`, `RT/arm-turn-bonus-preparation/<run>/`) | Recipes ([§4](#rl-handoff-recipes)) |
-| Checkpoints, optimizer state, data cursor | Cluster-only ([§1](#rl-handoff-20261110) table) | Continuing a lineage |
+| **Exact code each run used** | Private HF repo [`zixianma/openwebrl-rl-checkpoints`](https://huggingface.co/zixianma/openwebrl-rl-checkpoints), `<run>/source.tar.gz`. On the cluster these are the frozen trees `RT/reference-*`, about 17 MB each. They are not the same as `arm`: relative to `origin/arm`, the Gate B 48M+16F tree has 36 changed files (`train.py`, `slime/`, `openwebrl/arm_*.py`, `scripts/run_h200_browser.sh`, `scripts/serve_arm.py`, …) and 18 files not in git. | Reproducing or continuing any run |
+| Per-run settings (`launch_manifest.json`, `arm-config.json`, `browser-training-config.json`, controller `*-plan.json`) | HF `zixianma/openwebrl-rl-checkpoints`, `<run>/settings/`; on the cluster, beside each run (`RT/evaluations/<run>/`, `RT/arm-turn-bonus-preparation/<run>/`) | Recipes ([§4](#rl-handoff-recipes)) |
+| Iteration-90 checkpoints with optimizer state and data cursor | HF `zixianma/openwebrl-rl-checkpoints`, `<run>/checkpoint/` (all nine runs). Later checkpoints (Gate B iteration 98, outcome-only 48 iteration 100) are cluster-only ([§1](#rl-handoff-20261110) table) | Continuing a lineage |
 | Controllers (`scripts/run_arm_gate_b_*.py`, `scripts/resume_baseline.py`, `RT/arm-turn-bonus-preparation/*/training-controller.py`) | Partly in git; frozen copies cluster-only | Our Slurm workflow ([§5](#rl-handoff-launch)) |
 
-**Off-cluster you need to copy:** the frozen source tree of the run, its settings files and, to continue rather than restart, the checkpoint directory plus its `rollout/` cursor. Do not resume a checkpoint with a different source tree. The repository working tree on the cluster (`/gpfs/projects/krishna/zixianma/OpenWebRL`) has uncommitted changes and is not what any run used.
+**Off-cluster, download one run folder** from `zixianma/openwebrl-rl-checkpoints` (ask zixianma for access; about 58 GB per run):
+
+```bash
+huggingface-cli download zixianma/openwebrl-rl-checkpoints --include 'gate_b/*' --local-dir rl-ckpts
+tar -xzf rl-ckpts/gate_b/source.tar.gz           # exact frozen code tree
+export SLIME_LOAD_CHECKPOINT=$PWD/rl-ckpts/gate_b/checkpoint   # iter_0000089 + rollout/ cursor
+```
+
+Train and resume with the extracted tree, not with `arm`. The latest code on `arm` is useful for new work and tooling; every file from the cluster checkout that was not yet on `arm` was pushed on November 10. It is not the code any run used.
 
 ## 3. Environment
 
