@@ -46,9 +46,9 @@ PANELS = [
     ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
-def point(ax, x, v, color, marker, filled, outline=None):
+def point(ax, x, v, color, marker, filled, outline=None, interval_color=None):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=interval_color or C["BASELINE_DARK"], capsize=1.5, lw=0.75,
                 zorder=3, markeredgewidth=1.0,
                 markerfacecolor=color if filled else "white",
                 markeredgecolor=outline if outline is not None else color)
@@ -59,15 +59,14 @@ fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
-        outline = C["ADM_STUDENT"]
         if kind == "live":
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True, outline=outline)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], C["ORACLE"], "o", True, interval_color=C["ADM_STUDENT"])
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", True)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True, outline=outline)
+            point(ax, x + 0.17, P[src]["head_minus_sft"], C["ORACLE"], "o", True, interval_color=C["ADM_STUDENT"])
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -87,8 +86,8 @@ axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
 handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
-    Line2D([], [], marker="o", ls="", color=C["ADM_STUDENT"], ms=4.1,
-           markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
+    axes[0].errorbar([], [], yerr=[], fmt="o", ms=4.1, color=C["ORACLE"],
+                     ecolor=C["ADM_STUDENT"], capsize=1.5, lw=.75, markeredgewidth=1.0),
 ]
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
