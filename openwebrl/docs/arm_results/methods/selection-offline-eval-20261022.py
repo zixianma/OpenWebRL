@@ -141,8 +141,9 @@ for x, title, split, color, fill, width in (
 mid = sum(ys) / len(ys)
 box(0.03, mid - 0.12, 0.24, 0.24, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(0.15, mid, r"$s_t$", size=9, color=C["STATE_INK"], ha="center")
+# Emphasize the shared first rollout that supplies the lookahead states and actions.
 rollout_box = box(0.94, y_low - 0.02, xs[0] + rollout_pitch / 2 - 0.94,
-                  y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG, lw=1.0)
+                  y_high - y_low + 0.18, edge=LOOK, fill=tint("LOOKAHEAD_EVIDENCE", .93), lw=1.25)
 rollout_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.28, mid, 0.465, y, color=C["ACTION_INK"], lw=.75, head=5)
@@ -161,9 +162,8 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
         text(1.73, y, r"$\cdots$", size=10, color=MUTED, ha="center")
     for j, success in enumerate(outcomes):
         outcome_marker(xs[j], y, success)
-    text(3.82, y, percent(label_rates[i]), color=INK, ha="center",
-         weight="bold" if label_rates[i] == max(label_rates) else "normal")
-    text(4.20, y, f"{100 * held_rates[i]:.0f}", color=INK, weight="bold", ha="center")
+    text(3.82, y, percent(label_rates[i]), color=INK, ha="center")
+    text(4.20, y, f"{100 * held_rates[i]:.0f}", color=INK, ha="center")
 
 # (b) Shared context explicitly feeds each joint candidate-comparison call.
 ax.plot([4.42, 4.42], [0.26, 1.91], color=LINE, linewidth=0.6)
@@ -189,8 +189,7 @@ lanes = ((1.27, "Pre-execution", "Pre-execution", PRE, "—"),
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     is_lookahead = key.startswith("Lookahead")
-    text(method_x, y, label, color=color,
-         weight="bold" if is_lookahead else "normal", linespacing=1.0)
+    text(method_x, y, label, color=color, weight="bold", linespacing=1.0)
     text(evidence_x, y, evidence, color=color,
          weight="bold" if is_lookahead else "normal", ha="center", linespacing=0.95)
     rule(5.99, shared_x, y, color=color)
@@ -198,15 +197,13 @@ for y, key, label, color, evidence in lanes:
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
-    text(teacher_x + teacher_w / 2, y, "Teacher", color=color,
-         weight="bold" if is_lookahead else "normal", ha="center")
+    text(teacher_x + teacher_w / 2, y, "Teacher", color=color, weight="bold", ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
     box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]
     text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=C["ACTION_INK"], ha="center")
     arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
-    text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=INK,
-         weight="bold", ha="center")
+    text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=INK, ha="center")
 # The yellow input box refers to the complete five-action Train % column in (a).
 y = 0.32
 text(method_x, y, "Oracle", color=INK)
@@ -219,7 +216,7 @@ arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
 box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
 text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=C["ACTION_INK"], ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.28, y, color=HELD)
-text(eval_x, y, "80", color=INK, weight="bold", ha="center")
+text(eval_x, y, "80", color=INK, ha="center")
 
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
