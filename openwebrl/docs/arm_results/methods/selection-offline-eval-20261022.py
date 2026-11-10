@@ -81,11 +81,14 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
 
 def state_card(x, y, step, color, candidate):
     width, height = 0.28, 0.18
-    box(x - width / 2, y - height / 2, width, height, edge=color,
-        fill=tint("STATE", .60), lw=1.6)
+    box(x - width / 2, y - height / 2, width, height, edge="none",
+        fill=tint("STATE", .60), lw=0)
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=C["STATE"], edgecolor="none", alpha=0.65, zorder=2))
     text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["STATE_INK"], ha="center")
+    outline = box(x - width / 2, y - height / 2, width, height,
+                  edge=color, fill="none", lw=1.6)
+    outline.set_zorder(4)
 
 
 def percent(rate):
@@ -105,12 +108,13 @@ assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead H = 4",
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACTION_INK"])
-outcome_header = text(1.65, 0.245, r"Rollout success $R^{i,j}\in\{0,1\}$",
-                      color=MUTED, ha="center")
+outcome_header = text(0.06, 0.245, r"Train/Eval % $=100\,\mathrm{mean}_{j}\,R^{i,j}$",
+                      size=6.5, color=MUTED)
 # Outcome status key only; selected-action check marks remain omitted.
-for x, success, label in ((2.95, True, "Success"), (3.73, False, "Failure")):
+for x, success, label in ((2.80, True, r"Success ($R=1$)"),
+                          (3.62, False, r"Failure ($R=0$)")):
     outcome_marker(x, 0.245, success, radius=0.020)
-    text(x + 0.055, 0.245, label, color=MUTED, size=6.5)
+    text(x + 0.055, 0.245, label, color=MUTED, size=6.0)
 rollout_pitch = 0.11
 xs = [2.79 + rollout_pitch * j for j in range(8)]
 trajectory_x = [1.10 + 0.41 * k for k in range(4)]

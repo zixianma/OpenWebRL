@@ -1,0 +1,545 @@
+{
+  "sources": {
+    "inference": {
+      "path": "arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json",
+      "sha256": "c0cae98d38f7f9831d74b39108171dacf46b49a4dea0fcd3b66103d7e0bca7b4"
+    },
+    "offline": {
+      "path": "arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json",
+      "sha256": "6c1f8e5d75d57dcdfcdfb179985a991cbb30ce98d749ded0c1bbaf664d90427c"
+    },
+    "online": {
+      "path": "rl_results/rl_eval_learning_curves.json",
+      "sha256": "527156c4faf3894bdf2c948a83f6b118deacac0f9c51cc99795581fde79c56cd"
+    }
+  },
+  "inference": {
+    "metric": "Equal-weight three-benchmark mean valid-only success (%)",
+    "points": [
+      {
+        "label": "4B",
+        "system_parameters_B": 4.44,
+        "percent": 41.10642809369955
+      },
+      {
+        "label": "8B",
+        "system_parameters_B": 8.77,
+        "percent": 43.12527133802206
+      },
+      {
+        "label": "ADM-22M",
+        "system_parameters_B": 4.4626,
+        "percent": 47.378782567891186
+      }
+    ]
+  },
+  "offline": {
+    "metric": "Online-Mind2Web valid-only success (%)",
+    "rates": {
+      "historical-base": {
+        "successes": 90,
+        "valid": 267,
+        "scheduled": 300,
+        "valid_only": 0.33707865168539325
+      },
+      "sft": {
+        "successes": 102,
+        "valid": 270,
+        "scheduled": 300,
+        "valid_only": 0.37777777777777777
+      },
+      "dpo": {
+        "successes": 104,
+        "valid": 254,
+        "scheduled": 300,
+        "valid_only": 0.4094488188976378
+      }
+    }
+  },
+  "online": {
+    "protocol": "Local browser \u00b7 GPT-4.1 / action_history \u00b7 actor temperature 0",
+    "smoothing": {
+      "method": "Trailing ratio of pooled success and valid counts",
+      "evaluations": 3,
+      "minimum_evaluations": 1,
+      "location": "Latest checkpoint in each window",
+      "missing": "Never imputed; no extrapolation before first or after last recorded evaluation",
+      "interpretation": "A descriptive trend, not another evaluation or a confidence interval"
+    },
+    "display": {
+      "first_iteration": 20,
+      "last_iteration": 90,
+      "smoothing_population": "Only evaluations in the displayed 20\u201390 interval; no pre-20 warmup"
+    },
+    "methods": [
+      {
+        "id": "outcome48",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 95,
+            "valid": 232,
+            "planned": 300,
+            "percent": 40.94827586206897,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 96,
+            "valid": 248,
+            "planned": 300,
+            "percent": 38.70967741935484,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 100,
+            "valid": 231,
+            "planned": 300,
+            "percent": 43.29004329004329,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 105,
+            "valid": 234,
+            "planned": 300,
+            "percent": 44.87179487179487,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 105,
+            "valid": 230,
+            "planned": 300,
+            "percent": 45.65217391304348,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 70,
+            "successes": 103,
+            "valid": 229,
+            "planned": 300,
+            "percent": 44.97816593886463,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 80,
+            "successes": 114,
+            "valid": 229,
+            "planned": 300,
+            "percent": 49.78165938864629,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 90,
+            "successes": 101,
+            "valid": 222,
+            "planned": 300,
+            "percent": 45.4954954954955,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 40.94827586206897,
+            "successes": 95,
+            "valid": 232,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 39.791666666666664,
+            "successes": 191,
+            "valid": 480,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 40.92827004219409,
+            "successes": 291,
+            "valid": 711,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 42.215988779803645,
+            "successes": 301,
+            "valid": 713,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 44.60431654676259,
+            "successes": 310,
+            "valid": 695,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          },
+          {
+            "iteration": 70,
+            "percent": 45.16594516594517,
+            "successes": 313,
+            "valid": 693,
+            "window_iterations": [
+              50,
+              60,
+              70
+            ]
+          },
+          {
+            "iteration": 80,
+            "percent": 46.80232558139535,
+            "successes": 322,
+            "valid": 688,
+            "window_iterations": [
+              60,
+              70,
+              80
+            ]
+          },
+          {
+            "iteration": 90,
+            "percent": 46.76470588235294,
+            "successes": 318,
+            "valid": 680,
+            "window_iterations": [
+              70,
+              80,
+              90
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome56",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 93,
+            "valid": 243,
+            "planned": 300,
+            "percent": 38.27160493827161,
+            "source": "arm_results/rl_integration/outcome56-iteration20-audit.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 97,
+            "valid": 250,
+            "planned": 300,
+            "percent": 38.8,
+            "source": "arm_results/rl_integration/outcome56-iteration30-audit.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 103,
+            "valid": 240,
+            "planned": 300,
+            "percent": 42.916666666666664,
+            "source": "arm_results/rl_integration/outcome56-iteration40-audit.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 102,
+            "valid": 239,
+            "planned": 300,
+            "percent": 42.67782426778243,
+            "source": "arm_results/rl_integration/outcome56-iteration50-audit.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 117,
+            "valid": 245,
+            "planned": 300,
+            "percent": 47.755102040816325,
+            "source": "arm_results/rl_integration/outcome56-iteration60-audit.json"
+          },
+          {
+            "iteration": 70,
+            "successes": 112,
+            "valid": 243,
+            "planned": 300,
+            "percent": 46.09053497942387,
+            "source": "arm_results/rl_integration/outcome56-iteration70-audit.json"
+          },
+          {
+            "iteration": 80,
+            "successes": 124,
+            "valid": 248,
+            "planned": 300,
+            "percent": 50.0,
+            "source": "arm_results/rl_integration/outcome56-iteration80-audit.json"
+          },
+          {
+            "iteration": 90,
+            "successes": 107,
+            "valid": 237,
+            "planned": 300,
+            "percent": 45.14767932489451,
+            "source": "arm_results/rl_integration/outcome56-iteration90-audit.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 38.27160493827161,
+            "successes": 93,
+            "valid": 243,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 38.5395537525355,
+            "successes": 190,
+            "valid": 493,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 39.972714870395635,
+            "successes": 293,
+            "valid": 733,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 41.426611796982165,
+            "successes": 302,
+            "valid": 729,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 44.47513812154696,
+            "successes": 322,
+            "valid": 724,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          },
+          {
+            "iteration": 70,
+            "percent": 45.529573590096284,
+            "successes": 331,
+            "valid": 727,
+            "window_iterations": [
+              50,
+              60,
+              70
+            ]
+          },
+          {
+            "iteration": 80,
+            "percent": 47.96195652173913,
+            "successes": 353,
+            "valid": 736,
+            "window_iterations": [
+              60,
+              70,
+              80
+            ]
+          },
+          {
+            "iteration": 90,
+            "percent": 47.11538461538461,
+            "successes": 343,
+            "valid": 728,
+            "window_iterations": [
+              70,
+              80,
+              90
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gate-b",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 101,
+            "valid": 228,
+            "planned": 300,
+            "percent": 44.29824561403509,
+            "source": "arm_results/rl_integration/gate-b-iteration20-audit.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 102,
+            "valid": 234,
+            "planned": 300,
+            "percent": 43.58974358974359,
+            "source": "arm_results/rl_integration/gate-b-iteration30-audit.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 108,
+            "valid": 228,
+            "planned": 300,
+            "percent": 47.36842105263158,
+            "source": "arm_results/rl_integration/gate-b-iteration40-audit.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 113,
+            "valid": 232,
+            "planned": 300,
+            "percent": 48.706896551724135,
+            "source": "arm_results/rl_integration/gate-b-iteration50-audit.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 112,
+            "valid": 228,
+            "planned": 300,
+            "percent": 49.12280701754386,
+            "source": "arm_results/rl_integration/gate-b-iteration60-audit.json"
+          },
+          {
+            "iteration": 70,
+            "successes": 112,
+            "valid": 229,
+            "planned": 300,
+            "percent": 48.90829694323144,
+            "source": "arm_results/rl_integration/gate-b-iteration70-audit.json"
+          },
+          {
+            "iteration": 80,
+            "successes": 107,
+            "valid": 226,
+            "planned": 300,
+            "percent": 47.34513274336283,
+            "source": "arm_results/rl_integration/gate-b-iteration80-audit.json"
+          },
+          {
+            "iteration": 90,
+            "successes": 129,
+            "valid": 234,
+            "planned": 300,
+            "percent": 55.12820512820513,
+            "source": "arm_results/rl_integration/gate-b-iteration90-audit.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 44.29824561403509,
+            "successes": 101,
+            "valid": 228,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 43.93939393939394,
+            "successes": 203,
+            "valid": 462,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 45.072463768115945,
+            "successes": 311,
+            "valid": 690,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 46.54178674351585,
+            "successes": 323,
+            "valid": 694,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 48.401162790697676,
+            "successes": 333,
+            "valid": 688,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          },
+          {
+            "iteration": 70,
+            "percent": 48.91146589259797,
+            "successes": 337,
+            "valid": 689,
+            "window_iterations": [
+              50,
+              60,
+              70
+            ]
+          },
+          {
+            "iteration": 80,
+            "percent": 48.46266471449488,
+            "successes": 331,
+            "valid": 683,
+            "window_iterations": [
+              60,
+              70,
+              80
+            ]
+          },
+          {
+            "iteration": 90,
+            "percent": 50.50798258345428,
+            "successes": 348,
+            "valid": 689,
+            "window_iterations": [
+              70,
+              80,
+              90
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

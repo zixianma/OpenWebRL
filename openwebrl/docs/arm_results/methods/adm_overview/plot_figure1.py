@@ -8,14 +8,15 @@ https://github.com/zixianma/OpenWebRL/tree/arm/openwebrl/docs
 ARM_FORMULATIONS.md: matched branching and execution-evidence labels;
 ARM_SELECTION_HEAD.md: pre-action selection and teacher supervision;
 ARM_SUMMARY.md: inference, offline SFT, and action-guided online RL.
-Inference results use the November 4 SFT-only, three-run valid-only means in
-selection-recipe3-vs-cost-20261104.json (OpenWebRL arm, blob
-5fcc4d9819540dde6285174759a82d15f85ef301); offline and historical RL
-results retain their documented sources. No new estimates are collected.
+Insets read the current published Recipe 3, matched SFT/DPO and RL validation
+aggregates directly. RL uses both outcome controls and the published pooled
+trailing-three-evaluation smoother over iterations 20--90. Source hashes and
+coordinates are exported in figure1_results.json. No new evaluations are run.
 Source screenshots and their provenance are in web_states/. The selected
 teacher response and model scores are schematic, not case-study results.
 """
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -30,10 +31,14 @@ from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent
-DATA = json.loads((ROOT / "preliminary_results.json").read_text())
-LATEST = json.loads((ROOT / "results_20261025.json").read_text())
 WEB = ROOT / "web_states" / "dinka"
 DOCS = ROOT.parents[2]
+SOURCE_PATHS = {
+    "inference": DOCS / "arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json",
+    "offline": DOCS / "arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json",
+    "online": DOCS / "rl_results/rl_eval_learning_curves.json",
+}
+SOURCE = {key: json.loads(path.read_text()) for key, path in SOURCE_PATHS.items()}
 sys.path.insert(0, str(DOCS))
 from paper_plot_style import use_paper_style
 from paper_plot_palette import COLORS as C, tint
@@ -237,28 +242,34 @@ browser(1518, 265, 34, 43)
 text(1518, 334, "Execute", size=5.8, color=MUTED)
 # Selection outputs a decision; the browser icon denotes its execution.
 
-text(1662, 183, "Mean valid-only (%)", size=5.9, color=MUTED)
 # November 4 SFT-only comparison: three-benchmark valid-only means pooled
 # over three runs. The actor and head coordinates match Figure 4.
+def inference_mean(key):
+    rows = [r for r in SOURCE["inference"]["rows"] if r["key"] == key]
+    assert {r["benchmark"] for r in rows} == {"online_mind2web", "webvoyager", "deepshop"}
+    return sum(100 * r["successes"] / r["valid_episodes"] for r in rows) / 3
+
+
 inference_points = [
-    (4.44, 41.11, "4B", GRAY, "o", (1, -7), "left"),
-    (8.88, 43.12, "8B", GRAY, "s", (-2, -7), "right"),
-    (4.4626, 47.38, "ADM head", PURPLE, "o", (3, 5), "left"),
+    (4.44, inference_mean("sft1"), "4B", GRAY, "o", (3, -6), "left"),
+    (8.77, inference_mean("sft8b"), "8B", GRAY, "s", (-3, -7), "right"),
+    (4.4626, inference_mean("head-gpt55-k3"), "ADM-22M", PURPLE, "o", (5, -1), "left"),
 ]
-parameter_chart = chart_axes(1585, 208, 157, 130)
+parameter_chart = chart_axes(1585, 218, 180, 95)
+parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
 for x, y, label, color, marker, offset, align in inference_points:
     parameter_chart.scatter(x, y, s=19, marker=marker, color=color, zorder=3, linewidths=0.5)
     parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
                         ha=align, fontsize=5.6, color=color)
 parameter_chart.set(xlim=(3.8, 9.5), ylim=(38, 50), xticks=[4, 8], yticks=[40, 45])
-parameter_chart.set_xlabel("Parameters (B)", fontsize=5.3, labelpad=1.5, color=MUTED)
+parameter_chart.set_xlabel("System params (B)", fontsize=5.2, labelpad=2, color=MUTED)
 parameter_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 parameter_chart.spines[["top", "right"]].set_visible(False)
 for spine in parameter_chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
 
-line([(1227, 376), (1766, 376)], RULE, lw=0.45)
+line([(1227, 376), (1562, 376)], RULE, lw=0.45)
 application_card(385, 237, "Offline improvement", INK)
 # One ADM supplies both demonstrations (SFT) and preferences (DPO).
 box(1256, 501, 70, 48, PALE_PURPLE, PURPLE, radius=5)
@@ -276,10 +287,11 @@ for yy, method, label in [
     arrow((1452, yy+24), (1473, yy+24), ACTION_EDGE, scale=4)
     box(1474, yy, 64, 48, PALE_GRAY, GRAY, radius=5)
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
-offline = {r["key"]: r for r in DATA["offline_policy_comparison"]["rows"]}
-text(1663, 435, "OM2W success (%)", size=5.9, color=MUTED)
-offline_chart = chart_axes(1585, 450, 157, 145)
-offline_values = [offline[key]["valid_success"] for key in ["control", "joint_sft", "joint_dpo"]]
+offline_chart = chart_axes(1585, 468, 180, 118)
+offline_chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
+offline_values = [100 * SOURCE["offline"]["rates"][key]["successes"]
+                  / SOURCE["offline"]["rates"][key]["valid"]
+                  for key in ["historical-base", "sft", "dpo"]]
 offline_chart.bar(range(3), offline_values, width=0.66,
                   color=[GRAY, tint("ADM_DEFAULT", .50), PURPLE], edgecolor="none")
 for x, value in enumerate(offline_values):
@@ -294,8 +306,8 @@ for spine in offline_chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
 
-line([(1227, 632), (1766, 632)], RULE, lw=0.45)
-application_card(641, 304, "Online RL", INK)
+line([(1227, 632), (1562, 632)], RULE, lw=0.45)
+application_card(641, 274, "Online RL", INK)
 # The same ADM supplies the decision signal used by the online RL bonus.
 box(1256, 704, 70, 48, PALE_PURPLE, PURPLE, radius=5)
 text(1291, 730, r"$f_\phi$", size=8.0, color=PURPLE)
@@ -308,35 +320,75 @@ text(1506, 730, r"$\pi_\theta$", size=7.6, color=GRAY)
 arrow((1400, 752), (1400, 790), ACTION_EDGE, scale=4)
 box(1256, 790, 282, 85, PALE_PURPLE, PURPLE, radius=6)
 text(1397, 833, "ADM reward", size=6.6, color=PURPLE)
-text(1663, 702, "OM2W success (%)", size=5.9, color=MUTED)
-# Overview shows the standard outcome control and ADM reward; the full results
-# figure also includes the additional outcome control. Cutoff/smoothing match.
-chart = chart_axes(1585, 730, 157, 160)
-sigma = LATEST["rl_curves"]["smoothing"]["sigma_training_iterations"]
-rl_styles = [("outcome_only", GRAY, "Outcome", "-"),
-             ("gate_b", PURPLE, "+ ADM reward", "-")]
+# Match the published validation panel: iterations 20--90, pooled trailing-three
+# success/valid counts, with both outcome-only controls and raw checkpoint dots.
+chart = chart_axes(1585, 730, 180, 138)
+chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
+rl_styles = [("outcome48", C["BASELINE_LIGHT"], "48", "--"),
+             ("outcome56", GRAY, "56", "-"),
+             ("gate-b", PURPLE, "+ ADM", "-")]
 for key, color, label, linestyle in rl_styles:
-    rows = [r for r in LATEST["rl_curves"]["series"][key] if r["iteration"] <= 90]
+    method = next(m for m in SOURCE["online"]["methods"] if m["id"] == key)
+    rows = [r for r in method["points"] if 20 <= r["iteration"] <= 90]
     x = np.array([r["iteration"] for r in rows], dtype=float)
-    y = np.array([100*r["successes"]/r["valid_tasks"] for r in rows])
-    grid = np.linspace(x[0], x[-1], 150)
-    weights = np.exp(-0.5*((grid[:, None]-x[None, :])/sigma)**2)
-    chart.plot(x, y, color=color, alpha=0.18, lw=0.45, linestyle=linestyle)
-    chart.plot(grid, weights @ y/weights.sum(axis=1), color=color, lw=1.3,
-               linestyle=linestyle)
-    checkpoint_weights = np.exp(-0.5*((x[:, None]-x[None, :])/sigma)**2)
-    chart.plot(x, checkpoint_weights @ y/checkpoint_weights.sum(axis=1),
-               color=color, marker="o", ms=2.0, lw=0)
-chart.set(xlim=(8, 92), ylim=(25, 60), xticks=[10, 90], yticks=[30, 50])
+    raw = np.array([100*r["successes"]/r["valid"] for r in rows])
+    smoothed = []
+    for i in range(len(rows)):
+        window = rows[max(0, i - 2):i + 1]
+        smoothed.append(100 * sum(r["successes"] for r in window) / sum(r["valid"] for r in window))
+    assert np.allclose(smoothed, [r["percent"] for r in method["smoothed"]])
+    chart.scatter(x, raw, color=color, s=5, alpha=.25, edgecolors="none")
+    chart.plot(x, smoothed, color=color, lw=1.2, linestyle=linestyle,
+               marker="o", ms=1.9, markeredgewidth=0)
+chart.set(xlim=(18, 92), ylim=(35, 57), xticks=[20, 90], yticks=[40, 50])
 chart.set_xlabel("Iteration", fontsize=5.6, labelpad=1.5, color=MUTED)
 chart.tick_params(axis="both", labelsize=5.8, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 chart.spines[["top", "right"]].set_visible(False)
 for spine in chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
-for y, (_, color, label, linestyle) in zip([924, 948], rl_styles):
-    line([(1583, y), (1603, y)], color, lw=1.1, dashed=linestyle == "--")
-    text(1616, y, label, size=5.8, color=color, ha="left")
+text(1248, 925, "Outcome:", size=5.3, color=MUTED, ha="left")
+for x, (_, color, label, linestyle) in zip([1320, 1390, 1460], rl_styles):
+    line([(x, 925), (x + 16, 925)], color, lw=1.1, dashed=linestyle == "--")
+    text(x + 24, 925, label, size=5.6, color=color, ha="left")
+
+fig.canvas.draw()
+renderer = fig.canvas.get_renderer()
+right_labels = [t for t in ax.texts if t.get_position()[0] >= layout_x(1206)]
+for inset in (parameter_chart, offline_chart, chart):
+    right_labels.extend([inset.title, inset.xaxis.label, inset.yaxis.label, *inset.texts])
+    right_labels.extend(inset.get_xticklabels() + inset.get_yticklabels())
+right_labels = [t for t in right_labels if t.get_visible() and t.get_text()]
+for i, label in enumerate(right_labels):
+    bounds = label.get_window_extent(renderer)
+    assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label.get_text()
+    for other in right_labels[:i]:
+        assert not bounds.overlaps(other.get_window_extent(renderer)), (label.get_text(), other.get_text())
+    for guide in ax.lines:
+        if (min(guide.get_xdata()) >= layout_x(1206)
+                and np.ptp(guide.get_ydata()) < 1e-8):
+            assert not bounds.overlaps(guide.get_window_extent(renderer).padded(.25)), (
+                label.get_text(), list(guide.get_xdata()), list(guide.get_ydata()))
+
+result = {
+    "sources": {key: {"path": str(path.relative_to(DOCS)),
+                       "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                for key, path in SOURCE_PATHS.items()},
+    "inference": {"metric": "Equal-weight three-benchmark mean valid-only success (%)",
+                  "points": [{"label": label, "system_parameters_B": x, "percent": y}
+                             for x, y, label, *_ in inference_points]},
+    "offline": {"metric": "Online-Mind2Web valid-only success (%)",
+                "rates": {key: {field: SOURCE["offline"]["rates"][key][field]
+                                for field in ("successes", "valid", "scheduled", "valid_only")}
+                          for key in ("historical-base", "sft", "dpo")}},
+    "online": {"protocol": SOURCE["online"]["protocol"],
+               "smoothing": SOURCE["online"]["smoothing"],
+               "display": SOURCE["online"]["display"],
+               "methods": [{"id": m["id"], "points": [p for p in m["points"]
+                            if 20 <= p["iteration"] <= 90], "smoothed": m["smoothed"]}
+                           for m in SOURCE["online"]["methods"]]},
+}
+(ROOT / "figure1_results.json").write_text(json.dumps(result, indent=2) + "\n")
 
 metadata = {"CreationDate": None, "ModDate": None, "Creator": "plot_figure1.py"}
 fig.savefig(ROOT / "figure1.pdf", dpi=300, metadata=metadata)

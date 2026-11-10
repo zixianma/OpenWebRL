@@ -2,7 +2,7 @@
 
 ![Action Decision Models overview](figure1.png)
 
-[PDF](figure1.pdf) · [SVG](figure1.svg) · [Plot script](plot_figure1.py)
+[PDF](figure1.pdf) · [SVG](figure1.svg) · [Plot script](plot_figure1.py) · [Coordinates and source hashes](figure1_results.json)
 
 Counterclockwise exports: [PNG](figure1-ccw.png) · [PDF](figure1-ccw.pdf) · [SVG](figure1-ccw.svg)
 
@@ -21,11 +21,11 @@ No browser session or experiment service is required.
 
 ## Sources
 
-The layout and numerical results retain the paper's Figure 1 snapshot from paper commit `6f3f7c9`. The diagram uses green with darker green borders for browser states, purple for candidate and selected actions, salmon for lookahead evidence and the teacher, and light purple for ADM and its reward signal. State/action token colors identify content, not terminal outcomes. Actor policies stay neutral, and the result insets keep purple ADM and gray control series. Lighter purple fills denote secondary ADM bars. The script imports `paper_plot_palette.py` alongside the shared typography; no data, smoothing, screenshot content or geometry is changed.
+The diagram uses green for browser states, purple for actions and ADM, salmon for lookahead evidence and the teacher, and gray for actor controls. All three result insets show valid-only success; they summarize separate studies with different protocols and task populations. The renderer reads the result aggregates directly, records their hashes and plotted coordinates, and checks right-panel text for overlaps with other text, separators and legend handles.
 
 - The real browser observation is the Dinka Wikipedia task state shown in the paper. `web_states/dinka/state.jpg` is the original observation, resized without cropping. Its SHA-256 is `d028c34171bf1fd94709663c7c071f090cbce4bab4751db77d3ab8df8a4080be`. Lookahead icons, teacher choice and model scores are schematic.
-- Inference inset: November 4 SFT-only, three-run valid-only benchmark means from `selection-recipe3-vs-cost-20261104.json` (Git blob `5fcc4d9819540dde6285174759a82d15f85ef301`), embedded in the script. The plotted coordinates match the paper's Figure 4 snapshot.
-- Offline inset: the three aggregate `valid_success` values used by the paper's `preliminary_results.json`, retained in the local file of the same name.
-- Online inset: outcome-only and Gate B aggregate checkpoint counts through iteration 90 and the original smoothing bandwidth from the paper's `results_20261025.json`, retained in the local file of the same name.
+- Inference inset: [November 4 Recipe 3 aggregates](../../rl_integration/selection-recipe3-vs-cost-20261104.json), three runs pooled per benchmark. Points show the equal-weight mean of Online-Mind2Web, WebVoyager and DeepShop valid-only rates for SFT 4B, SFT 8B and the GPT-5.5 lookahead-label ADM-22M. System parameters are 4.44 B, 8.77 B and 4.4626 B, respectively.
+- Offline inset: [joint SFT/DPO source counts](../../joint_data_v2/joint-sft-vs-dpo-om2w.json), the latest recorded matched-objective comparison: actor 90/267 (33.7%), SFT 102/270 (37.8%) and DPO 104/254 (40.9%). One training seed per objective, o4-mini/AgentTrek judge; the actor control is historical. These bars retain their recorded values. [Comparability and paired evidence](../../../ARM_RESULTS.md#arm-joint-sft-vs-dpo-results).
+- Online inset: [current validation-curve aggregate](../../../rl_results/rl_eval_learning_curves.json), outcome-only 48 groups (light gray, dashed), outcome-only 56 groups (dark gray), and Outcome + ADM (purple). Iterations 20–90; lines and circles pool successes/valid counts over the latest three evaluations within the displayed interval, with faint raw checkpoint dots. Local browser, GPT-4.1/action-history judge, actor temperature 0; one lineage per method, different collection dates and valid populations. This replaces the older two-curve Gaussian-smoothed snapshot. [Full metric definition](../../../RL_EVALUATION.md#rl-smoothed-eval-learning-curves).
 
-The three application insets summarize separate studies, rather than a matched cross-application comparison. These JSON files contain only aggregates used by this figure. The bundle contains no rollout trajectories or task-pool dataset.
+The JSON exports contain aggregate counts and figure coordinates, without rollout trajectories or task-pool data. The original paper snapshots remain in `preliminary_results.json` and `results_20261025.json` for provenance; they no longer supply the plotted values.
