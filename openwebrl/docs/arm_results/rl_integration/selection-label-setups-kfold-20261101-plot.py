@@ -59,7 +59,7 @@ fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
-        outline = C["TRAIN"] if src == "teacher_pre" else color
+        outline = color
         if kind == "live":
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
