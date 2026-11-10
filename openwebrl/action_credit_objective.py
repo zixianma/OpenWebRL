@@ -84,6 +84,58 @@ class PreparedObjective:
                             edge_subset=edge_subset)
 
 
+def _sealed_panel_abstentions(graph, inventory, bound):
+    """Return only whole, independently bound Q panels with no local target.
+
+    The binding validator authenticates admission/completion records against the
+    sealed draw ledger. These additional numerical-boundary checks ensure that
+    abstention cannot remove a base trajectory or invent an absent candidate.
+    Candidate-generation infrastructure failures can leave other candidates'
+    real outcomes in the inventory; none of those extra draws enter base loss.
+    """
+    records = bound.get("panel_abstentions", {})
+    if not isinstance(records, dict):
+        raise ValueError("sealed panel abstentions must be a mapping")
+    leaves = {leaf.leaf_id: leaf for leaf in graph.leaves}
+    edge_ids = {edge.edge_id for edge in graph.edges}
+    excluded = set()
+    for panel_id, record in records.items():
+        if (not isinstance(panel_id, str) or not panel_id or not isinstance(record, dict)
+                or record.get("status") not in ("source_inadmissible", "candidate_incomplete")
+                or record.get("policy_sha256") != graph.contract.policy_sha256):
+            raise ValueError("invalid sealed panel abstention")
+        rows = {leaf_id: row for leaf_id, row in inventory.items()
+                if row["inventory_role"] in ("q_fit", "q_holdout")
+                and row["state_id"] == panel_id}
+        candidates = {row["action_id"] for row in rows.values()}
+        if len(rows) != 40 or len(candidates) != 5:
+            raise ValueError("panel abstention must preserve all five eight-draw candidates")
+        if len({(row["task_id"], row["group_id"], row["tree_id"]) for row in rows.values()}) != 1:
+            raise ValueError("panel abstention crosses task, group or tree")
+        for candidate in candidates:
+            candidate_rows = [row for row in rows.values() if row["action_id"] == candidate]
+            if (len(candidate_rows) != 8
+                    or sum(row["inventory_role"] == "q_fit" for row in candidate_rows) != 6
+                    or sum(row["inventory_role"] == "q_holdout" for row in candidate_rows) != 2):
+                raise ValueError("panel abstention changed the six-fit two-holdout inventory")
+        if record["status"] == "source_inadmissible":
+            if any(leaves[key].status != "missing" or leaves[key].edge_ids or row["reward"] is not None
+                   for key, row in rows.items()):
+                raise ValueError("source admission abstention requires entirely missing edge-free slots")
+        else:
+            missing = record.get("missing_candidate_edge_ids")
+            if (not isinstance(missing, (list, tuple)) or not missing
+                    or not all(isinstance(value, str) for value in missing)
+                    or len(set(missing)) != len(missing)
+                    or set(missing) != candidates - edge_ids):
+                raise ValueError("candidate abstention must identify every physically absent candidate")
+            if any(leaves[key].status == "valid" or row["reward"] is not None
+                   for key, row in rows.items() if row["action_id"] in missing):
+                raise ValueError("absent candidates cannot have valid continuation outcomes")
+        excluded.update(rows)
+    return excluded
+
+
 def build_objective(graph: ResponseGraph, config: ObjectiveConfig, *,
                     collection_binding, replay_receipts,
                     panels: tuple[ContinuationPanel, ...] = (), selection=None) -> PreparedObjective:
@@ -101,6 +153,16 @@ def build_objective(graph: ResponseGraph, config: ObjectiveConfig, *,
         if config.arm_id not in ("tree_outcome_sampling", "tree_grpo"):
             raise ValueError("K-leaf tree selection is distinct from fixed-panel and independent-chain collection")
         selected = validate_selection(graph, selection)
+    bound = collection_binding.to_dict()
+    inventory = bound["inventory"]
+    if config.arm_id == "continuation_q":
+        # The extra continuations estimate Q only. Including their outcomes in
+        # base normalization/loss would silently change the matched control.
+        selected = tuple(sorted(leaf_id for leaf_id, row in inventory.items()
+                                if row["inventory_role"] == "base"
+                                and row["draw_role"] == "train"))
+        if not selected:
+            raise ValueError("continuation-Q requires its prespecified ordinary base population")
     fit = tuple(x for x in graph.leaves if x.split == "train"
                 and (selected is None or x.leaf_id in selected))
     expected_ids = tuple(x.leaf_id for x in fit)
@@ -138,6 +200,7 @@ def build_objective(graph: ResponseGraph, config: ObjectiveConfig, *,
     diagnostics = [result]
     if config.arm_id == "continuation_q":
         leaves = {x.leaf_id: x for x in graph.leaves}
+        abstained_leaves = _sealed_panel_abstentions(graph, inventory, bound)
         seen_panels, seen_leaves, eligible = set(), set(), []
         for panel in panels:
             if (not isinstance(panel, ContinuationPanel) or not panel.panel_id or panel.panel_id in seen_panels
@@ -145,6 +208,8 @@ def build_objective(graph: ResponseGraph, config: ObjectiveConfig, *,
                     or len(panel.candidate_edges) < 2 or len(set(panel.candidate_edges)) != len(panel.candidate_edges)
                     or len(panel.candidate_edges) != len(panel.draw_leaf_ids)):
                 raise ValueError("duplicate or malformed fixed-candidate panel")
+            if panel.panel_id in bound.get("panel_abstentions", {}):
+                raise ValueError("an abstained panel cannot also supply local candidate targets")
             seen_panels.add(panel.panel_id)
             draws = []
             sibling_keys = set()
@@ -178,9 +243,9 @@ def build_objective(graph: ResponseGraph, config: ObjectiveConfig, *,
             diagnostics.append(q)
             if all(v.advantage is not None for v in q.values):
                 eligible.append({v.key[-1]: v.advantage for v in q.values})
-        if config.local_coefficient and not panels:
-            raise ValueError("nonzero continuation objective requires prespecified panels")
-        if panels and seen_leaves != set(leaves):
+        panel_ids = {leaf_id for leaf_id, row in inventory.items()
+                     if row["inventory_role"] in ("q_fit", "q_holdout")}
+        if seen_leaves & abstained_leaves or seen_leaves | abstained_leaves != panel_ids:
             raise ValueError("fixed-panel local-Q adapter requires every planned leaf, including empty missing slots")
         plan = append_local_terms(plan, eligible, coefficient=config.local_coefficient)
     return PreparedObjective(config, plan, tuple(diagnostics))
