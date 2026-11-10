@@ -81,8 +81,8 @@ box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
 text(1.075, 1.565, "a) ADM head", size=6.8, color=HEAD, ha="center")
 text(.60, 1.425, r"$s$: prompt end", size=5.8, color=C["STATE_INK"], ha="center")
 text(1.57, 1.425, r"$c_i$: response", size=5.8, color=C["ACTION_INK"], ha="center")
-text(1.075, 1.325, "Actor features", size=5.5, color=MUTED, ha="center")
-CELL, TOP = .084, 1.105
+text(1.075, 1.325, "Actor features · choose one scorer", size=5.5, color=MUTED, ha="center")
+CELL, TOP = .074, 1.105
 labels = [r"$s$"]+[rf"$c_{{{i}}}$" for i in range(1, K+1)]
 joint_mask = [[True]*(K+1) for _ in range(K+1)]
 independent_mask = [[r == c or (r > 0 and c == 0) for c in range(K+1)] for r in range(K+1)]
@@ -91,17 +91,27 @@ assert sum(map(sum, independent_mask)) == 11
 for name, x0, mask in (("Joint", .365, joint_mask), ("Independent", 1.355, independent_mask)):
     text(x0+3*CELL, 1.235, name, size=6, color=HEAD, ha="center")
     matrix(x0, TOP, labels, CELL, mask)
+    center = x0 + 3*CELL
+    arrow(center, .650, center, .620, color=HEAD, head=3)
+    text(center, .585, r"Linear $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
 text(.105, .86, "Transformer", size=5.8, color=HEAD, ha="center", rotation=90)
-ax.plot([.18, 2.065], [.575, .575], color=LINE, linewidth=.45)
+ax.plot([.18, 1.02], [.530, .530], color=LINE, linewidth=.45)
+ax.plot([1.20, 2.065], [.530, .530], color=LINE, linewidth=.45)
 text(.105, .445, "MLP", size=5.8, color=HEAD, ha="center", rotation=90)
 # cbar_-i is the mean of OTHER candidates, defined in the caption. Each MLP
 # shares parameters across candidates. Brackets denote vector concatenation.
 for center, inputs in ((.617, r"$[c_i,s,c_i-\bar c_{-i}]$"), (1.607, r"$[c_i,s]$")):
-    text(center, .51, inputs, size=5.8, ha="center")
-    arrow(center, .465, center, .425, color=HEAD, head=3)
-    text(center, .375, r"MLP $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
-arrow(1.075, .315, 1.075, .285, color=HEAD, head=3)
-text(1.075, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
+    text(center, .475, inputs, size=5.8, ha="center")
+    arrow(center, .435, center, .410, color=HEAD, head=3)
+    text(center, .365, r"MLP $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
+# Each row is an alternative path to scores, not a Transformer -> MLP stack.
+# The central collector occupies the gap between Joint and Independent columns.
+for y, left, right in ((.585, .88, 1.26), (.365, .90, 1.32)):
+    arrow(left, y, 1.11, y, color=HEAD, head=3)
+    arrow(right, y, 1.11, y, color=HEAD, head=3)
+ax.plot([1.11, 1.11], [.585, .315], color=HEAD, linewidth=.65, zorder=3)
+arrow(1.11, .315, 1.11, .285, color=HEAD, head=3)
+text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
 text(2.80, 1.565, "b) ADM-4B", size=6.8, color=DECODER, ha="center")
@@ -117,7 +127,7 @@ arrow(mid, .29, mid, .275, color=DECODER, head=3)
 text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 
 # One original action executes, whichever alternative selector is used.
-arrow(1.075, .185, 1.40, .15, color=HEAD)
+arrow(1.11, .185, 1.40, .15, color=HEAD)
 arrow(mid, .185, 1.94, .15, color=DECODER)
 box(1.10, .025, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(1.665, .085, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
