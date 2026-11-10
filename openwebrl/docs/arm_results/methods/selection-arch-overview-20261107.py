@@ -70,21 +70,18 @@ box(.025, 1.735, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(.29, 1.83, "Context", ha="center")
 arrow(.565, 1.83, .665, 1.83, color=MUTED)
 box(.675, 1.735, .80, .19, edge=INK)
-text(1.075, 1.83, "Frozen actor", size=6.3, ha="center")
+text(1.075, 1.83, r"Frozen actor $\theta_0$", size=6.0, ha="center")
 arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
 box(1.66, 1.735, 1.66, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(2.49, 1.83, r"$K=5$ candidate responses", color=C["ACTION_INK"], ha="center")
+text(2.49, 1.868, r"$K=5$ responses $c_i$", size=5.8, color=C["ACTION_INK"], ha="center")
+text(2.49, 1.792, r"thought + action $a_t^i$", size=5.6, color=C["ACTION_INK"], ha="center")
 arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
 arrow(2.80, 1.725, 2.80, 1.655, color=DECODER, head=4)
-ax.plot([1.475, 1.55, 2.30, 2.30], [1.775, 1.69, 1.69, 1.585],
-        color=DECODER, linewidth=.7, linestyle=(0, (2, 2)), zorder=1)
-arrow(2.30, 1.585, 2.42, 1.585, color=DECODER, head=4)
-
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
 box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
-text(1.075, 1.565, "a) ADM head", size=6.8, color=HEAD, ha="center")
-text(.60, 1.425, r"$s$: prompt", size=5.8, color=C["STATE_INK"], ha="center")
-text(1.57, 1.425, r"$c_i$: response", size=5.8, color=C["ACTION_INK"], ha="center")
+text(1.075, 1.565, "a) ADM head: 4 variants", size=6.6, color=HEAD, ha="center")
+text(.48, 1.425, r"$s$: prompt", size=5.8, color=C["STATE_INK"], ha="center")
+text(1.50, 1.425, r"$c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
 
 CELL, HEAD_TOP, TOP = .074, 1.16, 1.105
 labels = [r"$s$"]+[rf"$c_{{{i}}}$" for i in range(1, K+1)]
@@ -99,7 +96,9 @@ for name, x0, mask in (("Joint", .365, joint_mask), ("Independent", 1.355, indep
     arrow(center, .705, center, .630, color=HEAD, head=4)
     text(center, .585, r"Linear $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
 text(.105, .94, "Transformer", size=5.8, color=HEAD, ha="center", rotation=90)
-ax.plot([.18, 2.065], [.530, .530], color=LINE, linewidth=.45)
+ax.plot([.18, .94], [.530, .530], color=LINE, linewidth=.45)
+ax.plot([1.20, 2.065], [.530, .530], color=LINE, linewidth=.45)
+text(1.07, .530, "or", size=5.5, color=MUTED, ha="center")
 text(.105, .445, "MLP", size=5.8, color=HEAD, ha="center", rotation=90)
 # cbar_-i is the mean of OTHER candidates, defined in the caption. Each MLP
 # shares parameters across candidates. Brackets denote vector concatenation.
@@ -113,10 +112,17 @@ text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
 text(2.80, 1.565, "b) ADM-4B", size=6.8, color=DECODER, ha="center")
-text(2.80, 1.425, r"Prompt $p$ + responses", size=5.8, color=DECODER, ha="center")
-text(2.80, 1.325, "Actor backbone + LoRA", size=5.8, color=DECODER, ha="center")
+text(2.80, 1.460, r"Prompt $p$ + responses $c_i$", size=5.8, color=DECODER, ha="center")
+# Matching theta_0 symbols encode shared initialization without a long arrow.
+box(2.44, 1.290, .29, .12, edge=LINE)
+text(2.585, 1.350, r"$\theta_0$", size=6.4, ha="center")
+text(2.585, 1.245, "Frozen copy", size=5.2, color=MUTED, ha="center")
+text(2.81, 1.350, "+", size=7, color=DECODER, ha="center")
+box(2.90, 1.290, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
+text(3.075, 1.350, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
+text(3.075, 1.245, "LoRA", size=5.2, color=DECODER, ha="center")
 DX, DCELL = 2.48, .115
-TOKENS = [r"$p$"]+[rf"$a_t^{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
+TOKENS = [r"$p$"]+[rf"$c_{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
 causal_mask = [[c <= r for c in range(K+2)] for r in range(K+2)]
 assert sum(map(sum, causal_mask)) == 28
 matrix(DX, TOP, TOKENS, DCELL, causal_mask, answer=True)
