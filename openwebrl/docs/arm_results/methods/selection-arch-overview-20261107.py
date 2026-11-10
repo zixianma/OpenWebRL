@@ -95,8 +95,7 @@ for name, x0, mask in (("Joint", .365, joint_mask), ("Independent", 1.355, indep
     arrow(center, .650, center, .620, color=HEAD, head=3)
     text(center, .585, r"Linear $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
 text(.105, .86, "Transformer", size=5.8, color=HEAD, ha="center", rotation=90)
-ax.plot([.18, 1.02], [.530, .530], color=LINE, linewidth=.45)
-ax.plot([1.20, 2.065], [.530, .530], color=LINE, linewidth=.45)
+ax.plot([.18, 2.065], [.530, .530], color=LINE, linewidth=.45)
 text(.105, .445, "MLP", size=5.8, color=HEAD, ha="center", rotation=90)
 # cbar_-i is the mean of OTHER candidates, defined in the caption. Each MLP
 # shares parameters across candidates. Brackets denote vector concatenation.
@@ -104,12 +103,7 @@ for center, inputs in ((.617, r"$[c_i,s,c_i-\bar c_{-i}]$"), (1.607, r"$[c_i,s]$
     text(center, .475, inputs, size=5.8, ha="center")
     arrow(center, .435, center, .410, color=HEAD, head=3)
     text(center, .365, r"MLP $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
-# Each row is an alternative path to scores, not a Transformer -> MLP stack.
-# The central collector occupies the gap between Joint and Independent columns.
-for y, left, right in ((.585, .88, 1.26), (.365, .90, 1.32)):
-    arrow(left, y, 1.11, y, color=HEAD, head=3)
-    arrow(right, y, 1.11, y, color=HEAD, head=3)
-ax.plot([1.11, 1.11], [.585, .315], color=HEAD, linewidth=.65, zorder=3)
+# Every alternative explicitly ends in z_i; one panel-level arrow suffices.
 arrow(1.11, .315, 1.11, .285, color=HEAD, head=3)
 text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
@@ -127,10 +121,11 @@ arrow(mid, .29, mid, .275, color=DECODER, head=3)
 text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 
 # One original action executes, whichever alternative selector is used.
-arrow(1.11, .185, 1.40, .15, color=HEAD)
-arrow(mid, .185, 1.94, .15, color=DECODER)
-box(1.10, .025, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(1.665, .085, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
+ax.plot([1.11, 1.11, 1.665], [.185, .17, .17], color=HEAD, linewidth=.65)
+ax.plot([mid, mid, 1.665], [.185, .17, .17], color=DECODER, linewidth=.65)
+arrow(1.665, .17, 1.665, .135, color=C["ACTION_INK"], head=3)
+box(1.10, .015, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(1.665, .075, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
 # Compact legend, right aligned. Rows query columns in all matrices.
 for x, fill, label in ((2.43, ALLOWED, "Allowed"), (2.94, MASKED, "Masked")):
     ax.add_patch(Rectangle((x, .052), .045, .045, facecolor=fill, edgecolor=LINE, linewidth=.3))
