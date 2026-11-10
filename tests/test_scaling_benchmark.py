@@ -100,6 +100,31 @@ class ScalingTest(unittest.TestCase):
             self.assertTrue(summary['topology_only'])
             self.assertIsNone(summary['browser_winner'])
 
+    def test_browser_pair_is_two_independent_sft_starts_even_if_first_fails(self):
+        plans = []
+        with tempfile.TemporaryDirectory() as tmp:
+            runtime = Path(tmp)
+            def failed_worker(command, **kwargs):
+                path = Path(command[-1].rsplit(' ', 1)[-1])
+                plans.append(json.loads(path.read_text()))
+                return SimpleNamespace(returncode=124)
+            with patch.object(scaling_benchmark, 'RUNTIME', runtime), \
+                 patch.object(scaling_benchmark, 'resources', return_value={'deadline': 1e12}), \
+                 patch.object(scaling_benchmark.subprocess, 'check_output', return_value=''), \
+                 patch.object(scaling_benchmark.subprocess, 'run', side_effect=failed_worker), \
+                 patch('builtins.print'):
+                scaling_benchmark.controller('42', browser_pair=True)
+            self.assertEqual([p['browsers'] for p in plans], [256, 192])
+            for plan in plans:
+                self.assertIsNone(plan['checkpoint'])
+                self.assertIsNone(plan['replay_batch'])
+                self.assertEqual(plan['start_adam_updates'], 0)
+                self.assertEqual(plan['rollout_id'], 0)
+                self.assertTrue(plan['fresh_sft'])
+                self.assertFalse(plan['writes_main_run_pointer'])
+                self.assertNotIn('qcq7i4ug', plan['wandb_run_id'])
+            self.assertNotEqual(plans[0]['wandb_run_id'], plans[1]['wandb_run_id'])
+
 
 if __name__ == '__main__':
     unittest.main()
