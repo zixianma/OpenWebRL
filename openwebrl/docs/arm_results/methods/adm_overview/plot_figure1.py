@@ -59,7 +59,6 @@ STATE_INK, STATE_EDGE, PALE_STATE = C["STATE_INK"], C["STATE_BORDER"], tint("STA
 ACTION_EDGE, PALE_ACTION = C["ACTION_INK"], tint("ACTION", .65)
 TEACHER, PALE_TEACHER = C["LOOKAHEAD_TEACHER"], tint("LOOKAHEAD_EVIDENCE", .90)
 PURPLE, PALE_PURPLE = C["ADM_DEFAULT"], tint("ADM_DEFAULT", .92)
-RULE = tint("BORDER", .55)
 FIG_HEIGHT = 3.14
 CANVAS_HEIGHT = 790
 fig = plt.figure(figsize=(7.2, FIG_HEIGHT), facecolor="white")
@@ -148,7 +147,6 @@ def web_frame(x, y, w, filename):
 
 def panel(x, w, title, color=INK, size=8.25):
     text(x+20, 48, title, size=size, weight="bold", ha="left", color=color)
-    line([(x+17, 83), (x+w-17, 83)], RULE, lw=0.45)
 
 
 panel(12, 626, "(a) Training data")
@@ -218,7 +216,6 @@ text(944, 683, "argmax", size=6.2, color=PURPLE, ha="left")
 # (c) Model uses and representative results from separate paper studies.
 def application_card(y, height, heading, color):
     text(1246, y+27, heading, size=7.7, weight="bold", ha="left", color=color)
-    line([(1562, y+58), (1562, y+height-16)], RULE, lw=0.45)
 
 
 application_card(121, 245, "Inference-time scaling", INK)
@@ -269,7 +266,6 @@ for spine in parameter_chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
 
-line([(1227, 376), (1562, 376)], RULE, lw=0.45)
 application_card(385, 237, "Offline improvement", INK)
 # One ADM supplies both demonstrations (SFT) and preferences (DPO).
 box(1256, 501, 70, 48, PALE_PURPLE, PURPLE, radius=5)
@@ -306,7 +302,6 @@ for spine in offline_chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
 
-line([(1227, 632), (1562, 632)], RULE, lw=0.45)
 application_card(641, 274, "Online RL", INK)
 # The same ADM supplies the decision signal used by the online RL bonus.
 box(1256, 704, 70, 48, PALE_PURPLE, PURPLE, radius=5)
