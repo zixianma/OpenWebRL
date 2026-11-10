@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Compact two-example figure (paper, about 1/3 page): (a) the screen right after an action already separates the
 candidates (Netflix help page); (b) only the actor's next steps do (arXiv search box vs going back).
+The displayed lookahead picks use the saved H=1 teacher for (a) and H=4 teacher
+for (b), each agreeing across both recorded calls; pre-execution is the control.
 
 One column grid for both examples: current screen (what every teacher sees) | candidate action | screen right after the
 action | the actor's next two actions and their screens (lookahead H = 4) | teacher picks and
@@ -30,20 +32,21 @@ from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 COLOR = {k: c for k, _, c in SRC}
-NAME = {"pre": "Pre-execution", "k3": "Lookahead"}
+COLOR["post"] = C["LOOKAHEAD_TEACHER"]
+NAME = {"pre": "Pre-execution", "post": "Lookahead", "k3": "Lookahead"}
 BAND, BANDEDGE = tint("LOOKAHEAD_EVIDENCE", 0.92), C["LOOKAHEAD_EVIDENCE"]
 GOODC, BADC = C["SUCCESS"], C["FAILURE"]
 EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
          task="Find Netflix's accepted payment methods.", site="help.netflix.com",
          sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.56, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
-         decide=[0],
+         decide=[0], lookahead_source="post", horizon=1,
          cands=[(1, "Click “Netflix\npayment options”", ["Answer page opens", "Scroll down", "Scroll down"]),
                 (0, "Scroll down", ["More billing text", "Scroll up", "Site unavailable"])]),
     dict(letter="b", title="Only the next steps decide",
          task="Find recent machine learning and deep learning papers.", site="arxiv.org",
          sid="72dbd347d60817b95b0e603b", cur=(0.0, 0.0, 0.86, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
-         decide=[1, 2],
+         decide=[1, 2], lookahead_source="k3", horizon=4,
          cands=[(1, "Click search", ["Search box opens", "Type “machine\nlearning”", "353,132 results"]),
                 (0, "Go back", ["arXiv home page", "Same listing again", "Back again: loop"])]),
 ]
@@ -93,8 +96,8 @@ def main():
     xp = 0.815                         # picks / success; generous label column
     th, rowgap = 0.115, 0.07
     heads = [(xc + wc / 2, r"$s_t$"), (xa + wa / 2, r"$a_t^i$"),
-             (xt + (3 * wt + 2 * gt) / 2, "Lookahead (H = 4)"),
-             (xp + 0.07, "Teacher choice")]
+             (xt + (3 * wt + 2 * gt) / 2, "Lookahead"),
+             (xp + 0.07, "Selected by teacher")]
     for x, t in heads:
         is_math = t.startswith("$")
         is_state = t == r"$s_t$"
@@ -118,11 +121,17 @@ def main():
     y = 0.828
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
+        source = ex["lookahead_source"]
+        if source not in p:
+            where = {a["teacher_exec"]: i for i, a in enumerate(x["actions"])}
+            p[source] = [where[j["candidate"]] for j in read(
+                R / "labels" / source / "judgments" / f"{ex['sid']}.json") if j.get("valid")]
+        assert all(len(p[key]) == 2 and len(set(p[key])) == 1 for key in ("pre", source))
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
         block_h = 2 * th + rowgap
         fig.text(xc, y + 0.008, ex["letter"] + ")", fontsize=8.2, fontweight="bold", color=INK, va="bottom")
         fig.text(xc + 0.026, y + 0.008, f"Task: {ex['task']}  ({ex['site']}, step {depth + 1})",
-                 fontsize=6.3, color=MUTED, va="bottom")
+                 fontsize=7.5, color=INK, va="bottom")
         cur = img(x["image"]); W, H = cur.size; l, t, r, b = ex["cur"]
         c0, c1 = min(ex["decide"]), max(ex["decide"])       # highlight the evidence that decides this example
         bx0 = xt + c0 * (wt + gt) - 0.006; bx1 = xt + c1 * (wt + gt) + wt + 0.006
@@ -151,7 +160,7 @@ def main():
                         color="white", fontsize=8.0, weight="bold",
                         bbox=dict(boxstyle="round,pad=.15", fc=col, ec="white", lw=.5))
             ry = y - (k + 1) * th - k * rowgap
-            chip(fig, xa, ry - .018, wa, th + .018, action_id, label, col)
+            chip(fig, xa + .004, ry + th * .06, wa - .008, th * .88, action_id, label, col)
             arrow(fig, xa + wa + 0.002, xt - 0.004, ry + th / 2, col)
             att, imm = attempt_for(root, ex["sid"], x["actions"][i]["teacher_exec"])
             shots = [img(imm["observation"]["screenshot"]["path"])]
@@ -172,9 +181,10 @@ def main():
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
             bx = xp + .07
-            for kk in [kk for kk in ("pre", "k3") if p[kk].count(i) == 2]:
+            for kk in [kk for kk in ("pre", source) if p[kk].count(i) == 2]:
                 cy = ry + th * .75
-                fig.text(bx, cy, NAME[kk], fontsize=7.2, color="white" if kk == "pre" else INK,
+                method_label = NAME[kk] if kk == "pre" else f"Lookahead H={ex['horizon']}"
+                fig.text(bx, cy, method_label, fontsize=7.2, color="white" if kk == "pre" else INK,
                          fontweight="bold", ha="center", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
             s, n = held(x["actions"][i])
