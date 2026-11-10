@@ -108,8 +108,8 @@ assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead H = 4",
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACTION_INK"])
-outcome_header = text(0.06, 0.245, "Success rate (%)",
-                      size=6.5, color=MUTED)
+outcome_header = text(4.01, 1.98, "Success rate (%)",
+                      size=6.5, color=MUTED, ha="center")
 # Outcome status key only; selected-action check marks remain omitted.
 for x, success, label in ((2.80, True, r"Success ($R=1$)"),
                           (3.62, False, r"Failure ($R=0$)")):
