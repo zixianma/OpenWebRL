@@ -148,6 +148,29 @@ had already completed 62 tasks (median seven steps). This is consistent with
 Soft-MTP more often continuing until it hit the boundary; the saved evidence
 does not establish larger typical per-turn outputs.
 
+The follow-up actor context should match the prepared SFT records: keep the
+task and full prior textual reasoning/action/tool history, but expose only the
+current screenshot to each action decision. All 3,085 prepared training rows
+have exactly one image, including later-turn prefixes with up to 30 assistant
+turns; `mask_history: true` masks old assistant targets, not their input text.
+The existing `generate_turn_sample` path implements the one-screenshot filter
+and supplies the terminal judge with the full action transcript and latest
+screenshot. A corrected paired evaluation must opt into that path explicitly
+and be reported as a new protocol cohort.
+
+There is a separate image-resolution mismatch to control. The two experimental
+SFT runs used `image_max_pixels: 262144`; a training preflight encoded a
+1,280 × 1,000 screenshot as a 28 × 36 patch grid (252 merged visual tokens).
+The first evaluation used the exported processor's 16,777,216-pixel default
+and recorded a 62 × 80 grid (1,240 visual tokens) per screenshot. Two
+symlink-backed serving views under the private training runtime now set both
+processor config files to a 262,144-pixel cap; CPU processing of the same
+screenshot yielded 28 × 36 for both arms. This checks the token grid, not
+pixel-identical preprocessing or GPU inference. The released OpenWebRL SFT
+example uses a different image cap; 262,144 is specific to this matched
+experimental training pair. Keep the image-cap choice explicit in the next
+evaluation manifest.
+
 [Aggregate results and uncertainty](arm_results/soft_mtp_sft_terra_full300_20261109.json)
 link to the local task-level audit, frozen plan and saved rollouts/verdicts.
 Evaluation W&B runs `sbi1rfpw` (NTP) and `fsd94wxo` (Soft) synced in
