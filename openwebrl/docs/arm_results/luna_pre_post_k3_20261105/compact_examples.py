@@ -30,7 +30,7 @@ from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 COLOR = {k: c for k, _, c in SRC}
-NAME = {"pre": "Pre-execution", "k3": "Lookahead H=4"}
+NAME = {"pre": "Pre-execution", "k3": "Lookahead"}
 BAND, BANDEDGE = tint("LOOKAHEAD_EVIDENCE", 0.92), C["LOOKAHEAD_EVIDENCE"]
 GOODC, BADC = C["SUCCESS"], C["FAILURE"]
 EXAMPLES = [
@@ -73,7 +73,7 @@ def pic(fig, rect, im, edge=C["BORDER"], lw=0.6):
 def chip(fig, x, y, w, h, action_id, label, color, fs=6.0):
     fig.add_artist(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.008",
                                   fc=tint("ACTION", .72), ec=color, lw=.85, transform=fig.transFigure))
-    fig.text(x + w / 2, y + h * .76, rf"$a_t^{{{action_id}}}$", fontsize=8, color=color,
+    fig.text(x + w / 2, y + h * .76, rf"$a_t^{{{action_id}}}$", fontsize=10, color=color,
              fontweight="bold", ha="center", va="center")
     fig.text(x + w / 2, y + h * .23, label, fontsize=fs, color=INK, ha="center", va="center",
              linespacing=1.05)
@@ -96,13 +96,21 @@ def main():
              (xt + (3 * wt + 2 * gt) / 2, "Lookahead (H = 4)"),
              (xp + 0.07, "Teacher choice")]
     for x, t in heads:
-        fig.text(x, .950 if t.startswith("$") else .993, t, fontsize=7.5,
-                 color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
+        is_math = t.startswith("$")
+        fig.text(x, .956 if is_math else .993, t, fontsize=10 if is_math else 7.5,
+                 color=C["STATE_BORDER"] if t == r"$s_t$" else INK,
+                 ha="center", va="top", fontweight="bold", linespacing=1.1)
+    fig.text(xa + wa / 2, .993, r"$K=5$ (2 shown)", fontsize=6.2,
+             color=MUTED, ha="center", va="top")
+    fig.add_artist(FancyBboxPatch((xc, .972), .015, .017,
+                                  boxstyle="round,pad=0,rounding_size=.003",
+                                  fc=BAND, ec=BANDEDGE, lw=.9, transform=fig.transFigure))
+    fig.text(xc + .023, .9805, "Decisive states", fontsize=6.5, color=INK, va="center")
     for j in range(3):
         label = rf"$s_{{t+{j + 1}}}^i$"
-        fig.text(xt + j * (wt + gt) + wt / 2, .950, label,
-                 fontsize=7.5, color=MUTED, ha="center", va="top")
-    y = 0.855
+        fig.text(xt + j * (wt + gt) + wt / 2, .956, label,
+                 fontsize=10, color=C["STATE_BORDER"], ha="center", va="top")
+    y = 0.840
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
@@ -127,18 +135,18 @@ def main():
                 ax.add_patch(Rectangle((px - 0.075 * W, py - 0.03 * H), 0.15 * W, 0.06 * H, fill=False, ec=col, lw=1.6))
                 crop_h, crop_w = ax.images[0].get_array().shape[:2]
                 badge_x = min(max(px + .075 * W, .06 * crop_w), .98 * crop_w)
-                badge_y = min(max(py - .03 * H, .12 * crop_h), .95 * crop_h)
+                badge_y = min(max(py - .03 * H, .16 * crop_h), .95 * crop_h)
                 ax.text(badge_x, badge_y, action_id, ha="right", va="bottom", clip_on=True,
-                        color="white", fontsize=6.5, weight="bold",
+                        color="white", fontsize=8.0, weight="bold",
                         bbox=dict(boxstyle="round,pad=.15", fc=col, ec="white", lw=.5))
             if c.get("name") == "scroll":
                 ax.annotate("", (0.93, 0.08), (0.93, 0.32), xycoords="axes fraction",
                             arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6, mutation_scale=9))
                 ax.text(.93, .36, action_id, transform=ax.transAxes, ha="center", va="bottom",
-                        color="white", fontsize=6.5, weight="bold",
+                        color="white", fontsize=8.0, weight="bold",
                         bbox=dict(boxstyle="round,pad=.15", fc=col, ec="white", lw=.5))
             ry = y - (k + 1) * th - k * rowgap
-            chip(fig, xa, ry + th * 0.02, wa, th * 0.96, action_id, label, col)
+            chip(fig, xa, ry - .018, wa, th + .018, action_id, label, col)
             arrow(fig, xa + wa + 0.002, xt - 0.004, ry + th / 2, col)
             att, imm = attempt_for(root, ex["sid"], x["actions"][i]["teacher_exec"])
             shots = [img(imm["observation"]["screenshot"]["path"])]
@@ -167,8 +175,6 @@ def main():
             fig.text(xp, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, va="center")
         y = y - block_h - 0.15
-    fig.text(xc, .025, "Success: successful valid held-out continuations (rollouts 4–8).",
-             fontsize=5.8, color=MUTED, va="bottom")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for i, label in enumerate(fig.texts):
