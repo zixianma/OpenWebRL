@@ -108,7 +108,7 @@ assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead H = 4",
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACTION_INK"])
-outcome_header = text(0.06, 0.245, r"Train/Eval % $=100\,\mathrm{mean}_{j}\,R^{i,j}$",
+outcome_header = text(0.06, 0.245, "Success rate (%)",
                       size=6.5, color=MUTED)
 # Outcome status key only; selected-action check marks remain omitted.
 for x, success, label in ((2.80, True, r"Success ($R=1$)"),
@@ -139,11 +139,10 @@ rollout_box.set_linestyle(":")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 1.60,
          rf"$a_{{t+{k}}}^{{i}}$", size=6.5, color=C["ACTION_INK"], ha="center")
-for x, title, split, color, fill, width in (
-        (3.82, "Train %", "j=1–3", OUTCOME, LABEL_BG, 0.34),
-        (4.20, "Eval %", "j=4–8", HELD, HELD_BG, 0.28)):
+for x, title, color, fill, width in (
+        (3.82, "Train %", OUTCOME, LABEL_BG, 0.34),
+        (4.20, "Eval %", HELD, HELD_BG, 0.28)):
     text(x, 1.79, title, size=6.5, color=INK, ha="center")
-    text(x, 1.60, split, size=6.5, color=INK, ha="center")
     rule(x - width / 2, x + width / 2, 1.69, color, 1.0)
     ax.add_patch(Rectangle((x - width / 2, y_low), width, y_high - y_low,
                            facecolor=fill, edgecolor="none", zorder=0))
