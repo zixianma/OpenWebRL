@@ -132,6 +132,9 @@ ax.plot([mid, mid, 1.665], [.185, .17, .17], color=DECODER, linewidth=.65)
 arrow(1.665, .17, 1.665, .137, color=C["ACTION_INK"], head=3)
 box(1.10, .015, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(1.665, .075, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
+# Define the joint MLP's candidate-relative feature without crowding the row.
+text(.055, .160, r"$\Delta c_i = c_i - \bar c_{-i}$", size=5.5, color=MUTED)
+text(.055, .065, r"$\bar c_{-i}$: mean of others", size=5.2, color=MUTED)
 # Compact legend, right aligned. Rows query columns in all matrices.
 for x, fill, label in ((2.43, ALLOWED, "Allowed"), (2.94, MASKED, "Masked")):
     ax.add_patch(Rectangle((x, .052), .045, .045, facecolor=fill, edgecolor=LINE, linewidth=.3))
