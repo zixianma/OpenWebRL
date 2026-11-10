@@ -227,8 +227,9 @@ class LossPlan:
     arm_id: str
     reduction: str
     terms: tuple[LossTerm, ...]
-    # Separate from fit/holdout role: tree selection retains the full graph.
-    # The objective adapter verifies its outcome-blind sampler receipt.
+    # Ordinary outcome population, separate from fit/holdout role. Tree
+    # selection and Q's base-only population both retain the complete graph.
+    # The objective adapter verifies their immutable collection bindings.
     selected_leaf_ids: tuple[str, ...] | None = None
 
     def validate(self):
@@ -245,13 +246,16 @@ class LossPlan:
         leaves = {leaf.leaf_id: leaf for leaf in self.graph.leaves if leaf.split == "train"
                   and leaf.status == "valid" and (selected is None or leaf.leaf_id in selected)}
         eligible = {e for leaf in leaves.values() for e in leaf.edge_ids}
+        local_eligible = {e for leaf in self.graph.leaves
+                          if leaf.split == "train" and leaf.status == "valid"
+                          for e in leaf.edge_ids}
         expected_pairs = {(leaf.leaf_id, e) for leaf in leaves.values() for e in leaf.edge_ids}
         actual_pairs, local_groups = [], {}
         token_count = sum(sum(edges[e].sampled_mask) for leaf in leaves.values() for e in leaf.edge_ids)
         for term in self.terms:
             if not isinstance(term, LossTerm):
                 raise ValueError("typed immutable loss terms required")
-            if term.edge_id not in eligible:
+            if term.edge_id not in (local_eligible if term.component == "local" else eligible):
                 raise ValueError("loss references an invalid or held-out-only response")
             if (isinstance(term.advantage, bool) or not math.isfinite(term.advantage)
                     or isinstance(term.weight, bool) or not math.isfinite(term.weight) or term.weight <= 0):

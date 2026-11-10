@@ -34,10 +34,22 @@ def shared_prefix_contract(reduction):
     return dict(reduction=reduction, mode="separate_leaf_terms_before_clipping")
 
 
+def q_inventory_contract():
+    """Independent outcome population and disjoint continuation-Q inventory."""
+    return dict(version="independent_base_plus_local_q_v1", outcome_population="base",
+                local_target_population="q_fit", continuation_holdout="q_holdout",
+                q_continuations_in_outcome_objective=False,
+                coverage="all_planned_candidates_and_fit_holdout_invalid_missing_slots",
+                role_assignment="immutable_before_collection")
+
+
 def _check_contract(manifest, contract):
     splits = {task: "train" for task in contract.train_task_ids}
     splits.update({task: "holdout" for task in contract.heldout_task_ids})
     _require(manifest["task_splits"] == splits, "Graph task partition differs from campaign")
+    if manifest["arm_id"] == "continuation_q":
+        _require(manifest["science"]["algorithm"].get("q_inventory_protocol") == q_inventory_contract(),
+                 "Campaign must pin the independent-base continuation-Q inventory protocol")
     # Require explicit, unique pins; generic source/prompt hashes cannot replace
     # the complete protocol hashes named by the graph contract.
     pins = ("tokenizer_sha256", "processor_sha256", "task_manifest_sha256",
@@ -91,6 +103,13 @@ class SealedCollection:
                  "Graph policy differs from sealed collection")
         expected = update["expected_draws"]
         _require(digest(expected) == update["plan_sha256"], "Planned inventory digest mismatch")
+        online_plan = state.get("online_collection_plans", {}).get(str(update_id))
+        if online_plan is not None:
+            planned_mapping = {item["leaf_id"]:digest(store._draw_identity(update_id, graph_contract.policy_sha256,
+                               item["spec"])) for item in online_plan["draws"]}
+            _require(online_plan["graph_contract_sha256"] == graph_contract.sha256
+                     and leaf_to_draw == planned_mapping,
+                     "Online leaf identities must match their exact precollection draw slots")
         _require(isinstance(leaf_to_draw, dict) and bool(leaf_to_draw)
                  and all(isinstance(k, str) and k and k.strip() == k for k in leaf_to_draw)
                  and all(isinstance(v, str) for v in leaf_to_draw.values())
@@ -131,21 +150,87 @@ class SealedCollection:
             inventory[leaf_id] = dict(identity, draw_id=draw_id, status=draw["status"], reward=reward,
                 outcome=outcome, reason=completion["reason"] if completion else draw["missing_reason"],
                 sampling_terminal_node_id=completion.get("sampling_terminal_node_id") if completion else None)
+        abstentions = _sealed_panel_abstentions(state, graph_contract, inventory)
         payload = dict(schema_version=1, phase=update["phase"], manifest=manifest,
             manifest_sha256=state["manifest_sha256"], plan_sha256=update["plan_sha256"],
             export_sha256=update["export_sha256"], update_id=update_id,
             policy_sha256=graph_contract.policy_sha256, graph_contract_sha256=graph_contract.sha256,
-            inventory=inventory)
+            inventory=inventory, panel_abstentions=abstentions)
         instance = object.__new__(cls)
         object.__setattr__(instance, "canonical_json", _canonical(payload))
         return instance
 
 
+def _sealed_panel_abstentions(state, contract, inventory):
+    """Only prespecified source failure or physically absent candidates abstain."""
+    from .action_credit import _sha
+    prefix = str(contract.update_id)+":"
+    admissions = {k[len(prefix):]:v for k,v in state.get("online_panel_admissions", {}).items() if k.startswith(prefix)}
+    completions = {k[len(prefix):]:v for k,v in state.get("online_panel_completions", {}).items() if k.startswith(prefix)}
+    if not admissions and not completions:
+        return {}
+    plan = state.get("online_collection_plans", {}).get(str(contract.update_id))
+    _require(plan is not None and plan["graph_contract_sha256"] == contract.sha256,
+             "Q admissions require the pinned complete online collection plan")
+    groups = {g["group_id"]+":localq":g for g in plan["groups"][:8]}
+    _require(set(admissions) <= set(groups) and set(completions) <= set(admissions), "Unplanned Q admission")
+    abstentions = {}
+    for panel, admission in admissions.items():
+        source_id = groups[panel]["group_id"]+":chain00:terminal"
+        _require(admission["source_leaf_id"] == source_id and source_id in inventory
+                 and admission["policy_sha256"] == contract.policy_sha256
+                 and admission["selection_policy_sha256"] == digest(plan["protocol"]),
+                 "Q source/admission differs from prespecified outcome-blind protocol")
+        rows = {key:row for key,row in inventory.items() if row["state_id"] == panel and row["inventory_role"] != "base"}
+        actions = {row["action_id"] for row in rows.values()}
+        _require(len(rows) == 40 and len(actions) == 5, "Q abstention must retain all five-by-eight slots")
+        for action in actions:
+            slots = [row for row in rows.values() if row["action_id"] == action]
+            _require({row["draw_slot"] for row in slots} == set(range(8))
+                     and all(row["inventory_role"] == ("q_fit" if row["draw_slot"] < 6 else "q_holdout") for row in slots),
+                     "Q abstention changes fit/holdout slots")
+        source = state["draws"][inventory[source_id]["draw_id"]]
+        if admission["status"] == "abstained":
+            _require(source["status"] != "valid" and source["selected_attempt"] not in state.get("pending_episodes", {})
+                     and admission["source_attempt_id"] is None and admission["depth"] is None
+                     and all(row["status"] == "missing" and not state["draws"][row["draw_id"]]["attempts"] for row in rows.values())
+                     and panel not in completions, "Source abstention must preserve all40 unattempted missing draws")
+            abstentions[panel] = dict(admission, status="source_inadmissible", missing_candidate_edge_ids=sorted(actions))
+        else:
+            _require(admission["status"] == "admitted" and admission["source_attempt_id"] == source["selected_attempt"]
+                     and admission["source_attempt_id"] in state.get("pending_episodes", {})
+                     and type(admission["depth"]) is int and admission["depth"] >= 0,
+                     "Admitted Q source lacks its durable physical episode")
+            for name in ("source_context_sha256", "source_evidence_sha256"):
+                _sha(admission[name], name)
+            final = completions.get(panel)
+            if final is None:
+                continue
+            missing = final["missing_candidate_edge_ids"]
+            closed = {key:{k:state["draws"][row["draw_id"]][k] for k in ("status", "selected_attempt")} for key,row in rows.items()}
+            _require(final["status"] == "candidate_incomplete" and missing and len(set(missing)) == len(missing)
+                     and set(missing) <= actions and final["closed_inventory_sha256"] == digest(closed),
+                     "Candidate abstention requires exact closed inventory evidence")
+            for row in rows.values():
+                if row["action_id"] in missing:
+                    draw = state["draws"][row["draw_id"]]
+                    _require(row["status"] in ("invalid", "missing") and row["reward"] is None
+                             and draw["selected_attempt"] not in state.get("pending_episodes", {}),
+                             "Sampled model failures cannot become absent-candidate abstentions")
+                    _require(not any(call["attempt_id"] in draw["attempts"]
+                                     and call["turn"] == admission["depth"] and call["status"] == "received"
+                                     for call in state.get("online_actor_requests", {}).values()),
+                             "Received candidate tokens in partial artifacts require recovery, not abstention")
+            abstentions[panel] = dict(admission, **final)
+    return abstentions
+
+
 def validate_collection_binding(graph, config, panels, binding, *, selection=None):
     """Reject changed outcomes, roles, inventory, candidates or complete panels.
 
-    An empty panels tuple permits the zero-local ablation, while nonzero local
-    credit requires the complete candidate panel inventory.
+    Panels cover only the independently planned Q continuation inventory.
+    Empty Q inventory permits a base-only update after failed state admission;
+    a nonempty planned Q inventory can never be silently omitted.
     """
     from .action_credit_objective import ObjectiveConfig
     _require(type(binding) is SealedCollection and type(graph) is ResponseGraph
@@ -165,12 +250,31 @@ def validate_collection_binding(graph, config, panels, binding, *, selection=Non
              "Complete objective configuration differs from campaign")
     selection_policy = {"mode": "all_fit_inventory"}
     if selection is not None:
-        from .action_credit_selection import TrainingSelectionReceipt
-        _require(type(selection) is TrainingSelectionReceipt
+        from .action_credit_selection import (TrainingSelectionReceipt,
+            MultiGroupTrainingSelectionReceipt, validate_selection)
+        from .action_credit_slot_selection import SlotSelectionReceipt
+        _require(type(selection) in (TrainingSelectionReceipt, MultiGroupTrainingSelectionReceipt, SlotSelectionReceipt)
                  and config.arm_id in ("tree_outcome_sampling", "tree_grpo"),
                  "Only tree arms accept a typed outcome-blind selection receipt")
         selection_policy = selection.policy
         _require(selection.policy_sha256 == digest(selection_policy), "Selection policy digest mismatch")
+        if type(selection) in (MultiGroupTrainingSelectionReceipt, SlotSelectionReceipt):
+            _require(science["dataset"].get("task_order_sha256") == selection.frozen_policy.task_order_sha256,
+                     "Multi-group selection task order differs from frozen dataset order")
+        if type(selection) is SlotSelectionReceipt:
+            _require(selection.plan_sha256 == bound["plan_sha256"],
+                     "Prescheduled slot selection differs from the immutable precollection draw plan")
+            for part in selection.partitions:
+                for tree in part.schedule.tree_ids:
+                    for round_index in range(part.schedule.l+1):
+                        for slot in range(1 if round_index == 0 else part.schedule.n):
+                            leaf_id = f"{tree}:round{round_index}:draw{slot}"
+                            row = bound["inventory"].get(leaf_id, {})
+                            _require(row.get("state_id") == f"{tree}:round{round_index}"
+                                     and row.get("action_id") == "tree_continuation"
+                                     and row.get("draw_slot") == slot and row.get("inventory_role") == "base",
+                                     "Tree slot leaf is not bound to its exact prescheduled draw identity")
+        validate_selection(graph, selection)
     _require(science["algorithm"].get("leaf_selection") == selection_policy,
              "Leaf selection schedule, seed or policy differs from prespecified campaign")
     prefix = science["shared_prefix_normalization"]
@@ -186,6 +290,20 @@ def validate_collection_binding(graph, config, panels, binding, *, selection=Non
         _require((leaf.task_id, leaf.group_id, leaf.tree_id, leaf.split, leaf.status, leaf.reward)
                  == (row["task_id"], row["group_id"], row["tree_id"], row["draw_role"], row["status"], row["reward"]),
                  "Graph task, group, tree, draw role, status or reward differs from sealed draw")
+        role = row.get("inventory_role")
+        _require(role in ("base", "q_fit", "q_holdout"), "Missing or unknown sealed inventory role")
+        _require(role != "q_fit" or leaf.split == "train", "Q-fit draw cannot be holdout")
+        _require(role != "q_holdout" or leaf.split == "holdout", "Q-holdout draw cannot train")
+        _require(role == "base" or config.arm_id == "continuation_q", "Q inventory in another arm")
+    q_inventory = {key: row for key, row in inventory.items() if row["inventory_role"] != "base"}
+    abstentions = bound.get("panel_abstentions", {})
+    for panel_id, admission in abstentions.items():
+        _require(not any(panel.panel_id == panel_id for panel in panels), "Abstained panel cannot supply local Q terms")
+        _require(not set(admission["missing_candidate_edge_ids"]) & {edge.edge_id for edge in graph.edges},
+                 "Physically sampled candidate cannot be omitted as an infrastructure failure")
+    if config.arm_id == "continuation_q":
+        _require(science["algorithm"].get("q_inventory_protocol") == q_inventory_contract(),
+                 "Campaign must pin the independent-base continuation-Q inventory protocol")
     if selection is not None:
         terminal_map = dict(selection.terminal_to_leaf)
         recorded = [(row["sampling_terminal_node_id"], leaf_id) for leaf_id, row in inventory.items()
@@ -194,9 +312,7 @@ def validate_collection_binding(graph, config, panels, binding, *, selection=Non
                  and len({terminal for terminal, _ in recorded}) == len(recorded)
                  and terminal_map == dict(recorded),
                  "Selection terminal mapping differs from independently sealed outcome metadata")
-    _require(config.local_coefficient == 0 or bool(panels),
-             "Nonzero continuation credit requires every planned candidate panel")
-    if panels:
+    if panels or q_inventory:
         _require(config.arm_id == "continuation_q", "Only continuation-Q accepts candidate panels")
         actual, panel_ids = {}, set()
         for panel in panels:
@@ -210,6 +326,7 @@ def validate_collection_binding(graph, config, panels, binding, *, selection=Non
                 for leaf_id in leaves:
                     _require(leaf_id not in actual, "Repeated draw in continuation panels")
                     actual[leaf_id] = (panel.panel_id, action_id)
-        expected = {key: (row["state_id"], row["action_id"]) for key, row in inventory.items()}
+        expected = {key: (row["state_id"], row["action_id"]) for key, row in q_inventory.items()
+                    if row["state_id"] not in abstentions}
         _require(actual == expected,
-                 "Panels must exactly retain planned states, candidates and ALL draw slots")
+                 "Panels must exactly retain planned Q states, candidates and ALL draw slots, excluding base")
