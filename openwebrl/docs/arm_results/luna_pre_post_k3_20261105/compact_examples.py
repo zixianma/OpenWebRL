@@ -104,12 +104,12 @@ def main():
                 if is_math else None)
         fig.text(x, .945 if is_math else .993, t, fontsize=10 if is_math else 7.5,
                  color=color, bbox=bbox, ha="center", va="top", fontweight="bold", linespacing=1.1)
-    fig.text(xa + wa / 2, .993, r"$K=5$ (2 shown)", fontsize=6.2,
-             color=MUTED, ha="center", va="top")
-    fig.add_artist(FancyBboxPatch((xc, .972), .015, .017,
+    fig.text(xa, .005, r"$K=5$ (2 shown)", fontsize=6.2,
+             color=MUTED, ha="left", va="bottom")
+    fig.add_artist(FancyBboxPatch((xc, .0095), .015, .017,
                                   boxstyle="round,pad=0,rounding_size=.003",
                                   fc=BAND, ec=BANDEDGE, lw=.9, transform=fig.transFigure))
-    fig.text(xc + .023, .9805, "Decisive states", fontsize=6.5, color=INK, va="center")
+    fig.text(xc + .023, .005, "Decisive states", fontsize=6.5, color=INK, va="bottom")
     for j in range(3):
         label = rf"$s_{{t+{j + 1}}}^i$"
         fig.text(xt + j * (wt + gt) + wt / 2, .945, label,
@@ -129,7 +129,7 @@ def main():
         fig.add_artist(FancyBboxPatch((bx0, y - block_h - 0.045), bx1 - bx0, block_h + 0.05,
                                       boxstyle="round,pad=0,rounding_size=0.01", fc=BAND, ec=BANDEDGE, lw=0.8,
                                       transform=fig.transFigure, zorder=-5))
-        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]), edge=C["STATE_BORDER"], lw=.8)
+        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
         for k, (i, label, caps) in enumerate(ex["cands"]):
             action_id = str(k + 1)
             col = C["ACTION_INK"] if k == 0 else C["ACTION"]
@@ -160,7 +160,7 @@ def main():
                 rx = xt + j * (wt + gt)
                 if j < len(shots):
                     key = j in ex["decide"]
-                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=BANDEDGE if key else C["STATE_BORDER"],
+                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=BANDEDGE if key else C["BORDER"],
                              lw=1.3 if key else 0.5)
                     if not key:                    # fade evidence that does not decide this example
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.25, ec="none"))
@@ -171,23 +171,15 @@ def main():
                     fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
             fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color=C["MUTED"], va="center")
-            bx = xp
+            bx = xp + .07
             for kk in [kk for kk in ("pre", "k3") if p[kk].count(i) == 2]:
                 cy = ry + th * .75
-                t_ = fig.text(bx, cy, NAME[kk], fontsize=7.2, color="white" if kk == "pre" else INK, fontweight="bold", va="center",
+                fig.text(bx, cy, NAME[kk], fontsize=7.2, color="white" if kk == "pre" else INK,
+                         fontweight="bold", ha="center", va="center",
                               bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
-                fig.canvas.draw()
-                method_right = t_.get_bbox_patch().get_window_extent().transformed(fig.transFigure.inverted()).x1
-                arrow(fig, method_right + .004, .945, cy, COLOR[kk])
-                fig.add_artist(FancyBboxPatch((.949, cy - .025), .030, .050,
-                                              boxstyle="round,pad=0,rounding_size=.005",
-                                              fc=tint("ACTION", .65), ec=col, lw=1,
-                                              transform=fig.transFigure))
-                fig.text(.964, cy, action_id, fontsize=10.5, color=col,
-                         weight="bold", ha="center", va="center")
             s, n = held(x["actions"][i])
-            fig.text(xp, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
-                     color=GOOD if s / n > 0.5 else BAD, va="center")
+            fig.text(bx, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
+                     color=GOOD if s / n > 0.5 else BAD, ha="center", va="center")
         y = y - block_h - 0.15
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
