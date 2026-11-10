@@ -79,9 +79,8 @@ arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
 arrow(2.80, 1.725, 2.80, 1.655, color=DECODER, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
 box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
-text(1.075, 1.565, "a) ADM head: 4 variants", size=6.6, color=HEAD, ha="center")
-text(.48, 1.425, r"$s$: prompt", size=5.8, color=C["STATE_INK"], ha="center")
-text(1.50, 1.425, r"$c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
+text(1.075, 1.565, "a) ADM head", size=6.8, color=HEAD, ha="center")
+text(1.075, 1.425, r"Actor features $s, c_i$", size=5.8, color=MUTED, ha="center")
 
 CELL, HEAD_TOP, TOP = .074, 1.16, 1.105
 labels = [r"$s$"]+[rf"$c_{{{i}}}$" for i in range(1, K+1)]
@@ -105,27 +104,26 @@ text(.105, .445, "MLP", size=5.8, color=HEAD, ha="center", rotation=90)
 for center, inputs in ((.617, r"$[c_i,s,\Delta c_i]$"), (1.607, r"$[c_i,s]$")):
     text(center, .475, inputs, size=5.8, ha="center")
     arrow(center, .435, center, .410, color=HEAD, head=4)
-    text(center, .365, r"MLP $\rightarrow z_i$", size=5.7, color=HEAD, ha="center")
+    text(center, .365, r"$z_i$", size=5.7, color=HEAD, ha="center")
 # Every alternative explicitly ends in z_i; one panel-level arrow suffices.
 arrow(1.11, .323, 1.11, .280, color=HEAD, head=4)
 text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
 text(2.80, 1.565, "b) ADM-4B", size=6.8, color=DECODER, ha="center")
-text(2.80, 1.460, r"Prompt $p$ + responses $c_i$", size=5.8, color=DECODER, ha="center")
 # Matching theta_0 symbols encode shared initialization without a long arrow.
-box(2.44, 1.290, .29, .12, edge=LINE)
-text(2.585, 1.350, r"$\theta_0$", size=6.4, ha="center")
-text(2.585, 1.245, "Frozen copy", size=5.2, color=MUTED, ha="center")
-text(2.81, 1.350, "+", size=7, color=DECODER, ha="center")
-box(2.90, 1.290, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
-text(3.075, 1.350, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
-text(3.075, 1.245, "LoRA", size=5.2, color=DECODER, ha="center")
+box(2.44, 1.355, .29, .12, edge=LINE)
+text(2.585, 1.415, r"$\theta_0$", size=6.4, ha="center")
+text(2.585, 1.310, "Frozen", size=5.2, color=MUTED, ha="center")
+text(2.81, 1.415, "+", size=7, color=DECODER, ha="center")
+box(2.90, 1.355, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
+text(3.075, 1.415, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
+text(3.075, 1.310, "LoRA", size=5.2, color=DECODER, ha="center")
 DX, DCELL = 2.48, .115
 TOKENS = [r"$p$"]+[rf"$c_{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
 causal_mask = [[c <= r for c in range(K+2)] for r in range(K+2)]
 assert sum(map(sum, causal_mask)) == 28
-matrix(DX, TOP, TOKENS, DCELL, causal_mask, answer=True)
+matrix(DX, TOP, TOKENS, DCELL, causal_mask, answer=True, row_labels=False)
 mid = DX + len(TOKENS)*DCELL/2
 arrow(mid, .295, mid, .275, color=DECODER, head=4)
 text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
