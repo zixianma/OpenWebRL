@@ -128,14 +128,19 @@ for first, last, title, color, fill in (
 text(xs[0] - 0.095, 1.60, r"$j=$", size=6.5, color=MUTED, ha="right")
 text(0.64, 1.60, r"$K=5$ actions", size=6.5, color=MUTED, ha="center")
 text(1.73, 1.79, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
+# Dotted neutral boundary groups the Rollout 1 outcomes with their example path.
+rollout_box = box(0.94, y_low - 0.02, xs[0] + rollout_pitch / 2 + 0.02 - 0.94,
+                  1.68 - (y_low - 0.02), edge=ROLLOUT, fill="none", lw=0.9)
+rollout_box.set_linestyle(":")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 1.60,
          rf"$a_{{t+{k}}}^{{i}}$", size=6.5, color=C["ACTION_INK"], ha="center")
 for x, title, split, color, fill, width in (
-        (3.82, "Train %", "1–3", OUTCOME, LABEL_BG, 0.34),
-        (4.20, "Eval %", "4–8", HELD, HELD_BG, 0.28)):
+        (3.82, "Train %", "j=1–3", OUTCOME, LABEL_BG, 0.34),
+        (4.20, "Eval %", "j=4–8", HELD, HELD_BG, 0.28)):
     text(x, 1.79, title, size=6.5, color=INK, ha="center")
     text(x, 1.60, split, size=6.5, color=INK, ha="center")
+    rule(x - width / 2, x + width / 2, 1.69, color, 1.0)
     ax.add_patch(Rectangle((x - width / 2, y_low), width, y_high - y_low,
                            facecolor=fill, edgecolor="none", zorder=0))
 mid = sum(ys) / len(ys)
