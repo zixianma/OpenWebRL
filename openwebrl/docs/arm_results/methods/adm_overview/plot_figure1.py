@@ -237,7 +237,7 @@ browser(1518, 265, 34, 43)
 text(1518, 334, "Execute", size=5.8, color=MUTED)
 # Selection outputs a decision; the browser icon denotes its execution.
 
-text(1662, 183, "Mean valid-only (%)", size=5.5, color=MUTED)
+text(1662, 183, "Mean valid-only (%)", size=5.9, color=MUTED)
 # November 4 SFT-only comparison: three-benchmark valid-only means pooled
 # over three runs. The actor and head coordinates match Figure 4.
 inference_points = [
@@ -245,18 +245,18 @@ inference_points = [
     (8.88, 43.12, "8B", GRAY, "s", (-2, -7), "right"),
     (4.4626, 47.38, "ADM head", PURPLE, "o", (3, 5), "left"),
 ]
-parameter_chart = chart_axes(1585, 208, 157, 112)
+parameter_chart = chart_axes(1585, 208, 157, 130)
 for x, y, label, color, marker, offset, align in inference_points:
-    parameter_chart.scatter(x, y, s=12, marker=marker, color=color, zorder=3, linewidths=0.4)
+    parameter_chart.scatter(x, y, s=19, marker=marker, color=color, zorder=3, linewidths=0.5)
     parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
-                        ha=align, fontsize=4.8, color=color)
+                        ha=align, fontsize=5.6, color=color)
 parameter_chart.set(xlim=(3.8, 9.5), ylim=(38, 50), xticks=[4, 8], yticks=[40, 45])
-parameter_chart.tick_params(axis="both", labelsize=4.8, length=1.5, width=0.4, pad=1.5, colors=MUTED)
+parameter_chart.set_xlabel("Parameters (B)", fontsize=5.3, labelpad=1.5, color=MUTED)
+parameter_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 parameter_chart.spines[["top", "right"]].set_visible(False)
 for spine in parameter_chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
-text(1663, 352, "Parameters (B)", size=4.9, color=MUTED)
 
 line([(1227, 376), (1766, 376)], RULE, lw=0.45)
 application_card(385, 237, "Offline improvement", INK)
@@ -277,17 +277,17 @@ for yy, method, label in [
     box(1474, yy, 64, 48, PALE_GRAY, GRAY, radius=5)
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
 offline = {r["key"]: r for r in DATA["offline_policy_comparison"]["rows"]}
-text(1663, 435, "OM2W success (%)", size=5.5, color=MUTED)
-offline_chart = chart_axes(1585, 468, 157, 112)
+text(1663, 435, "OM2W success (%)", size=5.9, color=MUTED)
+offline_chart = chart_axes(1585, 450, 157, 145)
 offline_values = [offline[key]["valid_success"] for key in ["control", "joint_sft", "joint_dpo"]]
-offline_chart.bar(range(3), offline_values, width=0.62,
+offline_chart.bar(range(3), offline_values, width=0.66,
                   color=[GRAY, tint("ADM_DEFAULT", .50), PURPLE], edgecolor="none")
 for x, value in enumerate(offline_values):
-    offline_chart.text(x, value+1.7, f"{value:.1f}", ha="center", va="bottom", size=4.8,
+    offline_chart.text(x, value+1.7, f"{value:.1f}", ha="center", va="bottom", size=5.5,
                        color=PURPLE if x == 2 else MUTED)
 offline_chart.set(xlim=(-0.65, 2.65), ylim=(0, 49), xticks=[0, 1, 2], yticks=[0, 40])
 offline_chart.set_xticklabels(["Actor", "SFT", "DPO"])
-offline_chart.tick_params(axis="both", labelsize=4.8, length=1.5, width=0.4, pad=1.5, colors=MUTED)
+offline_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 offline_chart.tick_params(axis="x", length=0)
 offline_chart.spines[["top", "right"]].set_visible(False)
 for spine in offline_chart.spines.values():
@@ -308,10 +308,10 @@ text(1506, 730, r"$\pi_\theta$", size=7.6, color=GRAY)
 arrow((1400, 752), (1400, 790), ACTION_EDGE, scale=4)
 box(1256, 790, 282, 85, PALE_PURPLE, PURPLE, radius=6)
 text(1397, 833, "ADM reward", size=6.6, color=PURPLE)
-text(1663, 702, "OM2W success (%)", size=5.5, color=MUTED)
+text(1663, 702, "OM2W success (%)", size=5.9, color=MUTED)
 # Overview shows the standard outcome control and ADM reward; the full results
 # figure also includes the additional outcome control. Cutoff/smoothing match.
-chart = chart_axes(1585, 730, 157, 138)
+chart = chart_axes(1585, 730, 157, 160)
 sigma = LATEST["rl_curves"]["smoothing"]["sigma_training_iterations"]
 rl_styles = [("outcome_only", GRAY, "Outcome", "-"),
              ("gate_b", PURPLE, "+ ADM reward", "-")]
@@ -322,21 +322,21 @@ for key, color, label, linestyle in rl_styles:
     grid = np.linspace(x[0], x[-1], 150)
     weights = np.exp(-0.5*((grid[:, None]-x[None, :])/sigma)**2)
     chart.plot(x, y, color=color, alpha=0.18, lw=0.45, linestyle=linestyle)
-    chart.plot(grid, weights @ y/weights.sum(axis=1), color=color, lw=1.1,
+    chart.plot(grid, weights @ y/weights.sum(axis=1), color=color, lw=1.3,
                linestyle=linestyle)
     checkpoint_weights = np.exp(-0.5*((x[:, None]-x[None, :])/sigma)**2)
     chart.plot(x, checkpoint_weights @ y/checkpoint_weights.sum(axis=1),
-               color=color, marker="o", ms=1.6, lw=0)
+               color=color, marker="o", ms=2.0, lw=0)
 chart.set(xlim=(8, 92), ylim=(25, 60), xticks=[10, 90], yticks=[30, 50])
-chart.tick_params(axis="both", labelsize=5.0, length=1.5, width=0.4, pad=1.5, colors=MUTED)
+chart.set_xlabel("Iteration", fontsize=5.6, labelpad=1.5, color=MUTED)
+chart.tick_params(axis="both", labelsize=5.8, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 chart.spines[["top", "right"]].set_visible(False)
 for spine in chart.spines.values():
     spine.set_color(LINE)
     spine.set_linewidth(0.45)
-text(1663, 885, "Iteration", size=5.2, color=MUTED)
-for y, (_, color, label, linestyle) in zip([908, 931], rl_styles):
+for y, (_, color, label, linestyle) in zip([924, 948], rl_styles):
     line([(1583, y), (1603, y)], color, lw=1.1, dashed=linestyle == "--")
-    text(1616, y, label, size=5.2, color=color, ha="left")
+    text(1616, y, label, size=5.8, color=color, ha="left")
 
 metadata = {"CreationDate": None, "ModDate": None, "Creator": "plot_figure1.py"}
 fig.savefig(ROOT / "figure1.pdf", dpi=300, metadata=metadata)

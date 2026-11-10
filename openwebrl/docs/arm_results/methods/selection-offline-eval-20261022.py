@@ -130,7 +130,7 @@ text(0.64, 1.60, r"$K=5$ actions", size=6.5, color=MUTED, ha="center")
 text(1.73, 1.79, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
 # Dotted neutral boundary groups the Rollout 1 outcomes with their example path.
 rollout_box = box(0.94, y_low - 0.02, xs[0] + rollout_pitch / 2 + 0.02 - 0.94,
-                  1.68 - (y_low - 0.02), edge=ROLLOUT, fill="none", lw=0.9)
+                  1.68 - (y_low - 0.02), edge=C["BASELINE_DARK"], fill="none", lw=0.9)
 rollout_box.set_linestyle(":")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 1.60,
@@ -180,13 +180,13 @@ text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
 eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=INK, ha="center")
 shared_x = 6.08
-ax.plot([shared_x, shared_x], [1.67, 0.83], color=SHARED, linewidth=0.9, zorder=1)
-ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.23,
+ax.plot([shared_x, shared_x], [1.67, 0.72], color=SHARED, linewidth=0.9, zorder=1)
+ax.add_patch(Rectangle((7.26, 0.20), 0.28, 1.28,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 # H counts the candidate action; the legacy K=3 source now displays H=4.
 # The immediate-only (H=1) teacher result is retained in source tables, not plotted.
-lanes = ((1.27, "Pre-execution", "Pre-execution", PRE, "—"),
-         (0.83, "Lookahead H = 4", "Lookahead\nH = 4", LOOK,
+lanes = ((1.34, "Pre-execution", "Pre-execution", PRE, "—"),
+         (0.72, "Lookahead H = 4", "Lookahead\nH = 4", LOOK,
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     is_lookahead = key.startswith("Lookahead")
