@@ -37,6 +37,8 @@ def main():
         os.environ.pop("ACTION_CREDIT_UPSTREAM_FIXTURE_DIR", None)
     sys.path.insert(0, str(ROOT))
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"), pattern="test_action_credit*.py")
+    suite.addTests(unittest.defaultTestLoader.discover(str(ROOT / "tests"),
+                                                     pattern="test_prepare_action_credit*.py"))
     def test_ids(group):
         for item in group:
             if isinstance(item, unittest.TestSuite):
@@ -51,7 +53,12 @@ def main():
     upstream_passed = args.upstream_dir is not None and len(oracle_tests) >= 5 and not result.skipped and result.wasSuccessful()
     passed = result.wasSuccessful() and not (args.require_upstream and not upstream_passed)
     files = sorted([*ROOT.glob("openwebrl/action_credit*.py"),
-                    *ROOT.glob("tests/test_action_credit*.py"), Path(__file__).resolve()])
+                    *ROOT.glob("tests/test_action_credit*.py"),
+                    *ROOT.glob("tests/test_prepare_action_credit*.py"),
+                    *ROOT.glob("scripts/prepare_action_credit*.py"),
+                    ROOT / "scripts/run_action_credit_pilot.py",
+                    ROOT / "scripts/check_storage_quota.py",
+                    ROOT / "openwebrl/eval_monitor.py", Path(__file__).resolve()])
     oracle = sys.modules.get("test_action_credit_upstream")
     sources = {}
     for name, (repository, commit, source_path, expected_hash) in getattr(oracle, "SOURCES", {}).items():
@@ -81,15 +88,20 @@ def main():
             "Sealed inventory and full objective/scientific configuration binding",
             "Outcome-blind tree scheduling, complete round barriers and retained leaf selection",
             "Locked crash-safe ledger, immutable planned panels, all-attempt reservation accounting",
+            "CPU trainer/collector/manifest integration fixtures and saved-batch recovery",
+            "Real CPU subprocess lifecycle checks; these do not certify browser/GPU execution",
+            "Held-out300 artifact/owner checks with CPU fixtures and shared all-stage retry accounting",
+            "Shared storage reservation race/floor checks with mocked quota and measured-forecast fixtures",
+            "Production preparation and purpose-scoped verification accounting checks remain CPU-only",
         ],
         "remaining_gates": [
-            "Online actor-version freezing and recursive tree/chain collection adapters",
-            "Before-dispatch sampling-request/draw binding and independent terminal artifact provenance",
+            "Fresh production source/bootstrap and complete owning iteration0/10 evaluation queue",
+            "Live actor weight transfer and actual chain/tree/Q collection with retained judge artifacts",
             "Physical browser replay and parent-response/observation/context transition verification",
             "Actual multimodal token alignment and frozen old-policy scores",
             "TP2/DP4 full-batch/long-context numerical and restore/save/resume acceptance",
-            "Atomic optimizer/checkpoint transaction recovery integration",
-            "Exact new per-arm GPU/browser/judge budgets before any allocation or dispatch",
+            "Physical native-controller transaction recovery and representative full-batch memory/IO",
+            "Exact paid-API approval and per-arm resource/storage admission before production dispatch",
         ],
     }
     if args.report is not None:
