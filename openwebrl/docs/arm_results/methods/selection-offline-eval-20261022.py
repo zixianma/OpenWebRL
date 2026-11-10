@@ -82,7 +82,7 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
 def state_card(x, y, step, color, candidate):
     width, height = 0.28, 0.18
     box(x - width / 2, y - height / 2, width, height, edge=color,
-        fill=tint("STATE", .60), lw=1.25)
+        fill=tint("STATE", .60), lw=1.6)
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=C["STATE"], edgecolor="none", alpha=0.65, zorder=2))
     text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=C["STATE_INK"], ha="center")
@@ -141,14 +141,6 @@ for x, title, split, color, fill, width in (
 mid = sum(ys) / len(ys)
 box(0.03, mid - 0.12, 0.24, 0.24, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(0.15, mid, r"$s_t$", size=9, color=C["STATE_INK"], ha="center")
-# The outer neutral frame marks Rollout 1; the nested salmon frame isolates
-# the lookahead state/action path from its binary outcome column.
-rollout_box = box(0.92, y_low - 0.06, xs[0] + rollout_pitch / 2 + 0.02 - 0.92,
-                  1.72 - (y_low - 0.06), edge=ROLLOUT, fill="none", lw=0.85)
-lookahead_box = box(0.99, y_low, 2.68 - 0.99,
-                    1.67 - y_low, edge=LOOK,
-                    fill=tint("LOOKAHEAD_EVIDENCE", .93), lw=1.25)
-lookahead_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.28, mid, 0.465, y, color=C["ACTION_INK"], lw=.75, head=5)
     box(0.47, y - 0.09, 0.34, 0.18, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
