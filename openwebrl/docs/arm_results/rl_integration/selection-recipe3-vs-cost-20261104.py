@@ -74,9 +74,17 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)
+    emphasize = circle_encoding and success_metric == "overall"
     if len(fr) > 1:
-        ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER, linewidth=0.95, zorder=1.8)
-    ax.scatter([x for x, _ in fr], [y for _, y in fr], s=57, facecolors="none", edgecolors=FRONTIER, linewidths=0.6, zorder=2.4)
+        ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER,
+                linewidth=1.4 if emphasize else .95, zorder=1.8)
+    ax.scatter([x for x, _ in fr], [y for _, y in fr], s=80 if emphasize else 57,
+               facecolors="none", edgecolors=FRONTIER, linewidths=1.2 if emphasize else .6,
+               zorder=4.5 if emphasize else 2.4)
+    if emphasize and bench == "mean":
+        best = max(fr, key=lambda xy: xy[1])
+        ax.annotate("Pareto-optimal", best, xytext=(9, -2), textcoords="offset points",
+                    fontsize=6.3, color=C["MUTED"], ha="left", va="top", zorder=5)
     ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
     ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=3, integer=True))
