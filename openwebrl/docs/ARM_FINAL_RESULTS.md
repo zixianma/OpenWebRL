@@ -1161,7 +1161,7 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 ![Recipe 3 H = 4 selectors with SFT actors only: 3-benchmark mean valid-only success vs actor + selector parameters, PFLOP per episode and model time per episode](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.png)
 
-*Compact SFT-only view: equal-weight mean of valid-only success across the three benchmarks, with three runs pooled within each benchmark and costs from run 1. System parameters sum actor and selector parameters. Model latency is actor-plus-selector decision time per episode, excluding browser execution. GPT-5.5 LoRA uses the adjacent November 4 rerun window described above; its legend omits the footnote marker. Point coordinates match the six SFT configurations above; frontiers are recomputed over those six settings.*
+*Small filled circles identify ADM-23M and larger hollow circles identify ADM-4B; bright purple identifies GPT-5.5 labels and salmon identifies Luna labels. Compact SFT-only view: equal-weight mean of valid-only success across the three benchmarks, with three runs pooled within each benchmark and costs from run 1. System parameters sum actor and selector parameters. Model latency is actor-plus-selector decision time per episode, excluding browser execution. GPT-5.5 LoRA uses the adjacent November 4 rerun window described above; its legend omits the footnote marker. Point coordinates match the six SFT configurations above; frontiers are recomputed over those six settings.*
 
 ![Recipe 3 H = 4 selectors with SFT actors only, per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)
 

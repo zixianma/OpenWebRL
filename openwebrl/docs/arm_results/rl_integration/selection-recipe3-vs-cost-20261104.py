@@ -7,7 +7,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders five 
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
-rings mark frontier points. No smoothing or statistical superiority is implied. ADM-22M uses light purple. ADM-4B uses diamonds: green/teal for GPT-5.5 and salmon for Luna labels. ADM-22M teacher variants use circle/square markers; RL baselines retain up/down triangles, with hollow markers for ADM-22M. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+rings mark frontier points. No smoothing or statistical superiority is implied. ADM-22M uses light purple. ADM-4B uses diamonds: green/teal for GPT-5.5 and salmon for Luna labels. ADM-22M teacher variants use circle/square markers; RL baselines retain up/down triangles, with hollow markers for ADM-22M. SFT-only views use small filled ADM-23M circles and larger hollow ADM-4B circles, with bright purple for GPT-5.5 and salmon for Luna labels. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -60,15 +60,16 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k, methods):
+def panel(ax, bench, k, methods, *, circle_encoding=False):
     pts = []
     for key, label, p, color, marker, hollow in methods:
         r = point(key, bench)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
-        ax.scatter(x, r["success"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
+        size = 44 if circle_encoding and "lora" in key else 20 if circle_encoding and "head" in key else 24
+        ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
-                   linewidth=1.0 if hollow else 0.6, label=label)
+                   linewidth=1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)
     if len(fr) > 1:
         ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER, linewidth=0.95, zorder=1.8)
@@ -97,6 +98,16 @@ def legend(fig, axes, *, sft_only):
 
 
 def render(benches, name, height, methods=methods):
+    circle_encoding = "sft-actors" in name
+    if circle_encoding:
+        styled = []
+        for key, label, params, color, marker, hollow in methods:
+            if key.startswith(("head-", "lora-")):
+                color = "#8246E5" if "gpt55" in key else C["LOOKAHEAD_TEACHER"]
+                marker, hollow = "o", key.startswith("lora-")
+                label = label.replace("ADM-22M", "ADM-23M")
+            styled.append((key, label, params, color, marker, hollow))
+        methods = styled
     compact_sft_mean = name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
@@ -107,7 +118,7 @@ def render(benches, name, height, methods=methods):
     fig, axes = plt.subplots(len(benches), 3, figsize=(7, height), sharey="row", squeeze=False)
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
-            panel(ax, bench, k, methods)
+            panel(ax, bench, k, methods, circle_encoding=circle_encoding)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
