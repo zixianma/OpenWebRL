@@ -81,7 +81,7 @@ def layout_y(x, y):
     """Use space below the column heading to separate the application rows."""
     if x >= 1206 and y >= 100:
         return float(np.interp(y, [100, 148, 376, 412, 632, 668, 955],
-                               [70, 113, 302, 353.3, 542.3, 575, 764]))
+                               [70, 113, 302, 357.6, 546.6, 575, 764]))
     return y
 
 
@@ -263,7 +263,7 @@ inference_points = [(inference_pflops(key), inference_mean(key), label, color, m
                     for key, label, color, marker, offset, align in inference_methods]
 inference_point_keys = {(point[0], point[1]): method[0]
                         for method, point in zip(inference_methods, inference_points)}
-parameter_chart = chart_axes(1585, 188, 180, 125)
+parameter_chart = chart_axes(1585, 188, 180, 150)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
 # Frontier of the four displayed Figure 7 systems after omitting Luna variants.
 inference_frontier = []
@@ -306,7 +306,7 @@ for yy, method, label in [
     arrow((1452, yy+24), (1473, yy+24), ACTION_EDGE, scale=4)
     box(1474, yy, 64, 48, PALE_GRAY, GRAY, radius=5)
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
-offline_chart = chart_axes(1585, 468, 180, 118)
+offline_chart = chart_axes(1585, 455, 180, 145)
 offline_chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
 offline_keys = ["actor", "dpo", "rpo"]
 offline_values = [SOURCE["offline"]["rates"][key]["overall"] for key in offline_keys]
@@ -341,7 +341,7 @@ text(1397, 833, "ADM reward", size=6.6, color=PURPLE)
 # Show iterations 20--60 with the published pooled trailing-three smoother.
 # success/valid counts, with both outcome-only controls and raw checkpoint dots.
 RL_START, RL_STOP = 20, 60
-chart = chart_axes(1606, 730, 138, 175)
+chart = chart_axes(1606, 700, 138, 205)
 chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
 rl_styles = [("outcome48", C["BASELINE_LIGHT"], "48", "--"),
              ("outcome56", GRAY, "56", "-"),
