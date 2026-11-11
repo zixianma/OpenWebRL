@@ -7,7 +7,7 @@ _Written November 10, 2026. Results are in [ARM_FINAL_RESULTS.md](ARM_FINAL_RESU
 
 ## 1. State of the runs
 
-**Headline.** Gate B (outcome reward plus SelectionARM per-turn credit, with auxiliary all-failure groups) beats both outcome-only baselines at iteration 90. In three same-day full-300 repeats of each run it scores 40.56% vs 34.11% and 35.33%. The paired difference against the stronger baseline is +5.22 pp [1.56, 8.89], Holm p = 0.014. Single evaluations at other iterations are level within noise; see [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md#final-rl-arm-turn-credit-20261108). A same-day re-evaluation of all nine runs below (3 repeats each, paper actor sampling, offline gpt-5.6-terra judge) ran on November 9–10. Its judging and analysis are pending and will replace the mixed-date columns in that section.
+**Headline.** In a same-day iteration-90 evaluation of all nine runs (three full-300 repeats each, paper actor sampling, offline gpt-5.6-terra judge, November 9–10), every run that keeps mixed groups beats outcome-only 48 by 3.6–6.2 pp (p ≤ 0.044). Gate B scores 37.33% vs 32.11% (outcome-only 48) and 30.89% (outcome-only 56); 40M+16F (38.33%), 48M+16F and Additive are level with Gate B. Failures in main batch is not distinguishable from outcome-only. One training run per method. Tables and paired tests: [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md#final-rl-iter90-terra-sameday-20261111). An iteration-0 (SFT) evaluation under the same protocol is running.
 
 | Run | Recipe change vs Gate B | Iterations done | Latest durable checkpoint | Frozen source (`RT/`) | W&B (`zixianma/openwebrl`) |
 | --- | --- | ---: | --- | --- | --- |

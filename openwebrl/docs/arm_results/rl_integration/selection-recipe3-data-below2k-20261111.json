@@ -1,0 +1,201 @@
+{
+ "conditions": {
+  "arm5-9fadc8dc4655": {
+   "label": "Full data, LoRA (18,786 panels / 32,974 examples; reference)",
+   "training": "rl-actor-recollect-20261016/p16-k3-20261031/lora/lora",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 793,
+    "successes": 332,
+    "overall": 0.3688888888888889,
+    "valid_only": 0.41866330390920553
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1606,
+    "successes": 865,
+    "overall": 0.484593837535014,
+    "valid_only": 0.5386052303860523
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 446,
+    "successes": 223,
+    "overall": 0.4955555555555556,
+    "valid_only": 0.5
+   },
+   "mean_overall": 0.44967942732648614,
+   "mean_valid_only": 0.48575617809841926
+  },
+  "arm5-5d57cf0e0de4": {
+   "label": "1,000 states x 1 panel (1,001 panels / 1,905 examples)",
+   "training": "recipe3-ablations-20261104/lora/s1000-pps1 (identical LoRA recipe)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 794,
+    "successes": 277,
+    "overall": 0.30777777777777776,
+    "valid_only": 0.34886649874055414,
+    "diff_valid_only_pp": [
+     -6.979680516865139,
+     -10.789208545061411,
+     -3.220880029756083
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1614,
+    "successes": 752,
+    "overall": 0.42128851540616247,
+    "valid_only": 0.46592317224287483,
+    "diff_valid_only_pp": [
+     -7.268205814317752,
+     -9.843994993017056,
+     -4.7416867671502025
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 447,
+    "successes": 180,
+    "overall": 0.4,
+    "valid_only": 0.40268456375838924,
+    "diff_valid_only_pp": [
+     -9.731543624161077,
+     -14.660721527366032,
+     -4.827293433388241
+    ]
+   },
+   "mean_overall": 0.37635543106131336,
+   "mean_valid_only": 0.4058247449139394,
+   "diff_mean_overall_pp": [
+    -7.332399626517278,
+    -9.47965297230003,
+    -5.182695300342358
+   ],
+   "diff_mean_valid_only_pp": [
+    -7.993143318447987,
+    -10.246410071501474,
+    -5.768367116068579
+   ]
+  },
+  "arm5-c5ec9b4862f6": {
+   "label": "250 states x 1 panel (252 panels / 495 examples)",
+   "training": "recipe3-ablations-20261104/lora/s250-pps1 (identical LoRA recipe)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 810,
+    "successes": 283,
+    "overall": 0.31444444444444447,
+    "valid_only": 0.3493827160493827,
+    "diff_valid_only_pp": [
+     -6.928058785982283,
+     -10.850806891411642,
+     -2.9914125870541644
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1615,
+    "successes": 722,
+    "overall": 0.40448179271708684,
+    "valid_only": 0.4470588235294118,
+    "diff_valid_only_pp": [
+     -9.154640685664056,
+     -11.935515316556312,
+     -6.349286214396863
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 450,
+    "successes": 190,
+    "overall": 0.4222222222222222,
+    "valid_only": 0.4222222222222222,
+    "diff_valid_only_pp": [
+     -7.777777777777778,
+     -13.078901373283394,
+     -2.5338553318419095
+    ]
+   },
+   "mean_overall": 0.3803828197945845,
+   "mean_valid_only": 0.40622125393367225,
+   "diff_mean_overall_pp": [
+    -6.929660753190165,
+    -9.18993152816682,
+    -4.687807345160287
+   ],
+   "diff_mean_valid_only_pp": [
+    -7.9534924164747,
+    -10.35057080019572,
+    -5.634158826490546
+   ]
+  },
+  "sft1": {
+   "label": "SFT 4B alone (1 sample, no selector)",
+   "training": "none",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 796,
+    "successes": 268,
+    "overall": 0.29777777777777775,
+    "valid_only": 0.33668341708542715,
+    "diff_valid_only_pp": [
+     -8.197988682377838,
+     -11.858369658630377,
+     -4.578711525157467
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1625,
+    "successes": 756,
+    "overall": 0.4235294117647059,
+    "valid_only": 0.4652307692307692,
+    "diff_valid_only_pp": [
+     -7.337446115528312,
+     -9.899020963070399,
+     -4.776041515312072
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 447,
+    "successes": 177,
+    "overall": 0.3933333333333333,
+    "valid_only": 0.3959731543624161,
+    "diff_valid_only_pp": [
+     -10.402684563758392,
+     -15.844357084846763,
+     -4.932422177302395
+    ]
+   },
+   "mean_overall": 0.37154684095860563,
+   "mean_valid_only": 0.3992957802262042,
+   "diff_mean_overall_pp": [
+    -7.813258636788051,
+    -10.05354030501089,
+    -5.572634609399315
+   ],
+   "diff_mean_valid_only_pp": [
+    -8.646039787221504,
+    -11.00574930008484,
+    -6.270631672967568
+   ]
+  }
+ },
+ "runs": 3,
+ "reference": "arm5-9fadc8dc4655"
+}

@@ -1,0 +1,38 @@
+{
+ "22.6M head (ADM-22M)": {
+  "episodes": 2090,
+  "steps": 29334,
+  "sel_mean": 0.017389221247619394,
+  "sel_median": 0.014976219499658328,
+  "sel_p90": 0.024073157997918315,
+  "gen_mean": 7.982549075780224,
+  "dec_mean": 7.999938297027844,
+  "steps_per_episode": 14.035406698564593,
+  "sel_per_episode": 0.244064792381659,
+  "dec_per_episode": 112.28238756220786
+ },
+ "4B LoRA decoder (ADM-4B, full data)": {
+  "episodes": 3044,
+  "steps": 40193,
+  "sel_mean": 0.47301372359724264,
+  "sel_median": 0.42925070199999027,
+  "sel_p90": 0.7554601980082225,
+  "gen_mean": 7.956919438731414,
+  "dec_mean": 8.429933162328657,
+  "steps_per_episode": 13.20400788436268,
+  "sel_per_episode": 6.245676935789741,
+  "dec_per_episode": 111.30890394003863
+ },
+ "SFT 4B alone (1 sample)": {
+  "episodes": 3094,
+  "steps": 39450,
+  "sel_mean": 1.1929022142534051e-05,
+  "sel_median": 1.0965006367769092e-05,
+  "sel_p90": 1.4410994481295347e-05,
+  "gen_mean": 2.5402937738141214,
+  "dec_mean": 2.540305702836264,
+  "steps_per_episode": 12.75048480930834,
+  "sel_per_episode": 0.00015210081561828324,
+  "dec_per_episode": 32.39012927501301
+ }
+}

@@ -1,0 +1,326 @@
+{
+  "schema": "openwebrl-luna-n5-t1-three-repeats-v1",
+  "generated": "2026-11-11",
+  "methods": {
+    "sft4b_luna5": {
+      "cells": [
+        {
+          "benchmark": "online_mind2web",
+          "seed": 42,
+          "successes": 123,
+          "valid": 271,
+          "invalid": 29,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.41,
+          "valid_only_success": 0.45387453874538747,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed42/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "358ca95017d028c6845e3fbbaea51cb31efbc513416cb14656123b74373ca81d"
+        },
+        {
+          "benchmark": "online_mind2web",
+          "seed": 43,
+          "successes": 125,
+          "valid": 267,
+          "invalid": 33,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.4166666666666667,
+          "valid_only_success": 0.4681647940074906,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed43/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "a31df9069cffa4d2609ad3d977314d3171a0c908cf051e6176b531d11b8ef2e7"
+        },
+        {
+          "benchmark": "online_mind2web",
+          "seed": 44,
+          "successes": 121,
+          "valid": 270,
+          "invalid": 30,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.4033333333333333,
+          "valid_only_success": 0.44814814814814813,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed44/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "75fcde1fb40241716ecb60f589b87e727663bdb580ee3a5d9799fff29c011302"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 42,
+          "successes": 270,
+          "valid": 540,
+          "invalid": 55,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.453781512605042,
+          "valid_only_success": 0.5,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed42/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "3360226fb2449f350c7275eb10184b389cbd739434785ff4d044128672515dd7"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 43,
+          "successes": 274,
+          "valid": 540,
+          "invalid": 55,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.46050420168067224,
+          "valid_only_success": 0.5074074074074074,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed43/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "73dfa192d73fe5c54611b559ac8571dc46d6fd0ef5a161552d0ee07b4f9fe08d"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 44,
+          "successes": 267,
+          "valid": 540,
+          "invalid": 55,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.44873949579831934,
+          "valid_only_success": 0.49444444444444446,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed44/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "bd493d8b2b8644e588dc16de3a08ca22d42fd67be736a10f05839242e5ce5bd7"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 42,
+          "successes": 61,
+          "valid": 148,
+          "invalid": 2,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.4066666666666667,
+          "valid_only_success": 0.41216216216216217,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed42/deepshop/collection/native-endpoint.json",
+          "source_sha256": "b799da18e7ef8cbc2cbd6a48ee3619b4bdc37e965621473d9243589f293ec1f0"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 43,
+          "successes": 59,
+          "valid": 149,
+          "invalid": 1,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.3933333333333333,
+          "valid_only_success": 0.3959731543624161,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed43/deepshop/collection/native-endpoint.json",
+          "source_sha256": "139b93d88acb10506ff012bcfc4aee721f458540e23e6fb856066d53ab38e1ce"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 44,
+          "successes": 44,
+          "valid": 146,
+          "invalid": 4,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.29333333333333333,
+          "valid_only_success": 0.3013698630136986,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl4b-luna-n5-threebench-three-repeats-20261109-preparation-v1/methods/sft4b_luna5/seed44/deepshop/collection/native-endpoint.json",
+          "source_sha256": "7f9511b338227ae083f568a107fd1ce644f2b66e081c22b1b51d0327a274f0aa"
+        }
+      ],
+      "three_seed_summary": {
+        "online_mind2web": {
+          "overall_mean": 0.41,
+          "overall_sd": 0.006666666666666682,
+          "valid_only_mean": 0.45672916030034205,
+          "valid_only_sd": 0.010309130711708516
+        },
+        "webvoyager": {
+          "overall_mean": 0.45434173669467787,
+          "overall_sd": 0.005902327032410477,
+          "valid_only_mean": 0.5006172839506173,
+          "valid_only_sd": 0.006503489970896749
+        },
+        "deepshop": {
+          "overall_mean": 0.36444444444444446,
+          "overall_sd": 0.061943821621183795,
+          "valid_only_mean": 0.3698350598460923,
+          "valid_only_sd": 0.05984257160549559
+        }
+      },
+      "selector_ledger": {
+        "charged_or_reserved_usd": "29.777466685",
+        "calls": 39518,
+        "cap_usd": "70",
+        "note": "ledger totals include all attempts and retained unknown holds; the RL 8B ledger also includes earlier temperature-0.7 and SFT 8B calls from the shared 8B pool"
+      }
+    },
+    "rl8b_luna5": {
+      "cells": [
+        {
+          "benchmark": "online_mind2web",
+          "seed": 42,
+          "successes": 152,
+          "valid": 274,
+          "invalid": 26,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.5066666666666667,
+          "valid_only_success": 0.5547445255474452,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed42/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "7ebe7495d1c35432783bdc09f55ba93c7bdd33a0a58b287c0251d7ee0df9c784"
+        },
+        {
+          "benchmark": "online_mind2web",
+          "seed": 43,
+          "successes": 139,
+          "valid": 271,
+          "invalid": 29,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.4633333333333333,
+          "valid_only_success": 0.5129151291512916,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed43/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "d5b8a7cd9edf334df16867d0f4f8f419b1d068433d960144d67d2ee1fc5715cb"
+        },
+        {
+          "benchmark": "online_mind2web",
+          "seed": 44,
+          "successes": 158,
+          "valid": 269,
+          "invalid": 31,
+          "total": 300,
+          "complete": true,
+          "overall_success": 0.5266666666666666,
+          "valid_only_success": 0.587360594795539,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed44/online_mind2web/collection/native-endpoint.json",
+          "source_sha256": "7e37aaa408652fe0544677cd74a70a0d1150946e8749d4fc01600e992bed5cfe"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 42,
+          "successes": 305,
+          "valid": 541,
+          "invalid": 54,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.5126050420168067,
+          "valid_only_success": 0.5637707948243993,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed42/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "ee0cb1caa34e9b01cda20be76a004ceaa20f25660d6fe341fd6007740bc46dd9"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 43,
+          "successes": 297,
+          "valid": 542,
+          "invalid": 53,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.4991596638655462,
+          "valid_only_success": 0.5479704797047971,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed43/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "efd38de92bd9f87b7d4cdea0205647aee5b0bd6685d16f088003cc405193c2fa"
+        },
+        {
+          "benchmark": "webvoyager",
+          "seed": 44,
+          "successes": 305,
+          "valid": 539,
+          "invalid": 56,
+          "total": 595,
+          "complete": true,
+          "overall_success": 0.5126050420168067,
+          "valid_only_success": 0.5658627087198516,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed44/webvoyager/collection/native-endpoint.json",
+          "source_sha256": "3f46b0122a02846e9b08df3a83154e6ba2ee47b123ccfd40fb51e3c7481034d4"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 42,
+          "successes": 66,
+          "valid": 150,
+          "invalid": 0,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.44,
+          "valid_only_success": 0.44,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed42/deepshop/collection/native-endpoint.json",
+          "source_sha256": "06f9858df74bf2d96b7157f0c55b61c42bea37bf3f7a0ad6bef86a1e922d782b"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 43,
+          "successes": 69,
+          "valid": 149,
+          "invalid": 1,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.46,
+          "valid_only_success": 0.46308724832214765,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed43/deepshop/collection/native-endpoint.json",
+          "source_sha256": "fced8e9cd86e57a726f320da68a580fb5016a843954d97963899f11685c00ea2"
+        },
+        {
+          "benchmark": "deepshop",
+          "seed": 44,
+          "successes": 55,
+          "valid": 150,
+          "invalid": 0,
+          "total": 150,
+          "complete": true,
+          "overall_success": 0.36666666666666664,
+          "valid_only_success": 0.36666666666666664,
+          "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/openwebrl8b-gpt6-threebench-three-repeats-20261108-preparation-v1/launch-v1/temperature1-restart-v1/methods/rl8b_luna5/seed44/deepshop/collection/native-endpoint.json",
+          "source_sha256": "2d43623c0861407dc6000e05f1a48f135fcf5bd813a7f15535eac45f8d42189d"
+        }
+      ],
+      "three_seed_summary": {
+        "online_mind2web": {
+          "overall_mean": 0.4988888888888889,
+          "overall_sd": 0.03237511618740769,
+          "valid_only_mean": 0.551673416498092,
+          "valid_only_sd": 0.0373176315143656
+        },
+        "webvoyager": {
+          "overall_mean": 0.5081232492997199,
+          "overall_sd": 0.007762692694986538,
+          "valid_only_mean": 0.5592013277496827,
+          "valid_only_sd": 0.009782279222756788
+        },
+        "deepshop": {
+          "overall_mean": 0.4222222222222222,
+          "overall_sd": 0.049140765305546646,
+          "valid_only_mean": 0.42325130499627145,
+          "valid_only_sd": 0.050345021898309486
+        }
+      },
+      "selector_ledger": {
+        "charged_or_reserved_usd": "69.666501120",
+        "calls": 89124,
+        "cap_usd": "100",
+        "note": "ledger totals include all attempts and retained unknown holds; the RL 8B ledger also includes earlier temperature-0.7 and SFT 8B calls from the shared 8B pool"
+      }
+    }
+  },
+  "protocol": {
+    "actor_temperature": 1.0,
+    "actor_top_p": 0.9,
+    "actor_max_new_tokens": 1024,
+    "max_steps": 30,
+    "candidates": 5,
+    "candidate_sampling": "parallel independent",
+    "selector_model": "gpt-6-luna",
+    "selector_reasoning_effort": "medium",
+    "selector_max_output_tokens": 2048,
+    "judge_model": "gpt-5.6-terra",
+    "judge_reasoning_effort": "medium",
+    "judge_max_completion_tokens": 4096,
+    "judge_protocol": "benchmark-native terminal success",
+    "harness": "native coordinate-action, local browsers",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "seed_meaning": "repeat cohort; server seeds 4200/4300/4400"
+  },
+  "actors": {
+    "sft4b_luna5": "OpenWebRL SFT 4B",
+    "rl8b_luna5": "OpenWebRL RL 8B"
+  }
+}

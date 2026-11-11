@@ -1,5 +1,63 @@
 # Final inference results
 
+<!-- openwebrl-luna-n5-t1-three-repeats-20261111:start -->
+<a id="openwebrl-luna-n5-t1-three-repeats-20261111"></a>
+
+## SFT 4B and RL 8B + Luna N5 at temperature 1.0: three repeats
+
+**RL 8B + Luna N5 exceeds SFT 4B + Luna N5 on all three benchmarks: mean valid-only success is +9.5 pp on Online-Mind2Web, +5.8 pp on WebVoyager and +5.3 pp on DeepShop.** The two actors differ in both size and training (4B SFT versus 8B RL), so the gap does not isolate RL. No no-selector baseline exists under this exact protocol (T 1.0, top-p 0.9, 1,024-token actor cap, Terra on all three benchmarks), so these results do not show whether Luna selection helps or hurts either actor.
+
+| Benchmark | Actor + selector | Tasks per seed | Mean overall success | SD | Mean valid-only success | SD |
+|---|---|---:|---:|---:|---:|---:|
+| Online-Mind2Web | SFT 4B + Luna N5 | 300 | 41.0% | 0.7 | 45.7% | 1.0 |
+| Online-Mind2Web | RL 8B + Luna N5 | 300 | 49.9% | 3.2 | 55.2% | 3.7 |
+| WebVoyager | SFT 4B + Luna N5 | 595 | 45.4% | 0.6 | 50.1% | 0.7 |
+| WebVoyager | RL 8B + Luna N5 | 595 | 50.8% | 0.8 | 55.9% | 1.0 |
+| DeepShop | SFT 4B + Luna N5 | 150 | 36.4% | 6.2 | 37.0% | 6.0 |
+| DeepShop | RL 8B + Luna N5 | 150 | 42.2% | 4.9 | 42.3% | 5.0 |
+
+Means and sample SDs (pp) are over three repeat seeds (42, 43, 44); all 18 cells are complete, 3,135 outcomes per method. Overall success divides successes by all assigned tasks; valid-only success divides by each cell's valid outcomes, so valid subsets differ between methods and seeds. DeepShop varies most across seeds (SFT 4B seed 44: 29.3% overall versus 40.7% and 39.3%). WebVoyager has exactly 55 invalid tasks in every SFT 4B seed, consistent with persistently unreachable sites rather than random failures.
+
+[Aggregate counts, protocol and source fingerprints](arm_results/openwebrl_luna_n5_t1_three_repeats_20261111/aggregate.json).
+
+<details>
+<summary>Per-seed counts</summary>
+
+| Benchmark | Actor + selector | Seed | Successes | Valid | Invalid | Total | Overall success | Valid-only success |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Online-Mind2Web | SFT 4B + Luna N5 | 42 | 123 | 271 | 29 | 300 | 41.0% | 45.4% |
+| Online-Mind2Web | SFT 4B + Luna N5 | 43 | 125 | 267 | 33 | 300 | 41.7% | 46.8% |
+| Online-Mind2Web | SFT 4B + Luna N5 | 44 | 121 | 270 | 30 | 300 | 40.3% | 44.8% |
+| Online-Mind2Web | RL 8B + Luna N5 | 42 | 152 | 274 | 26 | 300 | 50.7% | 55.5% |
+| Online-Mind2Web | RL 8B + Luna N5 | 43 | 139 | 271 | 29 | 300 | 46.3% | 51.3% |
+| Online-Mind2Web | RL 8B + Luna N5 | 44 | 158 | 269 | 31 | 300 | 52.7% | 58.7% |
+| WebVoyager | SFT 4B + Luna N5 | 42 | 270 | 540 | 55 | 595 | 45.4% | 50.0% |
+| WebVoyager | SFT 4B + Luna N5 | 43 | 274 | 540 | 55 | 595 | 46.1% | 50.7% |
+| WebVoyager | SFT 4B + Luna N5 | 44 | 267 | 540 | 55 | 595 | 44.9% | 49.4% |
+| WebVoyager | RL 8B + Luna N5 | 42 | 305 | 541 | 54 | 595 | 51.3% | 56.4% |
+| WebVoyager | RL 8B + Luna N5 | 43 | 297 | 542 | 53 | 595 | 49.9% | 54.8% |
+| WebVoyager | RL 8B + Luna N5 | 44 | 305 | 539 | 56 | 595 | 51.3% | 56.6% |
+| DeepShop | SFT 4B + Luna N5 | 42 | 61 | 148 | 2 | 150 | 40.7% | 41.2% |
+| DeepShop | SFT 4B + Luna N5 | 43 | 59 | 149 | 1 | 150 | 39.3% | 39.6% |
+| DeepShop | SFT 4B + Luna N5 | 44 | 44 | 146 | 4 | 150 | 29.3% | 30.1% |
+| DeepShop | RL 8B + Luna N5 | 42 | 66 | 150 | 0 | 150 | 44.0% | 44.0% |
+| DeepShop | RL 8B + Luna N5 | 43 | 69 | 149 | 1 | 150 | 46.0% | 46.3% |
+| DeepShop | RL 8B + Luna N5 | 44 | 55 | 150 | 0 | 150 | 36.7% | 36.7% |
+
+</details>
+
+<details>
+<summary>Protocol, recovery and API accounting</summary>
+
+Each state samples five independent actor candidates in parallel; GPT-6 Luna (medium effort, 2,048-token response ceiling) selects one, and only that action executes. Both actors use temperature 1.0, top-p 0.9, a 1,024-token response ceiling and at most 30 steps, with local browsers through the native coordinate-action harness. GPT-5.6 Terra (medium effort, 4,096-token ceiling) grades each benchmark with its native success protocol. Seeds identify repeat cohorts (actor server seeds 4200/4300/4400). These settings differ from the [temperature-0.7 8B first repeat](#openwebrl8b-luna-n5-20261109), which remains separately labelled, and from the BrowserCode API-actor experiments.
+
+Collection ran in several Slurm segments. Every committed valid or invalid outcome was preserved; only uncommitted infrastructure slots were retried: transient upstream Luna HTTP 503 and timeout halts (acknowledged in the selector ledger with full reservations retained), one actor CUDA/cuBLAS crash on a single node (excluded afterwards), and wall-time stops. Episodes whose Terra call was interrupted were rerun from scratch, never judged from partial state.
+
+Selector ledgers at completion: SFT 4B pool $29.78 of a $70 cap; shared RL/SFT 8B pool $69.67, whose cap the user raised from $70 to $100 on November 11. Both totals include all attempts and retained unknown holds; the 8B pool also contains earlier temperature-0.7 and SFT 8B calls.
+
+</details>
+<!-- openwebrl-luna-n5-t1-three-repeats-20261111:end -->
+
 <!-- openwebrl8b-luna-n5-20261109:start -->
 <a id="openwebrl8b-luna-n5-20261109"></a>
 
@@ -30,7 +88,7 @@ Each state samples five independent actor candidates in parallel, then executes 
 
 All methods use at most 30 steps and local browsers through the native coordinate-action harness. Terra uses medium effort and a 4,096-token response ceiling with each benchmark's native success protocol. These settings differ from the BrowserCode API-actor scaling experiments elsewhere on this page.
 
-The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per method, or 1,045 outcomes each. Seeds 43 and 44 are incomplete, for a planned 3,135 outcomes per method. For the API actor, seeds identify repeat cohorts rather than seeded API sampling. Interrupted work preserves every committed valid or invalid outcome. Separate temperature-1.0 trials and the requested SFT 4B/T1.0 experiments are excluded.
+The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per method, or 1,045 outcomes each. Seeds 43 and 44 are incomplete, for a planned 3,135 outcomes per method. For the API actor, seeds identify repeat cohorts rather than seeded API sampling. Interrupted work preserves every committed valid or invalid outcome. Completed temperature-1.0 three-repeat results for SFT 4B and RL 8B + Luna N5 are [reported separately](#openwebrl-luna-n5-t1-three-repeats-20261111).
 
 </details>
 <!-- openwebrl8b-luna-n5-20261109:end -->
@@ -1127,6 +1185,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 **Recipe 3 follow-ups (November 8–9), all with the SFT 4B actor and the GPT-5.5 H = 4 labels; one window per comparison:**
 
 - **Less data is enough, more steps don't hurt.** LoRAs on 4 panels per state, 1 panel per state (12% of the examples) or 1,000 states are +0.4, +0.4 and −1.1 pp mean overall against the full-data LoRA (all intervals cross 0); the earlier subset leads were a window effect. Stopping the full-data LoRA at 1,692 instead of 4,122 steps changes nothing (−0.5 [−2.5, +1.4]); a full fine-tune is worse (−2.5 [−4.6, −0.4]). [Rerun](#final-selection-recipe3-data-rerun-20261109) · [controls](#final-selection-recipe3-lora-controls-20261109)
+- **Smaller heads do better.** Among joint-transformer heads of 4.4M–272.8M parameters, the 4.4M head is best: +8.2 [+5.7, +10.7] pp over one SFT sample and +4.3 [+1.9, +6.7] over the 22.6M default (one training seed per size). [Details](#final-selection-recipe3-head-scale-20261111)
 - **Kev-style selectors work on all three benchmarks.** Against one SFT sample in the same windows, Kev-A is +8.8 [+6.3, +11.4] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.6, +9.4]; B − A is −1.8 [−4.3, +0.6] (2 runs). [Details](#final-selection-recipe3-kev-3bench-20261110)
 - **The selector gain survives stealth browsers.** US-residential stealth browsers add about +13.5 pp mean overall to both SFT 4B and SFT 4B + the LoRA decoder (Online-Mind2Web and WebVoyager only); the decoder's gain is +7.2 [+3.5, +10.9] under stealth vs +7.6 [+5.4, +9.7] locally (1 stealth run). [Details](#final-selection-recipe3-stealth-20261109)
 
@@ -1183,11 +1242,35 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 *Compact RL-only view, same encoding as the SFT-only view: up triangles RL 4B (616cc8f), down triangles RL 8B (824a54f), both with 4,096 response tokens; dark = actor alone, green/teal diamonds = + ADM-4B (GPT-5.5), lighter for the RL 8B actor, light purple hollow = + ADM-22M (GPT-5.5) on the RL 4B actor's own features. RL 4B alone is from November 4; the selector rows and RL 8B are from November 4–5 (adjacent windows; paired intervals in footnotes ² and ³ of the Recipe 3 table).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
 
+<a id="final-selection-recipe3-head-vs-decoder-cost-20261111"></a>
+
+#### Training time and selection latency: 22.6M head vs 4B decoder
+
+**The 22.6M head trains about 18× cheaper and selects about 27× faster than the 4B LoRA decoder, but end-to-end decision time per episode is the same, because generating the five candidates dominates every step.** Both are the default Recipe 3 GPT-5.5 H = 4 selectors (ADM-22M, ADM-4B with full data, no WebArbiter pairs), trained on the same panels and evaluated with the SFT 4B actor, N = 5.
+
+| | 22.6M head (ADM-22M) | 4B LoRA decoder (ADM-4B) | Ratio |
+| --- | ---: | ---: | ---: |
+| ***Training*** | | | |
+| Feature extraction (actor hidden states, layers 18/27/36, all panels) | 1.0 H200-h (1 H200, 1 h 02 min) | — | |
+| Training | 7.5 min on 16 CPUs, no GPU (20 epochs, 18,781 panels) | 18.9 H200-h (4 H200, 4 h 44 min; 2 epochs, 32,974 examples) | |
+| Total GPU time | 1.0 H200-h | 18.9 H200-h | ~18× |
+| ***Selection, per step*** | | | |
+| Selection, mean / median / 90th percentile | 17 / 15 / 24 ms | 473 / 429 / 756 ms | ~27× |
+| Actor generation of 5 candidates, mean | 7.98 s | 7.96 s | ≈ 1 |
+| Decision step (generation + selection), mean | 8.00 s | 8.43 s | 0.95 |
+| ***Per episode*** | | | |
+| Steps | 14.0 | 13.2 | |
+| Selection time | 0.24 s | 6.2 s | |
+| Decision time (SFT 4B alone, 1 sample: 32 s) | 112 s | 111 s | ≈ 1 |
+| Steps measured | 29,334 (2 runs) | 40,193 (3 runs) | |
+
+*Latency: November 11 runs on 1 H200 each (head: head-size sweep `eval-scale`; decoder and SFT: data sweep `eval-1111`), all three benchmarks, from each step's `selection_seconds` / `generation_seconds`; browser time excluded. The head scores hidden states the actor exports while generating; that export overlaps with the other candidates' generation, so generation time matches the decoder's. The decoder is a separate sglang server on the same GPU (one ~1.6K-token forward per step, request overhead included). Training: head `train/heads-all2/k3-best` (`train_seconds` 452, train job allocated 1 H200 that the CPU trainer did not use, not counted); features `features/features-all2` (job 413066); decoder `lora/lora` (job 412317, LLaMA-Factory `train_runtime` 4:43:59, merge excluded); all under `rl-actor-recollect-20261016/p16-k3-20261031/`. Evidence: [latency data](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.json) · [script](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.py).*
+
 <a id="final-selection-recipe3-data-ablations-20261105"></a>
 
 #### How much Recipe 3 data the 4B LoRA needs (November 4–9)
 
-**About 12% of the GPT-5.5 H = 4 data is enough: LoRAs trained on 252 states (all their panels) or on one panel per state match the full-data LoRA. Rerun in one window with the full LoRA (November 8–9), four panels per state, one panel per state and 1,000 states are +0.4, +0.4 and −1.1 pp, and 252 states is +0.2 in its own window with a fresh full-data reference (November 10–11; all intervals cross 0): subsets match the full data but do not beat it. Their November 4–6 leads (+3.0 [+1.1, +4.9], +1.5, +1.6) were a window effect ([rerun below](#final-selection-recipe3-data-rerun-20261109)).** Same recipe, seed and evaluation as the [GPT-5.5 H = 4 4B LoRA](#final-selection-recipe3) (SFT 4B actor, N = 5, T 1.0 / top-p 0.9, all 1,045 tasks); only the training subset changes. Subsets of the 32,974-example data: *states* keeps whole tasks, in a seeded task order, until 250 / 500 / 1,000 states, with all their panels; *panels* keeps all 2,112 states and samples 1 / 2 / 4 panels per state (seed 20261023). Ablations ran November 4–5. SFT 4B and the full-data LoRA were re-run 3 times on November 6 as same-window references; they match their earlier batches (SFT −0.1 [−2.2, +1.9] pp vs November 3, full LoRA +0.5 [−1.3, +2.5] vs November 4).
+**About 12% of the GPT-5.5 H = 4 data is enough: LoRAs trained on 252 states (all their panels) or on one panel per state match the full-data LoRA. Rerun in one window with the full LoRA (November 8–9), four panels per state, one panel per state and 1,000 states are +0.4, +0.4 and −1.1 pp, and 252 states is +0.2 in its own window with a fresh full-data reference (November 10–11; all intervals cross 0): subsets match the full data but do not beat it. Below that, LoRAs on about 1K and 250 panels collapse to a fixed answer and score like SFT alone ([below 2K](#final-selection-recipe3-data-below2k-20261111)). Their November 4–6 leads (+3.0 [+1.1, +4.9], +1.5, +1.6) were a window effect ([rerun below](#final-selection-recipe3-data-rerun-20261109)).** Same recipe, seed and evaluation as the [GPT-5.5 H = 4 4B LoRA](#final-selection-recipe3) (SFT 4B actor, N = 5, T 1.0 / top-p 0.9, all 1,045 tasks); only the training subset changes. Subsets of the 32,974-example data: *states* keeps whole tasks, in a seeded task order, until 250 / 500 / 1,000 states, with all their panels; *panels* keeps all 2,112 states and samples 1 / 2 / 4 panels per state (seed 20261023). Ablations ran November 4–5. SFT 4B and the full-data LoRA were re-run 3 times on November 6 as same-window references; they match their earlier batches (SFT −0.1 [−2.2, +1.9] pp vs November 3, full LoRA +0.5 [−1.3, +2.5] vs November 4).
 
 | Training subset | Examples | States | Runs | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − full-data LoRA, pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -1209,6 +1292,24 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 ![The same per benchmark: overall success on Online-Mind2Web, WebVoyager and DeepShop](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.png)
 
 *Same encoding, overall success per benchmark. The 4-sets-per-state lead over the full data is mostly DeepShop (+6.2 [+2.0, +10.4] pp, table note); it did not replicate in the [November 8–9 rerun](#final-selection-recipe3-data-rerun-20261109). Mean: [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.svg) · per benchmark: [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg) · [plot script](arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105.py) · earlier separate valid-only plots: states [PNG](arm_results/rl_integration/selection-recipe3-data-states-20261105.png), panels [PNG](arm_results/rl_integration/selection-recipe3-data-panels-20261105.png) ([script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.py)) · [data](arm_results/rl_integration/selection-recipe3-data-ablations-20261105.json) · [analysis script](arm_results/rl_integration/selection-recipe3-data-ablations-20261105-analysis.py). Runtime: `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/` (subset builder `build_lora_subsets.py`, LoRAs `lora/<subset>/{adapter,merged}`, evals `eval/run<k>/`, same-window references `eval-ctrl/run<k>/`, deferred judging `deferjudge/`).
+
+<a id="final-selection-recipe3-data-below2k-20261111"></a>**Below 2K panels (November 11).** *At about 1K panels or fewer the LoRA stops selecting: it collapses to always answering candidate 2 and scores like SFT alone.* LoRAs on 1 panel per state for the first 1,000 or 250 states of the seeded task order (nested in the 1-panel-per-state subset; same recipe) were evaluated with the full-data LoRA and SFT 4B alone in one window, 3 runs each.
+
+| Training data | Panels | Examples | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − full-data LoRA, pp [95% CI] | Picks candidate 2 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full data | 18,786 | 32,974 | 41.9% | 53.9% | 50.0% | 45.0% | 48.6% | — | 30% |
+| 1,000 states × 1 panel | 1,001 | 1,905 | 34.9% | 46.6% | 40.3% | 37.6% | 40.6% | **−7.3 [−9.5, −5.2]** | 96% |
+| 250 states × 1 panel | 252 | 495 | 34.9% | 44.7% | 42.2% | 38.0% | 40.6% | **−6.9 [−9.2, −4.7]** | 99% |
+| SFT 4B alone (1 sample) | 0 | 0 | 33.7% | 46.5% | 39.6% | 37.2% | 39.9% | −7.8 [−10.1, −5.6] | — |
+
+| Training data | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full data | 793 / 900 | 332 | 1,606 / 1,785 | 865 | 446 / 450 | 223 |
+| 1,000 states × 1 panel | 794 / 900 | 277 | 1,614 / 1,785 | 752 | 447 / 450 | 180 |
+| 250 states × 1 panel | 810 / 900 | 283 | 1,615 / 1,785 | 722 | 450 / 450 | 190 |
+| SFT 4B alone | 796 / 900 | 268 | 1,625 / 1,785 | 756 | 447 / 450 | 177 |
+
+*Per-benchmark columns are valid-only; differences on mean overall, paired bootstrap as above. "Picks candidate 2": share of run-1 decision steps (about 13–14K each) on which the decoder answered `{"selection": 2}`; no step fell back (every answer parsed). The full-data LoRA spreads its picks (39 / 30 / 10 / 9 / 13% over candidates 1–5). Choosing a fixed slot among five independent samples is equivalent to one sample, so both small LoRAs land on SFT 4B alone (37.6% and 38.0% vs 37.2%). Both trained for very few optimizer steps (about 240 and 62, against 490 for the 1-panel-per-state subset and 4,122 for the full data), so the collapse may reflect too few steps rather than too little data; a step-matched rerun of the 1,001-panel set (about 4 epochs) would separate the two. The full-data reference reproduces earlier windows (45.0% mean overall vs 45.6% and 46.1%). Evidence: [rates and contrasts](arm_results/rl_integration/selection-recipe3-data-below2k-20261111.json) · [script](arm_results/rl_integration/selection-recipe3-data-below2k-20261111.py). Runtime: `recipe3-ablations-20261104/` (subsets `lora-data/{s1000,s250}-pps1/`, LoRAs `lora/{s1000,s250}-pps1/`, evals `eval-1111/run<k>/`).*
 
 <a id="final-selection-recipe3-lora-controls-20261109"></a>
 
@@ -1296,6 +1397,34 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 H = 4), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
 - **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds). The [step-matched control](#final-selection-recipe3-lora-controls-20261109) is done.
+
+<a id="final-selection-recipe3-head-scale-20261111"></a>
+
+#### Head model scale with Recipe 3 labels (November 11)
+
+**Smaller heads do better: the 4.4M head is +8.2 [+5.7, +10.7] pp over one SFT 4B sample and +4.3 [+1.9, +6.7] over the 22.6M default; the 9.6M head is +2.6 [+0.0, +5.1] over the default and the 272.8M head +1.7 [−0.7, +4.2]. Every head beats SFT.** One training seed per size, so the ordering among sizes needs a seed replication before it changes the default. All heads are the joint (bidirectional) transformer with soft-CE loss on the Recipe 3 GPT-5.5 H = 4 panels, same data, split, recipe and learning rate (3e-4); only width and depth change. 2 runs per condition with SFT 4B alone in the same window (November 11, 00:59–09:30 PST); the 1.8B head (d4096-L8) is not included because its CPU-side scoring exceeded the eval job's 120G memory.
+
+| Head | Params | Validation agreement | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | — | — | 34.2% | 45.6% | 44.6% | 38.7% | 41.5% | — | — |
+| d128-L2 | 4.4M | 49.5% | 39.4% | **57.3%** | **54.4%** | **46.9%** | **50.3%** | **+8.2 [+5.7, +10.7]** | **+4.3 [+1.9, +6.7]** |
+| d256-L2 | 9.6M | 46.4% | **41.2%** | 54.5% | 50.8% | 45.1% | 48.9% | +6.4 [+4.0, +8.8] | +2.6 [+0.0, +5.1] |
+| d512-L2 (default) | 22.6M | 46.8% | 39.8% | 50.9% | 47.5% | 42.6% | 46.1% | +3.8 [+1.4, +6.3] | — |
+| d2048-L4 | 272.8M | 47.2% | 40.3% | 50.6% | 52.2% | 44.3% | 47.7% | +5.6 [+3.1, +8.0] | +1.7 [−0.7, +4.2] |
+
+| Head | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 535 / 600 | 183 | 1,079 / 1,190 | 492 | 298 / 300 | 133 |
+| d128-L2 | 528 / 600 | 208 | 1,081 / 1,190 | 619 | 298 / 300 | 162 |
+| d256-L2 | 524 / 600 | 216 | 1,071 / 1,190 | 584 | 297 / 300 | 151 |
+| d512-L2 (default) | 522 / 600 | 208 | 1,068 / 1,190 | 544 | 299 / 300 | 142 |
+| d2048-L4 | 526 / 600 | 212 | 1,071 / 1,190 | 542 | 299 / 300 | 156 |
+
+*Per-benchmark columns are valid-only success; differences are on the equal-weight 3-benchmark mean of overall success, paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs). Validation agreement: best-epoch agreement with the GPT-5.5 picks on 1,727 held-out panels. Per benchmark, valid-only, d128-L2 − default: Online-Mind2Web −0.5 [−5.1, +4.0], WebVoyager +6.3 [+3.3, +9.4], DeepShop +6.9 [+1.3, +12.5]; the small head's lead is on WebVoyager and DeepShop. The default head is +3.8 over SFT here against +5.0 in its November 3–4 window (cross-day). Judges: Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o; rolled out judge-deferred, no record refused. These evals ran with `--allow-source-drift` because another session edited `crossbench_selector_eval.py` (adding new selector kinds only) between preparation and launch. One d128-L2 Online-Mind2Web run lost its model server at 152 of 300 tasks and was resumed.*
+
+![Selection-head model scale: 3-benchmark mean overall success versus head parameters, with same-window SFT 4B alone](arm_results/rl_integration/selection-head-scale-20261111.png)
+
+*Points: mean overall success, 2 runs; bars: paired 95% interval of each head's difference from SFT 4B alone, drawn around the point. [PDF](arm_results/rl_integration/selection-head-scale-20261111.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-20261111.svg) · [plot script](arm_results/rl_integration/selection-head-scale-20261111-plot.py) · [data](arm_results/rl_integration/selection-head-scale-20261111.json) · [analysis script](arm_results/rl_integration/selection-head-scale-20261111.py). Runtime: `recipe3-ablations-20261104/` (training `train_scale.sbatch`, `source-scale/`, heads `heads-scale/<size>/`, evals `eval-scale/run<k>/`, job log `eval-scale/jobs.txt`).*
 
 <a id="final-selection-recipe3-kev-3bench-20261110"></a>
 
@@ -1824,12 +1953,12 @@ Main-paper candidate set for online RL with SelectionARM turn credit, chosen on 
 runs trained to at least iteration 60. Detailed history stays in
 [ARM_SUMMARY.md](ARM_SUMMARY.md#arm-rl-method-guide) and [ARM_RESULTS.md](ARM_RESULTS.md).
 
-**Status (November 8):** The only statistically supported claim is the matched iteration-90
-comparison. Gate B beats both outcome-only controls by 5–6 pp under the local-browser GPT-4.1
-protocol (Holm p ≤ 0.014). On single evaluations Gate B is level with outcome-only and
-the mixed-only variants, and the stealth-browser comparison (+3.6 pp) is not significant. A
-same-day iteration-90 re-evaluation of every run below is planned for November 9–10: three
-repeats each, paper actor sampling, and a shared Terra judge. It replaces the mixed-date columns in Table 2.
+**Status (November 11):** Same-day iteration-90 evaluation of all nine runs, three full-300 repeats each,
+paper actor sampling and one shared Terra judge. Every run that keeps mixed groups beats outcome-only 48 by
+3.6–6.2 pp (p ≤ 0.044); 40M+16F, Gate B, 48M+16F and Additive are indistinguishable from each other (36.7–38.3%
+overall). Failures in main batch is the exception: +1.2 pp, not significant, and 4.0 pp below Gate B (p = 0.011).
+Every number is one training run per method. An iteration-0 (SFT) evaluation under the same protocol is running
+to measure the absolute RL gain.
 
 ### Experiments
 
@@ -1849,7 +1978,7 @@ batch 256, 2 PPO epochs, LR 1e−6, GPT-4.1 training judge and 15 browser turns.
 | Mixed-only reweight | 48 | 0 | D ≥ 2 | `A × w` (λ = 0.5) | 90 | Bonus versus redistributing `A` |
 | Failures in main batch | 48 − N | N, inside main batch | D = 5 | `A + b`; `b` on F | 100 | Replace versus add failure groups |
 | Gate B · 40M + 16F | 40 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
-| Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 70 (→ 90 Nov 9) | Larger ARM-only share |
+| Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
 
 **Failures in main batch** replaces mixed groups: $(48-N)$ mixed groups plus $N$ all-failure groups share one 48-group batch. Outcome + ADM keeps 48 mixed groups and adds failure groups through a separate loss. This comparison also changes the gate ($D=5$ versus $D\ge2$), so it does not isolate batch placement.
 
@@ -1859,6 +1988,51 @@ failure sampling 40%), and the loop-credit and rescue pilots. Appendix candidate
 [ARM_SUMMARY.md](ARM_SUMMARY.md#arm-rl-method-guide)).
 
 ### Results
+
+<a id="final-rl-iter90-terra-sameday-20261111"></a>
+
+**Same-day iteration 90, shared Terra judge, three repeats (November 9–10).** Online-Mind2Web, all 300 tasks,
+local browser, 30 turns, actor T0.6 / top-p 0.95 / top-k 20. Every episode is graded offline by gpt-5.6-terra with
+the shared terminal-success prompt (medium effort, 4,096 tokens, seed 42, final screenshot). Overall counts invalid
+episodes as failures; valid-only divides by valid episodes. Rates are means over the three repeats.
+
+| Method | Successes per repeat | Valid per repeat | Overall % | Valid-only % | Δ vs outcome-only 48, pp | Paired 95% CI, pp | p |
+| --- | --- | --- | ---: | ---: | ---: | --- | ---: |
+| Outcome-only, 48 groups | 106 / 98 / 85 | 273 / 264 / 272 | 32.11 | 35.73 | — | — | — |
+| Outcome-only, 56 groups | 91 / 92 / 95 | 272 / 270 / 271 | 30.89 | 34.20 | −1.2 | [−4.3, +1.9] | 0.49 |
+| **Gate B (ours)** | 113 / 120 / 103 | 268 / 268 / 269 | 37.33 | 41.74 | +5.2 | [+2.0, +8.3] | 0.002 |
+| Additive | 111 / 114 / 105 | 267 / 270 / 270 | 36.67 | 40.89 | +4.6 | [+1.2, +8.0] | 0.010 |
+| Mixed-only bonus | 106 / 106 / 109 | 270 / 272 / 269 | 35.67 | 39.58 | +3.6 | [+0.6, +6.7] | 0.028 |
+| Mixed-only reweight | 107 / 102 / 112 | 274 / 272 / 267 | 35.67 | 39.50 | +3.6 | [+0.2, +6.9] | 0.044 |
+| Failures in main batch | 103 / 97 / 100 | 269 / 273 / 273 | 33.33 | 36.82 | +1.2 | [−1.9, +4.3] | 0.49 |
+| Gate B · 40M + 16F | 110 / 114 / 121 | 268 / 272 / 273 | **38.33** | **42.43** | +6.2 | [+2.9, +9.6] | 0.001 |
+| Gate B · 48M + 16F | 116 / 108 / 110 | 270 / 268 / 273 | 37.11 | 41.18 | +5.0 | [+1.7, +8.3] | 0.005 |
+
+| Same-day comparison | Δ overall, pp | Paired 95% CI, pp | p |
+| --- | ---: | --- | ---: |
+| Gate B − outcome-only, 56 groups | +6.4 | [+3.3, +9.6] | < 0.001 |
+| 40M+16F − Gate B | +1.0 | [−2.3, +4.3] | 0.61 |
+| 48M+16F − Gate B | −0.2 | [−3.3, +2.9] | 0.94 |
+| Additive − Gate B | −0.7 | [−3.8, +2.6] | 0.74 |
+| Mixed-only bonus − Gate B | −1.7 | [−4.7, +1.3] | 0.30 |
+| Failures in main batch − Gate B | −4.0 | [−7.0, −1.0] | 0.011 |
+
+- **Paired test:** per-task success averaged over the three repeats; task bootstrap (10,000 samples) for the
+  interval and a sign-flip test for p. Not corrected for multiple comparisons. Against outcome-only 56, every
+  mixed-group run gains 4.8–7.4 pp (p ≤ 0.005) and Failures in main batch gains +2.4 pp (p = 0.12).
+- **Collection:** jobs 442017 (Gate B, 40M+16F, 48M+16F, both outcome-only) and 442018 (the other four), run in parallel and
+  interleaved by repeat. The in-harness judge was disabled; grading cost $58.36 with no actor calls.
+- **One ungraded episode:** in 48M+16F repeat 2 the judge answered `Status: "success"` twice, which the frozen
+  parser rejects; it counts as a failure (at most +0.1 pp).
+- **Not established:** training-seed variability, and the absolute gain over the SFT start model (evaluation running).
+
+[Aggregate, protocol and paired tests](arm_results/rl_final_20261108/iter90_terra_sameday_20261111.json)
+· Runners: `scripts/run_iter90_terra_reeval.py`, `scripts/run_iter90_terra_reeval_ext.py`
+· Re-grader: `scripts/rejudge_rl_evals_shared_terra.py`.
+
+<details>
+<summary>Historical single-evaluation and mixed-date results (GPT-4.1 and stealth/o4-mini judges)</summary>
+
 
 Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall rates.
 
@@ -1872,7 +2046,7 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 | Mixed-only reweight | 110 | 36.67 | 113 | 227 | 37.67 | 49.78 | 38.56 | — | 56.22 |
 | Failures in main batch | 100 | 33.33 | 101 | 217 | 33.67 | 46.54 | 33.22 | — | — |
 | Gate B · 40M + 16F | 108 | 36.00 | 103 | 227 | 34.33 | 45.37 | 34.89 | — | — |
-| Gate B · 48M + 16F | 99 | 33.00 | pending | pending | pending | pending | 33.00 (iter. 70 only) | — | — |
+| Gate B · 48M + 16F | 99 | 33.00 | 103 | 222 | 34.33 | 46.40 | 34.33 | — | — |
 
 | Matched iteration-90 comparison (October 25) | Difference | Paired 95% CI | Holm p |
 | --- | ---: | --- | ---: |
@@ -1891,6 +2065,8 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
   DeepShop show no ARM gain ([details](ARM_SUMMARY.md#arm-localbench90-summary-20261008)).
 - **Not established:** training-seed variability. Every number comes from one training run per method.
 
+</details>
+
 <a id="final-rl-learning-compact"></a>
 
 ### Compact training and evaluation curves
@@ -1899,7 +2075,7 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 
 *(a) Training “Success (%)” is binary task success among valid collected trajectories, before dynamic-sampling filtering. It excludes the ADM bonus and is not the total reward. Lines average the last five per-iteration rates; dots mark every tenth iteration. This policy-dependent collection metric is not fixed-task held-out accuracy. (b) Valid-only Online-Mind2Web success over iterations 20–90, reproducing the [standalone evaluation curves](rl_results/rl_eval_learning_curves.png). Lines and circles pool successes and valid counts across the latest three evaluations; faint dots show raw rates. Initial windows use one or two evaluations, without iteration-10 warmup. These historical evaluations use a local browser, GPT-4.1/action-history judge, actor T0 and 30 turns. Dates and valid populations differ; invalid episodes are excluded. One training lineage per method. The 40M+16F and other omitted ablations remain in the table and archived views below.*
 
-The GPT-4.1-judged matched bars are omitted pending a completed shared-Terra iteration-90 comparison of 48 groups, 56 groups and ADM. Existing [Terra iteration-50 ablations](ARM_SUMMARY.md#arm-failure-group-ablations-terra-20261104) and the [sampled outcome-56 judge audit](RL_REWARD_DESIGN.md) do not supply that cohort. The curve axes retain their previous physical dimensions. No new evaluations or rejudging calls were launched.
+The GPT-4.1-judged matched bars are omitted; the shared-Terra comparison is the [same-day iteration-90 table](#final-rl-iter90-terra-sameday-20261111). The curve axes retain their previous physical dimensions.
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
 
