@@ -32,6 +32,9 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
+    "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
+    "selection-head-scale-20261111": "Selection head scaling",
     "selection-recipe3-vs-cost-sft-actors-overall-20261104": "SFT actors and distillation: mean overall success",
     "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104": "SFT actors and distillation: overall success by benchmark",
     "selection-recipe3-data-ablations-rerun-per-benchmark-20261109": "Training data ablations: matched-window rerun by benchmark",
@@ -107,7 +110,7 @@ def figure_group(stem: str) -> str:
         return GROUPS[0]
     if name.startswith("selection-label-") and "kfold" in name:
         return GROUPS[1]
-    if name.startswith("selection-recipe3-vs-cost"):
+    if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale")):
         return GROUPS[2]
     if name.startswith("selection-recipe3-data-ablations"):
         return GROUPS[3]

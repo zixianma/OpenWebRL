@@ -94,7 +94,7 @@ def build(overall=False):
     fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.4),
                              gridspec_kw=dict(width_ratios=[1.45, 1.45, 1.05]))
     fig.subplots_adjust(left=.075, right=.985, bottom=.30, top=.88, wspace=.53)
-    for ax, title in zip(axes, ("a) Training", "b) Validation")):
+    for ax, title in zip(axes, ("a) Training", "b) OM2W")):
         style(ax, title)
     # Draw ours last without shifting measured checkpoint positions.
     order = [key for key in METHODS if key != "gate_b"] + ["gate_b"]
@@ -119,12 +119,12 @@ def build(overall=False):
         ax.set_xlabel("Iteration", fontsize=8.5)
     axes[0].set_ylim(15 if overall else 39, 61)
     axes[0].set_yticks([20, 40, 60] if overall else [40, 50, 60])
-    axes[0].set_ylabel("Success (%)", fontsize=8.5)
+    axes[0].set_ylabel("Success %", fontsize=8.5)
     axes[1].set_xlim(17, 93)
     axes[1].set_xticks([20, 40, 60, 80, 90])
     axes[1].set_ylim(25, 45.5 if overall else 60)
     axes[1].set_yticks([25, 35, 45] if overall else [30, 40, 50, 60])
-    axes[1].set_ylabel("Overall success (%)" if overall else "Valid-only success (%)", fontsize=8.5)
+    axes[1].set_ylabel("Success %", fontsize=8.5)
 
     # Remove the GPT-4.1 judge comparison while preserving each curve axis in inches.
     positions = [ax.get_position().bounds for ax in axes[:2]]

@@ -86,6 +86,12 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
 
+### Selection head scaling
+
+![Selection head scaling](arm_results/rl_integration/selection-head-scale-20261111.png)
+
+[PDF](arm_results/rl_integration/selection-head-scale-20261111.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-20261111.svg)
+
 ## Recipe 3 data ablations
 
 ### Training states and panels: benchmark mean
@@ -99,6 +105,18 @@
 ![Training states and panels: per benchmark](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg)
+
+### Training data ablations: matched-window results
+
+![Training data ablations: matched-window results](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-20261109.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-20261109.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-20261109.svg)
+
+### Training data ablations: matched-window results by benchmark
+
+![Training data ablations: matched-window results by benchmark](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109.pdf)
 
 ### Training data ablations: matched-window rerun
 
