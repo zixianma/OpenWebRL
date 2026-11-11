@@ -150,7 +150,7 @@ def panel(x, w, title, color=INK, size=8.25):
 
 
 panel(12, 626, "(a) Training data")
-panel(664, 515, "(b) Model", color=PURPLE)
+panel(664, 515, "(b) Model", color="black")
 panel(1206, 582, "(c) Applications")
 
 # (a) Conceptual supervision: proposals + privileged evidence -> teacher choice.
@@ -246,10 +246,15 @@ def inference_mean(key):
     return sum(100 * r["successes"] / r["valid_episodes"] for r in rows) / 3
 
 
+def inference_pflops(key):
+    rows = [r for r in SOURCE["inference"]["rows"] if r["key"] == key]
+    return sum(r["pflop_per_episode"] for r in rows) / 3
+
+
 inference_points = [
-    (4.44, inference_mean("sft1"), "4B", GRAY, "o", (3, -6), "left"),
-    (8.77, inference_mean("sft8b"), "8B", GRAY, "s", (-3, -7), "right"),
-    (4.4626, inference_mean("head-gpt55-k3"), "ADM-22M", PURPLE, "o", (5, -1), "left"),
+    (inference_pflops("sft1"), inference_mean("sft1"), "4B", GRAY, "o", (3, -6), "left"),
+    (inference_pflops("sft8b"), inference_mean("sft8b"), "8B", GRAY, "s", (3, -7), "left"),
+    (inference_pflops("head-gpt55-k3"), inference_mean("head-gpt55-k3"), "ADM-22M", PURPLE, "o", (-5, -1), "right"),
 ]
 parameter_chart = chart_axes(1585, 218, 180, 95)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
@@ -257,8 +262,8 @@ for x, y, label, color, marker, offset, align in inference_points:
     parameter_chart.scatter(x, y, s=19, marker=marker, color=color, zorder=3, linewidths=0.5)
     parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
                         ha=align, fontsize=5.6, color=color)
-parameter_chart.set(xlim=(3.8, 9.5), ylim=(38, 50), xticks=[4, 8], yticks=[40, 45])
-parameter_chart.set_xlabel("System params (B)", fontsize=5.2, labelpad=2, color=MUTED)
+parameter_chart.set(xlim=(.15, 1.08), ylim=(38, 50), xticks=[.3, .6, .9], yticks=[40, 45])
+parameter_chart.set_xlabel("PFLOPs / episode", fontsize=5.2, labelpad=2, color=MUTED)
 parameter_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 parameter_chart.spines[["top", "right"]].set_visible(False)
 for spine in parameter_chart.spines.values():
@@ -284,15 +289,15 @@ for yy, method, label in [
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
 offline_chart = chart_axes(1585, 468, 180, 118)
 offline_chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
-offline_keys = ["actor", "sft", "dpo", "rpo"]
+offline_keys = ["actor", "dpo", "rpo"]
 offline_values = [SOURCE["offline"]["rates"][key]["overall"] for key in offline_keys]
-offline_chart.bar(range(4), offline_values, width=0.66,
-                  color=[GRAY, tint("ADM_DEFAULT", .65), tint("ADM_DEFAULT", .35), PURPLE],
+offline_chart.bar(range(3), offline_values, width=0.66,
+                  color=[GRAY, tint("ADM_DEFAULT", .35), PURPLE],
                   edgecolor="none")
 for x, value in enumerate(offline_values):
     offline_chart.text(x, value+1.7, f"{value:.1f}", ha="center", va="bottom", size=5.5,
-                       color=PURPLE if x == 3 else MUTED)
-offline_chart.set(xlim=(-0.65, 3.65), ylim=(0, 49), xticks=[0, 1, 2, 3], yticks=[0, 40])
+                       color=PURPLE if x == 2 else MUTED)
+offline_chart.set(xlim=(-0.65, 2.65), ylim=(0, 49), xticks=[0, 1, 2], yticks=[0, 40])
 offline_chart.set_xticklabels([SOURCE["offline"]["rates"][key]["label"] for key in offline_keys])
 offline_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 offline_chart.tick_params(axis="x", length=0)
@@ -316,7 +321,7 @@ box(1256, 790, 282, 85, PALE_PURPLE, PURPLE, radius=6)
 text(1397, 833, "ADM reward", size=6.6, color=PURPLE)
 # Match the published validation panel: iterations 20--90, pooled trailing-three
 # success/valid counts, with both outcome-only controls and raw checkpoint dots.
-chart = chart_axes(1585, 730, 180, 138)
+chart = chart_axes(1606, 730, 138, 175)
 chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
 rl_styles = [("outcome48", C["BASELINE_LIGHT"], "48", "--"),
              ("outcome56", GRAY, "56", "-"),
@@ -369,11 +374,11 @@ result = {
                        "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
                 for key, path in SOURCE_PATHS.items()},
     "inference": {"metric": "Equal-weight three-benchmark mean valid-only success (%)",
-                  "points": [{"label": label, "system_parameters_B": x, "percent": y}
+                  "points": [{"label": label, "pflop_per_episode": x, "percent": y}
                              for x, y, label, *_ in inference_points]},
     "offline": {"metric": SOURCE["offline"]["metric"],
                 "source": SOURCE["offline"]["source"],
-                "rates": SOURCE["offline"]["rates"]},
+                "rates": {key: SOURCE["offline"]["rates"][key] for key in offline_keys}},
     "online": {"protocol": SOURCE["online"]["protocol"],
                "smoothing": SOURCE["online"]["smoothing"],
                "display": SOURCE["online"]["display"],

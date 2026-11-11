@@ -18,17 +18,17 @@
     "points": [
       {
         "label": "4B",
-        "system_parameters_B": 4.44,
+        "pflop_per_episode": 0.2703333333333333,
         "percent": 41.10642809369955
       },
       {
         "label": "8B",
-        "system_parameters_B": 8.77,
+        "pflop_per_episode": 0.5523333333333333,
         "percent": 43.12527133802206
       },
       {
         "label": "ADM-22M",
-        "system_parameters_B": 4.4626,
+        "pflop_per_episode": 0.9096666666666667,
         "percent": 47.378782567891186
       }
     ]
@@ -43,10 +43,6 @@
     "rates": {
       "actor": {
         "label": "Actor",
-        "overall": 30.7
-      },
-      "sft": {
-        "label": "SFT",
         "overall": 30.7
       },
       "dpo": {
