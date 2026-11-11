@@ -4,9 +4,9 @@
   "source_sha256": "bcd713b2bb925f308efca3810991f813d3420a6a58c53c2e56efecfc25765ef7",
   "validation_source": "rl_results/rl_eval_learning_curves.json",
   "validation_source_sha256": "527156c4faf3894bdf2c948a83f6b118deacac0f9c51cc99795581fde79c56cd",
-  "palette_sha256": "465930b2a58137ac282e6958ad2e89c744f45027d520ee770cd3c803a2189d24",
-  "palette_colors_sha256": "b16f95485348f5a63959bb5592ad15c8fcbb1b0f332b710dd6b03ef468bee8a5",
-  "renderer_sha256": "d2daac3855b02e51abc4005558fb9a10351e01bb169672a4946fa3735f4369c0",
+  "palette_sha256": "620d576abc991ad20162ff83e02a14ce022117f345afbcfc2a09fd6b2f189963",
+  "palette_colors_sha256": "4686f4751d60c4c28efed52d686bee4d02f0579a8931e963f3ee0e701e6d58ea",
+  "renderer_sha256": "a0dd91a631d1d1a22c47501a66dff825bf5acaf6588516bdaa6895d9dd2d82ce",
   "methods": {
     "outcome48": [
       "Outcome only \u00b7 48 groups",
@@ -1460,8 +1460,8 @@
     }
   },
   "output_sha256": {
-    "png": "ed79db88f76394ff505e8257601caaff6aa5cf4ec5aed182f655ad93a85d9456",
-    "pdf": "9047b47163511e652dad451451612631dadf677f16bdf9c97d5111a869406a57",
-    "svg": "f849055f78aeae785bb2d7e386ab89cf35fefe5ebd61b50be430995041d981c5"
+    "png": "fe52b362c714991a11bfd232cad3e9632e5d38cbf4b2f9fb9c44da89725b36fb",
+    "pdf": "2d7acc20cec512e942be0d2e47f5085bf0c634de9048df4b670594223ccf33e0",
+    "svg": "51d39408d84d157d9691fd3865b40cdf57d5f9417a13a63557acae67597e92d6"
   }
 }
