@@ -100,7 +100,8 @@ def execute(args):
     key = dotenv_values(REPO/'.env').get('OPENAI_API_KEY') or os.environ.get('OPENAI_API_KEY')
     rejudge.need(bool(key), 'OPENAI_API_KEY required')
     budget = budget_module.ReservationBudget(out/f'budget/run-{int(time.time())}', rejudge.positive_money(args.judge_usd), args.judge_calls)
-    todo = [r for r in manifest['episodes'] if r['eligible'] and not (out/'episodes'/r['id']/'result.json').is_file()][:args.judge_calls]
+    todo = [r for r in manifest['episodes'] if r['eligible'] and r['id'] not in args.skip
+            and not (out/'episodes'/r['id']/'result.json').is_file()][:args.judge_calls]
     print(f'{len(todo)} episodes to grade', flush=True)
 
     def one(r):
@@ -155,6 +156,8 @@ if __name__ == '__main__':
     p.add_argument('--judge-usd')
     p.add_argument('--judge-calls', type=int)
     p.add_argument('--concurrency', type=int, default=8)
+    p.add_argument('--skip', action='append', default=[],
+                   help='episode id to leave ungraded (counted as pending), e.g. one whose verdict the frozen parser rejects')
     a = p.parse_args()
     if not 1 <= a.concurrency <= 8:
         raise SystemExit('Concurrency must be 1-8')
