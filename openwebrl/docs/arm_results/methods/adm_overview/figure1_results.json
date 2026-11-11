@@ -15,6 +15,30 @@
   },
   "inference": {
     "metric": "Equal-weight three-benchmark mean valid-only success (%)",
+    "best_adm4b_key": "lora-gpt55-pre",
+    "frontier_scope": "Displayed SFT-actor systems; lower PFLOPs and higher success are better",
+    "frontier": [
+      {
+        "label": "4B",
+        "pflop_per_episode": 0.2703333333333333,
+        "percent": 41.10642809369955
+      },
+      {
+        "label": "8B",
+        "pflop_per_episode": 0.5523333333333333,
+        "percent": 43.12527133802206
+      },
+      {
+        "label": "ADM-22M",
+        "pflop_per_episode": 0.9096666666666667,
+        "percent": 47.378782567891186
+      },
+      {
+        "label": "ADM-4B",
+        "pflop_per_episode": 1.415,
+        "percent": 48.80078218121312
+      }
+    ],
     "points": [
       {
         "label": "4B",
@@ -30,6 +54,11 @@
         "label": "ADM-22M",
         "pflop_per_episode": 0.9096666666666667,
         "percent": 47.378782567891186
+      },
+      {
+        "label": "ADM-4B",
+        "pflop_per_episode": 1.415,
+        "percent": 48.80078218121312
       }
     ]
   },

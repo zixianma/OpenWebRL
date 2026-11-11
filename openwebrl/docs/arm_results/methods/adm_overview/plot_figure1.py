@@ -251,18 +251,31 @@ def inference_pflops(key):
     return sum(r["pflop_per_episode"] for r in rows) / 3
 
 
+best_adm4b_key = max(
+    {r["key"] for r in SOURCE["inference"]["rows"] if r["key"].startswith("lora-")},
+    key=lambda key: (inference_mean(key), -inference_pflops(key)),
+)
 inference_points = [
     (inference_pflops("sft1"), inference_mean("sft1"), "4B", GRAY, "o", (3, -6), "left"),
     (inference_pflops("sft8b"), inference_mean("sft8b"), "8B", GRAY, "s", (3, -7), "left"),
     (inference_pflops("head-gpt55-k3"), inference_mean("head-gpt55-k3"), "ADM-22M", PURPLE, "o", (-5, -1), "right"),
+    (inference_pflops(best_adm4b_key), inference_mean(best_adm4b_key), "ADM-4B", C["ADM_4B"], "o", (-3, -9), "right"),
 ]
 parameter_chart = chart_axes(1585, 218, 180, 95)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
+# Observed Pareto frontier over the systems displayed in this overview.
+inference_frontier = []
+for point in sorted(inference_points, key=lambda p: (p[0], -p[1])):
+    if not inference_frontier or point[1] > inference_frontier[-1][1]:
+        inference_frontier.append(point)
+parameter_chart.plot([p[0] for p in inference_frontier],
+                     [p[1] for p in inference_frontier],
+                     color=PURPLE, linestyle="--", linewidth=.8, alpha=.65, zorder=1)
 for x, y, label, color, marker, offset, align in inference_points:
     parameter_chart.scatter(x, y, s=19, marker=marker, color=color, zorder=3, linewidths=0.5)
     parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
                         ha=align, fontsize=5.6, color=color)
-parameter_chart.set(xlim=(.15, 1.08), ylim=(38, 50), xticks=[.3, .6, .9], yticks=[40, 45])
+parameter_chart.set(xlim=(.15, 1.62), ylim=(38, 50), xticks=[.3, .9, 1.5], yticks=[40, 45])
 parameter_chart.set_xlabel("PFLOPs / episode", fontsize=5.2, labelpad=2, color=MUTED)
 parameter_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 parameter_chart.spines[["top", "right"]].set_visible(False)
@@ -377,6 +390,10 @@ result = {
                        "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
                 for key, path in SOURCE_PATHS.items()},
     "inference": {"metric": "Equal-weight three-benchmark mean valid-only success (%)",
+                  "best_adm4b_key": best_adm4b_key,
+                  "frontier_scope": "Displayed SFT-actor systems; lower PFLOPs and higher success are better",
+                  "frontier": [{"label": p[2], "pflop_per_episode": p[0], "percent": p[1]}
+                               for p in inference_frontier],
                   "points": [{"label": label, "pflop_per_episode": x, "percent": y}
                              for x, y, label, *_ in inference_points]},
     "offline": {"metric": SOURCE["offline"]["metric"],
