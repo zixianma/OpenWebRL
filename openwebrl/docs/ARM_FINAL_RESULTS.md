@@ -1185,6 +1185,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 **Recipe 3 follow-ups (November 8–9), all with the SFT 4B actor and the GPT-5.5 H = 4 labels; one window per comparison:**
 
 - **Less data is enough, more steps don't hurt.** LoRAs on 4 panels per state, 1 panel per state (12% of the examples) or 1,000 states are +0.4, +0.4 and −1.1 pp mean overall against the full-data LoRA (all intervals cross 0); the earlier subset leads were a window effect. Stopping the full-data LoRA at 1,692 instead of 4,122 steps changes nothing (−0.5 [−2.5, +1.4]); a full fine-tune is worse (−2.5 [−4.6, −0.4]). [Rerun](#final-selection-recipe3-data-rerun-20261109) · [controls](#final-selection-recipe3-lora-controls-20261109)
+- **Smaller heads do better.** Among joint-transformer heads of 4.4M–272.8M parameters, the 4.4M head is best: +8.2 [+5.7, +10.7] pp over one SFT sample and +4.3 [+1.9, +6.7] over the 22.6M default (one training seed per size). [Details](#final-selection-recipe3-head-scale-20261111)
 - **Kev-style selectors work on all three benchmarks.** Against one SFT sample in the same windows, Kev-A is +8.8 [+6.3, +11.4] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.6, +9.4]; B − A is −1.8 [−4.3, +0.6] (2 runs). [Details](#final-selection-recipe3-kev-3bench-20261110)
 - **The selector gain survives stealth browsers.** US-residential stealth browsers add about +13.5 pp mean overall to both SFT 4B and SFT 4B + the LoRA decoder (Online-Mind2Web and WebVoyager only); the decoder's gain is +7.2 [+3.5, +10.9] under stealth vs +7.6 [+5.4, +9.7] locally (1 stealth run). [Details](#final-selection-recipe3-stealth-20261109)
 
@@ -1378,6 +1379,34 @@ All four attention × scorer × loss combinations plus causal attention, one run
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 H = 4), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
 - **Not yet:** more than one training seed per selector (the [architecture round](#final-selection-recipe3-head-arch-20261107) varies runs, not seeds). The [step-matched control](#final-selection-recipe3-lora-controls-20261109) is done.
+
+<a id="final-selection-recipe3-head-scale-20261111"></a>
+
+#### Head model scale with Recipe 3 labels (November 11)
+
+**Smaller heads do better: the 4.4M head is +8.2 [+5.7, +10.7] pp over one SFT 4B sample and +4.3 [+1.9, +6.7] over the 22.6M default; the 9.6M head is +2.6 [+0.0, +5.1] over the default and the 272.8M head +1.7 [−0.7, +4.2]. Every head beats SFT.** One training seed per size, so the ordering among sizes needs a seed replication before it changes the default. All heads are the joint (bidirectional) transformer with soft-CE loss on the Recipe 3 GPT-5.5 H = 4 panels, same data, split, recipe and learning rate (3e-4); only width and depth change. 2 runs per condition with SFT 4B alone in the same window (November 11, 00:59–09:30 PST); the 1.8B head (d4096-L8) is not included because its CPU-side scoring exceeded the eval job's 120G memory.
+
+| Head | Params | Validation agreement | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | — | — | 34.2% | 45.6% | 44.6% | 38.7% | 41.5% | — | — |
+| d128-L2 | 4.4M | 49.5% | 39.4% | **57.3%** | **54.4%** | **46.9%** | **50.3%** | **+8.2 [+5.7, +10.7]** | **+4.3 [+1.9, +6.7]** |
+| d256-L2 | 9.6M | 46.4% | **41.2%** | 54.5% | 50.8% | 45.1% | 48.9% | +6.4 [+4.0, +8.8] | +2.6 [+0.0, +5.1] |
+| d512-L2 (default) | 22.6M | 46.8% | 39.8% | 50.9% | 47.5% | 42.6% | 46.1% | +3.8 [+1.4, +6.3] | — |
+| d2048-L4 | 272.8M | 47.2% | 40.3% | 50.6% | 52.2% | 44.3% | 47.7% | +5.6 [+3.1, +8.0] | +1.7 [−0.7, +4.2] |
+
+| Head | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 535 / 600 | 183 | 1,079 / 1,190 | 492 | 298 / 300 | 133 |
+| d128-L2 | 528 / 600 | 208 | 1,081 / 1,190 | 619 | 298 / 300 | 162 |
+| d256-L2 | 524 / 600 | 216 | 1,071 / 1,190 | 584 | 297 / 300 | 151 |
+| d512-L2 (default) | 522 / 600 | 208 | 1,068 / 1,190 | 544 | 299 / 300 | 142 |
+| d2048-L4 | 526 / 600 | 212 | 1,071 / 1,190 | 542 | 299 / 300 | 156 |
+
+*Per-benchmark columns are valid-only success; differences are on the equal-weight 3-benchmark mean of overall success, paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs). Validation agreement: best-epoch agreement with the GPT-5.5 picks on 1,727 held-out panels. Per benchmark, valid-only, d128-L2 − default: Online-Mind2Web −0.5 [−5.1, +4.0], WebVoyager +6.3 [+3.3, +9.4], DeepShop +6.9 [+1.3, +12.5]; the small head's lead is on WebVoyager and DeepShop. The default head is +3.8 over SFT here against +5.0 in its November 3–4 window (cross-day). Judges: Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o; rolled out judge-deferred, no record refused. These evals ran with `--allow-source-drift` because another session edited `crossbench_selector_eval.py` (adding new selector kinds only) between preparation and launch. One d128-L2 Online-Mind2Web run lost its model server at 152 of 300 tasks and was resumed.*
+
+![Selection-head model scale: 3-benchmark mean overall success versus head parameters, with same-window SFT 4B alone](arm_results/rl_integration/selection-head-scale-20261111.png)
+
+*Points: mean overall success, 2 runs; bars: paired 95% interval of each head's difference from SFT 4B alone, drawn around the point. [PDF](arm_results/rl_integration/selection-head-scale-20261111.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-20261111.svg) · [plot script](arm_results/rl_integration/selection-head-scale-20261111-plot.py) · [data](arm_results/rl_integration/selection-head-scale-20261111.json) · [analysis script](arm_results/rl_integration/selection-head-scale-20261111.py). Runtime: `recipe3-ablations-20261104/` (training `train_scale.sbatch`, `source-scale/`, heads `heads-scale/<size>/`, evals `eval-scale/run<k>/`, job log `eval-scale/jobs.txt`).*
 
 <a id="final-selection-recipe3-kev-3bench-20261110"></a>
 
