@@ -239,11 +239,12 @@ text(1518, 334, "Execute", size=5.8, color=MUTED)
 # Selection outputs a decision; the browser icon denotes its execution.
 
 # November 4 SFT-only comparison: three-benchmark valid-only means pooled
-# over three runs. The actor and head coordinates match Figure 4.
+# over three runs. Match the published Figure 7 PFLOP panel exactly, including
+# its rounded per-benchmark rates and exclusion of pre-execution-label variants.
 def inference_mean(key):
     rows = [r for r in SOURCE["inference"]["rows"] if r["key"] == key]
     assert {r["benchmark"] for r in rows} == {"online_mind2web", "webvoyager", "deepshop"}
-    return sum(100 * r["successes"] / r["valid_episodes"] for r in rows) / 3
+    return sum(r["valid_only"] for r in rows) / 3
 
 
 def inference_pflops(key):
@@ -252,29 +253,39 @@ def inference_pflops(key):
 
 
 best_adm4b_key = max(
-    {r["key"] for r in SOURCE["inference"]["rows"] if r["key"].startswith("lora-")},
+    ["lora-gpt55-k3", "lora-luna-k3"],
     key=lambda key: (inference_mean(key), -inference_pflops(key)),
 )
-inference_points = [
-    (inference_pflops("sft1"), inference_mean("sft1"), "4B", GRAY, "o", (3, -6), "left"),
-    (inference_pflops("sft8b"), inference_mean("sft8b"), "8B", GRAY, "s", (3, -7), "left"),
-    (inference_pflops("head-gpt55-k3"), inference_mean("head-gpt55-k3"), "ADM-22M", PURPLE, "o", (-5, -1), "right"),
-    (inference_pflops(best_adm4b_key), inference_mean(best_adm4b_key), "ADM-4B", C["ADM_4B"], "o", (-3, -9), "right"),
+inference_methods = [
+    ("sft1", "4B", C["BASELINE_LIGHT"], "s", (3, -6), "left"),
+    ("sft8b", "8B", GRAY, "s", (3, -7), "left"),
+    ("lora-gpt55-k3", "ADM-4B" if best_adm4b_key == "lora-gpt55-k3" else "", "#8246E5", "D", (-3, -9), "right"),
+    ("lora-luna-k3", "ADM-4B" if best_adm4b_key == "lora-luna-k3" else "", C["LOOKAHEAD_TEACHER"], "D", (-3, -9), "right"),
+    ("head-gpt55-k3", "ADM-23M", "#8246E5", "o", (5, 2), "left"),
+    ("head-luna-k3", "", C["LOOKAHEAD_TEACHER"], "o", (0, 0), "left"),
 ]
+inference_points = [(inference_pflops(key), inference_mean(key), label, color, marker, offset, align)
+                    for key, label, color, marker, offset, align in inference_methods]
+inference_point_keys = {(point[0], point[1]): method[0]
+                        for method, point in zip(inference_methods, inference_points)}
 parameter_chart = chart_axes(1585, 218, 180, 95)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
-# Observed Pareto frontier over the systems displayed in this overview.
+# Use all six Figure 7 systems: both 4B decoders are dominated by the heads.
 inference_frontier = []
 for point in sorted(inference_points, key=lambda p: (p[0], -p[1])):
     if not inference_frontier or point[1] > inference_frontier[-1][1]:
         inference_frontier.append(point)
 parameter_chart.plot([p[0] for p in inference_frontier],
                      [p[1] for p in inference_frontier],
-                     color=PURPLE, linestyle="--", linewidth=.8, alpha=.65, zorder=1)
+                     color=C["FRONTIER"], linestyle="--", linewidth=.8, zorder=1)
+parameter_chart.scatter([p[0] for p in inference_frontier], [p[1] for p in inference_frontier],
+                        s=36, facecolors="none", edgecolors=C["FRONTIER"], linewidths=.5, zorder=2)
 for x, y, label, color, marker, offset, align in inference_points:
-    parameter_chart.scatter(x, y, s=19, marker=marker, color=color, zorder=3, linewidths=0.5)
-    parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
-                        ha=align, fontsize=5.6, color=color)
+    parameter_chart.scatter(x, y, s=25 if marker == "D" else 17, marker=marker,
+                            color=color, edgecolors="white", zorder=3, linewidths=0.5)
+    if label:
+        parameter_chart.annotate(label, (x, y), xytext=offset, textcoords="offset points",
+                            ha=align, fontsize=5.6, color=color)
 parameter_chart.set(xlim=(.15, 1.62), ylim=(38, 50), xticks=[.3, .9, 1.5], yticks=[40, 45])
 parameter_chart.set_xlabel("PFLOPs / episode", fontsize=5.2, labelpad=2, color=MUTED)
 parameter_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
@@ -391,11 +402,16 @@ result = {
                 for key, path in SOURCE_PATHS.items()},
     "inference": {"metric": "Equal-weight three-benchmark mean valid-only success (%)",
                   "best_adm4b_key": best_adm4b_key,
-                  "frontier_scope": "Displayed SFT-actor systems; lower PFLOPs and higher success are better",
-                  "frontier": [{"label": p[2], "pflop_per_episode": p[0], "percent": p[1]}
+                  "figure7_reference": {"image_blob": "adebff6875ecafe30c4e7874fe40f933a8eec90c",
+                                        "source_ref": "d7d4a1d",
+                                        "renderer_blob": "3be727b64855167b0e649d123ec58643c73838bf"},
+                  "frontier_scope": "All six Figure 7 SFT-actor systems; pre-execution-label variants excluded",
+                  "frontier": [{"key": inference_point_keys[(p[0], p[1])],
+                                "label": p[2], "pflop_per_episode": p[0], "percent": p[1]}
                                for p in inference_frontier],
-                  "points": [{"label": label, "pflop_per_episode": x, "percent": y}
-                             for x, y, label, *_ in inference_points]},
+                  "points": [{"key": method[0], "label": point[2],
+                              "pflop_per_episode": point[0], "percent": point[1]}
+                             for method, point in zip(inference_methods, inference_points)]},
     "offline": {"metric": SOURCE["offline"]["metric"],
                 "source": SOURCE["offline"]["source"],
                 "rates": {key: SOURCE["offline"]["rates"][key] for key in offline_keys}},

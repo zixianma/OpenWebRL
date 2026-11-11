@@ -15,50 +15,75 @@
   },
   "inference": {
     "metric": "Equal-weight three-benchmark mean valid-only success (%)",
-    "best_adm4b_key": "lora-gpt55-pre",
-    "frontier_scope": "Displayed SFT-actor systems; lower PFLOPs and higher success are better",
+    "best_adm4b_key": "lora-gpt55-k3",
+    "figure7_reference": {
+      "image_blob": "adebff6875ecafe30c4e7874fe40f933a8eec90c",
+      "source_ref": "d7d4a1d",
+      "renderer_blob": "3be727b64855167b0e649d123ec58643c73838bf"
+    },
+    "frontier_scope": "All six Figure 7 SFT-actor systems; pre-execution-label variants excluded",
     "frontier": [
       {
+        "key": "sft1",
         "label": "4B",
         "pflop_per_episode": 0.2703333333333333,
-        "percent": 41.10642809369955
+        "percent": 41.10666666666667
       },
       {
+        "key": "sft8b",
         "label": "8B",
         "pflop_per_episode": 0.5523333333333333,
-        "percent": 43.12527133802206
+        "percent": 43.123333333333335
       },
       {
-        "label": "ADM-22M",
+        "key": "head-luna-k3",
+        "label": "",
+        "pflop_per_episode": 0.775,
+        "percent": 46.70333333333334
+      },
+      {
+        "key": "head-gpt55-k3",
+        "label": "ADM-23M",
         "pflop_per_episode": 0.9096666666666667,
-        "percent": 47.378782567891186
-      },
-      {
-        "label": "ADM-4B",
-        "pflop_per_episode": 1.415,
-        "percent": 48.80078218121312
+        "percent": 47.379999999999995
       }
     ],
     "points": [
       {
+        "key": "sft1",
         "label": "4B",
         "pflop_per_episode": 0.2703333333333333,
-        "percent": 41.10642809369955
+        "percent": 41.10666666666667
       },
       {
+        "key": "sft8b",
         "label": "8B",
         "pflop_per_episode": 0.5523333333333333,
-        "percent": 43.12527133802206
+        "percent": 43.123333333333335
       },
       {
-        "label": "ADM-22M",
-        "pflop_per_episode": 0.9096666666666667,
-        "percent": 47.378782567891186
-      },
-      {
+        "key": "lora-gpt55-k3",
         "label": "ADM-4B",
-        "pflop_per_episode": 1.415,
-        "percent": 48.80078218121312
+        "pflop_per_episode": 1.421,
+        "percent": 47.04333333333333
+      },
+      {
+        "key": "lora-luna-k3",
+        "label": "",
+        "pflop_per_episode": 1.4779999999999998,
+        "percent": 46.06333333333333
+      },
+      {
+        "key": "head-gpt55-k3",
+        "label": "ADM-23M",
+        "pflop_per_episode": 0.9096666666666667,
+        "percent": 47.379999999999995
+      },
+      {
+        "key": "head-luna-k3",
+        "label": "",
+        "pflop_per_episode": 0.775,
+        "percent": 46.70333333333334
       }
     ]
   },
