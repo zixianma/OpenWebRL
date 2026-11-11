@@ -7,7 +7,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders five 
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
-rings mark frontier points. No smoothing or statistical superiority is implied. ADM-22M uses light purple. ADM-4B uses diamonds: green/teal for GPT-5.5 and salmon for Luna labels. ADM-22M teacher variants use circle/square markers; RL baselines retain up/down triangles, with hollow markers for ADM-22M. SFT-only views use small filled ADM-23M circles and larger hollow ADM-4B circles, with bright purple for GPT-5.5 and salmon for Luna labels. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+rings mark frontier points. No smoothing or statistical superiority is implied. ADM-22M uses light purple. ADM-4B uses diamonds: green/teal for GPT-5.5 and salmon for Luna labels. ADM-22M teacher variants use circle/square markers; RL baselines retain up/down triangles, with hollow markers for ADM-22M. SFT-only views use filled ADM-23M circles and larger filled ADM-4B diamonds, with bright purple for GPT-5.5 and salmon for Luna labels. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -66,7 +66,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False):
         r = point(key, bench)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
-        size = 44 if circle_encoding and "lora" in key else 20 if circle_encoding and "head" in key else 24
+        size = 44 if circle_encoding and "lora" in key else 24
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
@@ -104,7 +104,7 @@ def render(benches, name, height, methods=methods):
         for key, label, params, color, marker, hollow in methods:
             if key.startswith(("head-", "lora-")):
                 color = "#8246E5" if "gpt55" in key else C["LOOKAHEAD_TEACHER"]
-                marker, hollow = "o", key.startswith("lora-")
+                marker, hollow = ("D" if key.startswith("lora-") else "o"), False
                 label = label.replace("ADM-22M", "ADM-23M")
             styled.append((key, label, params, color, marker, hollow))
         methods = styled
