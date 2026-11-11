@@ -28,7 +28,7 @@ HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-recipe3-data-ablations-20261105.json").read_text())
 SETS = {"s250": 2234, "s1000": 8875, "pps1": 2112, "pps4": 7417, "full": 18786}
 STATES = {"s250": 252, "s1000": 1001, "pps1": 2112, "pps4": 2112, "full": 2112}
-SERIES = [("Fewer states (8.9 sets/state)", C["ADM_4B"], "o", ["s250", "s1000", "full"], "states"),
+SERIES = [("Fewer states (8.9 sets/state)", C["ADM_4B"], "D", ["s250", "s1000", "full"], "states"),
           ("Fewer sets per state (2.1K states)", C["ADM_4B"], "D", ["pps1", "pps4", "full"], "sets")]
 BENCH = [("online_mind2web", "Online-Mind2Web"), ("webvoyager", "WebVoyager"), ("deepshop", "DeepShop")]
 
@@ -45,14 +45,14 @@ def name(k, var):
 def draw(ax, y, fs):
     vals = [y[k] for k in SETS] + [y["sft"]]
     for i, (_, color, marker, keys, var) in enumerate(SERIES):
-        ax.plot([SETS[k] for k in keys], [y[k] for k in keys], color=color, linewidth=1.4, zorder=2)
+        ax.plot([SETS[k] for k in keys], [y[k] for k in keys], color=color, linestyle="-" if var == "states" else "--", linewidth=1.4, zorder=2)
         other = SERIES[1 - i][3]
         for j, k in enumerate(keys[:-1]):
             v = y[k]; up = v >= y[other[j]]
             ax.scatter(SETS[k], v, s=32, marker=marker, zorder=3, color=color)
             ax.annotate(f"{name(k, var)}\n{v:.1f}" if up else f"{v:.1f}\n{name(k, var)}", (SETS[k], v), textcoords="offset points",
                         xytext=(0, 6 if up else -6), ha="center", va="bottom" if up else "top", fontsize=fs, color=color, linespacing=1.0)
-    ax.scatter(SETS["full"], y["full"], s=42, marker="s", zorder=4, color=C["ADM_4B"])
+    ax.scatter(SETS["full"], y["full"], s=42, marker="D", zorder=4, color=C["ADM_4B"])
     ax.annotate(f"{y['full']:.1f}", (SETS["full"], y["full"]), textcoords="offset points", xytext=(0, -7),
                 ha="center", va="top", fontsize=fs, color=C["ADM_4B"], linespacing=1.0)
     ax.axhline(y["sft"], color=C["BASELINE_LIGHT"], linestyle="--", linewidth=0.9, zorder=1)
@@ -67,9 +67,9 @@ def draw(ax, y, fs):
 
 
 def legend(fig, ncol=3):
-    h = [Line2D([], [], color=c, marker=m, markersize=5, linewidth=1.4, label=l) for l, c, m, _, _ in SERIES]
-    h += [Line2D([], [], color=C["ADM_4B"], marker="s", linestyle="none", markersize=5, label="Full data (2.1K states, 8.9 sets/state)")]
-    fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2)
+    h = [Line2D([], [], color=c, marker=m, markersize=5, linewidth=1.4, linestyle="-" if var == "states" else "--", label=l) for l, c, m, _, var in SERIES]
+    h += [Line2D([], [], color=C["ADM_4B"], marker="D", linestyle="none", markersize=5, label="Full data (2.1K states, 8.9 sets/state)")]
+    fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2, handlelength=2.8)
 
 
 def save(fig, name):

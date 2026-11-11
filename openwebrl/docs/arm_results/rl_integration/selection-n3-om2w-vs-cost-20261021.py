@@ -30,7 +30,7 @@ rows = {r["key"]: r for r in json.loads((HERE / "selection-n3-sft8b-full-2026102
         if r["benchmark"] == "online_mind2web"}
 methods = [  # label, key, color, marker
     ("SFT 4B, 1 sample", "sft1", C["BASELINE_LIGHT"], "s"), ("SFT 8B, 1 sample", "sft8b", C["BASELINE_DARK"], "s"),
-    ("Piotr SelectionARM, N = 5", "piotr5", C["ADM_4B"], "D"), ("Piotr SelectionARM, N = 3", "piotr3", C["ADM_4B"], "v"),
+    ("Piotr SelectionARM, N = 5", "piotr5", C["ADM_4B"], "D"), ("Piotr SelectionARM, N = 3", "piotr3", C["ADM_4B"], "D"),
     ("Joint head, Piotr's data, N = 5", "head5-755d4cd49137", C["ADM_22M"], "o"),
     ("Joint head, Piotr's data, N = 3", "head3-755d4cd49137", C["ADM_22M"], "v"),
     ("Pointwise head, Piotr's data, N = 3", "head3-26c57559ccb4", C["ADM_22M"], "s"),
@@ -43,7 +43,7 @@ for ax, (k, xlabel) in zip(axes, panels):
     for a, b, color in links:
         ax.plot([rows[a][k], rows[b][k]], [rows[a]["overall"], rows[b]["overall"]], color=color, linewidth=2, alpha=0.5, zorder=2)
     for label, key, color, marker in methods:
-        ax.scatter(rows[key][k], rows[key]["overall"], s=80, color=color, marker=marker, edgecolor="white", linewidth=2, zorder=3,
+        ax.scatter(rows[key][k], rows[key]["overall"], s=80, facecolor="white" if key == "piotr3" else color, marker=marker, edgecolor=color if key == "piotr3" else "white", linewidth=2, zorder=3,
                    label=label)
     ax.set_xlabel(xlabel)
     ax.grid(True, color=C["BORDER"], linewidth=0.8); ax.set_axisbelow(True)

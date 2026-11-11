@@ -2,9 +2,9 @@
   selection-recipe3-data-ablations-rerun-20261109.*                equal-weight 3-benchmark mean of overall success
   selection-recipe3-data-ablations-rerun-per-benchmark-20261109.*  overall success on Online-Mind2Web, WebVoyager and DeepShop
 Same axes and encoding as selection-recipe3-data-ablations-compact-20261105.py (log axis of 5-action sets in the training data;
-circles = fewer states, diamonds = fewer sets per state, square = full data). Solid: November 8-9 rerun, 3 runs per point, all
+diamonds = ADM-4B; solid lines = fewer states, dashed lines = fewer sets per state; larger diamond = full data). Solid: November 8-9 rerun, 3 runs per point, all
 conditions in one window. Faded: the November 4-6 batch (subsets November 4-5, full data November 6), joined to the rerun of the
-same LoRA by a thin gray line; only rerun points carry names (faded: circles at 2.2K / 8.9K sets = 252 / 1,001 states, diamonds at
+same LoRA by a thin gray line; only rerun points carry names (faded: points at 2.2K / 8.9K sets = 252 / 1,001 states, points at
 2.1K / 7.4K = 1 / 3.5 sets per state). The 252-state subset was not rerun and appears faded only. Dashed: SFT 4B alone (3 runs, November 6; not
 rerun). Data: selection-recipe3-data-ablations-rerun-20261109-analysis.json and selection-recipe3-data-ablations-20261105.json."""
 import json
@@ -41,18 +41,18 @@ def name(k):
 
 def draw(ax, yo, yn, sft, fs):
     vals = list(yo.values()) + list(yn.values()) + [sft]
-    for marker, keys, _ in SERIES:                                   # faded November 4-6 families
-        ax.plot([SETS[k] for k in keys], [yo[k] for k in keys], color=FADE, linewidth=1.0, zorder=1)
+    for marker, keys, family in SERIES:                                   # faded November 4-6 families
+        ax.plot([SETS[k] for k in keys], [yo[k] for k in keys], color=FADE, linestyle="-" if family == "states" else "--", linewidth=1.0, zorder=1)
         ks = [k for k in keys if k in yn]                            # solid rerun families
         if len(ks) > 1:
-            ax.plot([SETS[k] for k in ks], [yn[k] for k in ks], color=COL, linewidth=1.4, zorder=2)
+            ax.plot([SETS[k] for k in ks], [yn[k] for k in ks], color=COL, linestyle="-" if family == "states" else "--", linewidth=1.4, zorder=2)
     for k in SETS:
-        ax.scatter(SETS[k], yo[k], s=30, marker=MARK[k], color="white", edgecolors=FADE, linewidths=1.0, zorder=2)
+        ax.scatter(SETS[k], yo[k], s=30, marker="D", color="white", edgecolors=FADE, linewidths=1.0, zorder=2)
         ax.annotate(f"{yo[k]:.1f}", (SETS[k], yo[k]), textcoords="offset points", xytext=(5, 0), ha="left", va="center",
                     fontsize=fs - 1, color=tint("MUTED", 0.3))
         if k in yn:
             ax.plot([SETS[k]] * 2, [yo[k], yn[k]], color=C["BORDER"], linewidth=0.8, zorder=1)
-            ax.scatter(SETS[k], yn[k], s=40 if k == "full" else 32, marker=MARK[k], color=COL, zorder=4)
+            ax.scatter(SETS[k], yn[k], s=40 if k == "full" else 32, marker="D", color=COL, zorder=4)
             up = yn[k] >= yo[k]
             lab = f"{yn[k]:.1f}" if k == "full" else f"{name(k)}\n{yn[k]:.1f}" if up else f"{yn[k]:.1f}\n{name(k)}"
             if MARK[k] == "o":                                       # right of the point: clear of the diamond at 7.4K sets
@@ -73,12 +73,12 @@ def draw(ax, yo, yn, sft, fs):
 
 
 def legend(fig, ncol):
-    h = [Line2D([], [], color=COL, marker="o", markersize=5, linewidth=1.4, label="Fewer states (8.9 sets/state)"),
-         Line2D([], [], color=COL, marker="D", markersize=5, linewidth=1.4, label="Fewer sets per state (2.1K states)"),
-         Line2D([], [], color=COL, marker="s", linestyle="none", markersize=5, label="Full data"),
-         Line2D([], [], color=COL, marker="o", linestyle="none", markersize=5, label="Nov 8–9 rerun, same window"),
-         Line2D([], [], color=FADE, marker="o", markerfacecolor="white", linestyle="none", markersize=5, label="Nov 4–6 batch")]
-    fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2)
+    h = [Line2D([], [], color=COL, marker="D", markersize=5, linewidth=1.4, label="Fewer states (8.9 sets/state)"),
+         Line2D([], [], color=COL, marker="D", markersize=5, linewidth=1.4, linestyle="--", label="Fewer sets per state (2.1K states)"),
+         Line2D([], [], color=COL, marker="D", linestyle="none", markersize=5, label="Full data"),
+         Line2D([], [], color=COL, marker="D", linestyle="none", markersize=5, label="Nov 8–9 rerun, same window"),
+         Line2D([], [], color=FADE, marker="D", markerfacecolor="white", linestyle="none", markersize=5, label="Nov 4–6 batch")]
+    fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2, handlelength=2.8)
 
 
 def save(fig, stem):

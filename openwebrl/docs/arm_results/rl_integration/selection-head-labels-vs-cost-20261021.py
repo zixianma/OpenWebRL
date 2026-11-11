@@ -28,7 +28,7 @@ methods = [  # label, (source, id), params, color, marker, hollow
     ("SFT 4B, 1 sample", ("full", "SFT1"), 4.44e9, C["BASELINE_LIGHT"], "s", False),
     ("SFT 8B, 1 sample", ("new", "sft8b"), 8.77e9, C["BASELINE_DARK"], "s", False),
     ("Piotr SelectionARM", ("full", "Piotr"), 8.88e9, C["ADM_4B"], "D", False),
-    ("Piotr SelectionARM, N = 3", ("new", "piotr3"), 8.88e9, C["ADM_4B"], "v", False),
+    ("Piotr SelectionARM, N = 3", ("new", "piotr3"), 8.88e9, C["ADM_4B"], "D", True),
     ("Head, Piotr's data", ("full", "Head, Piotr's data (GPT-5.5)"), HEAD, C["ADM_22M"], "o", False),
     ("Head, Piotr's data, N = 3", ("new", "head3-755d4cd49137"), HEAD, C["ADM_22M"], "v", False),
     ("Pointwise head, Piotr's data, N = 3", ("new", "head3-26c57559ccb4"), POINT, C["ADM_22M"], "v", True),

@@ -51,7 +51,7 @@ def palette_board():
     rows = [
         ("States / observations", "state", [("STATE", "state cards")]),
         ("Actions / selected actions", "action", [("ACTION", "action cards")]),
-        ("ADM", "adm", [("ADM_22M", "default / 22M"), ("ADM_4B", "4B")]),
+        ("ADM", "adm", [("ADM_22M", "23M"), ("ADM_4B", "4B GPT-5.5"), ("ADM_4B_LUNA", "4B Luna")]),
         ("Lookahead teacher / evidence", "lookahead", [("LOOKAHEAD_TEACHER", "teacher"), ("LOOKAHEAD_EVIDENCE", "evidence")]),
         ("Oracle / train / eval", "oracle", [("ORACLE", "oracle"), ("TRAIN", "train"), ("EVAL", "eval")]),
         ("Single-call scaling", "single_call", [("SINGLE_CALL_MAIN", "single call")]),

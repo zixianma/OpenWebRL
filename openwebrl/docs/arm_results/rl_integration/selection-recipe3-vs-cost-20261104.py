@@ -7,7 +7,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders five 
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
-rings mark frontier points. No smoothing or statistical superiority is implied. ADM colors identify model size: light purple for ADM-22M, dark purple for ADM-4B. On SFT actors, GPT-5.5 versus GPT-6 Luna label teachers use diamond versus plus-filled markers for ADM-4B, and circle versus square markers for ADM-22M. RL base actors retain up/down triangles, with hollow markers for ADM-22M. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+rings mark frontier points. No smoothing or statistical superiority is implied. ADM-22M uses light purple. ADM-4B uses diamonds: green/teal for GPT-5.5 and salmon for Luna labels. ADM-22M teacher variants use circle/square markers; RL baselines retain up/down triangles, with hollow markers for ADM-22M. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -21,7 +21,7 @@ from pathlib import Path as _PaperPath
 _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
-from paper_plot_palette import COLORS as C
+from paper_plot_palette import COLORS as C, tint
 
 from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
@@ -34,12 +34,12 @@ methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
     ("sft8b", "SFT 8B", 8.77e9, C["BASELINE_DARK"], "s", False),
     ("rl4b", "RL 4B ²", SFT, C["BASELINE_DARK"], "^", False),
-    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, C["ADM_4B"], "^", False),
+    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, C["ADM_4B"], "D", False),
     ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, C["ADM_22M"], "^", True),
     ("rl8b", "RL 8B ³", 8.77e9, C["BASELINE_DARK"], "v", False),
-    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, C["ADM_4B"], "v", False),
+    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, tint("ADM_4B", .30), "D", False),
     ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, C["ADM_4B"], "D", False),
-    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, C["ADM_4B"], "P", False),
+    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, C["ADM_4B_LUNA"], "D", False),
     ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, C["ADM_22M"], "o", False),
     ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, C["ADM_22M"], "s", False),
 ]

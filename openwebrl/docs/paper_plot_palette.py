@@ -1,6 +1,6 @@
 """Named colors shared by paper diagrams and quantitative result plots.
 
-STATE is green, ACTION is purple, ADM is purple and lookahead teachers are salmon.
+STATE is green, ACTION is purple, ADM-23M is purple, ADM-4B is green/teal (salmon for Luna labels), and lookahead teachers are salmon.
 Neutral controls, model-size shades and source-label outlines retain explicit roles.
 Color changes never affect source measurements, intervals or data populations.
 """

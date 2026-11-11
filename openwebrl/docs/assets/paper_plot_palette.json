@@ -114,7 +114,7 @@
       "tone": "base"
     },
     "ADM_4B": {
-      "family": "adm",
+      "family": "state",
       "tone": "dark"
     },
     "ADM_DARK": {
@@ -148,6 +148,10 @@
     "ACTION_INK": {
       "family": "action",
       "tone": "dark"
+    },
+    "ADM_4B_LUNA": {
+      "family": "lookahead",
+      "tone": "base"
     }
   },
   "neutral_roles": {
@@ -248,7 +252,7 @@
       "FRONTIER": "#7C7887",
       "ADM_DEFAULT": "#9575EE",
       "ADM_22M": "#9575EE",
-      "ADM_4B": "#654FA1",
+      "ADM_4B": "#489379",
       "LOOKAHEAD_TEACHER": "#ED8B74",
       "LOOKAHEAD_EVIDENCE": "#ED8B74",
       "ADM_STUDENT": "#9575EE",
@@ -256,12 +260,13 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1"
+      "ACTION_INK": "#654FA1",
+      "ADM_4B_LUNA": "#ED8B74"
     },
     "derived_colors": "Warm amber blends the supplied yellow #EDE374 with salmon #ED8B74. Lookahead uses the original salmon at every horizon; darker green marks and light gray fills remain derived from their source swatches.",
     "rules": [
-      "Use light purple #9575EE for default ADM and ADM-22M; use dark purple #654FA1 for ADM-4B wherever its size is identified. ADM hue intensity encodes model size, not the label teacher.",
-      "Salmon #ED8B74 identifies lookahead teacher/evidence; purple identifies the learned ADM. Horizons are distinguished by H labels and positions. In label-source comparisons, keep teacher circles hollow and label-source-colored, and make all learned ADM-22M student points solid light purple. Student fills keep purple, with thick warm outlines to identify label sources (yellow Pre-exec, salmon-orange Lookahead, amber Oracle).",
+      "Use light purple #9575EE for ADM-23M, green/teal #489379 diamonds for ADM-4B with GPT-5.5 labels, and salmon #ED8B74 diamonds for ADM-4B with Luna labels. In ADM-4B-only data ablations, solid versus dashed lines distinguish the data families.",
+      "Salmon identifies lookahead teacher/evidence and Luna-labelled ADM-4B. In label-source comparisons, hollow teacher circles and filled student circles share the source color (gray Pre-exec, salmon Lookahead, amber Oracle), with neutral interval bars.",
       "Use original yellow #EDE374 for Train and the 50% yellow-salmon blend #EDB774 for Eval and Oracle, widening Train/Eval separation. Labels and CI bars remain neutral. Mint keeps its darker related tone for small success marks.",
       "Keep failure marks hollow gray.",
       "Teacher/student fill, actor-model shapes and cached shading remain independent of hue.",
@@ -292,7 +297,7 @@
     "ADM_DEFAULT": "#9575EE",
     "ADM_MAIN": "#9575EE",
     "ADM_22M": "#9575EE",
-    "ADM_4B": "#654FA1",
+    "ADM_4B": "#489379",
     "LOOKAHEAD_TEACHER": "#ED8B74",
     "LOOKAHEAD_EVIDENCE": "#ED8B74",
     "ADM_STUDENT": "#9575EE",
@@ -301,7 +306,8 @@
     "STATE_BORDER": "#489379",
     "ACTION": "#9575EE",
     "ACTION_INK": "#654FA1",
-    "ATTENTION_ALLOWED": "#9575EE"
+    "ATTENTION_ALLOWED": "#9575EE",
+    "ADM_4B_LUNA": "#ED8B74"
   },
   "trial": {
     "status": "Applied across all registered paper figures; frozen scientific inputs and estimates preserved",
@@ -335,7 +341,7 @@
       "FRONTIER": "#7C7887",
       "ADM_DEFAULT": "#9575EE",
       "ADM_22M": "#9575EE",
-      "ADM_4B": "#654FA1",
+      "ADM_4B": "#489379",
       "LOOKAHEAD_TEACHER": "#ED8B74",
       "LOOKAHEAD_EVIDENCE": "#ED8B74",
       "ADM_STUDENT": "#9575EE",
@@ -343,7 +349,8 @@
       "STATE_INK": "#211A33",
       "STATE_BORDER": "#489379",
       "ACTION": "#9575EE",
-      "ACTION_INK": "#654FA1"
+      "ACTION_INK": "#654FA1",
+      "ADM_4B_LUNA": "#ED8B74"
     },
     "renderers": [
       "openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py",
@@ -426,7 +433,7 @@
     "state": "Green observation/state cards with dark text and darker green borders.",
     "action": "Purple candidate/selected-action cards and connectors.",
     "lookahead": "Secondary salmon teacher/evidence cues; state/action cards retain green/purple identity.",
-    "adm": "Light purple default/22M; dark purple only for 4B selector size where applicable.",
+    "adm": "Light purple for ADM-23M; green/teal for ADM-4B, with salmon for Luna-labelled ADM-4B comparisons.",
     "status": "Filled green dots mean success; hollow gray dots mean failure. State/action cards identify content, not outcomes.",
     "attention": "Primary purple cells encode allowed attention; neutral masks."
   }
