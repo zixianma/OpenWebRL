@@ -6,9 +6,9 @@
   "validation_source_sha256": "527156c4faf3894bdf2c948a83f6b118deacac0f9c51cc99795581fde79c56cd",
   "palette_sha256": "620d576abc991ad20162ff83e02a14ce022117f345afbcfc2a09fd6b2f189963",
   "palette_colors_sha256": "4686f4751d60c4c28efed52d686bee4d02f0579a8931e963f3ee0e701e6d58ea",
-  "renderer_sha256": "e5026c117c2f590467dc442fcee853bf16e7c965e33ce53842fc712fe6bc54e9",
-  "layout_source_sha256": "95c8585f20b9f6a6a881454df05a06c962c0fdb81eb5314c9d1b37b6172f7ef6",
-  "layout": "4.9 x 2.45 inches; 2:1 aspect; equal-width panels; vertical legend on the right",
+  "renderer_sha256": "fc36d7df055ff2e45d7f3b3838a37b2aefbfaa7aa33b5b80519b41c6b8d3f183",
+  "layout_source_sha256": "6c3bb9bb48694bbf4afdade2499a03093e530968c2dedc8ff525499fb2b8a047",
+  "layout": "4.9 x 2.10 inches; square panels; reduced horizontal spacing; vertical legend on the right",
   "methods": {
     "outcome48": [
       "Outcome only \u00b7 48 groups",
@@ -1462,8 +1462,8 @@
     }
   },
   "output_sha256": {
-    "png": "a3abe62b1722990beecdfea7b7d442cde98eaa84a8306a7038ffc8701188d74d",
-    "pdf": "d660b94a4daf60c89fa04188f61d1de993222d3e43174e63c9c1b0e94d924320",
-    "svg": "6408baefa2e63b87360be177eae269cdb66cfa20d03b1a0365d1769f0a47e8a4"
+    "png": "91fd2103f00dd47225c82954e92d70a2b3d1a8b1dae7ecbe69296190053b3081",
+    "pdf": "e888fc9baab9989ffe3ffa4080b597b0a3450d6dadc4a853decdd5fc20c9c750",
+    "svg": "a650fc794ff63c8c1e1d2a6603a4cbcae98d9614234ec6882c8fd13e145fd974"
   }
 }

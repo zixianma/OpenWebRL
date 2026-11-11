@@ -1,8 +1,8 @@
-"""Shared 2:1 layout for RL learning and repetition figures."""
+"""Shared compact square-panel layout for RL learning and repetition figures."""
 import matplotlib.pyplot as plt
 from paper_plot_palette import COLORS as C
 
-FIGSIZE = (4.9, 2.45)
+FIGSIZE = (4.9, 2.10)
 TITLE_SIZE, LABEL_SIZE, TICK_SIZE, LEGEND_SIZE = 8, 7.5, 7, 7
 LEGEND_LABELS = ("Outcome only\n48 groups", "Outcome only\n56 groups", "Outcome + ADM\n(ours)")
 
@@ -12,7 +12,9 @@ def make_axes():
                          "text.color": C["INK"], "axes.labelcolor": C["MUTED"],
                          "xtick.color": C["MUTED"], "ytick.color": C["MUTED"]})
     fig, axes = plt.subplots(1, 2, figsize=FIGSIZE)
-    fig.subplots_adjust(left=.09, right=.72, top=.84, bottom=.22, wspace=.65)
+    fig.subplots_adjust(left=.09, right=.72, top=.84, bottom=.22, wspace=.35)
+    for ax in axes:
+        ax.set_box_aspect(1)
     return fig, axes
 
 

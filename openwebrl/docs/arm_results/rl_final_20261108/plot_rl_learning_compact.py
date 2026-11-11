@@ -2,7 +2,7 @@
 
 Training is a trailing-five mean of valid-only collected binary success rates.
 Validation reproduces rl_eval_learning_curves.json, including its pooled trailing
-three-evaluation smoother and raw dots. Both panels use the shared 2:1 layout
+three-evaluation smoother and raw dots. Both panels use the shared square-panel layout
 with a vertical legend on the right. Matched GPT-4.1 bars are omitted pending a complete shared-Terra comparison.
 Use --overall to include invalid attempts in both denominators.
 No training, browser or API calls.
@@ -151,7 +151,7 @@ def main(overall=False):
                   palette_sha256=sha(DOCS / "paper_plot_palette.py"),
                   palette_colors_sha256=hashlib.sha256(json.dumps(C, sort_keys=True).encode()).hexdigest(),
                   renderer_sha256=sha(__file__), layout_source_sha256=sha(DOCS / "rl_plot_layout.py"),
-                  layout="4.9 x 2.45 inches; 2:1 aspect; equal-width panels; vertical legend on the right", methods=METHODS,
+                  layout="4.9 x 2.10 inches; square panels; reduced horizontal spacing; vertical legend on the right", methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 field="training_success" if overall else "training_success_valid",
                                 metric="100 * successes / all completed collected trajectories" if overall else "100 * successes / valid collected trajectories",
