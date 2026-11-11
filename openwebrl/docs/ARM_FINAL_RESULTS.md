@@ -1183,6 +1183,30 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 *Compact RL-only view, same encoding as the SFT-only view: up triangles RL 4B (616cc8f), down triangles RL 8B (824a54f), both with 4,096 response tokens; dark = actor alone, green/teal diamonds = + ADM-4B (GPT-5.5), lighter for the RL 8B actor, light purple hollow = + ADM-22M (GPT-5.5) on the RL 4B actor's own features. RL 4B alone is from November 4; the selector rows and RL 8B are from November 4–5 (adjacent windows; paired intervals in footnotes ² and ³ of the Recipe 3 table).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
 
+<a id="final-selection-recipe3-head-vs-decoder-cost-20261111"></a>
+
+#### Training time and selection latency: 22.6M head vs 4B decoder
+
+**The 22.6M head trains about 18× cheaper and selects about 27× faster than the 4B LoRA decoder, but end-to-end decision time per episode is the same, because generating the five candidates dominates every step.** Both are the default Recipe 3 GPT-5.5 H = 4 selectors (ADM-22M, ADM-4B with full data, no WebArbiter pairs), trained on the same panels and evaluated with the SFT 4B actor, N = 5.
+
+| | 22.6M head (ADM-22M) | 4B LoRA decoder (ADM-4B) | Ratio |
+| --- | ---: | ---: | ---: |
+| ***Training*** | | | |
+| Feature extraction (actor hidden states, layers 18/27/36, all panels) | 1.0 H200-h (1 H200, 1 h 02 min) | — | |
+| Training | 7.5 min on 16 CPUs, no GPU (20 epochs, 18,781 panels) | 18.9 H200-h (4 H200, 4 h 44 min; 2 epochs, 32,974 examples) | |
+| Total GPU time | 1.0 H200-h | 18.9 H200-h | ~18× |
+| ***Selection, per step*** | | | |
+| Selection, mean / median / 90th percentile | 17 / 15 / 24 ms | 473 / 429 / 756 ms | ~27× |
+| Actor generation of 5 candidates, mean | 7.98 s | 7.96 s | ≈ 1 |
+| Decision step (generation + selection), mean | 8.00 s | 8.43 s | 0.95 |
+| ***Per episode*** | | | |
+| Steps | 14.0 | 13.2 | |
+| Selection time | 0.24 s | 6.2 s | |
+| Decision time (SFT 4B alone, 1 sample: 32 s) | 112 s | 111 s | ≈ 1 |
+| Steps measured | 29,334 (2 runs) | 40,193 (3 runs) | |
+
+*Latency: November 11 runs on 1 H200 each (head: head-size sweep `eval-scale`; decoder and SFT: data sweep `eval-1111`), all three benchmarks, from each step's `selection_seconds` / `generation_seconds`; browser time excluded. The head scores hidden states the actor exports while generating; that export overlaps with the other candidates' generation, so generation time matches the decoder's. The decoder is a separate sglang server on the same GPU (one ~1.6K-token forward per step, request overhead included). Training: head `train/heads-all2/k3-best` (`train_seconds` 452, train job allocated 1 H200 that the CPU trainer did not use, not counted); features `features/features-all2` (job 413066); decoder `lora/lora` (job 412317, LLaMA-Factory `train_runtime` 4:43:59, merge excluded); all under `rl-actor-recollect-20261016/p16-k3-20261031/`. Evidence: [latency data](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.json) · [script](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.py).*
+
 <a id="final-selection-recipe3-data-ablations-20261105"></a>
 
 #### How much Recipe 3 data the 4B LoRA needs (November 4–9)
