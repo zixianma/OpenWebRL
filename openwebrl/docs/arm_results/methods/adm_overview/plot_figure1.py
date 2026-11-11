@@ -79,6 +79,9 @@ def layout_x(x):
 
 def layout_y(x, y):
     """Use space below the column heading to separate the application rows."""
+    # Give the inference illustration the same vertical presence as its plot.
+    if 1206 <= x < 1560 and 190 <= y <= 334:
+        y = 190 + (y - 190) * (186 / 144)
     if x >= 1206 and y >= 100:
         return float(np.interp(y, [100, 148, 376, 412, 632, 668, 955],
                                [70, 113, 302, 357.6, 546.6, 575, 764]))
@@ -256,7 +259,7 @@ best_adm4b_key = "lora-gpt55-k3"
 inference_methods = [
     ("sft1", "4B", C["BASELINE_LIGHT"], "s", (3, -6), "left"),
     ("sft8b", "8B", GRAY, "s", (3, -7), "left"),
-    ("lora-gpt55-k3", "ADM-4B" if best_adm4b_key == "lora-gpt55-k3" else "", "#8246E5", "D", (-3, -9), "right"),
+    ("lora-gpt55-k3", "ADM-4B" if best_adm4b_key == "lora-gpt55-k3" else "", "#8246E5", "D", (0, -9), "center"),
     ("head-gpt55-k3", "ADM-23M", "#8246E5", "o", (5, 2), "left"),
 ]
 inference_points = [(inference_pflops(key), inference_mean(key), label, color, marker, offset, align)
@@ -264,7 +267,7 @@ inference_points = [(inference_pflops(key), inference_mean(key), label, color, m
 inference_point_keys = {(point[0], point[1]): method[0]
                         for method, point in zip(inference_methods, inference_points)}
 parameter_chart = chart_axes(1585, 188, 180, 150)
-parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
+parameter_chart.set_title("Success (%)", fontsize=5.6, color=MUTED, pad=4)
 # Frontier of the four displayed Figure 7 systems after omitting Luna variants.
 inference_frontier = []
 for point in sorted(inference_points, key=lambda p: (p[0], -p[1])):
@@ -307,7 +310,7 @@ for yy, method, label in [
     box(1474, yy, 64, 48, PALE_GRAY, GRAY, radius=5)
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
 offline_chart = chart_axes(1585, 455, 180, 145)
-offline_chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
+offline_chart.set_title("Success (%)", fontsize=5.6, color=MUTED, pad=4)
 offline_keys = ["actor", "dpo", "rpo"]
 offline_values = [SOURCE["offline"]["rates"][key]["overall"] for key in offline_keys]
 offline_chart.bar(range(3), offline_values, width=0.66,
