@@ -78,10 +78,10 @@ def layout_x(x):
 
 
 def layout_y(x, y):
-    """Place application headings and dividers in three equal-height bands."""
+    """Use space below the column heading to separate the application rows."""
     if x >= 1206 and y >= 100:
         return float(np.interp(y, [100, 148, 376, 412, 632, 668, 955],
-                               [100, 143, 332, 359, 548, 575, 764]))
+                               [70, 113, 302, 352, 541, 575, 764]))
     return y
 
 
