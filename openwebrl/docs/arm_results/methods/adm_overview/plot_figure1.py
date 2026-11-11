@@ -360,7 +360,7 @@ for key, color, label, linestyle in rl_styles:
     chart.scatter(x, raw, color=color, s=5, alpha=.25, edgecolors="none")
     chart.plot(x, smoothed, color=color, lw=1.2, linestyle=linestyle,
                marker="o", ms=1.9, markeredgewidth=0)
-chart.set(xlim=(RL_START - 2, RL_STOP + 2), ylim=(35, 57),
+chart.set(xlim=(RL_START - 2, RL_STOP + 2), ylim=(35, 50),
           xticks=[RL_START, RL_STOP], yticks=[40, 50])
 chart.set_xlabel("Iteration", fontsize=5.6, labelpad=1.5, color=MUTED)
 chart.tick_params(axis="both", labelsize=5.8, length=1.8, width=0.45, pad=1.8, colors=MUTED)
