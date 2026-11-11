@@ -21,7 +21,7 @@
       "source_ref": "d7d4a1d",
       "renderer_blob": "3be727b64855167b0e649d123ec58643c73838bf"
     },
-    "frontier_scope": "All six Figure 7 SFT-actor systems; pre-execution-label variants excluded",
+    "frontier_scope": "Four displayed Figure 7 SFT-actor systems; Luna and pre-execution-label variants omitted",
     "frontier": [
       {
         "key": "sft1",
@@ -34,12 +34,6 @@
         "label": "8B",
         "pflop_per_episode": 0.5523333333333333,
         "percent": 43.123333333333335
-      },
-      {
-        "key": "head-luna-k3",
-        "label": "",
-        "pflop_per_episode": 0.775,
-        "percent": 46.70333333333334
       },
       {
         "key": "head-gpt55-k3",
@@ -68,22 +62,10 @@
         "percent": 47.04333333333333
       },
       {
-        "key": "lora-luna-k3",
-        "label": "",
-        "pflop_per_episode": 1.4779999999999998,
-        "percent": 46.06333333333333
-      },
-      {
         "key": "head-gpt55-k3",
         "label": "ADM-23M",
         "pflop_per_episode": 0.9096666666666667,
         "percent": 47.379999999999995
-      },
-      {
-        "key": "head-luna-k3",
-        "label": "",
-        "pflop_per_episode": 0.775,
-        "percent": 46.70333333333334
       }
     ]
   },

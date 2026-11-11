@@ -239,8 +239,8 @@ text(1518, 334, "Execute", size=5.8, color=MUTED)
 # Selection outputs a decision; the browser icon denotes its execution.
 
 # November 4 SFT-only comparison: three-benchmark valid-only means pooled
-# over three runs. Match the published Figure 7 PFLOP panel exactly, including
-# its rounded per-benchmark rates and exclusion of pre-execution-label variants.
+# over three runs. Use the Figure 7 PFLOP coordinates with Luna variants omitted.
+# Retain its rounded per-benchmark rates and exclusion of pre-execution labels.
 def inference_mean(key):
     rows = [r for r in SOURCE["inference"]["rows"] if r["key"] == key]
     assert {r["benchmark"] for r in rows} == {"online_mind2web", "webvoyager", "deepshop"}
@@ -252,17 +252,12 @@ def inference_pflops(key):
     return sum(r["pflop_per_episode"] for r in rows) / 3
 
 
-best_adm4b_key = max(
-    ["lora-gpt55-k3", "lora-luna-k3"],
-    key=lambda key: (inference_mean(key), -inference_pflops(key)),
-)
+best_adm4b_key = "lora-gpt55-k3"
 inference_methods = [
     ("sft1", "4B", C["BASELINE_LIGHT"], "s", (3, -6), "left"),
     ("sft8b", "8B", GRAY, "s", (3, -7), "left"),
     ("lora-gpt55-k3", "ADM-4B" if best_adm4b_key == "lora-gpt55-k3" else "", "#8246E5", "D", (-3, -9), "right"),
-    ("lora-luna-k3", "ADM-4B" if best_adm4b_key == "lora-luna-k3" else "", C["LOOKAHEAD_TEACHER"], "D", (-3, -9), "right"),
     ("head-gpt55-k3", "ADM-23M", "#8246E5", "o", (5, 2), "left"),
-    ("head-luna-k3", "", C["LOOKAHEAD_TEACHER"], "o", (0, 0), "left"),
 ]
 inference_points = [(inference_pflops(key), inference_mean(key), label, color, marker, offset, align)
                     for key, label, color, marker, offset, align in inference_methods]
@@ -270,7 +265,7 @@ inference_point_keys = {(point[0], point[1]): method[0]
                         for method, point in zip(inference_methods, inference_points)}
 parameter_chart = chart_axes(1585, 218, 180, 95)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
-# Use all six Figure 7 systems: both 4B decoders are dominated by the heads.
+# Frontier of the four displayed Figure 7 systems after omitting Luna variants.
 inference_frontier = []
 for point in sorted(inference_points, key=lambda p: (p[0], -p[1])):
     if not inference_frontier or point[1] > inference_frontier[-1][1]:
@@ -405,7 +400,7 @@ result = {
                   "figure7_reference": {"image_blob": "adebff6875ecafe30c4e7874fe40f933a8eec90c",
                                         "source_ref": "d7d4a1d",
                                         "renderer_blob": "3be727b64855167b0e649d123ec58643c73838bf"},
-                  "frontier_scope": "All six Figure 7 SFT-actor systems; pre-execution-label variants excluded",
+                  "frontier_scope": "Four displayed Figure 7 SFT-actor systems; Luna and pre-execution-label variants omitted",
                   "frontier": [{"key": inference_point_keys[(p[0], p[1])],
                                 "label": p[2], "pflop_per_episode": p[0], "percent": p[1]}
                                for p in inference_frontier],
