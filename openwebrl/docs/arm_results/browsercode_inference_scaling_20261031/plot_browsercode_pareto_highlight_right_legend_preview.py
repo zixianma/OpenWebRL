@@ -2,7 +2,7 @@
 """Separate sixteen-setting Pareto preview with right legends and shaded caches.
 
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
-ranges, colors and observed frontiers. Cached markers use shaded circles. No experiment calls.
+ranges and observed frontiers. Action decision scaling uses salmon accents. Cached markers use shaded circles. No experiment calls.
 """
 # Shared semantic palette; source measurements and geometry are unchanged.
 from pathlib import Path as _PalettePath
@@ -127,6 +127,17 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
 
 
 def build():
+    # Recolor this preview in memory; preserve sibling figures and all data.
+    def salmon_style(method, style):
+        label, marker, color, filled = style
+        fade = .40 if "parallel2" in method else .20 if "parallel3" in method or "n3_cached" in method else 0
+        return label, marker, palette_tint("LOOKAHEAD_TEACHER", fade), filled
+    for styles in (ORIGINAL.BASE.SCALING.STYLES, ORIGINAL.BASE.AVERAGE.SCALING.STYLES):
+        for method in list(styles):
+            if method.startswith("parallel"):
+                styles[method] = salmon_style(method, styles[method])
+    ORIGINAL.CACHED = {method: salmon_style(method, style)
+                       for method, style in ORIGINAL.CACHED.items()}
     fig, frontier, rows = ORIGINAL.build()
     matplotlib.rcParams["hatch.linewidth"] = .5
     assert len(rows) == 16
@@ -155,7 +166,8 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
-                              cached="Light/base purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+                              selection="Salmon action decision scaling; neutral single-call controls; lighter salmon for smaller candidate sets",
+                              cached="Light/base salmon circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Original gray solid rings and dashed links, unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),

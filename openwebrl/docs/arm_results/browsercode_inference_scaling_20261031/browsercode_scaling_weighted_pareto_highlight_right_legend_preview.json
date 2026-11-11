@@ -710,7 +710,8 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
-    "cached": "Light/base purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+    "selection": "Salmon action decision scaling; neutral single-call controls; lighter salmon for smaller candidate sets",
+    "cached": "Light/base salmon circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
       "marker": "o",
       "size_pt2": 36,
@@ -734,10 +735,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "c26daf28aa119c4e2a65f78a9d10427e80c24119524e4531ce8ae032d047ece7",
+  "renderer_sha256": "73c97dc372ef51c56a39fe7e328262c0ff4f219b6067f746c7ed7d22b9acf47d",
   "output_sha256": {
-    "png": "3ce0b590c6c22243b773884916035c8a3265a282914c19f58b01637aace40792",
-    "pdf": "7cbb3101a4041b5b22201b1296fa65da02dbd4a570f4daa93d80ec6f2ee30069",
-    "svg": "703247b36fdeb15204603cab0471c9cb35efed7a047b289fd21c98783c6bc874"
+    "png": "7c5ff199878757117b493de6091c8136dc6af07741e80b7230419fa023b1b865",
+    "pdf": "d39fadd0807d785d73f7204f21312cb89e49bc77418b929fdea176625cd47177",
+    "svg": "a34865452f52db693ee8eea08932532dd9a3cff2c6991aa8b0ab759dce26ab7d"
   }
 }
