@@ -2,8 +2,8 @@
 
 Training is a trailing-five mean of valid-only collected binary success rates.
 Validation reproduces rl_eval_learning_curves.json, including its pooled trailing
-three-evaluation smoother and raw dots. Both axes retain their previous physical
-size. Matched GPT-4.1 bars are omitted pending a complete shared-Terra comparison.
+three-evaluation smoother and raw dots. Both panels use the shared 2:1 layout
+with a vertical legend on the right. Matched GPT-4.1 bars are omitted pending a complete shared-Terra comparison.
 Use --overall to include invalid attempts in both denominators.
 No training, browser or API calls.
 """
@@ -23,6 +23,7 @@ DOCS = next(p for p in HERE.parents if (p / "paper_plot_style.py").is_file())
 sys.path.insert(0, str(DOCS))
 import paper_plot_style  # noqa: E402,F401
 from paper_plot_palette import COLORS as C  # noqa: E402
+from rl_plot_layout import make_axes, style_axis, add_legend, LABEL_SIZE  # noqa: E402
 
 DATA_PATH = HERE / "arm_final_results_data.json"
 DATA = json.loads(DATA_PATH.read_text())
@@ -76,26 +77,12 @@ def series(key, overall=False):
                                 counts=displayed, windows=smoothed))
 
 
-def style(ax, title):
-    ax.set_title(title, fontsize=9, loc="left", color=INK, pad=5)
-    ax.grid(False)
-    for side in ("top", "right"):
-        ax.spines[side].set_visible(False)
-    for side in ("left", "bottom"):
-        ax.spines[side].set_color(C["BORDER"])
-        ax.spines[side].set_linewidth(.65)
-    ax.tick_params(labelsize=8, colors=MUTED, width=.65, length=3)
-    ax.xaxis.label.set_color(MUTED)
-    ax.yaxis.label.set_color(MUTED)
-
 
 def build(overall=False):
     points = {key: series(key, overall=overall) for key in METHODS}
-    fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.4),
-                             gridspec_kw=dict(width_ratios=[1.45, 1.45, 1.05]))
-    fig.subplots_adjust(left=.075, right=.985, bottom=.30, top=.88, wspace=.53)
+    fig, axes = make_axes()
     for ax, title in zip(axes, ("a) Training", "b) OM2W")):
-        style(ax, title)
+        style_axis(ax, title)
     # Draw ours last without shifting measured checkpoint positions.
     order = [key for key in METHODS if key != "gate_b"] + ["gate_b"]
     for key in order:
@@ -116,31 +103,20 @@ def build(overall=False):
     for ax in axes[:2]:
         ax.set_xlim(0, 94)
         ax.set_xticks([0, 30, 60, 90])
-        ax.set_xlabel("Iteration", fontsize=8.5)
+        ax.set_xlabel("Iteration", fontsize=LABEL_SIZE)
     axes[0].set_ylim(15 if overall else 39, 61)
     axes[0].set_yticks([20, 40, 60] if overall else [40, 50, 60])
-    axes[0].set_ylabel("Success %", fontsize=8.5)
+    axes[0].set_ylabel("Success %", fontsize=LABEL_SIZE)
     axes[1].set_xlim(17, 93)
     axes[1].set_xticks([20, 40, 60, 80, 90])
     axes[1].set_ylim(25, 45.5 if overall else 60)
     axes[1].set_yticks([25, 35, 45] if overall else [30, 40, 50, 60])
-    axes[1].set_ylabel("Success %", fontsize=8.5)
+    axes[1].set_ylabel("Success %", fontsize=LABEL_SIZE)
 
-    # Remove the GPT-4.1 judge comparison while preserving each curve axis in inches.
-    positions = [ax.get_position().bounds for ax in axes[:2]]
-    axes[2].remove()
-    axes = axes[:2]
-    old_width = fig.get_figwidth()
-    fig.set_size_inches(4.9, 2.4, forward=True)
-    for ax, (left, bottom, width, height) in zip(axes, positions):
-        ax.set_position([left * old_width / 4.9, bottom,
-                         width * old_width / 4.9, height])
     handles = [Line2D([], [], color=color, linestyle=ls,
-                      linewidth=1.8 if key == "gate_b" else 1.2,
+                      linewidth=1.2, marker="o", markersize=3.5,
                       label=label) for key, (label, color, ls) in METHODS.items()]
-    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(.53, .005),
-                        ncol=2, frameon=False, fontsize=7.5, labelcolor=INK, handlelength=1.6,
-                        handletextpad=.5, columnspacing=1.1, labelspacing=.25)
+    legend = add_legend(fig, handles)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     assert not any(legend.get_window_extent(renderer).overlaps(ax.get_tightbbox(renderer))
@@ -174,7 +150,8 @@ def main(overall=False):
                   validation_source_sha256=sha(VALIDATION_PATH),
                   palette_sha256=sha(DOCS / "paper_plot_palette.py"),
                   palette_colors_sha256=hashlib.sha256(json.dumps(C, sort_keys=True).encode()).hexdigest(),
-                  renderer_sha256=sha(__file__), methods=METHODS,
+                  renderer_sha256=sha(__file__), layout_source_sha256=sha(DOCS / "rl_plot_layout.py"),
+                  layout="4.9 x 2.45 inches; 2:1 aspect; equal-width panels; vertical legend on the right", methods=METHODS,
                   training=dict(protocol=DATA["training_protocol"],
                                 field="training_success" if overall else "training_success_valid",
                                 metric="100 * successes / all completed collected trajectories" if overall else "100 * successes / valid collected trajectories",
