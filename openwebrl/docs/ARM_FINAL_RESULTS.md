@@ -1906,12 +1906,12 @@ Main-paper candidate set for online RL with SelectionARM turn credit, chosen on 
 runs trained to at least iteration 60. Detailed history stays in
 [ARM_SUMMARY.md](ARM_SUMMARY.md#arm-rl-method-guide) and [ARM_RESULTS.md](ARM_RESULTS.md).
 
-**Status (November 8):** The only statistically supported claim is the matched iteration-90
-comparison. Gate B beats both outcome-only controls by 5–6 pp under the local-browser GPT-4.1
-protocol (Holm p ≤ 0.014). On single evaluations Gate B is level with outcome-only and
-the mixed-only variants, and the stealth-browser comparison (+3.6 pp) is not significant. A
-same-day iteration-90 re-evaluation of every run below is planned for November 9–10: three
-repeats each, paper actor sampling, and a shared Terra judge. It replaces the mixed-date columns in Table 2.
+**Status (November 11):** Same-day iteration-90 evaluation of all nine runs, three full-300 repeats each,
+paper actor sampling and one shared Terra judge. Every run that keeps mixed groups beats outcome-only 48 by
+3.6–6.2 pp (p ≤ 0.044); 40M+16F, Gate B, 48M+16F and Additive are indistinguishable from each other (36.7–38.3%
+overall). Failures in main batch is the exception: +1.2 pp, not significant, and 4.0 pp below Gate B (p = 0.011).
+Every number is one training run per method. An iteration-0 (SFT) evaluation under the same protocol is running
+to measure the absolute RL gain.
 
 ### Experiments
 
@@ -1931,7 +1931,7 @@ batch 256, 2 PPO epochs, LR 1e−6, GPT-4.1 training judge and 15 browser turns.
 | Mixed-only reweight | 48 | 0 | D ≥ 2 | `A × w` (λ = 0.5) | 90 | Bonus versus redistributing `A` |
 | Failures in main batch | 48 − N | N, inside main batch | D = 5 | `A + b`; `b` on F | 100 | Replace versus add failure groups |
 | Gate B · 40M + 16F | 40 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
-| Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 70 (→ 90 Nov 9) | Larger ARM-only share |
+| Gate B · 48M + 16F | 48 | ≤ 16, separate loss, coef. N/48 | D ≥ 2 | `A + b`; `b` on F | 90 | Larger ARM-only share |
 
 **Failures in main batch** replaces mixed groups: $(48-N)$ mixed groups plus $N$ all-failure groups share one 48-group batch. Outcome + ADM keeps 48 mixed groups and adds failure groups through a separate loss. This comparison also changes the gate ($D=5$ versus $D\ge2$), so it does not isolate batch placement.
 
@@ -1941,6 +1941,51 @@ failure sampling 40%), and the loop-credit and rescue pilots. Appendix candidate
 [ARM_SUMMARY.md](ARM_SUMMARY.md#arm-rl-method-guide)).
 
 ### Results
+
+<a id="final-rl-iter90-terra-sameday-20261111"></a>
+
+**Same-day iteration 90, shared Terra judge, three repeats (November 9–10).** Online-Mind2Web, all 300 tasks,
+local browser, 30 turns, actor T0.6 / top-p 0.95 / top-k 20. Every episode is graded offline by gpt-5.6-terra with
+the shared terminal-success prompt (medium effort, 4,096 tokens, seed 42, final screenshot). Overall counts invalid
+episodes as failures; valid-only divides by valid episodes. Rates are means over the three repeats.
+
+| Method | Successes per repeat | Valid per repeat | Overall % | Valid-only % | Δ vs outcome-only 48, pp | Paired 95% CI, pp | p |
+| --- | --- | --- | ---: | ---: | ---: | --- | ---: |
+| Outcome-only, 48 groups | 106 / 98 / 85 | 273 / 264 / 272 | 32.11 | 35.73 | — | — | — |
+| Outcome-only, 56 groups | 91 / 92 / 95 | 272 / 270 / 271 | 30.89 | 34.20 | −1.2 | [−4.3, +1.9] | 0.49 |
+| **Gate B (ours)** | 113 / 120 / 103 | 268 / 268 / 269 | 37.33 | 41.74 | +5.2 | [+2.0, +8.3] | 0.002 |
+| Additive | 111 / 114 / 105 | 267 / 270 / 270 | 36.67 | 40.89 | +4.6 | [+1.2, +8.0] | 0.010 |
+| Mixed-only bonus | 106 / 106 / 109 | 270 / 272 / 269 | 35.67 | 39.58 | +3.6 | [+0.6, +6.7] | 0.028 |
+| Mixed-only reweight | 107 / 102 / 112 | 274 / 272 / 267 | 35.67 | 39.50 | +3.6 | [+0.2, +6.9] | 0.044 |
+| Failures in main batch | 103 / 97 / 100 | 269 / 273 / 273 | 33.33 | 36.82 | +1.2 | [−1.9, +4.3] | 0.49 |
+| Gate B · 40M + 16F | 110 / 114 / 121 | 268 / 272 / 273 | **38.33** | **42.43** | +6.2 | [+2.9, +9.6] | 0.001 |
+| Gate B · 48M + 16F | 116 / 108 / 110 | 270 / 268 / 273 | 37.11 | 41.18 | +5.0 | [+1.7, +8.3] | 0.005 |
+
+| Same-day comparison | Δ overall, pp | Paired 95% CI, pp | p |
+| --- | ---: | --- | ---: |
+| Gate B − outcome-only, 56 groups | +6.4 | [+3.3, +9.6] | < 0.001 |
+| 40M+16F − Gate B | +1.0 | [−2.3, +4.3] | 0.61 |
+| 48M+16F − Gate B | −0.2 | [−3.3, +2.9] | 0.94 |
+| Additive − Gate B | −0.7 | [−3.8, +2.6] | 0.74 |
+| Mixed-only bonus − Gate B | −1.7 | [−4.7, +1.3] | 0.30 |
+| Failures in main batch − Gate B | −4.0 | [−7.0, −1.0] | 0.011 |
+
+- **Paired test:** per-task success averaged over the three repeats; task bootstrap (10,000 samples) for the
+  interval and a sign-flip test for p. Not corrected for multiple comparisons. Against outcome-only 56, every
+  mixed-group run gains 4.8–7.4 pp (p ≤ 0.005) and Failures in main batch gains +2.4 pp (p = 0.12).
+- **Collection:** jobs 442017 (Gate B, 40M+16F, 48M+16F, both outcome-only) and 442018 (the other four), run in parallel and
+  interleaved by repeat. The in-harness judge was disabled; grading cost $58.36 with no actor calls.
+- **One ungraded episode:** in 48M+16F repeat 2 the judge answered `Status: "success"` twice, which the frozen
+  parser rejects; it counts as a failure (at most +0.1 pp).
+- **Not established:** training-seed variability, and the absolute gain over the SFT start model (evaluation running).
+
+[Aggregate, protocol and paired tests](arm_results/rl_final_20261108/iter90_terra_sameday_20261111.json)
+· Runners: `scripts/run_iter90_terra_reeval.py`, `scripts/run_iter90_terra_reeval_ext.py`
+· Re-grader: `scripts/rejudge_rl_evals_shared_terra.py`.
+
+<details>
+<summary>Historical single-evaluation and mixed-date results (GPT-4.1 and stealth/o4-mini judges)</summary>
+
 
 Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall rates.
 
@@ -1954,7 +1999,7 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 | Mixed-only reweight | 110 | 36.67 | 113 | 227 | 37.67 | 49.78 | 38.56 | — | 56.22 |
 | Failures in main batch | 100 | 33.33 | 101 | 217 | 33.67 | 46.54 | 33.22 | — | — |
 | Gate B · 40M + 16F | 108 | 36.00 | 103 | 227 | 34.33 | 45.37 | 34.89 | — | — |
-| Gate B · 48M + 16F | 99 | 33.00 | pending | pending | pending | pending | 33.00 (iter. 70 only) | — | — |
+| Gate B · 48M + 16F | 99 | 33.00 | 103 | 222 | 34.33 | 46.40 | 34.33 | — | — |
 
 | Matched iteration-90 comparison (October 25) | Difference | Paired 95% CI | Holm p |
 | --- | ---: | --- | ---: |
@@ -1973,6 +2018,8 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
   DeepShop show no ARM gain ([details](ARM_SUMMARY.md#arm-localbench90-summary-20261008)).
 - **Not established:** training-seed variability. Every number comes from one training run per method.
 
+</details>
+
 <a id="final-rl-learning-compact"></a>
 
 ### Compact training and evaluation curves
@@ -1981,7 +2028,7 @@ Online-Mind2Web, all 300 tasks. Invalid episodes count as failures in overall ra
 
 *(a) Training “Success (%)” is binary task success among valid collected trajectories, before dynamic-sampling filtering. It excludes the ADM bonus and is not the total reward. Lines average the last five per-iteration rates; dots mark every tenth iteration. This policy-dependent collection metric is not fixed-task held-out accuracy. (b) Valid-only Online-Mind2Web success over iterations 20–90, reproducing the [standalone evaluation curves](rl_results/rl_eval_learning_curves.png). Lines and circles pool successes and valid counts across the latest three evaluations; faint dots show raw rates. Initial windows use one or two evaluations, without iteration-10 warmup. These historical evaluations use a local browser, GPT-4.1/action-history judge, actor T0 and 30 turns. Dates and valid populations differ; invalid episodes are excluded. One training lineage per method. The 40M+16F and other omitted ablations remain in the table and archived views below.*
 
-The GPT-4.1-judged matched bars are omitted pending a completed shared-Terra iteration-90 comparison of 48 groups, 56 groups and ADM. Existing [Terra iteration-50 ablations](ARM_SUMMARY.md#arm-failure-group-ablations-terra-20261104) and the [sampled outcome-56 judge audit](RL_REWARD_DESIGN.md) do not supply that cohort. The curve axes retain their previous physical dimensions. No new evaluations or rejudging calls were launched.
+The GPT-4.1-judged matched bars are omitted; the shared-Terra comparison is the [same-day iteration-90 table](#final-rl-iter90-terra-sameday-20261111). The curve axes retain their previous physical dimensions.
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
 
