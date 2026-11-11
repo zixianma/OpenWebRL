@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[SFT 4B and RL 8B + Luna N5 at temperature 1.0: completed three repeats on all three benchmarks, with per-seed counts and Terra-judged overall and valid-only success](ARM_FINAL_RESULTS.md#openwebrl-luna-n5-t1-three-repeats-20261111).
+
 [Native actors + N5 selectors: SFT/RL 8B + Luna and Luna high + learned N5, with Terra-judged overall and valid-only success from the completed first repeat](ARM_FINAL_RESULTS.md#openwebrl8b-luna-n5-20261109).
 
 [Figures-only gallery: all final-results figures, including historical and supplementary views](ARM_FIGURES.md).

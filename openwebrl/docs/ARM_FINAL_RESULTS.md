@@ -1,5 +1,63 @@
 # Final inference results
 
+<!-- openwebrl-luna-n5-t1-three-repeats-20261111:start -->
+<a id="openwebrl-luna-n5-t1-three-repeats-20261111"></a>
+
+## SFT 4B and RL 8B + Luna N5 at temperature 1.0: three repeats
+
+**RL 8B + Luna N5 exceeds SFT 4B + Luna N5 on all three benchmarks: mean valid-only success is +9.5 pp on Online-Mind2Web, +5.8 pp on WebVoyager and +5.3 pp on DeepShop.** The two actors differ in both size and training (4B SFT versus 8B RL), so the gap does not isolate RL. No no-selector baseline exists under this exact protocol (T 1.0, top-p 0.9, 1,024-token actor cap, Terra on all three benchmarks), so these results do not show whether Luna selection helps or hurts either actor.
+
+| Benchmark | Actor + selector | Tasks per seed | Mean overall success | SD | Mean valid-only success | SD |
+|---|---|---:|---:|---:|---:|---:|
+| Online-Mind2Web | SFT 4B + Luna N5 | 300 | 41.0% | 0.7 | 45.7% | 1.0 |
+| Online-Mind2Web | RL 8B + Luna N5 | 300 | 49.9% | 3.2 | 55.2% | 3.7 |
+| WebVoyager | SFT 4B + Luna N5 | 595 | 45.4% | 0.6 | 50.1% | 0.7 |
+| WebVoyager | RL 8B + Luna N5 | 595 | 50.8% | 0.8 | 55.9% | 1.0 |
+| DeepShop | SFT 4B + Luna N5 | 150 | 36.4% | 6.2 | 37.0% | 6.0 |
+| DeepShop | RL 8B + Luna N5 | 150 | 42.2% | 4.9 | 42.3% | 5.0 |
+
+Means and sample SDs (pp) are over three repeat seeds (42, 43, 44); all 18 cells are complete, 3,135 outcomes per method. Overall success divides successes by all assigned tasks; valid-only success divides by each cell's valid outcomes, so valid subsets differ between methods and seeds. DeepShop varies most across seeds (SFT 4B seed 44: 29.3% overall versus 40.7% and 39.3%). WebVoyager has exactly 55 invalid tasks in every SFT 4B seed, consistent with persistently unreachable sites rather than random failures.
+
+[Aggregate counts, protocol and source fingerprints](arm_results/openwebrl_luna_n5_t1_three_repeats_20261111/aggregate.json).
+
+<details>
+<summary>Per-seed counts</summary>
+
+| Benchmark | Actor + selector | Seed | Successes | Valid | Invalid | Total | Overall success | Valid-only success |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Online-Mind2Web | SFT 4B + Luna N5 | 42 | 123 | 271 | 29 | 300 | 41.0% | 45.4% |
+| Online-Mind2Web | SFT 4B + Luna N5 | 43 | 125 | 267 | 33 | 300 | 41.7% | 46.8% |
+| Online-Mind2Web | SFT 4B + Luna N5 | 44 | 121 | 270 | 30 | 300 | 40.3% | 44.8% |
+| Online-Mind2Web | RL 8B + Luna N5 | 42 | 152 | 274 | 26 | 300 | 50.7% | 55.5% |
+| Online-Mind2Web | RL 8B + Luna N5 | 43 | 139 | 271 | 29 | 300 | 46.3% | 51.3% |
+| Online-Mind2Web | RL 8B + Luna N5 | 44 | 158 | 269 | 31 | 300 | 52.7% | 58.7% |
+| WebVoyager | SFT 4B + Luna N5 | 42 | 270 | 540 | 55 | 595 | 45.4% | 50.0% |
+| WebVoyager | SFT 4B + Luna N5 | 43 | 274 | 540 | 55 | 595 | 46.1% | 50.7% |
+| WebVoyager | SFT 4B + Luna N5 | 44 | 267 | 540 | 55 | 595 | 44.9% | 49.4% |
+| WebVoyager | RL 8B + Luna N5 | 42 | 305 | 541 | 54 | 595 | 51.3% | 56.4% |
+| WebVoyager | RL 8B + Luna N5 | 43 | 297 | 542 | 53 | 595 | 49.9% | 54.8% |
+| WebVoyager | RL 8B + Luna N5 | 44 | 305 | 539 | 56 | 595 | 51.3% | 56.6% |
+| DeepShop | SFT 4B + Luna N5 | 42 | 61 | 148 | 2 | 150 | 40.7% | 41.2% |
+| DeepShop | SFT 4B + Luna N5 | 43 | 59 | 149 | 1 | 150 | 39.3% | 39.6% |
+| DeepShop | SFT 4B + Luna N5 | 44 | 44 | 146 | 4 | 150 | 29.3% | 30.1% |
+| DeepShop | RL 8B + Luna N5 | 42 | 66 | 150 | 0 | 150 | 44.0% | 44.0% |
+| DeepShop | RL 8B + Luna N5 | 43 | 69 | 149 | 1 | 150 | 46.0% | 46.3% |
+| DeepShop | RL 8B + Luna N5 | 44 | 55 | 150 | 0 | 150 | 36.7% | 36.7% |
+
+</details>
+
+<details>
+<summary>Protocol, recovery and API accounting</summary>
+
+Each state samples five independent actor candidates in parallel; GPT-6 Luna (medium effort, 2,048-token response ceiling) selects one, and only that action executes. Both actors use temperature 1.0, top-p 0.9, a 1,024-token response ceiling and at most 30 steps, with local browsers through the native coordinate-action harness. GPT-5.6 Terra (medium effort, 4,096-token ceiling) grades each benchmark with its native success protocol. Seeds identify repeat cohorts (actor server seeds 4200/4300/4400). These settings differ from the [temperature-0.7 8B first repeat](#openwebrl8b-luna-n5-20261109), which remains separately labelled, and from the BrowserCode API-actor experiments.
+
+Collection ran in several Slurm segments. Every committed valid or invalid outcome was preserved; only uncommitted infrastructure slots were retried: transient upstream Luna HTTP 503 and timeout halts (acknowledged in the selector ledger with full reservations retained), one actor CUDA/cuBLAS crash on a single node (excluded afterwards), and wall-time stops. Episodes whose Terra call was interrupted were rerun from scratch, never judged from partial state.
+
+Selector ledgers at completion: SFT 4B pool $29.78 of a $70 cap; shared RL/SFT 8B pool $69.67, whose cap the user raised from $70 to $100 on November 11. Both totals include all attempts and retained unknown holds; the 8B pool also contains earlier temperature-0.7 and SFT 8B calls.
+
+</details>
+<!-- openwebrl-luna-n5-t1-three-repeats-20261111:end -->
+
 <!-- openwebrl8b-luna-n5-20261109:start -->
 <a id="openwebrl8b-luna-n5-20261109"></a>
 
@@ -30,7 +88,7 @@ Each state samples five independent actor candidates in parallel, then executes 
 
 All methods use at most 30 steps and local browsers through the native coordinate-action harness. Terra uses medium effort and a 4,096-token response ceiling with each benchmark's native success protocol. These settings differ from the BrowserCode API-actor scaling experiments elsewhere on this page.
 
-The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per method, or 1,045 outcomes each. Seeds 43 and 44 are incomplete, for a planned 3,135 outcomes per method. For the API actor, seeds identify repeat cohorts rather than seeded API sampling. Interrupted work preserves every committed valid or invalid outcome. Separate temperature-1.0 trials and the requested SFT 4B/T1.0 experiments are excluded.
+The table contains only repeat seed 42: 300 Online-Mind2Web, 595 WebVoyager and 150 DeepShop outcomes per method, or 1,045 outcomes each. Seeds 43 and 44 are incomplete, for a planned 3,135 outcomes per method. For the API actor, seeds identify repeat cohorts rather than seeded API sampling. Interrupted work preserves every committed valid or invalid outcome. Completed temperature-1.0 three-repeat results for SFT 4B and RL 8B + Luna N5 are [reported separately](#openwebrl-luna-n5-t1-three-repeats-20261111).
 
 </details>
 <!-- openwebrl8b-luna-n5-20261109:end -->
