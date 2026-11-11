@@ -1,0 +1,189 @@
+{
+ "runs": 2,
+ "benchmarks": [
+  "online_mind2web",
+  "webvoyager",
+  "deepshop"
+ ],
+ "conditions": {
+  "sft1": {
+   "label": "SFT 4B alone (1 sample)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 600,
+    "valid": 531,
+    "successes": 161,
+    "overall": 0.2683333333333333,
+    "valid_only": 0.3032015065913371
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1190,
+    "valid": 1092,
+    "successes": 494,
+    "overall": 0.4151260504201681,
+    "valid_only": 0.4523809523809524
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 300,
+    "valid": 298,
+    "successes": 121,
+    "overall": 0.4033333333333333,
+    "valid_only": 0.40604026845637586
+   },
+   "mean_overall": 0.36226423902894495,
+   "mean_valid_only": 0.38720757580955506
+  },
+  "head5x-9ff81e7c894f": {
+   "label": "Kev-A (LoRA on all tokens)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 600,
+    "valid": 529,
+    "successes": 200,
+    "overall": 0.3333333333333333,
+    "valid_only": 0.3780718336483932
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1190,
+    "valid": 1085,
+    "successes": 600,
+    "overall": 0.5042016806722689,
+    "valid_only": 0.5529953917050692
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 300,
+    "valid": 300,
+    "successes": 154,
+    "overall": 0.5133333333333333,
+    "valid_only": 0.5133333333333333
+   },
+   "mean_overall": 0.4502894491129785,
+   "mean_valid_only": 0.4814668528955986,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     7.48703270570561,
+     3.14537033007761,
+     11.86285940373395
+    ],
+    "webvoyager_valid_only_pp": [
+     10.06144393241168,
+     6.763685901509153,
+     13.413379205987432
+    ],
+    "deepshop_valid_only_pp": [
+     10.729306487695744,
+     5.000000000000004,
+     16.54517837235229
+    ],
+    "mean_overall_pp": [
+     8.802521008403358,
+     6.300186741363212,
+     11.355753968253966
+    ],
+    "mean_valid_only_pp": [
+     9.425927708604354,
+     6.785073082359342,
+     12.103417360371704
+    ]
+   }
+  },
+  "head5x-18ab53442be0": {
+   "label": "Kev-B (no LoRA on prompt tokens)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 600,
+    "valid": 525,
+    "successes": 200,
+    "overall": 0.3333333333333333,
+    "valid_only": 0.38095238095238093
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1190,
+    "valid": 1075,
+    "successes": 575,
+    "overall": 0.4831932773109244,
+    "valid_only": 0.5348837209302325
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 300,
+    "valid": 300,
+    "successes": 144,
+    "overall": 0.48,
+    "valid_only": 0.48
+   },
+   "mean_overall": 0.43217553688141924,
+   "mean_valid_only": 0.46527870062753784,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     7.775087436104383,
+     3.719898772434637,
+     11.856135545218791
+    ],
+    "webvoyager_valid_only_pp": [
+     8.250276854928012,
+     5.080347299703544,
+     11.435950656305161
+    ],
+    "deepshop_valid_only_pp": [
+     7.395973154362412,
+     1.9292087542087557,
+     12.923063973063966
+    ],
+    "mean_overall_pp": [
+     6.99112978524743,
+     4.631174136321196,
+     9.408963585434172
+    ],
+    "mean_valid_only_pp": [
+     7.807112481798279,
+     5.297361827239411,
+     10.33248197937916
+    ]
+   }
+  }
+ },
+ "judge_models": {
+  "online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "webvoyager": [
+   "gpt-4o"
+  ],
+  "deepshop": [
+   "gpt-4o"
+  ]
+ },
+ "kevB_minus_kevA": {
+  "online_mind2web_valid_only_pp": [
+   0.2880547303987735,
+   -3.9290473852898877,
+   4.361199255451792
+  ],
+  "webvoyager_valid_only_pp": [
+   -1.8111670774836663,
+   -4.652211521714536,
+   1.0964400873959006
+  ],
+  "deepshop_valid_only_pp": [
+   -3.3333333333333326,
+   -9.333333333333332,
+   2.3333333333333375
+  ],
+  "mean_overall_pp": [
+   -1.8113912231559282,
+   -4.279715219421102,
+   0.6321311858076573
+  ],
+  "mean_valid_only_pp": [
+   -1.6188152268060751,
+   -4.1982192055961765,
+   0.9565728328234683
+  ]
+ }
+}
