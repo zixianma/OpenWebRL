@@ -8,8 +8,8 @@ https://github.com/zixianma/OpenWebRL/tree/arm/openwebrl/docs
 ARM_FORMULATIONS.md: matched branching and execution-evidence labels;
 ARM_SELECTION_HEAD.md: pre-action selection and teacher supervision;
 ARM_SUMMARY.md: inference, offline SFT, and action-guided online RL.
-Insets read the current published Recipe 3, matched SFT/DPO and RL validation
-aggregates directly. RL uses both outcome controls and the published pooled
+Insets read the published Recipe 3 and RL validation aggregates.
+The offline inset uses the current paper Table 7 overall-success snapshot. RL uses both outcome controls and the published pooled
 trailing-three-evaluation smoother over iterations 20--90. Source hashes and
 coordinates are exported in figure1_results.json. No new evaluations are run.
 Source screenshots and their provenance are in web_states/. The selected
@@ -35,7 +35,7 @@ WEB = ROOT / "web_states" / "dinka"
 DOCS = ROOT.parents[2]
 SOURCE_PATHS = {
     "inference": DOCS / "arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json",
-    "offline": DOCS / "arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json",
+    "offline": ROOT / "figure1_offline_results.json",
     "online": DOCS / "rl_results/rl_eval_learning_curves.json",
 }
 SOURCE = {key: json.loads(path.read_text()) for key, path in SOURCE_PATHS.items()}
@@ -266,14 +266,14 @@ for spine in parameter_chart.spines.values():
     spine.set_linewidth(0.45)
 
 application_card(385, 237, "Offline improvement", INK)
-# One ADM supplies both demonstrations (SFT) and preferences (DPO).
+# One ADM supplies demonstrations (SFT) and preferences (DPO/RPO).
 box(1256, 501, 70, 48, PALE_PURPLE, PURPLE, radius=5)
 text(1291, 525, r"$f_\phi$", size=8.0, color=PURPLE)
 line([(1326, 525), (1337, 525)], PURPLE)
 line([(1337, 479), (1337, 572)], PURPLE)
 for yy, method, label in [
     (455, "SFT", r"$\hat a_t$"),
-    (548, "DPO", r"$\hat a_t\succ a_t^{-}$"),
+    (548, "DPO / RPO", r"$\hat a_t\succ a_t^{-}$"),
 ]:
     text(1400, yy-15, method, size=6.0, color=PURPLE)
     arrow((1337, yy+24), (1347, yy+24), PURPLE, scale=3)
@@ -284,16 +284,16 @@ for yy, method, label in [
     text(1506, yy+24, r"$\pi_\theta$", size=7.6, color=GRAY)
 offline_chart = chart_axes(1585, 468, 180, 118)
 offline_chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
-offline_values = [100 * SOURCE["offline"]["rates"][key]["successes"]
-                  / SOURCE["offline"]["rates"][key]["valid"]
-                  for key in ["historical-base", "sft", "dpo"]]
-offline_chart.bar(range(3), offline_values, width=0.66,
-                  color=[GRAY, tint("ADM_DEFAULT", .50), PURPLE], edgecolor="none")
+offline_keys = ["actor", "sft", "dpo", "rpo"]
+offline_values = [SOURCE["offline"]["rates"][key]["overall"] for key in offline_keys]
+offline_chart.bar(range(4), offline_values, width=0.66,
+                  color=[GRAY, tint("ADM_DEFAULT", .65), tint("ADM_DEFAULT", .35), PURPLE],
+                  edgecolor="none")
 for x, value in enumerate(offline_values):
     offline_chart.text(x, value+1.7, f"{value:.1f}", ha="center", va="bottom", size=5.5,
-                       color=PURPLE if x == 2 else MUTED)
-offline_chart.set(xlim=(-0.65, 2.65), ylim=(0, 49), xticks=[0, 1, 2], yticks=[0, 40])
-offline_chart.set_xticklabels(["Actor", "SFT", "DPO"])
+                       color=PURPLE if x == 3 else MUTED)
+offline_chart.set(xlim=(-0.65, 3.65), ylim=(0, 49), xticks=[0, 1, 2, 3], yticks=[0, 40])
+offline_chart.set_xticklabels([SOURCE["offline"]["rates"][key]["label"] for key in offline_keys])
 offline_chart.tick_params(axis="both", labelsize=5.5, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 offline_chart.tick_params(axis="x", length=0)
 offline_chart.spines[["top", "right"]].set_visible(False)
@@ -371,10 +371,9 @@ result = {
     "inference": {"metric": "Equal-weight three-benchmark mean valid-only success (%)",
                   "points": [{"label": label, "system_parameters_B": x, "percent": y}
                              for x, y, label, *_ in inference_points]},
-    "offline": {"metric": "Online-Mind2Web valid-only success (%)",
-                "rates": {key: {field: SOURCE["offline"]["rates"][key][field]
-                                for field in ("successes", "valid", "scheduled", "valid_only")}
-                          for key in ("historical-base", "sft", "dpo")}},
+    "offline": {"metric": SOURCE["offline"]["metric"],
+                "source": SOURCE["offline"]["source"],
+                "rates": SOURCE["offline"]["rates"]},
     "online": {"protocol": SOURCE["online"]["protocol"],
                "smoothing": SOURCE["online"]["smoothing"],
                "display": SOURCE["online"]["display"],

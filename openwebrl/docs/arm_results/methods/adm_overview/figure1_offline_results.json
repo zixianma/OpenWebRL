@@ -1,0 +1,26 @@
+{
+  "metric": "Online-Mind2Web overall success (%)",
+  "source": {
+    "path": "tables/offline-transfer-main.tex",
+    "sha256": "bd7226a887aaf4620a061e1204794b06daff7560709bec1194fc39cb217c28e3",
+    "paper_commit": "00269ce"
+  },
+  "rates": {
+    "actor": {
+      "label": "Actor",
+      "overall": 30.7
+    },
+    "sft": {
+      "label": "SFT",
+      "overall": 30.7
+    },
+    "dpo": {
+      "label": "DPO",
+      "overall": 36.0
+    },
+    "rpo": {
+      "label": "RPO",
+      "overall": 39.3
+    }
+  }
+}

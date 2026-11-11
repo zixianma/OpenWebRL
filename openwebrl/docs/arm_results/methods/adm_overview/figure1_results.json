@@ -5,8 +5,8 @@
       "sha256": "c0cae98d38f7f9831d74b39108171dacf46b49a4dea0fcd3b66103d7e0bca7b4"
     },
     "offline": {
-      "path": "arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json",
-      "sha256": "6c1f8e5d75d57dcdfcdfb179985a991cbb30ce98d749ded0c1bbaf664d90427c"
+      "path": "arm_results/methods/adm_overview/figure1_offline_results.json",
+      "sha256": "4057e9045df265407461f7525d19d736e6e7bce50bf507c22024bca30537902e"
     },
     "online": {
       "path": "rl_results/rl_eval_learning_curves.json",
@@ -34,25 +34,28 @@
     ]
   },
   "offline": {
-    "metric": "Online-Mind2Web valid-only success (%)",
+    "metric": "Online-Mind2Web overall success (%)",
+    "source": {
+      "path": "tables/offline-transfer-main.tex",
+      "sha256": "bd7226a887aaf4620a061e1204794b06daff7560709bec1194fc39cb217c28e3",
+      "paper_commit": "00269ce"
+    },
     "rates": {
-      "historical-base": {
-        "successes": 90,
-        "valid": 267,
-        "scheduled": 300,
-        "valid_only": 0.33707865168539325
+      "actor": {
+        "label": "Actor",
+        "overall": 30.7
       },
       "sft": {
-        "successes": 102,
-        "valid": 270,
-        "scheduled": 300,
-        "valid_only": 0.37777777777777777
+        "label": "SFT",
+        "overall": 30.7
       },
       "dpo": {
-        "successes": 104,
-        "valid": 254,
-        "scheduled": 300,
-        "valid_only": 0.4094488188976378
+        "label": "DPO",
+        "overall": 36.0
+      },
+      "rpo": {
+        "label": "RPO",
+        "overall": 39.3
       }
     }
   },
