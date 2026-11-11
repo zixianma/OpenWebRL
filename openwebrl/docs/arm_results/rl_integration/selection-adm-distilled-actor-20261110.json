@@ -1,0 +1,42 @@
+{
+  "schema": "user-provided-adm-distilled-actor-summary-v1",
+  "source": "Aggregate values supplied by the user in this figure-editing session on 2026-11-10.",
+  "system_parameters": 4440000000,
+  "parameter_note": "Assumes the distilled 4B actor has the same 4.44B parameters as the SFT 4B actor and no inference-time selector.",
+  "comparability_note": "Evaluation date, run count, exact valid counts, judge and cost-population accounting were not supplied; do not infer matching protocols or uncertainty intervals.",
+  "reported_average": {
+    "pflop_per_episode": 0.27,
+    "model_seconds_per_episode": 41.1,
+    "overall": 45.1,
+    "valid_only": 49.9
+  },
+  "benchmarks": {
+    "online_mind2web": {
+      "tasks": 300,
+      "pflop_per_episode": 0.284,
+      "model_seconds_per_episode": 43.3,
+      "steps_per_episode": 14.02,
+      "pflop_per_step": 0.0202,
+      "overall": 39.3,
+      "valid_only": 45.0
+    },
+    "webvoyager": {
+      "tasks": 595,
+      "pflop_per_episode": 0.205,
+      "model_seconds_per_episode": 29.4,
+      "steps_per_episode": 10.55,
+      "pflop_per_step": 0.0195,
+      "overall": 46.1,
+      "valid_only": 52.3
+    },
+    "deepshop": {
+      "tasks": 150,
+      "pflop_per_episode": 0.321,
+      "model_seconds_per_episode": 50.7,
+      "steps_per_episode": 14.64,
+      "pflop_per_step": 0.0219,
+      "overall": 50.0,
+      "valid_only": 52.4
+    }
+  }
+}

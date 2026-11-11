@@ -3,7 +3,7 @@ LoRAs, November 4–5, down triangles): valid-only success (successes / valid ep
 selector parameters, PFLOP per episode and model time per episode. Renders five figures:
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
-  selection-recipe3-vs-cost[-per-benchmark]-sft-actors-20261104.*  the same without the RL checkpoints (SFT actors only)
+  selection-recipe3-vs-cost[-per-benchmark]-sft-actors-20261104.*  the SFT actors plus the user-provided ADM-distilled actor (4.44B parameters assumed)
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
@@ -29,6 +29,7 @@ from matplotlib.ticker import MaxNLocator
 HERE = Path(__file__).parent
 rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text())["rows"]
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
+DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
@@ -49,7 +50,9 @@ cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seco
 
 
 def point(key, bench):
-    rs = [next(r for r in rows if r["key"] == key and r["benchmark"] == b) for b in (BENCH if bench == "mean" else (bench,))]
+    rs = ([DISTILLED["benchmarks"][b] for b in (BENCH if bench == "mean" else (bench,))]
+          if key == "adm-distilled" else
+          [next(r for r in rows if r["key"] == key and r["benchmark"] == b) for b in (BENCH if bench == "mean" else (bench,))])
     return dict(success=sum(r["valid_only"] for r in rs) / len(rs), pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
                 seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
 
@@ -107,7 +110,7 @@ def render(benches, name, height, methods=methods):
                 marker, hollow = ("D" if key.startswith("lora-") else "o"), False
                 label = label.replace("ADM-22M", "ADM-23M")
             styled.append((key, label, params, color, marker, hollow))
-        methods = styled
+        methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     compact_sft_mean = name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
