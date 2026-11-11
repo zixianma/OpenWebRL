@@ -81,7 +81,7 @@ def layout_y(x, y):
     """Use space below the column heading to separate the application rows."""
     if x >= 1206 and y >= 100:
         return float(np.interp(y, [100, 148, 376, 412, 632, 668, 955],
-                               [70, 113, 302, 352, 541, 575, 764]))
+                               [70, 113, 302, 353.3, 542.3, 575, 764]))
     return y
 
 
@@ -263,7 +263,7 @@ inference_points = [(inference_pflops(key), inference_mean(key), label, color, m
                     for key, label, color, marker, offset, align in inference_methods]
 inference_point_keys = {(point[0], point[1]): method[0]
                         for method, point in zip(inference_methods, inference_points)}
-parameter_chart = chart_axes(1585, 218, 180, 95)
+parameter_chart = chart_axes(1585, 188, 180, 125)
 parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
 # Frontier of the four displayed Figure 7 systems after omitting Luna variants.
 inference_frontier = []
