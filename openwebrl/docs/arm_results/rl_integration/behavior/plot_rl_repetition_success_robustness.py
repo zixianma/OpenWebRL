@@ -53,9 +53,9 @@ def render():
                        yerr=np.vstack((values - ci[:, 0], ci[:, 1] - values)),
                        color=color, marker="o", markersize=4, linewidth=1.2,
                        capsize=2, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
-    left_title = left.set_title("(a) Success (K=3)", loc="left", pad=7)
-    left.set_xlabel("Repetition (%)", labelpad=3)
-    left.set_ylabel("Valid-only success (%)", labelpad=3)
+    left_title = left.set_title("(a) Iter 90’s OM2W Success", loc="left", pad=7)
+    left.set_xlabel("Repetition (K=3)", labelpad=3)
+    left.set_ylabel("Success %", labelpad=3)
     left.set_xlim(13, 47)
     left.set_xticks([20, 30, 40])
     left.set_ylim(35, 60)
