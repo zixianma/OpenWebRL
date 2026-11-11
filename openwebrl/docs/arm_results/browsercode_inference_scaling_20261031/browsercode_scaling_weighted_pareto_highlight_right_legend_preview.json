@@ -710,7 +710,8 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
-    "selection": "Saturated purple action decision scaling; neutral single-call controls; slightly lighter purple for smaller candidate sets",
+    "selection": "Saturated purple action decision scaling; cool-gray single-call controls; slightly lighter purple for smaller candidate sets",
+    "single_call_color": "#78838C",
     "selection_color": "#8246E5",
     "selection_size_pt2": 42,
     "focus_size_pt2": 49,
@@ -738,10 +739,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "da5a8915cae146f5127ffc22e1f72fb261fc29f5aa9283298c5ee64d4b11ce6a",
+  "renderer_sha256": "705500975ccd506051d7faffae6630eb24fc1766bc3371fbf6f33acefeab5ac5",
   "output_sha256": {
-    "png": "fd93276646b8851af16c2d3b216a0ba67d9faa8a3be6600fb55e580e7725f575",
-    "pdf": "82321473d6785cf78bc9d03c318195e8e08ad9261a1179aa5c9386031f6ed110",
-    "svg": "050fb7762a686741c9eee35c4f6bd30c5fa443589b699d0bc3956b2438095ffd"
+    "png": "8d3c3a9d42e600bd314242afdb2b105a689fb8df33169fe7357df569a359cefe",
+    "pdf": "fa028a35c2a98d4fe148e5c29f437ebf0db5773e6226ec0a41cebd15b9fbd127",
+    "svg": "b83822458dad95fea48b2905aa910f6bef28760438e614c1ac61005e591d2573"
   }
 }

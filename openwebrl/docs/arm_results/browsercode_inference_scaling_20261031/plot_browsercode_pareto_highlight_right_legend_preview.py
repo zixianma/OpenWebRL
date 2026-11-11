@@ -31,6 +31,7 @@ spec = importlib.util.spec_from_file_location("original_highlight", SOURCE)
 ORIGINAL = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ORIGINAL)
 STEM = "browsercode_scaling_weighted_pareto_highlight_right_legend_preview"
+SINGLE_GRAY = "#78838C"
 SELECTION_PURPLE = "#8246E5"
 SELECTION_SIZE = 42
 FOCUS_SIZE = 49
@@ -140,10 +141,18 @@ def build():
         rgb = matplotlib.colors.to_rgb(SELECTION_PURPLE)
         color = matplotlib.colors.to_hex([v * (1 - fade) + fade for v in rgb])
         return label, marker, color, filled
+    def gray_style(method, style):
+        label, marker, color, filled = style
+        color = "#A0AAB1" if method == "luna_single_high_6144" else "#626E77" if "xhigh" in method or method in ORIGINAL.SOL else SINGLE_GRAY
+        return label, marker, color, filled
+    ORIGINAL.SOL = {method: gray_style(method, style) for method, style in ORIGINAL.SOL.items()}
+    ORIGINAL.BASE.SOL60_STYLE = gray_style(ORIGINAL.BASE.SOL60_METHOD, ORIGINAL.BASE.SOL60_STYLE)
     for styles in (ORIGINAL.BASE.SCALING.STYLES, ORIGINAL.BASE.AVERAGE.SCALING.STYLES):
         for method in list(styles):
             if method.startswith("parallel"):
                 styles[method] = purple_style(method, styles[method])
+            elif method not in ORIGINAL.CACHED:
+                styles[method] = gray_style(method, styles[method])
     ORIGINAL.CACHED = {method: purple_style(method, style)
                        for method, style in ORIGINAL.CACHED.items()}
     fig, frontier, rows = ORIGINAL.build()
@@ -184,8 +193,8 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
-                              selection="Saturated purple action decision scaling; neutral single-call controls; slightly lighter purple for smaller candidate sets",
-                              selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
+                              selection="Saturated purple action decision scaling; cool-gray single-call controls; slightly lighter purple for smaller candidate sets",
+                              single_call_color=SINGLE_GRAY, selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
                               cached="Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
