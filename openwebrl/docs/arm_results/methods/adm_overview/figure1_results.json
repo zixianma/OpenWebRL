@@ -67,8 +67,8 @@
     },
     "display": {
       "first_iteration": 20,
-      "last_iteration": 90,
-      "smoothing_population": "Only evaluations in the displayed 20\u201390 interval; no pre-20 warmup"
+      "last_iteration": 60,
+      "smoothing_population": "Only evaluations in the displayed 20--60 interval; no pre-20 warmup"
     },
     "methods": [
       {
@@ -112,30 +112,6 @@
             "valid": 230,
             "planned": 300,
             "percent": 45.65217391304348,
-            "source": "rl_results/baseline_vs_arm_full300.json"
-          },
-          {
-            "iteration": 70,
-            "successes": 103,
-            "valid": 229,
-            "planned": 300,
-            "percent": 44.97816593886463,
-            "source": "rl_results/baseline_vs_arm_full300.json"
-          },
-          {
-            "iteration": 80,
-            "successes": 114,
-            "valid": 229,
-            "planned": 300,
-            "percent": 49.78165938864629,
-            "source": "rl_results/baseline_vs_arm_full300.json"
-          },
-          {
-            "iteration": 90,
-            "successes": 101,
-            "valid": 222,
-            "planned": 300,
-            "percent": 45.4954954954955,
             "source": "rl_results/baseline_vs_arm_full300.json"
           }
         ],
@@ -191,39 +167,6 @@
               50,
               60
             ]
-          },
-          {
-            "iteration": 70,
-            "percent": 45.16594516594517,
-            "successes": 313,
-            "valid": 693,
-            "window_iterations": [
-              50,
-              60,
-              70
-            ]
-          },
-          {
-            "iteration": 80,
-            "percent": 46.80232558139535,
-            "successes": 322,
-            "valid": 688,
-            "window_iterations": [
-              60,
-              70,
-              80
-            ]
-          },
-          {
-            "iteration": 90,
-            "percent": 46.76470588235294,
-            "successes": 318,
-            "valid": 680,
-            "window_iterations": [
-              70,
-              80,
-              90
-            ]
           }
         ]
       },
@@ -269,30 +212,6 @@
             "planned": 300,
             "percent": 47.755102040816325,
             "source": "arm_results/rl_integration/outcome56-iteration60-audit.json"
-          },
-          {
-            "iteration": 70,
-            "successes": 112,
-            "valid": 243,
-            "planned": 300,
-            "percent": 46.09053497942387,
-            "source": "arm_results/rl_integration/outcome56-iteration70-audit.json"
-          },
-          {
-            "iteration": 80,
-            "successes": 124,
-            "valid": 248,
-            "planned": 300,
-            "percent": 50.0,
-            "source": "arm_results/rl_integration/outcome56-iteration80-audit.json"
-          },
-          {
-            "iteration": 90,
-            "successes": 107,
-            "valid": 237,
-            "planned": 300,
-            "percent": 45.14767932489451,
-            "source": "arm_results/rl_integration/outcome56-iteration90-audit.json"
           }
         ],
         "smoothed": [
@@ -347,39 +266,6 @@
               50,
               60
             ]
-          },
-          {
-            "iteration": 70,
-            "percent": 45.529573590096284,
-            "successes": 331,
-            "valid": 727,
-            "window_iterations": [
-              50,
-              60,
-              70
-            ]
-          },
-          {
-            "iteration": 80,
-            "percent": 47.96195652173913,
-            "successes": 353,
-            "valid": 736,
-            "window_iterations": [
-              60,
-              70,
-              80
-            ]
-          },
-          {
-            "iteration": 90,
-            "percent": 47.11538461538461,
-            "successes": 343,
-            "valid": 728,
-            "window_iterations": [
-              70,
-              80,
-              90
-            ]
           }
         ]
       },
@@ -425,30 +311,6 @@
             "planned": 300,
             "percent": 49.12280701754386,
             "source": "arm_results/rl_integration/gate-b-iteration60-audit.json"
-          },
-          {
-            "iteration": 70,
-            "successes": 112,
-            "valid": 229,
-            "planned": 300,
-            "percent": 48.90829694323144,
-            "source": "arm_results/rl_integration/gate-b-iteration70-audit.json"
-          },
-          {
-            "iteration": 80,
-            "successes": 107,
-            "valid": 226,
-            "planned": 300,
-            "percent": 47.34513274336283,
-            "source": "arm_results/rl_integration/gate-b-iteration80-audit.json"
-          },
-          {
-            "iteration": 90,
-            "successes": 129,
-            "valid": 234,
-            "planned": 300,
-            "percent": 55.12820512820513,
-            "source": "arm_results/rl_integration/gate-b-iteration90-audit.json"
           }
         ],
         "smoothed": [
@@ -502,39 +364,6 @@
               40,
               50,
               60
-            ]
-          },
-          {
-            "iteration": 70,
-            "percent": 48.91146589259797,
-            "successes": 337,
-            "valid": 689,
-            "window_iterations": [
-              50,
-              60,
-              70
-            ]
-          },
-          {
-            "iteration": 80,
-            "percent": 48.46266471449488,
-            "successes": 331,
-            "valid": 683,
-            "window_iterations": [
-              60,
-              70,
-              80
-            ]
-          },
-          {
-            "iteration": 90,
-            "percent": 50.50798258345428,
-            "successes": 348,
-            "valid": 689,
-            "window_iterations": [
-              70,
-              80,
-              90
             ]
           }
         ]

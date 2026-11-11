@@ -10,7 +10,7 @@ ARM_SELECTION_HEAD.md: pre-action selection and teacher supervision;
 ARM_SUMMARY.md: inference, offline SFT, and action-guided online RL.
 Insets read the published Recipe 3 and RL validation aggregates.
 The offline inset uses the current paper Table 7 overall-success snapshot. RL uses both outcome controls and the published pooled
-trailing-three-evaluation smoother over iterations 20--90. Source hashes and
+trailing-three-evaluation smoother over iterations 20--60. Source hashes and
 coordinates are exported in figure1_results.json. No new evaluations are run.
 Source screenshots and their provenance are in web_states/. The selected
 teacher response and model scores are schematic, not case-study results.
@@ -319,8 +319,9 @@ text(1506, 730, r"$\pi_\theta$", size=7.6, color=GRAY)
 arrow((1400, 752), (1400, 790), ACTION_EDGE, scale=4)
 box(1256, 790, 282, 85, PALE_PURPLE, PURPLE, radius=6)
 text(1397, 833, "ADM reward", size=6.6, color=PURPLE)
-# Match the published validation panel: iterations 20--90, pooled trailing-three
+# Show iterations 20--60 with the published pooled trailing-three smoother.
 # success/valid counts, with both outcome-only controls and raw checkpoint dots.
+RL_START, RL_STOP = 20, 60
 chart = chart_axes(1606, 730, 138, 175)
 chart.set_title("OM2W success (%)", fontsize=5.6, color=MUTED, pad=4)
 rl_styles = [("outcome48", C["BASELINE_LIGHT"], "48", "--"),
@@ -328,18 +329,20 @@ rl_styles = [("outcome48", C["BASELINE_LIGHT"], "48", "--"),
              ("gate-b", PURPLE, "+ ADM", "-")]
 for key, color, label, linestyle in rl_styles:
     method = next(m for m in SOURCE["online"]["methods"] if m["id"] == key)
-    rows = [r for r in method["points"] if 20 <= r["iteration"] <= 90]
+    rows = [r for r in method["points"] if RL_START <= r["iteration"] <= RL_STOP]
     x = np.array([r["iteration"] for r in rows], dtype=float)
     raw = np.array([100*r["successes"]/r["valid"] for r in rows])
     smoothed = []
     for i in range(len(rows)):
         window = rows[max(0, i - 2):i + 1]
         smoothed.append(100 * sum(r["successes"] for r in window) / sum(r["valid"] for r in window))
-    assert np.allclose(smoothed, [r["percent"] for r in method["smoothed"]])
+    assert np.allclose(smoothed, [r["percent"] for r in method["smoothed"]
+                                  if RL_START <= r["iteration"] <= RL_STOP])
     chart.scatter(x, raw, color=color, s=5, alpha=.25, edgecolors="none")
     chart.plot(x, smoothed, color=color, lw=1.2, linestyle=linestyle,
                marker="o", ms=1.9, markeredgewidth=0)
-chart.set(xlim=(18, 92), ylim=(35, 57), xticks=[20, 90], yticks=[40, 50])
+chart.set(xlim=(RL_START - 2, RL_STOP + 2), ylim=(35, 57),
+          xticks=[RL_START, RL_STOP], yticks=[40, 50])
 chart.set_xlabel("Iteration", fontsize=5.6, labelpad=1.5, color=MUTED)
 chart.tick_params(axis="both", labelsize=5.8, length=1.8, width=0.45, pad=1.8, colors=MUTED)
 chart.spines[["top", "right"]].set_visible(False)
@@ -381,9 +384,12 @@ result = {
                 "rates": {key: SOURCE["offline"]["rates"][key] for key in offline_keys}},
     "online": {"protocol": SOURCE["online"]["protocol"],
                "smoothing": SOURCE["online"]["smoothing"],
-               "display": SOURCE["online"]["display"],
+               "display": {"first_iteration": RL_START, "last_iteration": RL_STOP,
+                           "smoothing_population": "Only evaluations in the displayed 20--60 interval; no pre-20 warmup"},
                "methods": [{"id": m["id"], "points": [p for p in m["points"]
-                            if 20 <= p["iteration"] <= 90], "smoothed": m["smoothed"]}
+                            if RL_START <= p["iteration"] <= RL_STOP],
+                            "smoothed": [p for p in m["smoothed"]
+                                         if RL_START <= p["iteration"] <= RL_STOP]}
                            for m in SOURCE["online"]["methods"]]},
 }
 (ROOT / "figure1_results.json").write_text(json.dumps(result, indent=2) + "\n")
