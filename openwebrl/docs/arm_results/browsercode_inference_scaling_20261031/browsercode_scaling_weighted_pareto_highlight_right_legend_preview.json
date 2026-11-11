@@ -710,17 +710,20 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
-    "selection": "Salmon action decision scaling; neutral single-call controls; lighter salmon for smaller candidate sets",
-    "cached": "Light/base salmon circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+    "selection": "Saturated purple action decision scaling; neutral single-call controls; slightly lighter purple for smaller candidate sets",
+    "selection_color": "#8246E5",
+    "selection_size_pt2": 42,
+    "focus_size_pt2": 49,
+    "cached": "Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
       "marker": "o",
-      "size_pt2": 36,
+      "size_pt2": 46,
       "hatch": "////////",
       "hatch_color": "white",
       "hatch_linewidth": 0.5,
       "linewidth": 0
     },
-    "frontier": "Original gray solid rings and dashed links, unchanged",
+    "frontier": "Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
     "typography": "Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"
   },
   "source_sha256": {
@@ -735,10 +738,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "73c97dc372ef51c56a39fe7e328262c0ff4f219b6067f746c7ed7d22b9acf47d",
+  "renderer_sha256": "da5a8915cae146f5127ffc22e1f72fb261fc29f5aa9283298c5ee64d4b11ce6a",
   "output_sha256": {
-    "png": "7c5ff199878757117b493de6091c8136dc6af07741e80b7230419fa023b1b865",
-    "pdf": "d39fadd0807d785d73f7204f21312cb89e49bc77418b929fdea176625cd47177",
-    "svg": "a34865452f52db693ee8eea08932532dd9a3cff2c6991aa8b0ab759dce26ab7d"
+    "png": "fd93276646b8851af16c2d3b216a0ba67d9faa8a3be6600fb55e580e7725f575",
+    "pdf": "82321473d6785cf78bc9d03c318195e8e08ad9261a1179aa5c9386031f6ed110",
+    "svg": "050fb7762a686741c9eee35c4f6bd30c5fa443589b699d0bc3956b2438095ffd"
   }
 }

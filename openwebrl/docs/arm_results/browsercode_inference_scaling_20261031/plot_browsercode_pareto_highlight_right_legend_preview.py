@@ -2,7 +2,7 @@
 """Separate sixteen-setting Pareto preview with right legends and shaded caches.
 
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
-ranges and observed frontiers. Action decision scaling uses salmon accents. Cached markers use shaded circles. No experiment calls.
+ranges and observed frontiers. Action decision scaling uses saturated purple accents and larger markers. Cached markers use shaded circles. No experiment calls.
 """
 # Shared semantic palette; source measurements and geometry are unchanged.
 from pathlib import Path as _PalettePath
@@ -31,7 +31,10 @@ spec = importlib.util.spec_from_file_location("original_highlight", SOURCE)
 ORIGINAL = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ORIGINAL)
 STEM = "browsercode_scaling_weighted_pareto_highlight_right_legend_preview"
-CACHE_SIZE = 36
+SELECTION_PURPLE = "#8246E5"
+SELECTION_SIZE = 42
+FOCUS_SIZE = 49
+CACHE_SIZE = 46
 CACHE_HATCH = "////////"
 
 
@@ -65,6 +68,9 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         for line, label in zip(old.get_lines(), labels):
             handles.append(cache_handle(cached_labels[label]) if label in cached_labels
                            else copy.copy(line))
+            if j == 1 and label not in cached_labels:
+                handles[-1].set_markersize(6.0)
+                handles[-1].set_markeredgewidth(1.2)
         if j == 0:
             index = labels.index("Sol high · 120 steps")
             handle, label = handles.pop(index), labels.pop(index)
@@ -128,15 +134,17 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
 
 def build():
     # Recolor this preview in memory; preserve sibling figures and all data.
-    def salmon_style(method, style):
+    def purple_style(method, style):
         label, marker, color, filled = style
-        fade = .40 if "parallel2" in method else .20 if "parallel3" in method or "n3_cached" in method else 0
-        return label, marker, palette_tint("LOOKAHEAD_TEACHER", fade), filled
+        fade = .18 if "parallel2" in method else .08 if "parallel3" in method or "n3_cached" in method else 0
+        rgb = matplotlib.colors.to_rgb(SELECTION_PURPLE)
+        color = matplotlib.colors.to_hex([v * (1 - fade) + fade for v in rgb])
+        return label, marker, color, filled
     for styles in (ORIGINAL.BASE.SCALING.STYLES, ORIGINAL.BASE.AVERAGE.SCALING.STYLES):
         for method in list(styles):
             if method.startswith("parallel"):
-                styles[method] = salmon_style(method, styles[method])
-    ORIGINAL.CACHED = {method: salmon_style(method, style)
+                styles[method] = purple_style(method, styles[method])
+    ORIGINAL.CACHED = {method: purple_style(method, style)
                        for method, style in ORIGINAL.CACHED.items()}
     fig, frontier, rows = ORIGINAL.build()
     matplotlib.rcParams["hatch.linewidth"] = .5
@@ -145,12 +153,22 @@ def build():
     circle_path = circle.get_path().transformed(circle.get_transform())
     for ax in fig.axes:
         for row, point in zip(rows, ax.collections[:len(rows)]):
+            if row["method"].startswith("parallel") or row["method"] in ORIGINAL.CACHED:
+                point.set_sizes([FOCUS_SIZE if row["method"] == ORIGINAL.FOCUS else SELECTION_SIZE])
+                point.set_linewidths([1.2])
+                point.set_zorder(5)
             if row["method"] in ORIGINAL.CACHED:
                 point.set_paths([circle_path])
                 point.set_sizes([CACHE_SIZE])
                 point.set_edgecolors("white")
                 point.set_linewidths([0])
                 point.set_hatch(CACHE_HATCH)
+        # Keep the observed-frontier rings visible around the enlarged points.
+        emphasized = [point.get_offsets()[0] for row, point in zip(rows, ax.collections[:len(rows)])
+                      if row["method"].startswith("parallel") or row["method"] in ORIGINAL.CACHED]
+        rings = ax.collections[len(rows)]
+        rings.set_sizes([90 if any(all(abs(float(a) - float(b)) < 1e-10 for a, b in zip(xy, p))
+                                   for p in emphasized) else 57 for xy in rings.get_offsets()])
     right_layout(fig)
     return fig, frontier, rows
 
@@ -166,10 +184,11 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
-                              selection="Salmon action decision scaling; neutral single-call controls; lighter salmon for smaller candidate sets",
-                              cached="Light/base salmon circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+                              selection="Saturated purple action decision scaling; neutral single-call controls; slightly lighter purple for smaller candidate sets",
+                              selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
+                              cached="Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
-                              frontier="Original gray solid rings and dashed links, unchanged",
+                              frontier="Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),
                   source_sha256={**original_report["source_sha256"],
                                  SOURCE.name: ORIGINAL.BASE.sha(SOURCE),
