@@ -32,6 +32,8 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-recipe3-vs-cost-sft-actors-overall-20261104": "SFT actors and distillation: mean overall success",
+    "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104": "SFT actors and distillation: overall success by benchmark",
     "selection-recipe3-data-ablations-rerun-per-benchmark-20261109": "Training data ablations: matched-window rerun by benchmark",
     "selection-recipe3-data-ablations-rerun-20261109": "Training data ablations: matched-window rerun",
     "figure1": "Action Decision Models: overview",

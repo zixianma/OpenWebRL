@@ -62,6 +62,18 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.svg)
 
+### SFT actors and distillation: mean overall success
+
+![SFT actors and distillation: mean overall success](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-20261104.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-20261104.svg)
+
+### SFT actors and distillation: overall success by benchmark
+
+![SFT actors and distillation: overall success by benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg)
+
 ### SFT actors: per benchmark
 
 ![SFT actors: per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)

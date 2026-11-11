@@ -49,11 +49,11 @@ NAMES = {"mean": "3-benchmark mean", "online_mind2web": "OM2W", "webvoyager": "W
 cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seconds", "Model time / episode (s)")]
 
 
-def point(key, bench):
+def point(key, bench, success_metric="valid_only"):
     rs = ([DISTILLED["benchmarks"][b] for b in (BENCH if bench == "mean" else (bench,))]
           if key == "adm-distilled" else
           [next(r for r in rows if r["key"] == key and r["benchmark"] == b) for b in (BENCH if bench == "mean" else (bench,))])
-    return dict(success=sum(r["valid_only"] for r in rs) / len(rs), pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
+    return dict(success=sum(r[success_metric] for r in rs) / len(rs), pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
                 seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
 
 
@@ -63,10 +63,10 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k, methods, *, circle_encoding=False):
+def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only"):
     pts = []
     for key, label, p, color, marker, hollow in methods:
-        r = point(key, bench)
+        r = point(key, bench, success_metric)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
         size = 44 if circle_encoding and "lora" in key else 24
@@ -100,7 +100,10 @@ def legend(fig, axes, *, sft_only):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only"):
+    assert success_metric in ("valid_only", "overall")
+    metric_label = "Overall" if success_metric == "overall" else "Valid-only"
+    canonical_name = name.replace("-overall-", "-")
     circle_encoding = "sft-actors" in name
     if circle_encoding:
         styled = []
@@ -111,7 +114,7 @@ def render(benches, name, height, methods=methods):
                 label = label.replace("ADM-22M", "ADM-23M")
             styled.append((key, label, params, color, marker, hollow))
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
-    compact_sft_mean = name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
+    compact_sft_mean = canonical_name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
     plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
@@ -121,15 +124,15 @@ def render(benches, name, height, methods=methods):
     fig, axes = plt.subplots(len(benches), 3, figsize=(7, height), sharey="row", squeeze=False)
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
-            panel(ax, bench, k, methods, circle_encoding=circle_encoding)
+            panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
             if i == 0:
                 title = {"params": "System parameters (B)", "seconds": "Model latency (s)"}.get(k, xlabel) if compact_sft_mean else xlabel
                 ax.set_title(title, fontsize=7.5, pad=4)
-        ax_row[0].set_ylabel("Valid-only\nsuccess (%)" if compact_sft_mean else
-                             (f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)"))
+        ax_row[0].set_ylabel(f"{metric_label}\nsuccess (%)" if compact_sft_mean else
+                             (f"{NAMES[bench]}\n{metric_label.lower()} (%)" if len(benches) > 1 else f"{NAMES[bench]}\n{metric_label.lower()} success (%)"))
     bottom_legend = legend(fig, axes, sft_only=all(not m[0].startswith("rl") for m in methods))
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
@@ -161,7 +164,7 @@ def render(benches, name, height, methods=methods):
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
-    return {bench: {k: frontier([(p / 1e9 if k == "params" else point(key, bench)[k], point(key, bench)["success"])
+    return {bench: {k: frontier([(p / 1e9 if k == "params" else point(key, bench, success_metric)[k], point(key, bench, success_metric)["success"])
                                  for key, _, p, *_ in methods]) for k, _ in cols} for bench in benches}
 
 
@@ -171,5 +174,7 @@ if __name__ == "__main__":
     sft = [m for m in methods if not m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.60, sft))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
+    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.60, sft, success_metric="overall")
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 4.35, sft, success_metric="overall")
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))
