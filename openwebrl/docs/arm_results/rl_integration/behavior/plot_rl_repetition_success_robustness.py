@@ -13,6 +13,7 @@ _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().par
                                 if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _paper_style
 from paper_plot_palette import COLORS as C
+from rl_plot_layout import make_axes, style_axis, add_legend
 
 from matplotlib.lines import Line2D
 import numpy as np
@@ -34,8 +35,7 @@ def render():
                          "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
                          "svg.hashsalt": "rl-repetition-success-robustness"})
-    fig, (left, right) = plt.subplots(1, 2, figsize=(3.35, 2.25),
-                                      gridspec_kw={"width_ratios": [0.78, 1]})
+    fig, (left, right) = make_axes()
     for key, _, _, color, _ in RUNS:
         row = success["methods"][key]
         x, y = row["repetition_incidence"], row["valid_success"]
@@ -52,35 +52,28 @@ def render():
         right.errorbar(THRESHOLDS, values,
                        yerr=np.vstack((values - ci[:, 0], ci[:, 1] - values)),
                        color=color, marker="o", markersize=4, linewidth=1.2,
+                       linestyle=(0, (3, 2)) if key == "outcome48" else "-",
                        capsize=2, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
-    left_title = left.set_title("(a) Iter 90 on OM2W", loc="left", pad=7)
+    left_title = left.set_title("a) Iter 90 on OM2W", loc="left", pad=7)
     left.set_xlabel("Repetition % (K=3)", labelpad=3)
     left.set_ylabel("Success %", labelpad=3)
     left.set_xlim(13, 47)
     left.set_xticks([20, 30, 40])
     left.set_ylim(35, 60)
     left.set_yticks([40, 45, 50, 55])
-    right_title = right.set_title("(b) Robustness", loc="left", pad=7)
+    right_title = right.set_title("b) Robustness", loc="left", pad=7)
     right.set_xlabel("Repetition threshold, K", labelpad=3)
     right.set_ylabel("Repetition (%)", labelpad=3)
     right.set_xlim(1.82, 5.18)
     right.set_xticks(THRESHOLDS)
     right.set_ylim(0, 70)
     right.set_yticks([0, 20, 40, 60])
-    for ax in (left, right):
-        ax.grid(False)
-        for side in ("top", "right"):
-            ax.spines[side].set_visible(False)
-        for side in ("left", "bottom"):
-            ax.spines[side].set_color(C["BASELINE_DARK"])
-            ax.spines[side].set_linewidth(0.7)
-        ax.tick_params(length=2.5, pad=2, color=C["BASELINE_DARK"])
-    handles = [Line2D([], [], color=color, marker="o", linewidth=1.2, markersize=4,
-                      label=label) for _, label, _, color, _ in RUNS]
-    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.54, 0.005),
-                        frameon=False, ncol=1, fontsize=7, handlelength=1.4,
-                        labelspacing=0.35, handletextpad=0.5)
-    fig.subplots_adjust(left=0.15, right=0.98, top=0.86, bottom=0.43, wspace=0.65)
+    style_axis(left, "a) Iter 90 on OM2W")
+    style_axis(right, "b) Robustness")
+    handles = [Line2D([], [], color=color, marker="o", linewidth=1.2, markersize=3.5,
+                      linestyle=(0, (3, 2)) if key == "outcome48" else "-",
+                      label=label) for key, label, _, color, _ in RUNS]
+    legend = add_legend(fig, handles)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for text in fig.findobj(match=matplotlib.text.Text):
@@ -88,7 +81,7 @@ def render():
             box = text.get_window_extent(renderer)
             assert fig.bbox.contains(*box.p0) and fig.bbox.contains(*box.p1), text.get_text()
     legend_box = legend.get_window_extent(renderer)
-    assert all(not legend_box.overlaps(ax.xaxis.label.get_window_extent(renderer)) for ax in (left, right))
+    assert all(not legend_box.overlaps(ax.get_tightbbox(renderer)) for ax in (left, right))
     assert not left_title.get_window_extent(renderer).overlaps(right_title.get_window_extent(renderer))
     fig.savefig(OUTPUT.with_suffix(".png"), dpi=300)
     fig.savefig(OUTPUT.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})

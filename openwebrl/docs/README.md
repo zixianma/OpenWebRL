@@ -65,7 +65,7 @@
 
 [Smoothed RL evaluation curves, iterations 20–90: outcome-only 48/56 groups and Outcome + ADM rewards, with dots on the smoother and faint raw points](RL_EVALUATION.md#rl-smoothed-eval-learning-curves) · [PDF](rl_results/rl_eval_learning_curves.pdf).
 
-[Valid-only success versus repetition and threshold robustness (K = 2–5): compact 3.35-inch-wide iteration-90 paper figure, with vertical 95% task-bootstrap intervals and Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-repetition-incidence-paper) · [Paper PDF](rl_results/rl_repetition_success_robustness.pdf) · [Success counts and paired differences](RL_BEHAVIOR.md#rl-repetition-success-preview). [Earlier failure-category metric and precise definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
+[Valid-only success versus repetition and threshold robustness (K = 2–5): iteration-90 paper figure, with the same 2:1 layout and right-side legend as the RL learning curves, with vertical 95% task-bootstrap intervals and Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-repetition-incidence-paper) · [Paper PDF](rl_results/rl_repetition_success_robustness.pdf) · [Success counts and paired differences](RL_BEHAVIOR.md#rl-repetition-success-preview). [Earlier failure-category metric and precise definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
 
 [Teacher and student ADM: 3.35-inch-wide Pre-exec, Lookahead H = 1/4/6 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
