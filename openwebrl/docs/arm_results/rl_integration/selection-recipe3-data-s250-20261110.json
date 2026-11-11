@@ -1,0 +1,91 @@
+{
+ "conditions": {
+  "arm5-9fadc8dc4655": {
+   "label": "Full data, LoRA (32,974 examples; reference)",
+   "training": "rl-actor-recollect-20261016/p16-k3-20261031/lora/lora (rank 32, lr 1e-4, 2 epochs, batch 16)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 784,
+    "successes": 335,
+    "overall": 0.37222222222222223,
+    "valid_only": 0.4272959183673469
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1610,
+    "successes": 898,
+    "overall": 0.5030812324929972,
+    "valid_only": 0.5577639751552795
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 442,
+    "successes": 222,
+    "overall": 0.49333333333333335,
+    "valid_only": 0.502262443438914
+   },
+   "mean_overall": 0.4562122626828509,
+   "mean_valid_only": 0.4957741123205135
+  },
+  "arm5-d6c492ad4c40": {
+   "label": "250 states, all panels (LoRA)",
+   "training": "recipe3-ablations-20261104/lora/s250 (identical LoRA recipe on the 252-state subset)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 772,
+    "successes": 327,
+    "overall": 0.36333333333333334,
+    "valid_only": 0.42357512953367876,
+    "diff_valid_only_pp": [
+     -0.3720788833668165,
+     -3.7223739055094978,
+     3.016842281398903
+    ]
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1611,
+    "successes": 889,
+    "overall": 0.4980392156862745,
+    "valid_only": 0.5518311607697083,
+    "diff_valid_only_pp": [
+     -0.593281438557125,
+     -2.8886082457837077,
+     1.6865141276423694
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 231,
+    "overall": 0.5133333333333333,
+    "valid_only": 0.5191011235955056,
+    "diff_valid_only_pp": [
+     1.6838680156591623,
+     -2.939716672983259,
+     6.462500541857599
+    ]
+   },
+   "mean_overall": 0.458235294117647,
+   "mean_valid_only": 0.4981691379662976,
+   "diff_mean_overall_pp": [
+    0.20230314347960965,
+    -1.7258014316837822,
+    2.2072829131652667
+   ],
+   "diff_mean_valid_only_pp": [
+    0.2395025645784088,
+    -1.7686212511514279,
+    2.317748257081243
+   ]
+  }
+ },
+ "runs": 3,
+ "reference": "arm5-9fadc8dc4655"
+}

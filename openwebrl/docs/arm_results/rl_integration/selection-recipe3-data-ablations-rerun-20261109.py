@@ -5,8 +5,10 @@ Same axes and encoding as selection-recipe3-data-ablations-compact-20261105.py (
 diamonds = ADM-4B; solid lines = fewer states, dashed lines = fewer sets per state; larger diamond = full data). Solid: November 8-9 rerun, 3 runs per point, all
 conditions in one window. Faded: the November 4-6 batch (subsets November 4-5, full data November 6), joined to the rerun of the
 same LoRA by a thin gray line; only rerun points carry names (faded: points at 2.2K / 8.9K sets = 252 / 1,001 states, points at
-2.1K / 7.4K = 1 / 3.5 sets per state). The 252-state subset was not rerun and appears faded only. Dashed: SFT 4B alone (3 runs, November 6; not
-rerun). Data: selection-recipe3-data-ablations-rerun-20261109-analysis.json and selection-recipe3-data-ablations-20261105.json."""
+2.1K / 7.4K = 1 / 3.5 sets per state). The 252-state subset was rerun on November 10-11 in its own window with a full-data reference
+(45.6% mean overall there vs 46.1% on November 8-9); its solid point is that window's raw value. Dashed: SFT 4B alone (3 runs, November 6;
+not rerun). Data: selection-recipe3-data-ablations-rerun-20261109-analysis.json, selection-recipe3-data-s250-20261110.json and
+selection-recipe3-data-ablations-20261105.json."""
 import json
 import os
 from pathlib import Path
@@ -26,6 +28,9 @@ from matplotlib.ticker import MultipleLocator
 HERE = Path(__file__).parent
 old = json.loads((HERE / "selection-recipe3-data-ablations-20261105.json").read_text())["rates"]
 new = json.loads((HERE / "selection-recipe3-data-ablations-rerun-20261109-analysis.json").read_text())["rates"]
+_s250 = json.loads((HERE / "selection-recipe3-data-s250-20261110.json").read_text())["conditions"]["arm5-d6c492ad4c40"]
+new["s250"] = {"mean_overall": 100 * _s250["mean_overall"], **{b: {"overall": 100 * _s250[b]["overall"]} for b in
+               ("online_mind2web", "webvoyager", "deepshop")}}                # November 10-11 window
 SETS = {"s250": 2234, "s1000": 8875, "pps1": 2112, "pps4": 7417, "full": 18786}
 STATES = {"s250": 252, "s1000": 1001, "pps1": 2112, "pps4": 2112, "full": 2112}
 MARK = {"s250": "o", "s1000": "o", "pps1": "D", "pps4": "D", "full": "s"}
@@ -36,6 +41,8 @@ COL, FADE = C["ADM_4B"], tint("ADM_4B", 0.68)
 
 def name(k):
     r = SETS[k] / STATES[k]
+    if k == "s250":
+        return "0.25K states†"
     return f"{STATES[k] / 1000:.2g}K states" if MARK[k] == "o" else f"{r:.2g} {'set' if r == 1 else 'sets'}/state"
 
 
@@ -48,14 +55,19 @@ def draw(ax, yo, yn, sft, fs):
             ax.plot([SETS[k] for k in ks], [yn[k] for k in ks], color=COL, linestyle="-" if family == "states" else "--", linewidth=1.4, zorder=2)
     for k in SETS:
         ax.scatter(SETS[k], yo[k], s=30, marker="D", color="white", edgecolors=FADE, linewidths=1.0, zorder=2)
-        ax.annotate(f"{yo[k]:.1f}", (SETS[k], yo[k]), textcoords="offset points", xytext=(5, 0), ha="left", va="center",
-                    fontsize=fs - 1, color=tint("MUTED", 0.3))
+        ax.annotate(f"{yo[k]:.1f}", (SETS[k], yo[k]), textcoords="offset points", xytext=(5, 0), ha="left",
+                    va="center", fontsize=fs - 1, color=tint("MUTED", 0.3))
         if k in yn:
             ax.plot([SETS[k]] * 2, [yo[k], yn[k]], color=C["BORDER"], linewidth=0.8, zorder=1)
             ax.scatter(SETS[k], yn[k], s=40 if k == "full" else 32, marker="D", color=COL, zorder=4)
             up = yn[k] >= yo[k]
             lab = f"{yn[k]:.1f}" if k == "full" else f"{name(k)}\n{yn[k]:.1f}" if up else f"{yn[k]:.1f}\n{name(k)}"
-            if MARK[k] == "o":                                       # right of the point: clear of the diamond at 7.4K sets
+            if k in ("pps1", "s250"):                                 # ~2K-set pair (6% apart): both label on the left, higher above, lower below
+                hi = yn[k] >= yn["s250" if k == "pps1" else "pps1"]
+                ax.annotate(f"{name(k)}\n{yn[k]:.1f}" if hi else f"{yn[k]:.1f}\n{name(k)}", (SETS[k], yn[k]), textcoords="offset points",
+                            xytext=(-8, 6 if hi else -6), ha="right",
+                            va="bottom" if hi else "top", fontsize=fs, color=COL, linespacing=1.0)
+            elif MARK[k] == "o":                                     # right of the point: clear of the diamond at 7.4K sets
                 ax.annotate(f"{name(k)}\n{yn[k]:.1f}" if up else f"{yn[k]:.1f}\n{name(k)}", (SETS[k], yn[k]), textcoords="offset points",
                             xytext=(7, 3 if up else -10), ha="left", va="bottom" if up else "top", fontsize=fs, color=COL, linespacing=1.0)
             else:
@@ -64,7 +76,7 @@ def draw(ax, yo, yn, sft, fs):
     ax.axhline(sft, color=C["BASELINE_LIGHT"], linestyle="--", linewidth=0.9, zorder=0)
     ax.text(29000, sft - 0.3, f"SFT 4B alone (Nov 6) {sft:.1f}", fontsize=fs, color=C["MUTED"], va="top", ha="right")
     ax.set_xscale("log"); ax.set_xticks([2000, 4000, 8000, 16000]); ax.set_xticklabels(["2K", "4K", "8K", "16K"]); ax.minorticks_off()
-    ax.set_xlim(1600, 30000); ax.set_ylim(min(vals) - 4.2, max(vals) + 3.6)
+    ax.set_xlim(1050, 30000); ax.set_ylim(min(vals) - 4.2, max(vals) + 3.6)
     ax.set_xlabel("5-action sets in training data")
     ax.yaxis.set_major_locator(MultipleLocator(2 if max(vals) - min(vals) < 12 else 4))
     ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
@@ -76,7 +88,7 @@ def legend(fig, ncol):
     h = [Line2D([], [], color=COL, marker="D", markersize=5, linewidth=1.4, label="Fewer states (8.9 sets/state)"),
          Line2D([], [], color=COL, marker="D", markersize=5, linewidth=1.4, linestyle="--", label="Fewer sets per state (2.1K states)"),
          Line2D([], [], color=COL, marker="D", linestyle="none", markersize=5, label="Full data"),
-         Line2D([], [], color=COL, marker="D", linestyle="none", markersize=5, label="Nov 8–9 rerun, same window"),
+         Line2D([], [], color=COL, marker="D", linestyle="none", markersize=5, label="Rerun, Nov 8–9 († Nov 10–11)"),
          Line2D([], [], color=FADE, marker="D", markerfacecolor="white", linestyle="none", markersize=5, label="Nov 4–6 batch")]
     fig.legend(handles=h, loc="lower center", ncol=ncol, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.02), handletextpad=0.4, columnspacing=1.2, handlelength=2.8)
 
