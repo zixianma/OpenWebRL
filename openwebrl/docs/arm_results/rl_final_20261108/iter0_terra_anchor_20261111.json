@@ -1,0 +1,92 @@
+{
+ "protocol": "same as iter90_terra_sameday_20261111.json; job 451475 (Nov 11), arms interleaved by repeat; SFT loaded from HF weights (OpenWebRL-4B-SFT@15e777db)",
+ "rows": {
+  "sft0": {
+   "successes": [
+    86,
+    94,
+    86
+   ],
+   "valid": [
+    271,
+    270,
+    270
+   ],
+   "judged": 555,
+   "ungraded": 0,
+   "overall_mean": 29.56,
+   "valid_only_mean": 32.8
+  },
+  "outcome48": {
+   "successes": [
+    99,
+    104,
+    100
+   ],
+   "valid": [
+    269,
+    274,
+    274
+   ],
+   "judged": 789,
+   "ungraded": 0,
+   "overall_mean": 33.67,
+   "valid_only_mean": 37.09
+  },
+  "gateb": {
+   "successes": [
+    113,
+    123,
+    107
+   ],
+   "valid": [
+    269,
+    269,
+    265
+   ],
+   "judged": 794,
+   "ungraded": 0,
+   "overall_mean": 38.11,
+   "valid_only_mean": 42.7
+  }
+ },
+ "diffs": {
+  "outcome48-sft0": {
+   "diff_pp": 4.11,
+   "ci95": [
+    0.67,
+    7.56
+   ],
+   "p": 0.0242,
+   "tasks": 300
+  },
+  "gateb-sft0": {
+   "diff_pp": 8.56,
+   "ci95": [
+    4.89,
+    12.11
+   ],
+   "p": 0.0,
+   "tasks": 300
+  },
+  "gateb-outcome48": {
+   "diff_pp": 4.44,
+   "ci95": [
+    1.0,
+    8.0
+   ],
+   "p": 0.0198,
+   "tasks": 300
+  }
+ },
+ "turns_mean": {
+  "sft0": 14.59,
+  "outcome48": 9.36,
+  "gateb": 9.59
+ },
+ "judged_per_repeat": {
+  "gateb": 264.7,
+  "outcome48": 263.0,
+  "sft0": 185.0
+ }
+}

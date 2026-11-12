@@ -1957,8 +1957,8 @@ runs trained to at least iteration 60. Detailed history stays in
 paper actor sampling and one shared Terra judge. Every run that keeps mixed groups beats outcome-only 48 by
 3.6–6.2 pp (p ≤ 0.044); 40M+16F, Gate B, 48M+16F and Additive are indistinguishable from each other (36.7–38.3%
 overall). Failures in main batch is the exception: +1.2 pp, not significant, and 4.0 pp below Gate B (p = 0.011).
-Every number is one training run per method. An iteration-0 (SFT) evaluation under the same protocol is running
-to measure the absolute RL gain.
+Against the SFT start model (same protocol, November 11), outcome-only 48 gains +4.1 pp and Gate B +8.6 pp.
+Every number is one training run per method.
 
 ### Experiments
 
@@ -2024,7 +2024,29 @@ episodes as failures; valid-only divides by valid episodes. Rates are means over
   interleaved by repeat. The in-harness judge was disabled; grading cost $58.36 with no actor calls.
 - **One ungraded episode:** in 48M+16F repeat 2 the judge answered `Status: "success"` twice, which the frozen
   parser rejects; it counts as a failure (at most +0.1 pp).
-- **Not established:** training-seed variability, and the absolute gain over the SFT start model (evaluation running).
+- **Not established:** training-seed variability.
+
+<a id="final-rl-iter0-terra-anchor-20261111"></a>
+
+**Gain over the SFT start model (November 11).** Same protocol; one job with the SFT model (iteration 0, HF weights
+15e777db) and same-day anchors for outcome-only 48 and Gate B at iteration 90, three repeats each, interleaved.
+
+| Model | Successes per repeat | Valid per repeat | Judged per repeat | Mean turns | Overall % | Valid-only % |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| SFT, iteration 0 | 86 / 94 / 86 | 271 / 270 / 270 | 185 | 14.6 | 29.56 | 32.80 |
+| Outcome-only 48, iteration 90 | 99 / 104 / 100 | 269 / 274 / 274 | 263 | 9.4 | 33.67 | 37.09 |
+| Gate B, iteration 90 | 113 / 123 / 107 | 269 / 269 / 265 | 265 | 9.6 | 38.11 | 42.70 |
+
+| Paired comparison | Δ overall, pp | Paired 95% CI, pp | p |
+| --- | ---: | --- | ---: |
+| Outcome-only 48 − SFT | +4.11 | [+0.67, +7.56] | 0.024 |
+| Gate B − SFT | +8.56 | [+4.89, +12.11] | < 0.001 |
+| Gate B − outcome-only 48 | +4.44 | [+1.00, +8.00] | 0.020 |
+
+*Judged* = valid episodes that ended on their own and reached the judge; the rest hit the 30-turn limit or a browser
+failure and count as failures. The SFT model averages 14.6 turns and reaches the judge on 185 of ~270 valid episodes.
+The anchors reproduce the November 9–10 rates within 1.6 pp (outcome-only 48: 33.67 vs 32.11; Gate B: 38.11 vs 37.33).
+Judge cost $16.98. [Aggregate](arm_results/rl_final_20261108/iter0_terra_anchor_20261111.json) · Runner: `scripts/run_iter0_terra_anchor.py`.
 
 [Aggregate, protocol and paired tests](arm_results/rl_final_20261108/iter90_terra_sameday_20261111.json)
 · Runners: `scripts/run_iter90_terra_reeval.py`, `scripts/run_iter90_terra_reeval_ext.py`
