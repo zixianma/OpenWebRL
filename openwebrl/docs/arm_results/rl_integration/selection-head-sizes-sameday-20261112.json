@@ -1,0 +1,355 @@
+{
+ "runs": 1,
+ "benchmarks": [
+  "online_mind2web",
+  "webvoyager",
+  "deepshop"
+ ],
+ "conditions": {
+  "sft1": {
+   "label": "SFT 4B alone (1 sample)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 300,
+    "valid": 266,
+    "successes": 98,
+    "overall": 0.32666666666666666,
+    "valid_only": 0.3684210526315789
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 595,
+    "valid": 536,
+    "successes": 248,
+    "overall": 0.41680672268907565,
+    "valid_only": 0.4626865671641791
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 150,
+    "valid": 150,
+    "successes": 61,
+    "overall": 0.4066666666666667,
+    "valid_only": 0.4066666666666667
+   },
+   "mean_overall": 0.38338001867413635,
+   "mean_valid_only": 0.4125914288208083
+  },
+  "head5-fa31796f1fe0": {
+   "label": "d256-L2 (9.6M)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 300,
+    "valid": 261,
+    "successes": 111,
+    "overall": 0.37,
+    "valid_only": 0.42528735632183906
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 595,
+    "valid": 539,
+    "successes": 291,
+    "overall": 0.4890756302521008,
+    "valid_only": 0.5398886827458256
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 150,
+    "valid": 149,
+    "successes": 66,
+    "overall": 0.44,
+    "valid_only": 0.4429530201342282
+   },
+   "mean_overall": 0.43302521008403355,
+   "mean_valid_only": 0.46937635306729764,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     5.686630369026013,
+     -0.2144256612975575,
+     11.524256742480945
+    ],
+    "webvoyager_valid_only_pp": [
+     7.720211558164647,
+     3.2673473881130257,
+     12.154802765302264
+    ],
+    "deepshop_valid_only_pp": [
+     3.6286353467561536,
+     -4.666666666666669,
+     12.0
+    ],
+    "mean_overall_pp": [
+     4.9645191409897205,
+     1.4630952380952362,
+     8.529458450046683
+    ],
+    "mean_valid_only_pp": [
+     5.678492424648934,
+     1.9939960719229946,
+     9.433316523824782
+    ]
+   },
+   "minus_default": {
+    "online_mind2web_valid_only_pp": [
+     1.915708812260536,
+     -3.838915322875529,
+     7.8360023977569515
+    ],
+    "webvoyager_valid_only_pp": [
+     5.028565817115638,
+     0.5575208329034808,
+     9.41766420094921
+    ],
+    "deepshop_valid_only_pp": [
+     -0.6711409395973145,
+     -9.056040268456378,
+     7.4803035912624845
+    ],
+    "mean_overall_pp": [
+     2.1260504201680575,
+     -1.4276844070961714,
+     5.574229691876751
+    ],
+    "mean_valid_only_pp": [
+     2.0910445632596195,
+     -1.6078810288245449,
+     5.731403183335247
+    ]
+   }
+  },
+  "head5-91e7a5a67417": {
+   "label": "d512-L2 (22.6M, default)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 300,
+    "valid": 261,
+    "successes": 106,
+    "overall": 0.35333333333333333,
+    "valid_only": 0.4061302681992337
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 595,
+    "valid": 529,
+    "successes": 259,
+    "overall": 0.43529411764705883,
+    "valid_only": 0.4896030245746692
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 150,
+    "valid": 149,
+    "successes": 67,
+    "overall": 0.44666666666666666,
+    "valid_only": 0.44966442953020136
+   },
+   "mean_overall": 0.411764705882353,
+   "mean_valid_only": 0.44846590743470144,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     3.7709215567654777,
+     -2.5416617796419976,
+     9.979366740928848
+    ],
+    "webvoyager_valid_only_pp": [
+     2.691645741049009,
+     -1.7727974692216262,
+     7.103906573638404
+    ],
+    "deepshop_valid_only_pp": [
+     4.2997762863534685,
+     -4.775,
+     13.659863945578232
+    ],
+    "mean_overall_pp": [
+     2.838468720821663,
+     -0.9972222222222228,
+     6.72642390289449
+    ],
+    "mean_valid_only_pp": [
+     3.5874478613893146,
+     -0.4358892063880165,
+     7.6394745449187536
+    ]
+   }
+  },
+  "head5-938477dffad2": {
+   "label": "d2048-L4 (272.8M)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 300,
+    "valid": 266,
+    "successes": 105,
+    "overall": 0.35,
+    "valid_only": 0.39473684210526316
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 595,
+    "valid": 537,
+    "successes": 278,
+    "overall": 0.4672268907563025,
+    "valid_only": 0.5176908752327747
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 150,
+    "valid": 148,
+    "successes": 77,
+    "overall": 0.5133333333333333,
+    "valid_only": 0.5202702702702703
+   },
+   "mean_overall": 0.4435200746965453,
+   "mean_valid_only": 0.47756599586943604,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     2.631578947368424,
+     -3.250571495072674,
+     8.654946702335694
+    ],
+    "webvoyager_valid_only_pp": [
+     5.5004308068595575,
+     0.9231111184248174,
+     10.082165087467464
+    ],
+    "deepshop_valid_only_pp": [
+     11.36036036036036,
+     3.2432123904726646,
+     19.718120805369132
+    ],
+    "mean_overall_pp": [
+     6.014005602240896,
+     2.457469654528478,
+     9.585550887021462
+    ],
+    "mean_valid_only_pp": [
+     6.497456704862775,
+     2.7454830427017627,
+     10.244785103349454
+    ]
+   },
+   "minus_default": {
+    "online_mind2web_valid_only_pp": [
+     -1.1393426093970538,
+     -7.372715912801111,
+     4.940947816801405
+    ],
+    "webvoyager_valid_only_pp": [
+     2.8087850658105484,
+     -1.2041527276136883,
+     6.805861378246523
+    ],
+    "deepshop_valid_only_pp": [
+     7.060584074006893,
+     -1.342281879194629,
+     15.178327725067895
+    ],
+    "mean_overall_pp": [
+     3.175536881419233,
+     -0.3314892623716141,
+     6.635854341736692
+    ],
+    "mean_valid_only_pp": [
+     2.9100088434734603,
+     -0.837861515341428,
+     6.61268111406745
+    ]
+   }
+  },
+  "head5-7bbad4567d44": {
+   "label": "d4096-L8 (1.8B)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 300,
+    "valid": 260,
+    "successes": 95,
+    "overall": 0.31666666666666665,
+    "valid_only": 0.36538461538461536
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 595,
+    "valid": 536,
+    "successes": 270,
+    "overall": 0.453781512605042,
+    "valid_only": 0.503731343283582
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 150,
+    "valid": 148,
+    "successes": 68,
+    "overall": 0.4533333333333333,
+    "valid_only": 0.4594594594594595
+   },
+   "mean_overall": 0.40792717086834734,
+   "mean_valid_only": 0.4428584727092189,
+   "minus_sft": {
+    "online_mind2web_valid_only_pp": [
+     -0.30364372469635637,
+     -6.242962284080302,
+     5.698328395678748
+    ],
+    "webvoyager_valid_only_pp": [
+     4.104477611940293,
+     -0.09170860485332054,
+     8.375418342764814
+    ],
+    "deepshop_valid_only_pp": [
+     5.279279279279281,
+     -4.128105810108647,
+     14.36734693877551
+    ],
+    "mean_overall_pp": [
+     2.4547152194210997,
+     -1.2670401493930894,
+     6.124229691876751
+    ],
+    "mean_valid_only_pp": [
+     3.0267043888410616,
+     -0.8878204319068488,
+     6.920016068309417
+    ]
+   },
+   "minus_default": {
+    "online_mind2web_valid_only_pp": [
+     -4.074565281461834,
+     -9.911539396887159,
+     1.7352981465599429
+    ],
+    "webvoyager_valid_only_pp": [
+     1.4128318708912846,
+     -2.843132128028063,
+     5.49071971278283
+    ],
+    "deepshop_valid_only_pp": [
+     0.9795029929258126,
+     -8.412162162162158,
+     10.000057856977554
+    ],
+    "mean_overall_pp": [
+     -0.3837535014005633,
+     -4.103641456582633,
+     3.227847805788983
+    ],
+    "mean_valid_only_pp": [
+     -0.560743472548253,
+     -4.489264500756781,
+     3.286231119281063
+    ]
+   }
+  }
+ },
+ "judge_models": {
+  "online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "webvoyager": [
+   "gpt-4o"
+  ],
+  "deepshop": [
+   "gpt-4o"
+  ]
+ }
+}

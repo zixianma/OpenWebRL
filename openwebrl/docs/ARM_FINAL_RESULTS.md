@@ -1436,6 +1436,26 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 <a id="final-selection-recipe3-head-1p8b-20261111"></a>**1.8B head (November 11 evening).** d4096-L8 (1.77B parameters, lr 3e-4 like the others; validation agreement 46.3%), 2 runs, against the 22.6M default and SFT 4B alone re-run in the same window (1 run each): Online-Mind2Web / WebVoyager / DeepShop valid-only 38.4 / 50.4 / 48.6%, mean overall **42.3%** (22.6M default 43.4%, SFT 32.2%); − 22.6M default **−1.1 [−4.3, +2.2]** pp, − SFT +10.1 [+7.1, +13.2]. Counts: 524 / 600 valid, 201 successes; 1,074 / 1,190, 541; 296 / 300, 144. The head scores on the CPU inside the eval worker, which loads it from about 40 threads at once and held one copy per thread (peak memory about 54× the head file), so the first 1.8B attempts were OOM-killed at 120G and 240G. These runs use a launcher that serializes that load (`deferjudge/xbench_defer_headlock.py`; same scores). Evidence: [rates and contrasts](arm_results/rl_integration/selection-evening-20261111.json) (`head_1p8b`) · [script](arm_results/rl_integration/selection-evening-20261111.py).
 
+<a id="final-selection-recipe3-head-sizes-sameday-20261112"></a>**All sizes in one window (November 12, 00:00–03:20 PST).** One run each of every size with SFT 4B alone, all on all 1,045 tasks: no size differs from the 22.6M default (intervals all cross 0).
+
+| Head | Params | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | — | 36.8% | 46.3% | 40.7% | 38.3% | 41.3% | — | — |
+| d256-L2 | 9.6M | **42.5%** | **54.0%** | 44.3% | 43.3% | 46.9% | +5.0 [+1.5, +8.5] | +2.1 [−1.4, +5.6] |
+| d512-L2 (default) | 22.6M | 40.6% | 49.0% | 45.0% | 41.2% | 44.8% | +2.8 [−1.0, +6.7] | — |
+| d2048-L4 | 272.8M | 39.5% | 51.8% | **52.0%** | **44.4%** | **47.8%** | **+6.0 [+2.5, +9.6]** | +3.2 [−0.3, +6.6] |
+| d4096-L8 | 1.8B | 36.5% | 50.4% | 45.9% | 40.8% | 44.3% | +2.5 [−1.3, +6.1] | −0.4 [−4.1, +3.2] |
+
+| Head | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 266 / 300 | 98 | 536 / 595 | 248 | 150 / 150 | 61 |
+| 9.6M | 261 / 300 | 111 | 539 / 595 | 291 | 149 / 150 | 66 |
+| 22.6M | 261 / 300 | 106 | 529 / 595 | 259 | 149 / 150 | 67 |
+| 272.8M | 266 / 300 | 105 | 537 / 595 | 278 | 148 / 150 | 77 |
+| 1.8B | 260 / 300 | 95 | 536 / 595 | 270 | 148 / 150 | 68 |
+
+*Same protocol, judges and bootstrap as the tables above; training seed 0 for every size; one run per condition, so intervals are wider than in the seed replication. With this window every size has three eval runs (9.6M and 272.8M: 2 in the November 11 morning screen + this one; 1.8B: 2 on the evening of November 11 + this one). All heads ran through the head-lock launcher (serialized head load; same scores). Evidence: [rates and contrasts](arm_results/rl_integration/selection-head-sizes-sameday-20261112.json) · [script](arm_results/rl_integration/selection-head-sizes-sameday-20261112.py). Runtime: `recipe3-ablations-20261104/eval-sizes3/`.*
+
 **Single-seed screen (November 11 morning).** One training seed per size, 2 runs each, SFT in the same window (00:59–09:30 PST). Superseded by the seed replication above for the size comparison.
 
 | Head | Params | Validation agreement | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
