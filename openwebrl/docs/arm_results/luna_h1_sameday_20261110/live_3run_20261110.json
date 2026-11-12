@@ -1,0 +1,521 @@
+{
+ "note": "Luna p16 4B decoder LoRAs, live same-night eval (2026-11-10 22:49 runs 1(-2), top-up 2026-11-11 ~00:50 runs 2-3): pre (no evidence),\nH = 1 (immediate result + screenshot) and H = 4 (+3 actor continuation steps) labels, 3 runs each. SFT actor, N=5, T1.0/p0.9,\nall tasks (OM2W 300, WV 595, DS 150), judge-deferred then rejudged (gpt-4o WV/DS, Terra OM2W). Per-task success averaged over a\ncondition's runs. Valid-only = successes/valid; mean = unweighted mean of benchmark rates. Paired bootstrap over tasks (10,000,\nseed 20261029), benchmarks resampled independently. H = 4 runs 2-3 and pre run 3 OM2W/DS ran on eval sources edited at 00:59\n(re-prepared after a source-drift start failure); H = 4 run 3 OM2W resumed at 94/300 after a GPU fault.",
+ "sources": {
+  "pre": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/pre/run1/{b}/arm5-3b148a583f85",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/pre/run2/{b}/arm5-3b148a583f85",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/pre/run3/{b}/arm5-3b148a583f85"
+  ],
+  "h1": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h1/run1/{b}/arm5-5de0d929af3b",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h1/run2/{b}/arm5-5de0d929af3b",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h1/run3/{b}/arm5-5de0d929af3b"
+  ],
+  "h4": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h4/run1/{b}/arm5-2ed62dd7c4dc",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h4/run2/{b}/arm5-2ed62dd7c4dc",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h4/run3/{b}/arm5-2ed62dd7c4dc"
+  ],
+  "h1_runs12": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h1/run1/{b}/arm5-5de0d929af3b",
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h1/run2/{b}/arm5-5de0d929af3b"
+  ],
+  "pre_run1": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/pre/run1/{b}/arm5-3b148a583f85"
+  ],
+  "h4_run1": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/luna-h1-sameday-20261110/h4/run1/{b}/arm5-2ed62dd7c4dc"
+  ]
+ },
+ "rates": {
+  "pre": {
+   "online_mind2web": {
+    "successes": 327,
+    "valid": 776,
+    "episodes": 900,
+    "overall": 36.3,
+    "valid_only": 42.1
+   },
+   "webvoyager": {
+    "successes": 836,
+    "valid": 1602,
+    "episodes": 1785,
+    "overall": 46.8,
+    "valid_only": 52.2
+   },
+   "deepshop": {
+    "successes": 217,
+    "valid": 441,
+    "episodes": 450,
+    "overall": 48.2,
+    "valid_only": 49.2
+   },
+   "mean_overall": 43.8,
+   "mean_valid_only": 47.8
+  },
+  "h1": {
+   "online_mind2web": {
+    "successes": 321,
+    "valid": 787,
+    "episodes": 900,
+    "overall": 35.7,
+    "valid_only": 40.8
+   },
+   "webvoyager": {
+    "successes": 855,
+    "valid": 1611,
+    "episodes": 1785,
+    "overall": 47.9,
+    "valid_only": 53.1
+   },
+   "deepshop": {
+    "successes": 201,
+    "valid": 447,
+    "episodes": 450,
+    "overall": 44.7,
+    "valid_only": 45.0
+   },
+   "mean_overall": 42.8,
+   "mean_valid_only": 46.3
+  },
+  "h4": {
+   "online_mind2web": {
+    "successes": 333,
+    "valid": 781,
+    "episodes": 900,
+    "overall": 37.0,
+    "valid_only": 42.6
+   },
+   "webvoyager": {
+    "successes": 832,
+    "valid": 1612,
+    "episodes": 1785,
+    "overall": 46.6,
+    "valid_only": 51.6
+   },
+   "deepshop": {
+    "successes": 226,
+    "valid": 449,
+    "episodes": 450,
+    "overall": 50.2,
+    "valid_only": 50.3
+   },
+   "mean_overall": 44.6,
+   "mean_valid_only": 48.2
+  },
+  "h1_runs12": {
+   "online_mind2web": {
+    "successes": 219,
+    "valid": 523,
+    "episodes": 600,
+    "overall": 36.5,
+    "valid_only": 41.9
+   },
+   "webvoyager": {
+    "successes": 571,
+    "valid": 1077,
+    "episodes": 1190,
+    "overall": 48.0,
+    "valid_only": 53.0
+   },
+   "deepshop": {
+    "successes": 132,
+    "valid": 298,
+    "episodes": 300,
+    "overall": 44.0,
+    "valid_only": 44.3
+   },
+   "mean_overall": 42.8,
+   "mean_valid_only": 46.4
+  },
+  "pre_run1": {
+   "online_mind2web": {
+    "successes": 111,
+    "valid": 256,
+    "episodes": 300,
+    "overall": 37.0,
+    "valid_only": 43.4
+   },
+   "webvoyager": {
+    "successes": 271,
+    "valid": 536,
+    "episodes": 595,
+    "overall": 45.5,
+    "valid_only": 50.6
+   },
+   "deepshop": {
+    "successes": 71,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 47.3,
+    "valid_only": 47.7
+   },
+   "mean_overall": 43.3,
+   "mean_valid_only": 47.2
+  },
+  "h4_run1": {
+   "online_mind2web": {
+    "successes": 118,
+    "valid": 257,
+    "episodes": 300,
+    "overall": 39.3,
+    "valid_only": 45.9
+   },
+   "webvoyager": {
+    "successes": 282,
+    "valid": 540,
+    "episodes": 595,
+    "overall": 47.4,
+    "valid_only": 52.2
+   },
+   "deepshop": {
+    "successes": 74,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 49.3,
+    "valid_only": 49.7
+   },
+   "mean_overall": 45.3,
+   "mean_valid_only": 49.3
+  }
+ },
+ "per_run": {
+  "pre/run1": {
+   "online_mind2web": {
+    "successes": 111,
+    "valid": 256,
+    "episodes": 300,
+    "overall": 37.0,
+    "valid_only": 43.4
+   },
+   "webvoyager": {
+    "successes": 271,
+    "valid": 536,
+    "episodes": 595,
+    "overall": 45.5,
+    "valid_only": 50.6
+   },
+   "deepshop": {
+    "successes": 71,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 47.3,
+    "valid_only": 47.7
+   },
+   "mean_overall": 43.3,
+   "mean_valid_only": 47.2
+  },
+  "pre/run2": {
+   "online_mind2web": {
+    "successes": 108,
+    "valid": 263,
+    "episodes": 300,
+    "overall": 36.0,
+    "valid_only": 41.1
+   },
+   "webvoyager": {
+    "successes": 279,
+    "valid": 532,
+    "episodes": 595,
+    "overall": 46.9,
+    "valid_only": 52.4
+   },
+   "deepshop": {
+    "successes": 71,
+    "valid": 147,
+    "episodes": 150,
+    "overall": 47.3,
+    "valid_only": 48.3
+   },
+   "mean_overall": 43.4,
+   "mean_valid_only": 47.3
+  },
+  "pre/run3": {
+   "online_mind2web": {
+    "successes": 108,
+    "valid": 257,
+    "episodes": 300,
+    "overall": 36.0,
+    "valid_only": 42.0
+   },
+   "webvoyager": {
+    "successes": 286,
+    "valid": 534,
+    "episodes": 595,
+    "overall": 48.1,
+    "valid_only": 53.6
+   },
+   "deepshop": {
+    "successes": 75,
+    "valid": 145,
+    "episodes": 150,
+    "overall": 50.0,
+    "valid_only": 51.7
+   },
+   "mean_overall": 44.7,
+   "mean_valid_only": 49.1
+  },
+  "h1/run1": {
+   "online_mind2web": {
+    "successes": 107,
+    "valid": 260,
+    "episodes": 300,
+    "overall": 35.7,
+    "valid_only": 41.2
+   },
+   "webvoyager": {
+    "successes": 285,
+    "valid": 538,
+    "episodes": 595,
+    "overall": 47.9,
+    "valid_only": 53.0
+   },
+   "deepshop": {
+    "successes": 60,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 40.0,
+    "valid_only": 40.3
+   },
+   "mean_overall": 41.2,
+   "mean_valid_only": 44.8
+  },
+  "h1/run2": {
+   "online_mind2web": {
+    "successes": 112,
+    "valid": 263,
+    "episodes": 300,
+    "overall": 37.3,
+    "valid_only": 42.6
+   },
+   "webvoyager": {
+    "successes": 286,
+    "valid": 539,
+    "episodes": 595,
+    "overall": 48.1,
+    "valid_only": 53.1
+   },
+   "deepshop": {
+    "successes": 72,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 48.0,
+    "valid_only": 48.3
+   },
+   "mean_overall": 44.5,
+   "mean_valid_only": 48.0
+  },
+  "h1/run3": {
+   "online_mind2web": {
+    "successes": 102,
+    "valid": 264,
+    "episodes": 300,
+    "overall": 34.0,
+    "valid_only": 38.6
+   },
+   "webvoyager": {
+    "successes": 284,
+    "valid": 534,
+    "episodes": 595,
+    "overall": 47.7,
+    "valid_only": 53.2
+   },
+   "deepshop": {
+    "successes": 69,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 46.0,
+    "valid_only": 46.3
+   },
+   "mean_overall": 42.6,
+   "mean_valid_only": 46.0
+  },
+  "h4/run1": {
+   "online_mind2web": {
+    "successes": 118,
+    "valid": 257,
+    "episodes": 300,
+    "overall": 39.3,
+    "valid_only": 45.9
+   },
+   "webvoyager": {
+    "successes": 282,
+    "valid": 540,
+    "episodes": 595,
+    "overall": 47.4,
+    "valid_only": 52.2
+   },
+   "deepshop": {
+    "successes": 74,
+    "valid": 149,
+    "episodes": 150,
+    "overall": 49.3,
+    "valid_only": 49.7
+   },
+   "mean_overall": 45.3,
+   "mean_valid_only": 49.3
+  },
+  "h4/run2": {
+   "online_mind2web": {
+    "successes": 108,
+    "valid": 265,
+    "episodes": 300,
+    "overall": 36.0,
+    "valid_only": 40.8
+   },
+   "webvoyager": {
+    "successes": 281,
+    "valid": 537,
+    "episodes": 595,
+    "overall": 47.2,
+    "valid_only": 52.3
+   },
+   "deepshop": {
+    "successes": 72,
+    "valid": 150,
+    "episodes": 150,
+    "overall": 48.0,
+    "valid_only": 48.0
+   },
+   "mean_overall": 43.7,
+   "mean_valid_only": 47.0
+  },
+  "h4/run3": {
+   "online_mind2web": {
+    "successes": 107,
+    "valid": 259,
+    "episodes": 300,
+    "overall": 35.7,
+    "valid_only": 41.3
+   },
+   "webvoyager": {
+    "successes": 269,
+    "valid": 535,
+    "episodes": 595,
+    "overall": 45.2,
+    "valid_only": 50.3
+   },
+   "deepshop": {
+    "successes": 80,
+    "valid": 150,
+    "episodes": 150,
+    "overall": 53.3,
+    "valid_only": 53.3
+   },
+   "mean_overall": 44.7,
+   "mean_valid_only": 48.3
+  }
+ },
+ "paired": {
+  "h1 - pre": {
+   "online_mind2web": [
+    -0.7,
+    -4.1,
+    2.8
+   ],
+   "webvoyager": [
+    1.1,
+    -1.3,
+    3.4
+   ],
+   "deepshop": [
+    -3.6,
+    -8.7,
+    1.6
+   ],
+   "mean": [
+    -1.1,
+    -3.2,
+    1.1
+   ]
+  },
+  "h4 - pre": {
+   "online_mind2web": [
+    0.7,
+    -2.6,
+    3.9
+   ],
+   "webvoyager": [
+    -0.2,
+    -2.4,
+    2.0
+   ],
+   "deepshop": [
+    2.0,
+    -3.1,
+    7.1
+   ],
+   "mean": [
+    0.8,
+    -1.3,
+    3.0
+   ]
+  },
+  "h1 - h4": {
+   "online_mind2web": [
+    -1.3,
+    -4.6,
+    1.9
+   ],
+   "webvoyager": [
+    1.3,
+    -0.9,
+    3.4
+   ],
+   "deepshop": [
+    -5.6,
+    -9.1,
+    -2.0
+   ],
+   "mean": [
+    -1.9,
+    -3.6,
+    -0.1
+   ]
+  },
+  "h1_runs12 - pre_run1": {
+   "online_mind2web": [
+    -0.5,
+    -5.2,
+    4.2
+   ],
+   "webvoyager": [
+    2.4,
+    -1.0,
+    5.9
+   ],
+   "deepshop": [
+    -3.3,
+    -11.0,
+    4.3
+   ],
+   "mean": [
+    -0.5,
+    -3.7,
+    2.8
+   ]
+  },
+  "h4_run1 - pre_run1": {
+   "online_mind2web": [
+    2.3,
+    -3.0,
+    7.7
+   ],
+   "webvoyager": [
+    1.8,
+    -1.8,
+    5.4
+   ],
+   "deepshop": [
+    2.0,
+    -6.0,
+    10.0
+   ],
+   "mean": [
+    2.1,
+    -1.4,
+    5.5
+   ]
+  }
+ }
+}

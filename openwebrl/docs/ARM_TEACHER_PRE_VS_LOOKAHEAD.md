@@ -8,6 +8,7 @@ Lookahead H includes the candidate action: H = 1 is its immediate result, and H 
 
 **Takeaways** (20,671 p16 panels, 2026-11-03):
 
+- **Live, Lookahead H = 1 labels do not help the LoRA student** (same-night 3 runs each, 2026-11-10/11): mean overall success H = 1 − pre −1.1 [−3.2, +1.1] pp, H = 4 − pre +0.8 [−1.3, +3.0], H = 1 − H = 4 −1.9 [−3.6, −0.1] (all on DeepShop). The teacher-level H = 1 gain does not transfer to a selection-only student. [Table](#luna-h1-live-20261110)
 - **Live, H = 4 labels help heads but not LoRAs.** Heads: +2.9 pp (Luna) and +3.2 pp (GPT-5.5) mean overall success over pre labels, both significant; Luna LoRA: +0.3 [−1.8, +2.4]. No p16 selector beats same-day SelectionARM. [Table](#luna-pre-vs-k3p-live-20261103)
 
 - **The two labels pick the same executed action on 63.3% of panels.** Agreement falls as panels hold more distinct actions: 69.9% with 2 distinct targets, 44.3% with 5.
@@ -142,6 +143,41 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 - **Runs:** every row has 1,785 / 900 / 450 completed episodes; there are no missing tasks. Two jobs were retried and resumed from saved records (Luna pre LoRA run 1 DeepShop: startup goto timeouts; Luna pre head run 3 Online-Mind2Web: model service died at 181/300).
 - **Files:** [per-row counts and all paired intervals](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.json) · [script](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.py). Runtime evaluation roots: `evaluations/{p16-lora-lunapre-20261103, p16-lora-lunak3-20261103, p16-heads-luna-20261103, p16-heads-all-20261102, p16-lora-pre-20261102, p16-lora-20261101, controls-sameday-20261103}`.
 - **Interval scope:** the intervals cover task sampling only, not training-seed variance (one seed per selector) or drift between eval windows.
+</details>
+
+## Live outcome: Lookahead H = 1 vs H = 4 vs pre labels, Luna LoRAs (3 runs, same night, 2026-11-10/11)
+
+<a id="luna-h1-live-20261110"></a>
+
+**Lookahead H = 1 labels do not improve the trained 4B LoRA selector, and H = 4 is not significantly better than pre either.** On the [1,727 branch states](#luna-pre-post-k3-20261105) the H = 1 teacher's own picks capture most of H = 4's gain. A student trained on those picks scores −1.1 pp against pre and −1.9 pp against H = 4. The H = 1 − H = 4 gap is the only interval that excludes zero, and it comes from DeepShop.
+
+All three LoRAs share the [Luna p16 setup above](#luna-pre-vs-k3p-live-20261103): the same 20,525 panels and split, the same pre-format prompt, and the same SelectionARM LoRA recipe. Only the evidence the teacher saw differs. H = 1 shows each candidate's immediate tool result and the following screenshot from one execution. H = 4 adds three actor steps. The training target is the selection only (`{"selection": N}`). Luna's reasoning is not used.
+
+Eval protocol is the same as the 11-03 table: 3 runs per row, all 1,045 tasks, SFT 4B actor, N = 5, T 1.0 / top-p 0.9, seed 20261018. Runs 1 started 2026-11-10 22:49 and runs 2–3 at 2026-11-11 00:50–02:00. Judges: gpt-5.6-terra for Online-Mind2Web, GPT-4o for WebVoyager and DeepShop. Rollouts were judge-deferred and judged together on 11-11. Columns as above. Differences are on mean overall, with per-task success averaged over the three runs and paired 95% intervals (10,000 task resamples within each benchmark, seed 20261029). **Bold** intervals exclude zero. There is no same-night SFT or SelectionARM control, so compare these rows with each other, not with the 11-03 table.
+
+| Luna labels, LoRA | WebVoyager<br>valid-only | Online-Mind2Web<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − pre, pp<br>[95% CI] | − H = 4, pp<br>[95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| pre | 52.2% | 42.1% | 49.2% | 43.8% | 47.8% | — | −0.8 [−3.0, +1.3] |
+| Lookahead H = 1 | 53.1% | 40.8% | 45.0% | 42.8% | 46.3% | −1.1 [−3.2, +1.1] | **−1.9 [−3.6, −0.1]** |
+| H = 4 | 51.6% | 42.6% | 50.3% | 44.6% | 48.2% | +0.8 [−1.3, +3.0] | — |
+
+| Difference, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
+| --- | ---: | ---: | ---: | ---: |
+| H = 1 − pre | +1.1 [−1.3, +3.4] | −0.7 [−4.1, +2.8] | −3.6 [−8.7, +1.6] | −1.1 [−3.2, +1.1] |
+| H = 4 − pre | −0.2 [−2.4, +2.0] | +0.7 [−2.6, +3.9] | +2.0 [−3.1, +7.1] | +0.8 [−1.3, +3.0] |
+| H = 1 − H = 4 | +1.3 [−0.9, +3.4] | −1.3 [−4.6, +1.9] | **−5.6 [−9.1, −2.0]** | **−1.9 [−3.6, −0.1]** |
+
+- **One run is not enough to rank these.** Run 1 alone gave H = 4 − pre +2.1 [−1.4, +5.5]. H = 4 runs 2–3 reached 43.7% and 44.7% mean overall against run 1's 45.3%. Runs within a row span 41.2–44.5% (H = 1), 43.3–44.7% (pre) and 43.7–45.3% (H = 4).
+- **Against the 11-03 Luna LoRAs:** H = 4 − pre was +0.3 [−1.8, +2.4] there and is +0.8 here, so both batches find no reliable H = 4 gain for the LoRA student.
+
+<details>
+<summary>Labels, horizon coverage, runs and files</summary>
+
+- **H = 1 labels:** gpt-6-luna on all 20,671 p16 panels (p16a/d/e/f/g), $28.39, no failures. They use the same prompt as pre and H = 4 (k3p), with each candidate's draw-0 tool result and screenshot added. Median hidden reasoning tokens on 300 p16a labels: pre 416, H = 1 253, H = 4 475. The build has 20,525 train panels with 36,256 examples (H = 4: 35,527, pre: 36,368); ties expand differently.
+- **Effective H = 4 horizon:** episodes that end (stop or answer) shorten the lookahead. Among H = 4 candidates, 69.9% (37,899) have the full 4 steps, 10.9% (5,892) have 3, 12.2% (6,594) have 2 and 7.1% (3,831) have 1. By the shortest candidate in each panel the shares are 53.0%, 13.4%, 15.8% and 17.8%.
+- **Runs:** every row has 1,785 / 900 / 450 completed episodes and all records are judged. Eight top-up jobs (pre run 3 Online-Mind2Web/DeepShop, H = 4 runs 2–3) failed at start because evaluation source files were edited mid-queue. They were re-prepared and ran on the edited sources; the protocol check was unchanged. H = 4 run 3 Online-Mind2Web resumed from 94/300 saved records after a GPU fault.
+- **Files:** [per-row and per-run rates, paired intervals](arm_results/luna_h1_sameday_20261110/live_3run_20261110.json) · [script](arm_results/luna_h1_sameday_20261110/live_3run_20261110.py). Runtime root: `evaluations/luna-h1-sameday-20261110/`. Training: `p16-k3-20261031/lora-luna-h1/`.
+- **Interval scope:** the intervals cover task sampling only, not training-seed variance (one seed per LoRA).
 </details>
 
 ### What the trained students pick on the same eval states (LoRAs, 2026-11-07)
