@@ -95,6 +95,7 @@
 [PRO-CUA on DeepShop-150: 4B 47.3% (≈ our 4B SFT), 8B 27.3%](WEBPRM_BASELINES.md#procua-deepshop-20261102). [WebPRMBench headline, actions only: Piotr 77.3% pairwise > WebArbiter-7B 74.1% ≈ our LoRAs 73.9–75.0% > heads ≤67.9% (released: WebArbiter-7B 89.5%)](WEBPRM_BASELINES.md#webprmbench-headline-20261103). [WebPRM baselines: all 12 attempts audited, two guarded successes; Reddit allocation cap exhausted](WEBPRM_BASELINES.md#table5-plan-20261010).
 [Baseline comparison: on 284 paired Online-Mind2Web tasks no selector beats no search (Piotr +2.5 pp, WebArbiter −2.8 pp, WebShepherd −14.8 pp); WebArena-Lite Reddit after harness fixes: no search 26.7%, WebArbiter 31.2%, WebShepherd 8.3%; WebArena-Lite four sites at 1280×720: gpt-4o + Piotr 14.9% vs no search 20.8%, paired −4.0 pp, n.s.](baseline_comparison.md).
 [WebPRM collaborator handover (October 28): Table 5 reproduction, OM2W and WebArena selector results, option C (OpenWebRL-4B-SFT ± Piotr) status, code map and pitfalls](WEBPRM_HANDOFF.md#webprm-baselines-handover-20261028).
+[RL with ARM turn credit, results summary (November 11): SFT start vs iteration 90 and all nine runs, same-day shared Terra](RL_ARM_CREDIT_SUMMARY.md#rl-arm-credit-summary-20261111).
 [RL collaborator handoff (November 10): run lineages, cluster-only artifacts, recipes and how to continue Gate B / outcome-only training](RL_HANDOFF.md#rl-handoff-20261110).
 
 [Faster reward improvement: five fresh iteration0→10 action-credit pilots, pending native GPU validation, controlled comparisons and recent evidence](RL_LEARNING_EFFICIENCY.md#action-credit-implementation-20261011).
@@ -182,6 +183,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_RESULTS.md](RL_RESULTS.md) | Tables-only RL checkpoint scores; overall, valid-only, invalid counts, and separate protocols |
 | [RL_LEARNING_EFFICIENCY.md](RL_LEARNING_EFFICIENCY.md) | Five fresh iteration0→10 action-credit pilots; pending GPU validation, exact comparison limits and learning-efficiency evidence |
 | [RL_RUNTIME.md](RL_RUNTIME.md) | Reference baseline resume, GPU scaling, archives, and runtime history |
+| [RL_ARM_CREDIT_SUMMARY.md](RL_ARM_CREDIT_SUMMARY.md) | Short results summary for RL with ARM turn credit: SFT start vs iteration 90, nine runs at iteration 90, paired tests |
 | [RL_HANDOFF.md](RL_HANDOFF.md) | Collaborator handoff for continuing RL: run lineages and checkpoints, git vs cluster-only artifacts, environment, recipes, ARM launch orchestration, evaluation protocol |
 | [RL_BEHAVIOR.md](RL_BEHAVIOR.md) | Evaluation noise and fair comparison, failure categories across checkpoints, episode length, training-time behavior, step-0 group usefulness |
 | [RL_REWARD_DESIGN.md](RL_REWARD_DESIGN.md) | Grounded-answer reward proposal: judge audit, answer-grounding evidence, gated reward, success-only efficiency bonus, handover plan |
