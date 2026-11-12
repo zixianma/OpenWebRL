@@ -1,0 +1,746 @@
+{
+ "head5-5fbddd8b2031": {
+  "label": "d128-L2 head (4.4M)",
+  "evals": [
+   [
+    "eval-scale",
+    "head5-5fbddd8b2031"
+   ],
+   [
+    "eval-seed",
+    "head5-5fbddd8b2031"
+   ],
+   [
+    "eval-sizes3",
+    "head5-5fbddd8b2031"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 40720,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 13396,
+  "actor_requests_per_step": 5.0033592117049865,
+  "steps_per_episode": 12.98883572567783,
+  "selector_pflop_per_step": 4.610907109002593e-05,
+  "head_only_pflop_per_step": 4.362754e-08,
+  "actor_pflop_per_step": 0.06120401878064624,
+  "decision_pflop_per_step": 0.061250127851736266,
+  "selection_seconds_mean": 0.015021259836409282,
+  "selection_seconds_median": 0.013021400998695754,
+  "selection_seconds_p90": 0.020670566002081614,
+  "generation_seconds_mean": 7.662602945928726,
+  "decision_seconds_mean": 7.677624205765135,
+  "decision_seconds_per_episode": 99.72339957217152,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 168.20860383477418,
+  "episode_seconds_median": 112.38449904300796,
+  "episode_seconds_p90": 387.723243653003
+ },
+ "head5-fa31796f1fe0": {
+  "label": "d256-L2 head (9.6M)",
+  "evals": [
+   [
+    "eval-scale",
+    "head5-fa31796f1fe0"
+   ],
+   [
+    "eval-seed",
+    "head5-fa31796f1fe0"
+   ],
+   [
+    "eval-sizes3",
+    "head5-fa31796f1fe0"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 39776,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 13068,
+  "actor_requests_per_step": 5.007652280379553,
+  "steps_per_episode": 12.687719298245614,
+  "selector_pflop_per_step": 4.855940997349316e-05,
+  "head_only_pflop_per_step": 9.577474e-08,
+  "actor_pflop_per_step": 0.06047587511309729,
+  "decision_pflop_per_step": 0.06052443452307078,
+  "selection_seconds_mean": 0.015360609849767826,
+  "selection_seconds_median": 0.013347595999221085,
+  "selection_seconds_p90": 0.02094106800359441,
+  "generation_seconds_mean": 7.678247946463196,
+  "decision_seconds_mean": 7.693608556312964,
+  "decision_seconds_per_episode": 97.61434575307962,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 161.4682505559815,
+  "episode_seconds_median": 113.07481275100145,
+  "episode_seconds_p90": 363.4151211230055
+ },
+ "head5-91e7a5a67417": {
+  "label": "d512-L2 head (22.6M, default)",
+  "evals": [
+   [
+    "eval-scale",
+    "head5-91e7a5a67417"
+   ],
+   [
+    "eval-seed",
+    "head5-91e7a5a67417"
+   ],
+   [
+    "eval-sizes3",
+    "head5-91e7a5a67417"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 4180,
+  "steps": 59082,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 14620,
+  "actor_requests_per_step": 5.006155950752394,
+  "steps_per_episode": 14.13444976076555,
+  "selector_pflop_per_step": 4.7100836947538536e-05,
+  "head_only_pflop_per_step": 2.2562818e-07,
+  "actor_pflop_per_step": 0.06065062695216538,
+  "decision_pflop_per_step": 0.06069772778911292,
+  "selection_seconds_mean": 0.017135433233745622,
+  "selection_seconds_median": 0.014805418002652004,
+  "selection_seconds_p90": 0.02365575199655723,
+  "generation_seconds_mean": 7.934692086002846,
+  "decision_seconds_mean": 7.951827519236591,
+  "decision_seconds_per_episode": 112.39470657692262,
+  "episodes_timed": 4180,
+  "episode_seconds_mean": 181.87139305392813,
+  "episode_seconds_median": 128.99049264299902,
+  "episode_seconds_p90": 403.0837833169935
+ },
+ "head5-938477dffad2": {
+  "label": "d2048-L4 head (272.8M)",
+  "evals": [
+   [
+    "eval-scale",
+    "head5-938477dffad2"
+   ],
+   [
+    "eval-seed",
+    "head5-938477dffad2"
+   ],
+   [
+    "eval-sizes3",
+    "head5-938477dffad2"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 43841,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 14482,
+  "actor_requests_per_step": 5.003797817980942,
+  "steps_per_episode": 13.984370015948963,
+  "selector_pflop_per_step": 4.933672978034671e-05,
+  "head_only_pflop_per_step": 2.72756738e-06,
+  "actor_pflop_per_step": 0.05960266100384084,
+  "decision_pflop_per_step": 0.05965199773362118,
+  "selection_seconds_mean": 0.0668497133643042,
+  "selection_seconds_median": 0.0533182110011694,
+  "selection_seconds_p90": 0.10907365100865718,
+  "generation_seconds_mean": 7.907122379404004,
+  "decision_seconds_mean": 7.973972092768308,
+  "decision_seconds_per_episode": 111.51097624212355,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 178.639270939273,
+  "episode_seconds_median": 126.54969883900048,
+  "episode_seconds_p90": 396.3540010950019
+ },
+ "head5-7bbad4567d44": {
+  "label": "d4096-L8 head (1.8B)",
+  "evals": [
+   [
+    "eval-scale",
+    "head5-7bbad4567d44"
+   ],
+   [
+    "eval-seed",
+    "head5-7bbad4567d44"
+   ],
+   [
+    "eval-sizes3",
+    "head5-7bbad4567d44"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 43532,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 14550,
+  "actor_requests_per_step": 5.005841924398625,
+  "steps_per_episode": 13.885805422647527,
+  "selector_pflop_per_step": 6.362356842519416e-05,
+  "head_only_pflop_per_step": 1.770463234e-05,
+  "actor_pflop_per_step": 0.06082702271884003,
+  "decision_pflop_per_step": 0.060890646287265225,
+  "selection_seconds_mean": 0.3365192632547367,
+  "selection_seconds_median": 0.27592000699951313,
+  "selection_seconds_p90": 0.5120388049981557,
+  "generation_seconds_mean": 7.9918029845435195,
+  "decision_seconds_mean": 8.328322247798257,
+  "decision_seconds_per_episode": 115.64546223003299,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 186.27740451165585,
+  "episode_seconds_median": 127.69645422999747,
+  "episode_seconds_p90": 417.15376214399294
+ },
+ "lora-full": {
+  "label": "4B LoRA decoder (ADM-4B), full data",
+  "evals": [
+   [
+    "eval-1111",
+    "arm5-9fadc8dc4655"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 41759,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 13904,
+  "actor_requests_per_step": 5.004315304948216,
+  "steps_per_episode": 13.320255183413078,
+  "selector_pflop_per_step": 0.030731431847184878,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": 0.06105551265597769,
+  "decision_pflop_per_step": 0.09178694450316256,
+  "selection_seconds_mean": 0.47398929156195274,
+  "selection_seconds_median": 0.4302871789986966,
+  "selection_seconds_p90": 0.7576723509992007,
+  "generation_seconds_mean": 8.015395912261956,
+  "decision_seconds_mean": 8.48938520382391,
+  "decision_seconds_per_episode": 113.08077726522674,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 180.51737670358594,
+  "episode_seconds_median": 122.4230141759981,
+  "episode_seconds_p90": 409.991751804002
+ },
+ "sft1": {
+  "label": "SFT 4B alone (1 sample)",
+  "evals": [
+   [
+    "eval-1111",
+    "sft1"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 40172,
+  "actor_cost_episodes": 1045,
+  "actor_cost_steps": 13415,
+  "actor_requests_per_step": 1.0005218039508013,
+  "steps_per_episode": 12.814035087719299,
+  "selector_pflop_per_step": 0.0,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": 0.018726553229119335,
+  "decision_pflop_per_step": 0.018726553229119335,
+  "selection_seconds_mean": 1.1916883808633315e-05,
+  "selection_seconds_median": 1.097100175684318e-05,
+  "selection_seconds_p90": 1.4399003703147173e-05,
+  "generation_seconds_mean": 2.545057798377605,
+  "decision_seconds_mean": 2.5450697152614135,
+  "decision_seconds_per_episode": 32.612612632051494,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 91.89890586154506,
+  "episode_seconds_median": 66.38431022501027,
+  "episode_seconds_p90": 205.27688455300085
+ },
+ "eval-1108:lora": {
+  "label": "lora (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-9fadc8dc4655"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/lora/lora",
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 41337,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.185645933014355,
+  "selector_pflop_per_step": 0.03082034875975284,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.47399161880448193,
+  "selection_seconds_median": 0.42953393515199423,
+  "selection_seconds_p90": 0.760025077033788,
+  "generation_seconds_mean": 8.198628900148654,
+  "decision_seconds_mean": 8.672620518953137,
+  "decision_seconds_per_episode": 114.35410347431126,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 180.76948642727282,
+  "episode_seconds_median": 121.36334107303992,
+  "episode_seconds_p90": 406.969280378893
+ },
+ "eval-1108:pps4": {
+  "label": "pps4 (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-9117fa5a37bb"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/pps4/adapter",
+  "train_runtime_seconds": 7097.3987,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 38518,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 12.286443381180224,
+  "selector_pflop_per_step": 0.030543248979521796,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.4996471051505481,
+  "selection_seconds_median": 0.45692244940437376,
+  "selection_seconds_p90": 0.7883743201382458,
+  "generation_seconds_mean": 7.9420527310052575,
+  "decision_seconds_mean": 8.441699836155806,
+  "decision_seconds_per_episode": 103.71846707784667,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 169.1360953435385,
+  "episode_seconds_median": 110.84117347095162,
+  "episode_seconds_p90": 389.6714070220478
+ },
+ "eval-1108:pps1": {
+  "label": "pps1 (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-9f25a8bd0da7"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/pps1/adapter",
+  "train_runtime_seconds": 2053.4323,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 40210,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 12.82615629984051,
+  "selector_pflop_per_step": 0.03083975875494965,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.49647504416709654,
+  "selection_seconds_median": 0.4484214650874492,
+  "selection_seconds_p90": 0.7897768719121814,
+  "generation_seconds_mean": 8.08303719006044,
+  "decision_seconds_mean": 8.579512234227536,
+  "decision_seconds_per_episode": 110.04216489259623,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 176.18269939983617,
+  "episode_seconds_median": 116.95379345701076,
+  "episode_seconds_p90": 395.4856237168424
+ },
+ "eval-1108:s1000": {
+  "label": "s1000 (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-fc760b23e227"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s1000/adapter",
+  "train_runtime_seconds": 8150.0355,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 41213,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.14609250398724,
+  "selector_pflop_per_step": 0.03098279546555067,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.503861930120341,
+  "selection_seconds_median": 0.46201275615021586,
+  "selection_seconds_p90": 0.7894663959741592,
+  "generation_seconds_mean": 8.187438872453798,
+  "decision_seconds_mean": 8.69130080257414,
+  "decision_seconds_per_episode": 114.25664433061819,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 183.35057532223246,
+  "episode_seconds_median": 122.81063045794144,
+  "episode_seconds_p90": 411.150710307993
+ },
+ "eval-1108:full-s1692": {
+  "label": "full-s1692 (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-5f368697014f"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/full-s1692/adapter",
+  "train_runtime_seconds": 7018.2133,
+  "train_epochs": 0.8209606986899564,
+  "episodes": 3135,
+  "steps": 40889,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.042743221690591,
+  "selector_pflop_per_step": 0.031024982713286228,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.47999670190829996,
+  "selection_seconds_median": 0.4380891527980566,
+  "selection_seconds_p90": 0.7641315222717822,
+  "generation_seconds_mean": 8.215172680094856,
+  "decision_seconds_mean": 8.695169382003154,
+  "decision_seconds_per_episode": 113.4088615185732,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 178.93630126753325,
+  "episode_seconds_median": 117.16377229010686,
+  "episode_seconds_p90": 411.3470717887394
+ },
+ "eval-1108:ft-full": {
+  "label": "ft-full (eval-1108)",
+  "evals": [
+   [
+    "eval-1108",
+    "arm5-31cb7266dae5"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/ft-full/merged",
+  "train_runtime_seconds": 16921.8477,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 41744,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.315470494417863,
+  "selector_pflop_per_step": 0.030945120960326155,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.47822759893614003,
+  "selection_seconds_median": 0.43507443205453455,
+  "selection_seconds_p90": 0.7670113737694919,
+  "generation_seconds_mean": 8.22850365919383,
+  "decision_seconds_mean": 8.70673125812997,
+  "decision_seconds_per_episode": 115.93422317045534,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 183.32891609206516,
+  "episode_seconds_median": 124.34651070600376,
+  "episode_seconds_p90": 411.5883357729763
+ },
+ "eval-1110:lora": {
+  "label": "lora (eval-1110)",
+  "evals": [
+   [
+    "eval-1110",
+    "arm5-9fadc8dc4655"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/lora/lora",
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 3135,
+  "steps": 40774,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.006060606060606,
+  "selector_pflop_per_step": 0.03070108403491534,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.4733323584912366,
+  "selection_seconds_median": 0.43103784599861683,
+  "selection_seconds_p90": 0.7567060419969494,
+  "generation_seconds_mean": 8.048149175571282,
+  "decision_seconds_mean": 8.521481534062518,
+  "decision_seconds_per_episode": 110.83090528544295,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 177.19605196861977,
+  "episode_seconds_median": 120.22505349300263,
+  "episode_seconds_p90": 395.43624438199913
+ },
+ "eval-1110:s250": {
+  "label": "s250 (eval-1110)",
+  "evals": [
+   [
+    "eval-1110",
+    "arm5-d6c492ad4c40"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s250/adapter",
+  "train_runtime_seconds": 1926.0668,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 42585,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.583732057416269,
+  "selector_pflop_per_step": 0.031898669671282034,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.5113984733104112,
+  "selection_seconds_median": 0.4619438170011563,
+  "selection_seconds_p90": 0.805580648000614,
+  "generation_seconds_mean": 8.43287851534,
+  "decision_seconds_mean": 8.944276988650412,
+  "decision_seconds_per_episode": 121.4966620611399,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 191.27281883470522,
+  "episode_seconds_median": 132.0828368409966,
+  "episode_seconds_p90": 432.02774622500147
+ },
+ "eval-1111:s1000-pps1": {
+  "label": "s1000-pps1 (eval-1111)",
+  "evals": [
+   [
+    "eval-1111",
+    "arm5-5d57cf0e0de4"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s1000-pps1/adapter",
+  "train_runtime_seconds": 1002.0852,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 41996,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.39585326953748,
+  "selector_pflop_per_step": 0.029832489109511123,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.4685888748614413,
+  "selection_seconds_median": 0.42482638899673475,
+  "selection_seconds_p90": 0.7556511989969295,
+  "generation_seconds_mean": 7.782775338985797,
+  "decision_seconds_mean": 8.251364213847237,
+  "decision_seconds_per_episode": 110.53406428220967,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 173.4208574087445,
+  "episode_seconds_median": 123.02497838399722,
+  "episode_seconds_p90": 384.57649191199744
+ },
+ "eval-1111:s250-pps1": {
+  "label": "s250-pps1 (eval-1111)",
+  "evals": [
+   [
+    "eval-1111",
+    "arm5-c5ec9b4862f6"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s250-pps1/adapter",
+  "train_runtime_seconds": 255.1882,
+  "train_epochs": 2.0,
+  "episodes": 3135,
+  "steps": 40295,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 12.853269537480063,
+  "selector_pflop_per_step": 0.02965095943509296,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.49075629920363695,
+  "selection_seconds_median": 0.44899185500253225,
+  "selection_seconds_p90": 0.7802356979955221,
+  "generation_seconds_mean": 7.830640796887686,
+  "decision_seconds_mean": 8.321397096091324,
+  "decision_seconds_per_episode": 106.95715980446505,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 167.59538090032905,
+  "episode_seconds_median": 117.70636600999569,
+  "episode_seconds_p90": 378.9516762629937
+ },
+ "eval-1111b:s1000-pps1-e4": {
+  "label": "s1000-pps1-e4 (eval-1111b)",
+  "evals": [
+   [
+    "eval-1111b",
+    "arm5-a82f7bbded0c"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s1000-pps1-e4/adapter",
+  "train_runtime_seconds": 2008.5259,
+  "train_epochs": 4.0,
+  "episodes": 3135,
+  "steps": 42837,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.664114832535885,
+  "selector_pflop_per_step": 0.030501849704507665,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.4677740784124493,
+  "selection_seconds_median": 0.42917716898955405,
+  "selection_seconds_p90": 0.7472705340042012,
+  "generation_seconds_mean": 7.992041051469583,
+  "decision_seconds_mean": 8.459815129882031,
+  "decision_seconds_per_episode": 115.59588539673227,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 184.23560565909065,
+  "episode_seconds_median": 127.86548340899753,
+  "episode_seconds_p90": 417.09952519999933
+ },
+ "eval-s250ep:lora": {
+  "label": "lora (eval-s250ep)",
+  "evals": [
+   [
+    "eval-s250ep",
+    "arm5-9fadc8dc4655"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/lora/lora",
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 1045,
+  "steps": 14417,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.796172248803828,
+  "selector_pflop_per_step": 0.030841804065352627,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.4689452310134155,
+  "selection_seconds_median": 0.430961871999898,
+  "selection_seconds_p90": 0.74188283199328,
+  "generation_seconds_mean": 8.13393351535391,
+  "decision_seconds_mean": 8.602878746367326,
+  "decision_seconds_per_episode": 118.68679702045716,
+  "episodes_timed": 1045,
+  "episode_seconds_mean": 189.33374352160152,
+  "episode_seconds_median": 132.43440108399955,
+  "episode_seconds_p90": 428.3445581940032
+ },
+ "eval-s250ep:s250-pps1-e4": {
+  "label": "s250-pps1-e4 (eval-s250ep)",
+  "evals": [
+   [
+    "eval-s250ep",
+    "arm5-9c955fbdf7eb"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s250-pps1-e4/adapter",
+  "train_runtime_seconds": 503.6873,
+  "train_epochs": 4.0,
+  "episodes": 3135,
+  "steps": 40636,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 12.962041467304624,
+  "selector_pflop_per_step": 0.029729492271344124,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.46255932574978753,
+  "selection_seconds_median": 0.42340771900489926,
+  "selection_seconds_p90": 0.7388261060114019,
+  "generation_seconds_mean": 7.757322069803191,
+  "decision_seconds_mean": 8.219881395552978,
+  "decision_seconds_per_episode": 106.54644350548394,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 167.05382693607226,
+  "episode_seconds_median": 113.83876969800622,
+  "episode_seconds_p90": 377.58839021998574
+ },
+ "eval-s250ep:s250-pps1-e16": {
+  "label": "s250-pps1-e16 (eval-s250ep)",
+  "evals": [
+   [
+    "eval-s250ep",
+    "arm5-88632a7097e6"
+   ]
+  ],
+  "train_dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/lora/s250-pps1-e16/adapter",
+  "train_runtime_seconds": 2021.3603,
+  "train_epochs": 16.0,
+  "episodes": 3135,
+  "steps": 41131,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 13.11993620414673,
+  "selector_pflop_per_step": 0.03079663015595509,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 0.5146404398474531,
+  "selection_seconds_median": 0.4636421839968534,
+  "selection_seconds_p90": 0.8086047609976958,
+  "generation_seconds_mean": 7.952461073149612,
+  "decision_seconds_mean": 8.467101512997065,
+  "decision_seconds_per_episode": 111.08783168455692,
+  "episodes_timed": 3135,
+  "episode_seconds_mean": 176.09112930902117,
+  "episode_seconds_median": 126.77117600699421,
+  "episode_seconds_p90": 380.2165786130063
+ },
+ "eval-s250ep:sft1": {
+  "label": "SFT 4B alone (eval-s250ep)",
+  "evals": [
+   [
+    "eval-s250ep",
+    "sft1"
+   ]
+  ],
+  "train_dir": null,
+  "train_runtime_seconds": null,
+  "train_epochs": null,
+  "episodes": 1045,
+  "steps": 13419,
+  "actor_cost_episodes": 0,
+  "actor_cost_steps": 0,
+  "actor_requests_per_step": null,
+  "steps_per_episode": 12.841148325358851,
+  "selector_pflop_per_step": 0.0,
+  "head_only_pflop_per_step": 0.0,
+  "actor_pflop_per_step": null,
+  "decision_pflop_per_step": null,
+  "selection_seconds_mean": 1.1241565252626423e-05,
+  "selection_seconds_median": 1.0756004485301673e-05,
+  "selection_seconds_p90": 1.4139994163997471e-05,
+  "generation_seconds_mean": 2.526632050439932,
+  "decision_seconds_mean": 2.5266432920051844,
+  "decision_seconds_per_episode": 32.44500127791155,
+  "episodes_timed": 1045,
+  "episode_seconds_mean": 90.9349565675016,
+  "episode_seconds_median": 64.47713534500508,
+  "episode_seconds_p90": 197.4811235119996
+ }
+}

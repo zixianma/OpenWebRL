@@ -1244,7 +1244,7 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 <a id="final-selection-recipe3-head-vs-decoder-cost-20261111"></a>
 
-#### Training time and selection latency: 22.6M head vs 4B decoder
+#### Training time, compute and latency: heads vs 4B decoder
 
 **The 22.6M head trains about 18× cheaper and selects about 27× faster than the 4B LoRA decoder, but end-to-end decision time per episode is the same, because generating the five candidates dominates every step.** Both are the default Recipe 3 GPT-5.5 H = 4 selectors (ADM-22M, ADM-4B with full data, no WebArbiter pairs), trained on the same panels and evaluated with the SFT 4B actor, N = 5.
 
@@ -1262,9 +1262,24 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 | Steps | 14.0 | 13.2 | |
 | Selection time | 0.24 s | 6.2 s | |
 | Decision time (SFT 4B alone, 1 sample: 32 s) | 112 s | 111 s | ≈ 1 |
+| End-to-end episode time incl. browser, mean (SFT 4B alone: 92 s) ³ | 182 s | 181 s | ≈ 1 |
 | Steps measured | 29,334 (2 runs) | 40,193 (3 runs) | |
 
-*Latency: November 11 runs on 1 H200 each (head: head-size sweep `eval-scale`; decoder and SFT: data sweep `eval-1111`), all three benchmarks, from each step's `selection_seconds` / `generation_seconds`; browser time excluded. The head scores hidden states the actor exports while generating; that export overlaps with the other candidates' generation, so generation time matches the decoder's. The decoder is a separate sglang server on the same GPU (one ~1.6K-token forward per step, request overhead included). Training: head `train/heads-all2/k3-best` (`train_seconds` 452, train job allocated 1 H200 that the CPU trainer did not use, not counted); features `features/features-all2` (job 413066); decoder `lora/lora` (job 412317, LLaMA-Factory `train_runtime` 4:43:59, merge excluded); all under `rl-actor-recollect-20261016/p16-k3-20261031/`. Evidence: [latency data](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.json) · [script](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.py).*
+*Latency: November 11 runs on 1 H200 each (head: head-size sweep `eval-scale`; decoder and SFT: data sweep `eval-1111`), all three benchmarks, from each step's `selection_seconds` / `generation_seconds`; browser time excluded. The head scores hidden states the actor exports while generating; that export overlaps with the other candidates' generation, so generation time matches the decoder's. The decoder is a separate sglang server on the same GPU (one forward per step over about 3.5K uncached selection-prompt tokens on average, request overhead included). ³ From the table below (all runs of each). Training: head `train/heads-all2/k3-best` (`train_seconds` 452, train job allocated 1 H200 that the CPU trainer did not use, not counted); features `features/features-all2` (job 413066); decoder `lora/lora` (job 412317, LLaMA-Factory `train_runtime` 4:43:59, merge excluded); all under `rl-actor-recollect-20261016/p16-k3-20261031/`. Evidence: [latency data](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.json) · [script](arm_results/rl_integration/selection-latency-head-vs-decoder-20261111.py).*
+
+<a id="final-selection-recipe3-head-scale-cost-20261112"></a>**Compute and latency by head size (November 11–12).** *Every head adds under 0.1 TFLOP per step to the actor's 61 TFLOP for five candidates (the 1.8B head itself 17.7 GFLOP); the 4B decoder adds 30.7 TFLOP, so a decoder episode costs about 1.2 PFLOP against 0.8–0.9 with any head. Selection time grows with head size (15 ms at 4.4M, 67 ms at 273M, 337 ms at 1.8B, 474 ms for the decoder), but end-to-end episode time is 161–186 s for every head and 181 s for the decoder, against 92 s for SFT 4B alone: generating five candidates instead of one doubles the episode, and the selector does not matter.*
+
+| Selector | Params | Selector TFLOP / step | of which head | Actor TFLOP / step | PFLOP / episode | Selection ms, mean / median / p90 | Model time / episode | End-to-end / episode, mean / median / p90 | Steps / episode |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| d128-L2 head | 4.4M | 0.046 | 0.04 G | 61.2 | 0.80 | 15 / 13 / 21 | 100 s | 168 / 112 / 388 s | 13.0 |
+| d256-L2 head | 9.6M | 0.049 | 0.10 G | 60.5 | 0.77 | 15 / 13 / 21 | 98 s | 161 / 113 / 363 s | 12.7 |
+| d512-L2 head (default, ADM-22M) | 22.6M | 0.047 | 0.23 G | 60.7 | 0.86 | 17 / 15 / 24 | 112 s | 182 / 129 / 403 s | 14.1 |
+| d2048-L4 head | 272.8M | 0.049 | 2.7 G | 59.6 | 0.83 | 67 / 53 / 109 | 112 s | 179 / 127 / 396 s | 14.0 |
+| d4096-L8 head | 1.77B | 0.064 | 17.7 G | 60.8 | 0.85 | 337 / 276 / 512 | 116 s | 186 / 128 / 417 s | 13.9 |
+| 4B LoRA decoder (ADM-4B) | 4.44B | 30.7 | — | 61.1 | 1.22 | 474 / 430 / 758 | 113 s | 181 / 122 / 410 s | 13.3 |
+| SFT 4B alone (1 sample) | — | — | — | 18.7 | 0.24 | — | 33 s | 92 / 66 / 205 s | 12.8 |
+
+*Per decision step, forward FLOPs = 2 × params × tokens. Head selector = the actor's follow-up decode for candidates whose end token was not cached (2 × 4.44B × uncached + sampled tokens, about 44 GFLOP) plus the head (2 × head params × 5 candidates, "of which head"), as logged per step. Decoder selector = 2 × 4.44B × (uncached selection-prompt + generated tokens) from each step's selector telemetry. Actor = 2 × 4.44B × (uncached prompt + completion tokens) over the step's actor requests (5.0 per step with N = 5), run 1 only. PFLOP per episode = (actor + selector) × steps per episode. Selection and model time from each step's decision trace (browser excluded); end-to-end = each episode record's `elapsed_seconds` (wall clock from start to finish incl. browser; the judge ran afterwards). Each run is 1 H200 on all 1,045 tasks. Heads pool every run of the head-size sweep (`eval-scale`, `eval-seed`, `eval-sizes3`; training seed 0; 3 runs each, 22.6M 4), November 11–12; decoder and SFT: `eval-1111` (3 runs, November 11). End-to-end times also move with steps per episode and site speed (the 9.6M head's 161 s comes with 12.7 steps per episode, the 22.6M head's 182 s with 14.1). Evidence: [data](arm_results/rl_integration/selection-head-scale-cost-20261112.json) · [script](arm_results/rl_integration/selection-head-scale-cost-20261112.py).*
 
 <a id="final-selection-recipe3-data-ablations-20261105"></a>
 
@@ -1319,7 +1334,29 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 ![Recipe 3 data scaling: difference in mean overall success from SFT 4B alone versus training panels, filled when trained for about 480 or more optimizer steps](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.png)
 
-*Every data-scaling LoRA (November 8–12, 3 runs each) as mean overall success minus SFT 4B alone (1 sample, 3 runs), with its paired 95% interval; labels give states × panels per state and epochs. Filled: about 480 or more optimizer steps (all +6.7 to +9.8 pp, level with the full-data LoRA at +7.8 / +10.1 in the November 11 / 12 windows); hollow: 250 or fewer, collapsed to candidate 2 and level with SFT (+0.5 to +1.7, intervals cross 0). SFT from the same window where it ran (November 11 and 12); the November 8–9 and 10 windows ran no SFT, so points marked * use the November 11 SFT (cross-window; the same-window comparison with the full-data LoRA is in the tables above). Paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently). [PDF](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg) · [plot script](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.py) · [data](arm_results/rl_integration/selection-recipe3-data-scaling-vs-sft-20261112.json) · [analysis script](arm_results/rl_integration/selection-recipe3-data-scaling-vs-sft-20261112.py).*
+*Every data-scaling LoRA (November 8–12, 3 runs each) as mean overall success minus SFT 4B alone (1 sample; 3 runs on November 11, 1 run on November 12, when the full-data reference also ran once), with its paired 95% interval; labels give states × panels per state and epochs. Filled: about 480 or more optimizer steps (all +6.7 to +9.8 pp, level with the full-data LoRA at +7.8 / +10.1 in the November 11 / 12 windows); hollow: 250 or fewer, collapsed to candidate 2 and level with SFT (+0.5 to +1.7, intervals cross 0). SFT from the same window where it ran (November 11 and 12); the November 8–9 and 10 windows ran no SFT, so points marked * use the November 11 SFT (cross-window; the same-window comparison with the full-data LoRA is in the tables above). Paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently). [PDF](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg) · [plot script](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.py) · [data](arm_results/rl_integration/selection-recipe3-data-scaling-vs-sft-20261112.json) · [analysis script](arm_results/rl_integration/selection-recipe3-data-scaling-vs-sft-20261112.py).*
+
+<a id="final-selection-recipe3-data-cost-20261112"></a>**Training and inference cost of the data-scaling LoRAs.** *Inference cost does not depend on the training data: every LoRA spends about 30 TFLOP and 460–520 ms per selection and 167–191 s per episode end to end (SFT 4B alone: 91–92 s). Training cost falls with the data: the 250 × 1 panel LoRA at 16 epochs, level with the full data, takes 2.2 H200-h against 18.9.*
+
+| Window | LoRA training data | Epochs | Training, 4 H200 | H200-h | Selection ms, mean / p90 | Selector TFLOP / step | Model time / episode | End-to-end / episode, mean / median / p90 | Steps / episode | Runs |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Nov 8–9 | Full data | 2 | 4 h 44 min | 18.9 | 474 / 760 | 30.8 | 114 s | 181 / 121 / 407 s | 13.2 | 3 |
+| Nov 8–9 | 4 panels / state | 2 | 1 h 58 min | 7.9 | 500 / 788 | 30.5 | 104 s | 169 / 111 / 390 s | 12.3 | 3 |
+| Nov 8–9 | 1 panel / state | 2 | 0 h 34 min | 2.3 | 496 / 790 | 30.8 | 110 s | 176 / 117 / 395 s | 12.8 | 3 |
+| Nov 8–9 | 1,000 states | 2 | 2 h 15 min | 9.1 | 504 / 789 | 31.0 | 114 s | 183 / 123 / 411 s | 13.1 | 3 |
+| Nov 8–9 | Full data, 1,692 steps | 0.82 | 1 h 56 min | 7.8 | 480 / 764 | 31.0 | 113 s | 179 / 117 / 411 s | 13.0 | 3 |
+| Nov 8–9 | Full data, full fine-tune | 2 | 4 h 42 min | 18.8 | 478 / 767 | 30.9 | 116 s | 183 / 124 / 412 s | 13.3 | 3 |
+| Nov 10 | Full data | 2 | 4 h 44 min | 18.9 | 473 / 757 | 30.7 | 111 s | 177 / 120 / 395 s | 13.0 | 3 |
+| Nov 10 | 252 states | 2 | 0 h 32 min | 2.1 | 511 / 806 | 31.9 | 121 s | 191 / 132 / 432 s | 13.6 | 3 |
+| Nov 11 | 1,000 states × 1 panel, 2 ep | 2 | 0 h 16 min | 1.1 | 469 / 756 | 29.8 | 111 s | 173 / 123 / 385 s | 13.4 | 3 |
+| Nov 11 | 250 states × 1 panel, 2 ep | 2 | 0 h 04 min | 0.3 | 491 / 780 | 29.7 | 107 s | 168 / 118 / 379 s | 12.9 | 3 |
+| Nov 11 evening | 1,000 states × 1 panel, 4 ep | 4 | 0 h 33 min | 2.2 | 468 / 747 | 30.5 | 116 s | 184 / 128 / 417 s | 13.7 | 3 |
+| Nov 12 | Full data | 2 | 4 h 44 min | 18.9 | 469 / 742 | 30.8 | 119 s | 189 / 132 / 428 s | 13.8 | 1 |
+| Nov 12 | 250 states × 1 panel, 4 ep | 4 | 0 h 08 min | 0.6 | 463 / 739 | 29.7 | 107 s | 167 / 114 / 378 s | 13.0 | 3 |
+| Nov 12 | 250 states × 1 panel, 16 ep | 16 | 0 h 33 min | 2.2 | 515 / 809 | 30.8 | 111 s | 176 / 127 / 380 s | 13.1 | 3 |
+| Nov 12 | SFT 4B alone | — | — | — | — | — | 32 s | 91 / 64 / 197 s | 12.8 | 1 |
+
+*Training: LLaMA-Factory `train_runtime` on 4 H200 (merge excluded); H200-h = 4 × runtime. Inference columns as in the [head-size cost table](#final-selection-recipe3-head-scale-cost-20261112), each LoRA in its own eval window (3 runs; the November 12 full-data and SFT references 1 run). Evidence: [data](arm_results/rl_integration/selection-head-scale-cost-20261112.json) · [script](arm_results/rl_integration/selection-head-scale-cost-20261112.py).*
 
 <a id="final-selection-recipe3-lora-controls-20261109"></a>
 
