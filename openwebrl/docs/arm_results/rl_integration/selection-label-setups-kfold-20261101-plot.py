@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Label sources, offline (task-level 5-fold) and live: gain over one SFT 4B actor sample.
 
+Pass --teacher-only-offline for a separate figure omitting offline student points.
+
 (1) Offline, 5-fold: all 1,725 SFT-action branch states (433 tasks) split into five task-level folds (fold 0 = the
     original 345-state / 86-task test split). Each fold's heads (3 seeds, scores averaged per state) are trained on the
     other four folds' states, so every state is scored out-of-fold. Each state's first five SFT proposals (duplicates
@@ -27,6 +29,7 @@ plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42,
                      "ps.fonttype": 42, "svg.fonttype": "none"})
 from matplotlib.lines import Line2D
 
+TEACHER_ONLY_OFFLINE = "--teacher-only-offline" in _paper_sys.argv
 HERE = Path(__file__).resolve().parent
 K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())
 LIVE3 = json.loads((HERE / "selection-label-live-3run-20261103.json").read_text())  # same-day 3-run batch
@@ -65,8 +68,9 @@ for ax, (title, kind, base) in zip(axes, PANELS):
                 continue
             point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)
         else:
-            point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
+            point(ax, x if TEACHER_ONLY_OFFLINE else x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
+            if not TEACHER_ONLY_OFFLINE:
+                point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -102,6 +106,8 @@ for artist in [*fig.legends, *[text for ax in axes for text in
         bounds = artist.get_window_extent(renderer)
         assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), str(artist)
 output = HERE / "selection-label-setups-kfold-20261101"
+if TEACHER_ONLY_OFFLINE:
+    output = HERE / "selection-label-setups-kfold-teacher-only-offline-20261101"
 fig.savefig(output.with_suffix(".png"), dpi=300)
 fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
 fig.savefig(output.with_suffix(".svg"), metadata={"Date": None})

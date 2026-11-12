@@ -42,6 +42,12 @@
 
 ![Training, held-out and online: 5-fold](arm_results/rl_integration/selection-label-same-state-kfold-20261101.png)
 
+### Teacher offline success and student online success
+
+![Teacher offline success and student online success](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.png)
+
+[PDF](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.svg)
+
 ## Actor + ADM trade-offs
 
 ### All actors: benchmark mean

@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
     "selection-head-scale-20261111": "Selection head scaling",
