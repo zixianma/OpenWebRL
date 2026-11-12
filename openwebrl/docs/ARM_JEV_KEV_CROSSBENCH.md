@@ -1,6 +1,6 @@
 # Jev and Kev-4B cross-benchmark evaluation (2026-11-11)
 
-Jev 1.13.0 used as a top-5 selector over the OpenWebRL-4B-SFT actor improves on SFT alone on two of three benchmarks: **+20.7 points on DeepShop** and **+4.9 on WebVoyager**. On Online-Mind2Web it is neutral (+1.7). Kev-4B as a selector is mixed (+13.3, −1.0 and −5.7 points). Jev running as the actor, directly or through our ADM, scores far below the SFT actor. The Jev-actor cohorts stopped a few tasks short of complete when they hit approved browser-session or spending caps.
+Jev 1.13.0 used as a top-5 selector over the OpenWebRL-4B-SFT actor improves on SFT alone on two of three benchmarks: **+20.7 points on DeepShop** and **+4.9 on WebVoyager**. On Online-Mind2Web it is neutral (+1.7). Kev-4B as a selector is mixed (+13.3, −1.0 and −5.7 points). Jev running as the actor, directly or through our ADM, scores far below the SFT actor.
 
 ## Selectors over the SFT-4B actor {#jev-kev-selectors-20261111}
 
@@ -33,20 +33,20 @@ WebVoyager SFT + Jev was interrupted when TypeSafe credits ran out (HTTP 402). T
 - **Direct Jev:** Jev 1.13.0 chooses and runs its own actions. On DONE, GPT-4.1-mini extracts the answer, and the benchmark's own judge grades it.
 - **Jev top-5 → ADM:** Jev ranks its actions by P(op)·P(target|op). The ADM `decoder-4b-lora-gpt55-k3-p16` (arm5-9fadc8dc4655) picks one of the top 5, and Jev executes it.
 
-These cohorts stopped short of all tasks when they hit approved browser-session or spending caps, so each is compared with SFT alone on the same tasks only. Episodes that end without DONE count as failures. Early partial rates were optimistic: top-5 → ADM on DeepShop was 35.6% after 59 tasks and 20.5% after 146.
+All rates divide by every task. Episodes that end without DONE count as failures. Tasks whose browser failed all 3 allowed attempts count as invalid failures; for direct Jev on WebVoyager, 44 of the 49 invalid tasks are Wolfram Alpha, whose start page timed out. The comparison columns are paired differences over all tasks, with 95% bootstrap intervals.
 
-| Benchmark | Condition | Done | Total | Valid | Successes | Overall | SFT alone, same tasks | Difference [95% interval] |
-|---|---|---:|---:|---:|---:|---:|---:|---|
-| WebVoyager | Direct Jev | 545 | 595 | 544 | 60 | 11.0% | 47.2% | −36.1 [−40.7, −31.7] |
-| WebVoyager | Jev top-5 → ADM | 582 | 595 | 538 | 121 | 20.8% | 44.5% | −23.7 [−28.2, −19.2] |
-| DeepShop | Direct Jev | 103 | 150 | 103 | 15 | 14.6% | 30.1% | −15.5 [−25.2, −5.8] |
-| DeepShop | Jev top-5 → ADM | 146 | 150 | 145 | 30 | 20.5% | 30.1% | −9.6 [−18.5, −0.7] |
-| Online-Mind2Web | Direct Jev | 280 | 300 | 263 | 18 | 6.4% | 38.2% | −31.8 [−37.5, −26.4] |
-| Online-Mind2Web | Jev top-5 → ADM | 276 | 300 | 262 | 30 | 10.9% | 39.5% | −28.6 [−34.8, −22.5] |
+| Benchmark | Condition | Successes | Valid | Invalid | Total | Overall | Valid-only | − SFT alone | − SFT + Jev top-5 |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|
+| WebVoyager | Direct Jev | 61 | 546 | 49 | 595 | 10.25% | 11.17% | −33.3 [−37.3, −29.1] | −38.2 [−42.4, −33.9] |
+| WebVoyager | Jev top-5 → ADM | 121 | 539 | 56 | 595 | 20.34% | 22.45% | −23.2 [−27.4, −19.0] | −28.1 [−32.4, −23.7] |
+| DeepShop | Direct Jev | 16 | 150 | 0 | 150 | 10.67% | 10.67% | −19.3 [−27.3, −11.3] | −40.0 [−48.0, −32.0] |
+| DeepShop | Jev top-5 → ADM | 30 | 149 | 1 | 150 | 20.00% | 20.13% | −10.0 [−18.7, −1.3] | −30.7 [−39.3, −22.0] |
+| Online-Mind2Web | Direct Jev | 18 | 269 | 31 | 300 | 6.00% | 6.69% | −31.0 [−36.3, −25.7] | −32.7 [−38.0, −27.3] |
+| Online-Mind2Web | Jev top-5 → ADM | 32 | 271 | 29 | 300 | 10.67% | 11.81% | −26.3 [−32.0, −20.7] | −28.0 [−33.7, −22.3] |
 
-Overall here divides by tasks done.
+Early partial rates were optimistic: top-5 → ADM on DeepShop was 35.6% after 59 tasks and 20.0% at completion.
 
-- **Direct Jev gives up early; answers are not lost.** 438 of 545 WebVoyager episodes and 230 of 280 Online-Mind2Web episodes end BLOCKED, mostly at step 0. Typical causes are an Allrecipes access-issue page, an empty first load on Amazon, and Akamai "Access Denied" pages. The SFT actor sees the same pages but navigates around them. Every DONE episode is extracted and judged.
+- **Direct Jev gives up early; answers are not lost.** 439 of 549 recorded WebVoyager episodes and 236 of 290 Online-Mind2Web episodes end BLOCKED, mostly at step 0. Typical causes are an Allrecipes access-issue page, an empty first load on Amazon, and Akamai "Access Denied" pages. The SFT actor sees the same pages but navigates around them. Every DONE episode is extracted and judged.
 - **Top-5 → ADM loops instead of stopping.** In the first 78 Online-Mind2Web episodes, 47 hit the 30-action limit, mostly in WAIT loops, because the ADM rarely picks DONE or BLOCKED. It beats direct Jev on every benchmark but still trails SFT alone.
 
 <details>
@@ -72,17 +72,23 @@ Code: `openwebrl/crossbench_selector_eval.py`, `openwebrl/jev_native_bench_eval.
 </details>
 
 <details>
-<summary>Why the Jev-actor cohorts are incomplete</summary>
+<summary>Interruptions and cap changes</summary>
 
-| Cohort | Done | Total | Stopping cap | Used / cap |
-|---|---:|---:|---|---|
-| Direct Jev, WebVoyager | 545 | 595 | Browser sessions | 655 / 655 |
-| Direct Jev, DeepShop | 103 | 150 | Halted with the WebVoyager run (shared job) | 108 / 165 sessions |
-| Direct Jev, Online-Mind2Web | 280 | 300 | Browser sessions | 330 / 330 |
-| Jev top-5 → ADM, WebVoyager | 582 | 595 | Browser sessions | 655 / 655 |
-| Jev top-5 → ADM, Online-Mind2Web | 276 | 300 | Browser sessions | 330 / 330 |
-| Jev top-5 → ADM, DeepShop | 146 | 150 | Halt with no cap reached; likely the $4 GPT-4.1-mini reservation (unverified) | $3.12 / $4.00 |
+The Jev-actor runs were interrupted twice on 2026-11-11, and every interrupted episode was set aside and rerun:
 
-Session caps were 1.1× tasks per cohort and count every browser launch, including those lost to the 402 outage.
+1. **TypeSafe credits ran out (HTTP 402).** The jobs were resubmitted after credits were added.
+2. **Approved caps were reached.** Browser launches lost to the outage had counted toward each run's browser-session cap (1.1× tasks). With the user's approval, the caps were raised:
+    - Direct Jev: WebVoyager 655 → 720 sessions; Online-Mind2Web 330 → 360.
+    - Top-5 → ADM: Online-Mind2Web 330 → 370 sessions; WebVoyager 655 → 690.
+    - Top-5 → ADM, DeepShop: GPT-4.1-mini cap $4 → $5. Its judge cap went $3 → $5, because each judge call reserves its worst-case cost (≈$1.50) up front.
+
+Unrecorded tasks failed all 3 browser attempts and are counted as invalid:
+
+| Run | Unrecorded tasks | Main sites |
+|---|---:|---|
+| Direct Jev, WebVoyager | 46 | Wolfram Alpha (44), ESPN |
+| Direct Jev, Online-Mind2Web | 10 | Best Buy, FedEx, UPS, ESPN |
+| Jev top-5 → ADM, Online-Mind2Web | 5 | recreation.gov, FedEx, Best Buy |
+| Jev top-5 → ADM, WebVoyager | 1 | Wolfram Alpha |
 
 </details>
