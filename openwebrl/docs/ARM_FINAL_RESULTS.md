@@ -1186,7 +1186,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 - **Less data is enough, more steps don't hurt.** LoRAs on 4 panels per state, 1 panel per state (12% of the examples) or 1,000 states are +0.4, +0.4 and −1.1 pp mean overall against the full-data LoRA (all intervals cross 0); the earlier subset leads were a window effect. With about 480+ optimizer steps even 252 panels (1.5% of the examples, 16 epochs) is level with the full data (−0.4 [−3.4, +2.7]); with 250 steps or fewer, LoRAs on 1K or fewer panels collapse to a fixed answer and score like SFT alone. [Plot](#final-selection-recipe3-data-below2k-20261111) Stopping the full-data LoRA at 1,692 instead of 4,122 steps changes nothing (−0.5 [−2.5, +1.4]); a full fine-tune is worse (−2.5 [−4.6, −0.4]). [Rerun](#final-selection-recipe3-data-rerun-20261109) · [controls](#final-selection-recipe3-lora-controls-20261109)
 - **Head size does not matter (4.4M–1.8B).** Over three training seeds in one window the 4.4M and 22.6M heads are level (−0.2 [−1.8, +1.4] pp), and the 1.8B head is level with the 22.6M default (−1.1 [−4.3, +2.2]); the single-seed screen's 4.4M lead (+4.3) was a seed and window effect. [Details](#final-selection-recipe3-head-scale-20261111)
-- **Kev-style selectors work on all three benchmarks.** Against one SFT sample in the same windows, Kev-A is +8.8 [+6.3, +11.4] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.6, +9.4]; B − A is −1.8 [−4.3, +0.6] (2 runs). [Details](#final-selection-recipe3-kev-3bench-20261110)
+- **Kev-style selectors work on all three benchmarks and match the GPT-5.5 decoder.** Over 3 runs against one SFT sample in the same windows, Kev-A is +8.7 [+6.7, +10.8] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.9, +9.1]. In a same-window run with the Recipe 3 GPT-5.5 K = 3 decoder, Kev-A − decoder is +0.7 [−2.9, +4.3] and Kev-B − decoder −0.9 [−4.6, +2.9]. [Details](#final-selection-recipe3-kev-3bench-20261110)
 - **The selector gain survives stealth browsers.** US-residential stealth browsers add about +13.5 pp mean overall to both SFT 4B and SFT 4B + the LoRA decoder (Online-Mind2Web and WebVoyager only); the decoder's gain is +7.2 [+3.5, +10.9] under stealth vs +7.6 [+5.4, +9.7] locally (1 stealth run). [Details](#final-selection-recipe3-stealth-20261109)
 
 <a id="final-selection-recipe3"></a>
@@ -1490,9 +1490,51 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 <a id="final-selection-recipe3-kev-3bench-20261110"></a>
 
-#### Kev-style decision pass on Recipe 3 labels (November 7–10)
+#### Kev-style decision pass on Recipe 3 labels (November 7–12)
 
-**Both Kev-style selectors beat one SFT 4B sample on all three benchmarks: Kev-A by +8.8 [+6.3, +11.4] pp mean overall, Kev-B by +7.0 [+4.6, +9.4]. Kev-B, which skips the LoRA on prompt tokens so the selector could reuse the actor's generation cache, is −1.8 [−4.3, +0.6] behind Kev-A (not significant; −1.8 on WebVoyager and −3.3 on DeepShop valid-only, +0.3 on Online-Mind2Web).** 2 runs per condition on all 1,045 tasks, with SFT re-run in each window: Online-Mind2Web November 8 (16:15–19:45 PST), WebVoyager and DeepShop November 10 (16:00–21:00 PST). The Recipe 3 4B LoRA decoder did not run in these windows, so Kev and the decoder are not compared directly.
+**Over 3 runs, both Kev-style selectors beat one SFT 4B sample on all three benchmarks: Kev-A by +8.7 [+6.7, +10.8] pp mean overall, Kev-B by +7.0 [+4.9, +9.1]. Kev-B, which skips the LoRA on prompt tokens so the selector could reuse the actor's generation cache, is −1.7 [−3.9, +0.4] behind Kev-A; the gap is all DeepShop (−6.4 [−11.8, −1.1] overall). In a same-window run, neither Kev variant differs from the Recipe 3 GPT-5.5 K = 3 decoder: Kev-A − decoder +0.7 [−2.9, +4.3], Kev-B − decoder −0.9 [−4.6, +2.9] pp mean overall.** All 1,045 tasks per run, with SFT re-run in each window. Runs 1–2: Online-Mind2Web November 8 (16:15–19:45 PST), WebVoyager and DeepShop November 10 (16:00–21:00 PST). Run 3, all four conditions on all three benchmarks: November 11, 23:43 to November 12, 04:30 PST.
+
+**3 runs: Kev-style vs SFT.**
+
+| Selector | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, mean overall pp [95% CI] | − SFT alone, mean valid-only pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | 28.6% | 41.3% | 38.2% | 36.0% | 38.6% | — | — |
+| Kev-A: LoRA on all tokens | 33.2% | **48.6%** | **52.4%** | **44.8%** | **48.0%** | **+8.7 [+6.7, +10.8]** | **+9.3 [+7.2, +11.5]** |
+| Kev-B: no LoRA on prompt tokens | **34.7%** | 48.4% | 46.0% | 43.0% | 46.5% | **+7.0 [+4.9, +9.1]** | **+7.8 [+5.6, +10.0]** |
+| *Kev-B − Kev-A, pp [95% CI]* | +1.4 [−1.6, +4.4] | −0.2 [−2.4, +1.9] | **−6.4 [−11.8, −1.1]** | −1.7 [−3.9, +0.4] | −1.5 [−3.8, +0.7] | | |
+
+| Selector | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 799 / 900 | 257 | 1,628 / 1,785 | 737 | 447 / 450 | 172 |
+| Kev-A | 790 / 900 | 299 | 1,621 / 1,785 | 868 | 449 / 450 | 236 |
+| Kev-B | 784 / 900 | 312 | 1,612 / 1,785 | 864 | 450 / 450 | 207 |
+
+*Per-benchmark columns are overall success (invalid episodes and tasks with no recorded episode count as failures). Mean overall is the equal-weight 3-benchmark mean; differences are paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs); one training run per selector. Overall − SFT, Online-Mind2Web / WebVoyager / DeepShop: Kev-A +4.7 [+1.6, +7.8] / +7.3 [+4.9, +9.8] / +14.2 [+9.6, +19.1], Kev-B +6.1 [+3.1, +9.0] / +7.1 [+4.6, +9.6] / +7.8 [+2.7, +12.9]. Valid-only rates: SFT 32.2 / 45.3 / 38.5%, Kev-A 37.8 / 53.5 / 52.6%, Kev-B 39.8 / 53.6 / 46.0%.*
+
+<a id="final-selection-recipe3-kev-decoder-20261112"></a>
+
+**Run 3, same window: Kev-style vs the Recipe 3 decoder.**
+
+| Selector | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | − SFT alone, mean overall pp [95% CI] | − Decoder, mean overall pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | 32.0% | 40.8% | 34.0% | 35.6% | — | — |
+| Recipe 3 decoder (GPT-5.5 K = 3, 4B LoRA) | 36.0% | 47.9% | 46.7% | 43.5% | **+7.9 [+4.4, +11.4]** | — |
+| Kev-A: LoRA on all tokens | 33.0% | 45.0% | **54.7%** | **44.2%** | **+8.6 [+5.0, +12.2]** | +0.7 [−2.9, +4.3] |
+| Kev-B: no LoRA on prompt tokens | **37.3%** | **48.6%** | 42.0% | 42.6% | **+7.0 [+3.2, +10.7]** | −0.9 [−4.6, +2.9] |
+
+| Selector | Online-Mind2Web valid / tasks | Online-Mind2Web successes | WebVoyager valid / tasks | WebVoyager successes | DeepShop valid / tasks | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 268 / 300 | 96 | 536 / 595 | 243 | 149 / 150 | 51 |
+| Decoder | 255 / 300 | 108 | 536 / 595 | 285 | 147 / 150 | 70 |
+| Kev-A | 261 / 300 | 99 | 536 / 595 | 268 | 149 / 150 | 82 |
+| Kev-B | 259 / 300 | 112 | 537 / 595 | 289 | 150 / 150 | 63 |
+
+*One run per condition; per-benchmark columns are overall success. Overall − decoder, Online-Mind2Web / WebVoyager / DeepShop: Kev-A −3.0 [−8.3, +2.0] / −2.9 [−6.4, +0.8] / +8.0 [−0.7, +16.7]; Kev-B +1.3 [−4.3, +7.0] / +0.7 [−3.2, +4.5] / −4.7 [−14.0, +4.7]. Mean valid-only: SFT 38.5%, decoder 47.7%, Kev-A 47.7%, Kev-B 46.4%. The decoder is `arm5-9fadc8dc4655` (GPT-5.5 K = 3 labels, p16), the same checkpoint as the [Recipe 3 table](#selection-head-headline-results). Run 3 left 10 of 4,180 task episodes unrecorded (at most 2 per job) because the browser failed all attempts; they count as invalid failures.*
+
+*Judges: Online-Mind2Web gpt-5.6-terra (AgentTrek prompt), WebVoyager and DeepShop GPT-4o; rolled out judge-deferred and judged afterwards, no record refused. One Kev-A WebVoyager run-1 job restarted on another node after the actor server crashed at startup (bus error on g016); its 595 tasks all come from the restart. Run 3 used 12 one-H200 jobs (about 30 of 49 approved H200-hours, urgent QoS) and $22.45 of judge calls.*
+
+<details>
+<summary>2-run report (November 10)</summary>
 
 | Selector | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, mean overall pp [95% CI] | − SFT alone, mean valid-only pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -1508,6 +1550,8 @@ All four attention × scorer × loss combinations plus causal attention, one run
 | Kev-B | 525 / 600 | 200 | 1,075 / 1,190 | 575 | 300 / 300 | 144 |
 
 *Per-benchmark columns are valid-only success. Mean overall is the equal-weight 3-benchmark mean of overall success (invalid episodes count as failures); differences are on it, paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs); one training run per selector. Valid-only − SFT, Online-Mind2Web / WebVoyager / DeepShop: Kev-A +7.5 [+3.1, +11.9] / +10.1 [+6.8, +13.4] / +10.7 [+5.0, +16.5], Kev-B +7.8 [+3.7, +11.9] / +8.3 [+5.1, +11.4] / +7.4 [+1.9, +12.9]. The Kev-B − Kev-A row is valid-only per benchmark, with mean overall and mean valid-only in their columns. Judges: Online-Mind2Web gpt-5.6-terra (AgentTrek prompt), WebVoyager and DeepShop GPT-4o; rolled out judge-deferred and judged afterwards, no record refused. One Kev-A WebVoyager run restarted on another node after the actor server crashed at startup (bus error on g016); its 595 tasks all come from the restart. For context only (other windows, cross-day): the Recipe 3 4B LoRA decoder is +5.1 to +7.6 pp over SFT in its own windows ([Recipe 3 table](#selection-head-headline-results), [stealth section](#final-selection-recipe3-stealth-20261109)).*
+
+</details>
 
 <details>
 <summary>Online-Mind2Web alone (November 8, first report)</summary>
@@ -1526,7 +1570,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 - **Training.** Kev-style selector ([Kev-inspired variants](ARM_SELECTION_HEAD.md#selection-head-designs), October) on the same Recipe 3 GPT-5.5 H = 4 panels and split as the default head: the 4B SFT actor with a LoRA on all 36 layers plus a pointer head on a decision token, initialised from the pointwise head, lr 1e-4 (pointer 1e-3), batch 8 states. Best probe at step 600 of 750 (4,800 training states), 6.8 h on 1 H200 each. Kev-A adapts every token; Kev-B runs the prompt through the unadapted actor (`--kev-prompt-base`). Held-out agreement with the GPT-5.5 picks on 1,727 validation panels: 41.6% (A) and 42.7% (B).
 - **Inference.** Evaluated as a separate scorer service next to the actor (`head5x`), N = 5, SFT 4B actor, T 1.0 / top-p 0.9, 30 steps.
-- Evidence: [3-benchmark rates and contrasts](arm_results/rl_integration/selection-recipe3-kev-3bench-20261110.json) · [script](arm_results/rl_integration/selection-recipe3-kev-3bench-20261110.py) · Online-Mind2Web only: [rates](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.json) · [script](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.py). Runtime: `recipe3-ablations-20261104/` (training `kev/train.sbatch`, `kev/common.sh`, source `source-kev/`, checkpoints `/gpfs/projects/krishna/zixianma/kev-ckpt-tmp/kev{A,B}-r3/`, evals `eval-kev/run<k>/`, job log `eval-kev/jobs.txt`).
+- Evidence: [3 runs and same-window decoder: rates and contrasts](arm_results/rl_integration/selection-recipe3-kev-3bench-20261112.json) · [script](arm_results/rl_integration/selection-recipe3-kev-3bench-20261112.py) · 2-runs: [rates](arm_results/rl_integration/selection-recipe3-kev-3bench-20261110.json) · [script](arm_results/rl_integration/selection-recipe3-kev-3bench-20261110.py) · Online-Mind2Web only: [rates](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.json) · [script](arm_results/rl_integration/selection-recipe3-kev-om2w-20261108.py). Runtime: `recipe3-ablations-20261104/` (training `kev/train.sbatch`, `kev/common.sh`, source `source-kev/`, checkpoints `/gpfs/projects/krishna/zixianma/kev-ckpt-tmp/kev{A,B}-r3/`, evals `eval-kev/run<k>/`, job log `eval-kev/jobs.txt`).
 
 <a id="final-selection-recipe3-stealth-20261109"></a>
 
