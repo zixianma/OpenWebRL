@@ -36,10 +36,10 @@ OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overa
 FRONTIER = C["FRONTIER"]
 # Overall-success paper view: shape denotes the actor/selector architecture.
 OVERALL_STYLES = {
-    "sft1": (tint("ADM_4B", .35), "o"),
-    "sft8b": (C["ADM_4B"], "o"),
-    "rl4b": (tint("ADM_4B", .35), "s"),
-    "rl8b": (C["ADM_4B"], "s"),
+    "sft1": (C["BASELINE_LIGHT"], "o"),
+    "sft8b": (C["BASELINE_DARK"], "o"),
+    "rl4b": (C["BASELINE_LIGHT"], "s"),
+    "rl8b": (C["BASELINE_DARK"], "s"),
     "head-gpt55-k3": ("#B69AE8", "D"),
     "lora-gpt55-k3": ("#8246E5", "D"),
     "rl8b-lora-gpt55-k3": ("#5429A3", "D"),
@@ -101,7 +101,10 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
-        size = 44 if circle_encoding and "lora" in key else 24
+        if circle_encoding and success_metric == "overall":
+            size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3") else 24
+        else:
+            size = 44 if circle_encoding and "lora" in key else 24
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=.95 if hollow and circle_encoding and success_metric == "overall" else 1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
@@ -159,13 +162,12 @@ def legend(fig, axes, *, sft_only, grouped=False):
              (blank, "Our ADM"),
              (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
              (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
-             (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"),
-             (by_label["ADM-distilled actor"], "ADM-distilled 4B")],
-            [(blank, "Baselines"),
+             (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"), (blank, "")],
+            [(blank, ""), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
+             (blank, ""), (frontier_handle, "Frontier"), (blank, ""),
+             (blank, "Baseline ADMs"),
              (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
-             (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B"),
-             (blank, ""), (frontier_handle, "Frontier"),
-             (blank, ""), (blank, ""), (blank, "")],
+             (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B")],
         ]
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
@@ -173,7 +175,7 @@ def legend(fig, axes, *, sft_only, grouped=False):
                          frameon=False, fontsize=6.4, handlelength=1.1,
                          handletextpad=.7, columnspacing=1.5, labelspacing=.22,
                          borderaxespad=0)
-        for index in (0, 5, 10):
+        for index in (0, 5, 15):
             leg.texts[index].set_fontweight("medium")
             leg.texts[index].set_color(C["MUTED"])
         return leg
@@ -202,14 +204,9 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
-        methods = [(key, label, params, "#8246E5" if key == "adm-distilled" else color, marker, hollow)
-                   for key, label, params, color, marker, hollow in methods]
-        methods = [(key, label, params,
-                    tint("ADM_4B", .35) if key == "sft1" else C["ADM_4B"] if key == "sft8b" else color,
-                    marker, hollow) for key, label, params, color, marker, hollow in methods]
         methods.extend([
-            ("rl4b", "RL 4B", SFT, tint("ADM_4B", .35), "^", False),
-            ("rl8b", "RL 8B", 8.77e9, C["ADM_4B"], "^", False),
+            ("rl4b", "RL 4B", SFT, C["BASELINE_LIGHT"], "s", False),
+            ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "s", False),
             ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
         ])
         methods = [(key, label, params, OVERALL_STYLES[key][0], OVERALL_STYLES[key][1], hollow)
