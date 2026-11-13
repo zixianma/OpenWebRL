@@ -115,5 +115,29 @@
     },
     "reported_mean_overall": 42.0,
     "accounting": "Updates SFT 4B success in the SFT overall-success views only. Existing SFT 4B cost coordinates are retained. Exact counts, evaluation date and run count for the supplied success row were not specified."
-  }
+  },
+  "rl_overall_updates": [
+    {
+      "source": "User-provided RL-8B overall-success rows, 2026-11-13",
+      "plot_key": "rl8b",
+      "benchmarks": {
+        "webvoyager": 56.5,
+        "online_mind2web": 38.3,
+        "deepshop": 57.8
+      },
+      "reported_mean_overall": 50.9,
+      "accounting": "Success rates supplied by user; cost coordinates retained from the existing November 4–5 run-1 accounting. Matching cost measurements, exact counts and evaluation date for this new success row were not supplied."
+    },
+    {
+      "source": "User-provided RL-8B overall-success rows, 2026-11-13",
+      "plot_key": "rl8b-lora-gpt55-k3",
+      "benchmarks": {
+        "webvoyager": 58.8,
+        "online_mind2web": 41.9,
+        "deepshop": 63.3
+      },
+      "reported_mean_overall": 54.7,
+      "accounting": "Success rates supplied by user; cost coordinates retained from the existing November 4–5 run-1 accounting. Matching cost measurements, exact counts and evaluation date for this new success row were not supplied."
+    }
+  ]
 }

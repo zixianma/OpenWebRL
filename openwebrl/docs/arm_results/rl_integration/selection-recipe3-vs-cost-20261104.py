@@ -32,7 +32,7 @@ HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
 EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
 EXTERNAL = {**EXTRA_RESULTS["systems"], "kev-4b": json.loads((HERE / "selection-kev-costs-20261113.json").read_text())}
-OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"]]
+OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"], *EXTRA_RESULTS["rl_overall_updates"]]
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
@@ -114,7 +114,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
     if k == "params":
         if any(m[0] in EXTERNAL for m in methods):
             ax.set_xlim(3.5, 18.5)
-            ax.set_xticks([4.44, 8.88, 17.17], ["4.44", "8.88", "17.17"])
+            ax.set_xticks([4.44, 8.88, 13.21, 17.17], ["4.44", "8.88", "13.21", "17.17"])
             return
         wide = any(m[2] > 9e9 for m in methods)
         ax.set_xlim(3.5, 14.2 if wide else 9.5)
@@ -148,6 +148,10 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
+        methods.extend([
+            ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "h", False),
+            ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
+        ])
         for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X"), ("kev-4b", "v")):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
@@ -171,7 +175,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
                 ax.set_title(title, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel(f"{metric_label}\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\n{metric_label.lower()} (%)" if len(benches) > 1 else f"{NAMES[bench]}\n{metric_label.lower()} success (%)"))
-    bottom_legend = legend(fig, axes, sft_only=all(not m[0].startswith("rl") for m in methods))
+    bottom_legend = legend(fig, axes, sft_only=circle_encoding or all(not m[0].startswith("rl") for m in methods))
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
