@@ -15,6 +15,7 @@ MEAN_STEMS = {
     'browsercode_scaling_strategies_compact', 'browsercode_selection_interaction',
     'browsercode_selection_scaling', 'selection-head-labels-vs-cost-20261021',
     'selection-recipe3-vs-cost-20261104', 'selection-recipe3-vs-cost-sft-actors-20261104',
+    'selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104',
     'selection-recipe3-vs-cost-sft-actors-overall-20261104', 'selection-recipe3-vs-cost-rl-actors-20261104',
     'selection-recipe3-data-ablations-compact-20261105', 'selection-recipe3-data-states-20261105',
     'selection-recipe3-data-panels-20261105', 'selection-recipe3-data-scaling-20261112',

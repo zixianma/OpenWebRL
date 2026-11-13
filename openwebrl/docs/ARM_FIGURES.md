@@ -90,6 +90,18 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg)
 
+### SFT actors and ADMs: without RL checkpoints
+
+![SFT actors and ADMs: without RL checkpoints](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.svg)
+
+### SFT actors and ADMs: without RL, per benchmark
+
+![SFT actors and ADMs: without RL, per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg)
+
 ### SFT actors: per benchmark
 
 ![SFT actors: per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)

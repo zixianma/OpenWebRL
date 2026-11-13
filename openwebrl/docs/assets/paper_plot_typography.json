@@ -378,7 +378,13 @@
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109.svg": "76910263c4e22e695e98c168faa410757a9aab23cd2bd0893905974f29315634",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-scaling-20261112.pdf": "63bd477503ba03d1ce2711a3bb9ee041327b47966e1b900c2ba9b53c00d547e6",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-scaling-20261112.png": "29a2a97aaf25333eed90edc944dadc6b257bd91bfa43dbe8a82e86983770b72b",
-    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg": "a807558073347af75374da255f4abc502ca390fdef1cd0557c1b063ad662aa88"
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg": "a807558073347af75374da255f4abc502ca390fdef1cd0557c1b063ad662aa88",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.png": "8f6cdfa0bc9a82cb7acd3300e537ec5775db25e262410e7f14bb96f062bf5d3d",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.pdf": "35c8af1d341df6bfb2b74511e4d2ae1de3ed7c7b566e61e1014b8e50479e773e",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.svg": "49f9adc3c75f9b903d4c7315fad405a257fdc9a024257c2aa9c0df1e957277fb",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.png": "2995b74c59b68d594041cebca04eb66dd5d2c4bc21018fd8c4ad4d33d62318fa",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.pdf": "be81558e7bca0806e1e5f614f280d1960b5c90fd0841645ede09207dc0bfcf16",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg": "573860be5974ca3ea73a695cb3682717f37e2013ad65c31830900d2c9665a334"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
@@ -390,6 +396,6 @@
     "validity_qualifiers": "Defined in captions, omitted from plot text",
     "policy": "openwebrl/docs/paper_plot_labels.py",
     "audit": "openwebrl/docs/assets/paper_plot_label_audit.json",
-    "policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
+    "policy_sha256": "3379f94655b8afcf5dbc7daab59299244de0e4f994ad14dd8b0d2064c4fb42e7"
   }
 }

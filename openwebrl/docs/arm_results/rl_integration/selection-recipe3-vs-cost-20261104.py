@@ -132,7 +132,8 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
     if k == "params":
         if any(m[0] in EXTERNAL for m in methods):
             ax.set_xlim(3.5, 18.5)
-            ax.set_xticks([4.44, 8.88, 13.21, 17.17], ["4.44", "8.88", "13.21", "17.17"])
+            ticks = [4.44, 8.88, 13.21, 17.17] if any(m[0].startswith("rl") for m in methods) else [4.44, 8.88, 17.17]
+            ax.set_xticks(ticks, [str(v) for v in ticks])
             return
         wide = any(m[2] > 9e9 for m in methods)
         ax.set_xlim(3.5, 14.2 if wide else 9.5)
@@ -158,24 +159,36 @@ def legend(fig, axes, *, sft_only, grouped=False):
         columns = [
             [(blank, "Actors"),
              (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
-             (by_label["RL 4B"], "RL 4B"), (by_label["RL 8B"], "RL 8B"),
+             (by_label.get("RL 4B", blank), "RL 4B"), (by_label.get("RL 8B", blank), "RL 8B"),
              (blank, "Our ADM"),
              (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
              (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
-             (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"), (blank, "")],
+             (by_label.get("RL 8B + ADM-4B", blank), "RL 8B + ADM-4B"), (blank, "")],
             [(blank, ""), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
              (blank, ""), (frontier_handle, "Frontier"), (blank, ""),
              (blank, "Baseline ADMs"),
              (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
              (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B")],
         ]
+        headings = (0, 5, 15)
+        if "RL 4B" not in by_label:
+            columns = [
+                [(blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
+                 (blank, "Our ADM"), (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+                 (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (blank, ""), (blank, "")],
+                [(blank, ""), (by_label["ADM-distilled actor"], "ADM-distilled 4B"), (frontier_handle, "Frontier"),
+                 (blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
+                 (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
+                 (by_label["Kev-4B"], "Kev-4B")],
+            ]
+            headings = (0, 3, 11)
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
                          loc="center left", bbox_to_anchor=(.730, .5), ncol=2,
                          frameon=False, fontsize=6.4, handlelength=1.1,
                          handletextpad=.7, columnspacing=1.5, labelspacing=.22,
                          borderaxespad=0)
-        for index in (0, 5, 15):
+        for index in headings:
             leg.texts[index].set_fontweight("medium")
             leg.texts[index].set_color(C["MUTED"])
         return leg
@@ -188,10 +201,12 @@ def legend(fig, axes, *, sft_only, grouped=False):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods, *, success_metric="valid_only"):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True):
     assert success_metric in ("valid_only", "overall")
+    if not include_rl:
+        methods = [method for method in methods if not method[0].startswith("rl")]
     metric_label = "Overall" if success_metric == "overall" else "Valid-only"
-    canonical_name = name.replace("-overall-", "-")
+    canonical_name = name.replace("-no-rl", "").replace("-overall-", "-")
     circle_encoding = "sft-actors" in name
     if circle_encoding:
         styled = []
@@ -204,7 +219,8 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
-        methods.extend([
+        if include_rl:
+            methods.extend([
             ("rl4b", "RL 4B", SFT, C["BASELINE_LIGHT"], "s", False),
             ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "s", False),
             ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
@@ -286,5 +302,7 @@ if __name__ == "__main__":
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
     render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.42, sft, success_metric="overall")
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 3.90, sft, success_metric="overall")
+    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104", 1.42, sft, success_metric="overall", include_rl=False)
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104", 3.90, sft, success_metric="overall", include_rl=False)
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))

@@ -606,8 +606,24 @@
         "pdf"
       ],
       "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
     }
   ],
-  "figure_count": 76,
+  "figure_count": 78,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

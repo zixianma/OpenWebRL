@@ -1244,6 +1244,17 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 [Per-benchmark PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg).
 
+**Separate version without RL checkpoints:**
+
+![SFT actors and ADM methods without RL checkpoints: mean success versus cost](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.png)
+
+*Omits RL 4B, RL 8B and RL 8B + ADM-4B; all retained points and cost-accounting caveats are unchanged from the overall-success figure above. Success is successes / scheduled tasks, with invalid outcomes counted as failures; the mean weights the three benchmarks equally. Frontiers are recomputed over retained methods: the distilled actor and SFT 4B + ADM-4B form the mean parameter/compute frontier; latency additionally retains SFT 4B alone. Gray circles denote SFT actors, equal-size purple diamonds added ADM selectors, and a plum-purple circle the distilled actor. This is an additional view; the figure including RL is preserved.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.svg).
+
+![SFT actors and ADM methods without RL checkpoints: results per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.png)
+
+[Per-benchmark PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg).
+
+
 ![Recipe 3 H = 4 selectors with SFT actors only, per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.svg) · per benchmark: [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.svg)
