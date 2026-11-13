@@ -1887,6 +1887,21 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 
 <a id="final-selection-our-data-panels-20261027"></a>
 
+<a id="final-selection-rl8b-stealth-20261112"></a>**RL 8B actor with the default ADM on stealth browsers (November 12, partial: Online-Mind2Web and DeepShop).** *On stealth browsers the default ADM does not measurably help the RL 8B actor: −0.3 [−6.0, +5.3] pp mean overall, +1.8 [−3.7, +7.3] valid-only (2-benchmark means). RL 8B alone is already strong here (52.5% mean overall, Online-Mind2Web 60.5% valid-only). Locally the GPT-5.5 H = 4 LoRA added +2.7 [+0.6, +4.8] to RL 8B (3 benchmarks), so this interval is wide enough to contain that.* RL 8B (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 response tokens) alone vs + the default ADM (R3+WA 4B LoRA, `arm5-d470d7e52a38`, N = 5); US residential proxy, T 1.0 / top-p 0.9, 30 steps, one run, judge-deferred and judged afterwards (Online-Mind2Web gpt-5.6-terra, DeepShop GPT-4o; no record refused).
+
+| Condition | Online-Mind2Web | DeepShop | Mean overall | Mean valid-only |
+| --- | ---: | ---: | ---: | ---: |
+| RL 8B alone (1 sample) | 60.5% | 46.3% | 52.5% | 53.4% |
+| RL 8B + ADM (N = 5) | 63.0% | 47.5% | 52.2% | 55.3% |
+| *ADM − alone, pp [95% CI]* | +2.5 [−3.3, +8.2] | +1.2 [−8.3, +10.5] | −0.3 [−6.0, +5.3] | +1.8 [−3.7, +7.3] |
+
+| Condition | Online-Mind2Web valid / tasks | Online-Mind2Web successes | DeepShop valid / tasks | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: |
+| RL 8B alone | 261 / 268 | 158 | 149 / 150 | 69 |
+| RL 8B + ADM | 254 / 268 | 160 | 141 / 150 | 67 |
+
+*Per-benchmark columns are valid-only success; paired bootstrap over tasks both arms completed (10,000 resamples, seed 20261029, benchmarks resampled independently). Online-Mind2Web is compared on 268 of 300 tasks: the Browser Use credit ran out with 32 ADM episodes left (job cancelled while idle; resumable). WebVoyager is not run (about $190 of proxy credit; measured cost about $0.16 per episode). The ADM arm has more invalid episodes (DeepShop 9 vs 1, Online-Mind2Web 14 vs 7), which is why it gains valid-only but not overall; about 1–2% of episodes in both arms end on the actor's 32K context limit (prompt + 4,096 response tokens), as in the local RL 8B runs. Evidence: [rates and contrasts](arm_results/rl_integration/selection-rl8b-stealth-20261112.json) · [script](arm_results/rl_integration/selection-rl8b-stealth-20261112.py). Runtime: `recipe3-ablations-20261104/stealth/rl8b-proxy-1112/`.*
+
 #### Many Piotr-style panels per state instead of one
 
 **Swapping Piotr's GPT-5.5 picks for Luna H = 4 lookahead picks, on 2,551 of our branching states in Piotr's panel format (22,880 panels, same trainer and recipe), gives a head level with the Piotr-data head: −1.2 pp [−4.9, +2.5] on the three-benchmark mean against its 10-23 run and −0.1 [−3.7, +3.4] against its same-recipe 10-25 rerun. It is +1.6 [−1.8, +5.1] over SFT 4B and −4.0 [−7.6, −0.2] below the earlier 1,380-state one-panel H = 4 head, a gap that is all DeepShop (−10.0, run six days apart). Offline it scores 37.80% against 38.31% for the Piotr-data head (−0.51 [−2.43, +1.42]) and 37.68% for the one-panel H = 4 head.** Like the [state](ARM_SELECTION_HEAD.md#selection-head-state-scale-1panel-20261027) and [panel](ARM_SELECTION_HEAD.md#selection-head-panel-scale-20261026) scaling, more Luna-labelled panels and states do not lift the head, so further state collection for this purpose is not justified by these results.
