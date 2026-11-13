@@ -30,7 +30,9 @@ HERE = Path(__file__).parent
 rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text())["rows"]
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
-EXTERNAL = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())["systems"]
+EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
+EXTERNAL = EXTRA_RESULTS["systems"]
+ADM_OVERALL = EXTRA_RESULTS["adm_overall_update"]
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
@@ -65,6 +67,14 @@ def point(key, bench, success_metric="valid_only"):
                 seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
 
 
+def plot_point(key, bench, success_metric, *, circle_encoding=False):
+    r = point(key, bench, success_metric)
+    if circle_encoding and success_metric == "overall" and key == ADM_OVERALL["plot_key"]:
+        r["success"] = (ADM_OVERALL["reported_mean_overall"] if bench == "mean"
+                        else ADM_OVERALL["benchmarks"][bench])
+    return r
+
+
 def frontier(pts):
     """Lower x and higher success; dominance needs at least one strict gain."""
     keep = [(x, y) for x, y in pts if not any(a <= x and b >= y and (a < x or b > y) for a, b in pts)]
@@ -74,7 +84,7 @@ def frontier(pts):
 def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only"):
     pts = []
     for key, label, p, color, marker, hollow in methods:
-        r = point(key, bench, success_metric)
+        r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
         size = 44 if circle_encoding and "lora" in key else 24
@@ -189,7 +199,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
-    return {bench: {k: frontier([(p / 1e9 if k == "params" else point(key, bench, success_metric)[k], point(key, bench, success_metric)["success"])
+    return {bench: {k: frontier([(p / 1e9 if k == "params" else plot_point(key, bench, success_metric, circle_encoding=circle_encoding)[k], plot_point(key, bench, success_metric, circle_encoding=circle_encoding)["success"])
                                  for key, _, p, *_ in methods]) for k, _ in cols} for bench in benches}
 
 

@@ -93,5 +93,16 @@
       "mean"
     ],
     "mean": "Use reported three-benchmark averages; displayed benchmark percentages are rounded and do not exactly reconstruct every reported average."
+  },
+  "adm_overall_update": {
+    "source": "User-provided best ADM-4B overall-success row, 2026-11-13",
+    "plot_key": "lora-gpt55-k3",
+    "benchmarks": {
+      "webvoyager": 52.4,
+      "online_mind2web": 43.8,
+      "deepshop": 50.5
+    },
+    "reported_mean_overall": 48.9,
+    "accounting": "Updates the best ADM-4B point in the SFT overall-success views only. Existing GPT-5.5 ADM-4B cost coordinates are retained; matching costs, evaluation date, exact counts and run count for this success row were not supplied. Historical pooled results and valid-only figures remain unchanged."
   }
 }
