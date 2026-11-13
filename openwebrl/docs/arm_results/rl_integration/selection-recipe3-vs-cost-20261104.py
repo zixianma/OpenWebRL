@@ -175,15 +175,23 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                 fig.canvas.draw()
                 top = leg.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - gap / fig.get_figheight()
                 return leg
-            block([(by_label["SFT 4B"], "SFT 4B"),
-                   (by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)"),
-                   (by_label["SFT 8B"], "SFT 8B"), (blank, "")], title="Actors", ncol=2)
+            actors = block([(by_label["SFT 4B"], "SFT 4B"),
+                            (by_label["SFT 8B"], "SFT 8B")], title="Actors", ncol=2, gap=.005)
+            block([(by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)")])
             comparison = block([
                 (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
                 (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (blank, ""), (blank, ""),
                 (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
                 (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
                 (by_label["Kev-4B"], "Kev-4B")], title="SFT + ADM", ncol=2)
+            # Match the text/marker columns across independently sized blocks.
+            renderer = fig.canvas.get_renderer()
+            delta = (comparison.texts[5].get_window_extent(renderer).x0
+                     - actors.texts[1].get_window_extent(renderer).x0)
+            actors._legend_handle_box.sep += delta / renderer.points_to_pixels(1)
+            fig.canvas.draw()
+            assert abs(actors.texts[1].get_window_extent(renderer).x0
+                       - comparison.texts[5].get_window_extent(renderer).x0) < .1
             for index in (0, 5):
                 comparison.texts[index].set_color(C["MUTED"])
                 comparison.texts[index].set_fontweight("medium")
