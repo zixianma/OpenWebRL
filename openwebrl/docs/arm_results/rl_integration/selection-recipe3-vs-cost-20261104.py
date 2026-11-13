@@ -174,6 +174,8 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
+        methods = [(key, label, params, "#8246E5" if key == "adm-distilled" else color, marker, hollow)
+                   for key, label, params, color, marker, hollow in methods]
         methods.extend([
             ("rl4b", "RL 4B", SFT, C["BASELINE_LIGHT"], "^", False),
             ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "^", False),
