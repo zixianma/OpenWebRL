@@ -92,14 +92,14 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         size = 44 if circle_encoding and "lora" in key else 24
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
-                   linewidth=1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
+                   linewidth=.95 if hollow and circle_encoding and success_metric == "overall" else 1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)
     emphasize = circle_encoding and success_metric == "overall"
     if len(fr) > 1:
         ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER,
-                linewidth=1.4 if emphasize else .95, zorder=1.8)
-    ax.scatter([x for x, _ in fr], [y for _, y in fr], s=80 if emphasize else 57,
-               facecolors="none", edgecolors=FRONTIER, linewidths=1.2 if emphasize else .6,
+                linewidth=1.05 if emphasize else .95, zorder=1.8)
+    ax.scatter([x for x, _ in fr], [y for _, y in fr], s=70 if emphasize else 57,
+               facecolors="none", edgecolors=FRONTIER, linewidths=.8 if emphasize else .6,
                zorder=4.5 if emphasize else 2.4)
     if emphasize and bench == "mean" and not any(m[0] in EXTERNAL for m in methods):
         best = max(fr, key=lambda xy: xy[1])
@@ -121,8 +121,34 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         ax.set_xticks(*([[4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"]] if wide else [[4.44, 8.88], ["4.44", "8.88"]]))
 
 
-def legend(fig, axes, *, sft_only):
+def legend(fig, axes, *, sft_only, grouped=False):
     handles, labels = axes.flat[0].get_legend_handles_labels()
+    if grouped:
+        by_label = {label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""): handle
+                    for label, handle in zip(labels, handles)}
+        blank = Line2D([], [], linestyle="none")
+        frontier_handle = Line2D([], [], linestyle="--", color=FRONTIER, linewidth=1,
+                                 marker="o", markerfacecolor="none", markersize=5,
+                                 markeredgecolor=FRONTIER, markeredgewidth=.8)
+        # Matplotlib fills columns: each visual row is one method family.
+        columns = [
+            [(blank, "Actors"), (blank, "Our ADM"), (blank, "Selectors")],
+            [(by_label["SFT 4B"], "SFT 4B"), (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"), (by_label["Best-of-Q"], "Best-of-Q")],
+            [(by_label["SFT 8B"], "SFT 8B"), (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM")],
+            [(by_label["RL 4B"], "RL 4B"), (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"), (by_label["WebDreamer"], "WebDreamer")],
+            [(by_label["RL 8B"], "RL 8B"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"), (by_label["Kev-4B"], "Kev-4B")],
+            [(frontier_handle, "Frontier"), (blank, ""), (blank, "")],
+        ]
+        entries = [entry for column in columns for entry in column]
+        leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
+                         loc="lower center", bbox_to_anchor=(.52, .01), ncol=6,
+                         frameon=False, fontsize=6.4, handlelength=1.1,
+                         handletextpad=.3, columnspacing=.75, labelspacing=.6,
+                         borderaxespad=0)
+        for label in leg.texts[:3]:
+            label.set_fontweight("medium")
+            label.set_color(C["MUTED"])
+        return leg
     handles.append(Line2D([], [], linestyle="--", color=FRONTIER, linewidth=0.95, marker="o", markerfacecolor="white",
                           markeredgecolor=FRONTIER, markeredgewidth=0.6, markersize=4.4))
     labels.append("Observed frontier")
@@ -149,13 +175,14 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
         methods.extend([
-            ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "h", False),
+            ("rl4b", "RL 4B", SFT, C["BASELINE_LIGHT"], "^", False),
+            ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "^", False),
             ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
         ])
-        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X"), ("kev-4b", "v")):
+        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
-            methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, False))
+            methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, True))
     compact_sft_mean = canonical_name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
@@ -175,7 +202,8 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
                 ax.set_title(title, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel(f"{metric_label}\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\n{metric_label.lower()} (%)" if len(benches) > 1 else f"{NAMES[bench]}\n{metric_label.lower()} success (%)"))
-    bottom_legend = legend(fig, axes, sft_only=circle_encoding or all(not m[0].startswith("rl") for m in methods))
+    bottom_legend = legend(fig, axes, sft_only=circle_encoding or all(not m[0].startswith("rl") for m in methods),
+                           grouped=circle_encoding and success_metric == "overall")
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
