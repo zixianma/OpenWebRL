@@ -95,7 +95,7 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only"):
+def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only", frontier_rings=True):
     pts = []
     for key, label, p, color, marker, hollow in methods:
         r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding)
@@ -113,9 +113,10 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
     if len(fr) > 1:
         ax.plot([x for x, _ in fr], [y for _, y in fr], linestyle="--", color=FRONTIER,
                 linewidth=1.05 if emphasize else .95, zorder=1.8)
-    ax.scatter([x for x, _ in fr], [y for _, y in fr], s=70 if emphasize else 57,
-               facecolors="none", edgecolors=FRONTIER, linewidths=.8 if emphasize else .6,
-               zorder=4.5 if emphasize else 2.4)
+    if frontier_rings:
+        ax.scatter([x for x, _ in fr], [y for _, y in fr], s=70 if emphasize else 57,
+                   facecolors="none", edgecolors=FRONTIER, linewidths=.8 if emphasize else .6,
+                   zorder=4.5 if emphasize else 2.4)
     if emphasize and bench == "mean" and not any(m[0] in EXTERNAL for m in methods):
         best = max(fr, key=lambda xy: xy[1])
         ax.annotate("Pareto-optimal", best, xytext=(9, -2), textcoords="offset points",
@@ -140,7 +141,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         ax.set_xticks(*([[4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"]] if wide else [[4.44, 8.88], ["4.44", "8.88"]]))
 
 
-def legend(fig, axes, *, sft_only, grouped=False):
+def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
     handles, labels = axes.flat[0].get_legend_handles_labels()
     if grouped:
         # Line proxies have finite symbol bounds, allowing checks against every
@@ -154,7 +155,7 @@ def legend(fig, axes, *, sft_only, grouped=False):
                     for label, handle in zip(labels, handles)}
         blank = Line2D([], [], linestyle="none")
         frontier_handle = Line2D([], [], linestyle="--", color=FRONTIER, linewidth=1,
-                                 marker="o", markerfacecolor="none", markersize=5,
+                                 marker="o" if frontier_rings else "None", markerfacecolor="none", markersize=5,
                                  markeredgecolor=FRONTIER, markeredgewidth=.8)
         columns = [
             [(blank, "Actors"),
@@ -174,14 +175,14 @@ def legend(fig, axes, *, sft_only, grouped=False):
         if "RL 4B" not in by_label:
             columns = [
                 [(blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
-                 (blank, "Our ADM"), (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
-                 (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (blank, ""), (blank, "")],
-                [(blank, ""), (by_label["ADM-distilled actor"], "ADM-distilled 4B"), (frontier_handle, "Frontier"),
-                 (blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
+                 (blank, "Our ADM"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
+                 (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+                 (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (blank, "")],
+                [(blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
                  (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
-                 (by_label["Kev-4B"], "Kev-4B")],
+                 (by_label["Kev-4B"], "Kev-4B"), (blank, ""), (frontier_handle, "Frontier"), (blank, "")],
             ]
-            headings = (0, 3, 11)
+            headings = (0, 3, 8)
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
                          loc="center left", bbox_to_anchor=(.730, .5), ncol=2,
@@ -242,24 +243,29 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     fig, axes = plt.subplots(len(benches), 3, figsize=(9 if right_legend else 7, height), sharey="row", squeeze=False)
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
-            panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric)
+            panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric,
+                  frontier_rings=include_rl)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
-            if i == 0:
+            if not include_rl:
+                if i == len(benches) - 1:
+                    ax.set_xlabel({"params": "System parameters (B)", "pflop": "PFLOP / task",
+                                   "seconds": "Latency / task (s)"}[k])
+            elif i == 0:
                 title = {"params": "System parameters (B)", "seconds": "Model latency (s)"}.get(k, xlabel) if compact_sft_mean else xlabel
                 ax.set_title(title, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel(f"{metric_label}\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\n{metric_label.lower()} (%)" if len(benches) > 1 else f"{NAMES[bench]}\n{metric_label.lower()} success (%)"))
     bottom_legend = legend(fig, axes, sft_only=circle_encoding or all(not m[0].startswith("rl") for m in methods),
-                           grouped=circle_encoding and success_metric == "overall")
+                           grouped=circle_encoding and success_metric == "overall", frontier_rings=include_rl)
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
     fig.subplots_adjust(left=.065 if right_legend else .085,
                         right=.715 if right_legend else .99,
-                        bottom=.23 / height if right_legend else (legend_height + .26) / height,
-                        top=1 - .18 / height, hspace=.32, wspace=.17)
+                        bottom=(.35 if not include_rl else .23) / height if right_legend else (legend_height + .26) / height,
+                        top=1 - (.06 if not include_rl else .18) / height, hspace=.32, wspace=.17)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_bounds = bottom_legend.get_window_extent(renderer)
