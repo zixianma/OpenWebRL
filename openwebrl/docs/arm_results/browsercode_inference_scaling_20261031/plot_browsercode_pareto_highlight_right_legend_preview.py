@@ -2,7 +2,7 @@
 """Separate sixteen-setting Pareto preview with right legends and shaded caches.
 
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
-ranges and observed frontiers. Action decision scaling uses saturated purple accents and larger markers. Cached markers use shaded circles. No experiment calls.
+ranges and observed frontiers. Action decision scaling uses saturated purple accents and larger markers. Cached markers retain their N-specific shape with diagonal shading. No experiment calls.
 """
 # Shared semantic palette; source measurements and geometry are unchanged.
 from pathlib import Path as _PalettePath
@@ -23,7 +23,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.legend_handler import HandlerPatch
 from matplotlib.markers import MarkerStyle
-from matplotlib.patches import Circle
+from matplotlib.patches import Circle, Rectangle
 
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE / "plot_browsercode_pareto_highlight_preview.py"
@@ -52,16 +52,30 @@ SELECTION_SIZE = 42
 FOCUS_SIZE = 49
 CACHE_SIZE = 46
 CACHE_HATCH = "////////"
+SELECTION_MARKERS = {
+    "parallel2_select_high": "^", "parallel3_select_high": "s",
+    "parallel5_select_high": "o", "parallel5_select_high_60steps": "o",
+    "luna_n3_cached_high30": "s", "luna_n5_cached_high60": "o",
+}
 
 
-def cache_handle(color=PALETTE["BASELINE_LIGHT"]):
-    return Circle((0, 0), radius=1, facecolor=color, edgecolor="white",
-                  linewidth=0, hatch=CACHE_HATCH)
+def cache_handle(color=PALETTE["BASELINE_LIGHT"], marker="o"):
+    shape = Rectangle((-1, -1), 2, 2) if marker == "s" else Circle((0, 0), radius=1)
+    shape.set_facecolor(color)
+    shape.set_edgecolor("white")
+    shape.set_linewidth(0)
+    shape.set_hatch(CACHE_HATCH)
+    return shape
 
 
 def legend_circle(legend, orig_handle, xdescent, ydescent, width, height, fontsize):
     return Circle((width / 2 - xdescent, height / 2 - ydescent),
                   radius=min(width, height) * .46)
+
+
+def legend_square(legend, orig_handle, xdescent, ydescent, width, height, fontsize):
+    side = min(width, height) * .92
+    return Rectangle(((width - side) / 2 - xdescent, (height - side) / 2 - ydescent), side, side)
 
 
 def right_layout(fig, previous=None, height=2.4451461988304095):
@@ -77,12 +91,12 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         ax.set_box_aspect(1)
     fig.axes[0].set_ylabel("")
     sidebar_x, top = .72, .95
-    handlers = {Circle: HandlerPatch(patch_func=legend_circle)}
-    cached_labels = {style[0]: style[2] for style in ORIGINAL.CACHED.values()}
+    handlers = {Circle: HandlerPatch(patch_func=legend_circle), Rectangle: HandlerPatch(patch_func=legend_square)}
+    cached_labels = {style[0]: (style[2], SELECTION_MARKERS[method]) for method, style in ORIGINAL.CACHED.items()}
     for j, old in enumerate(previous[:2]):
         handles, labels = [], [text.get_text() for text in old.texts]
         for line, label in zip(old.get_lines(), labels):
-            handles.append(cache_handle(cached_labels[label]) if label in cached_labels
+            handles.append(cache_handle(*cached_labels[label]) if label in cached_labels
                            else copy.copy(line))
             if j == 1 and label not in cached_labels:
                 handles[-1].set_markersize(6.0)
@@ -93,6 +107,12 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
             index = labels.index("Sol high · 60 steps") + 1
             handles.insert(index, handle)
             labels.insert(index, label)
+        # Explicit maximum-step notation in both legend groups.
+        labels = [label.replace("30 steps", "≤30 steps").replace("60 steps", "≤60 steps")
+                        .replace("120 steps", "≤120 steps")
+                        .replace("N=3/30 cached", "N=3 · ≤30 cached")
+                        .replace("N=5/60 cached", "N=5 · ≤60 cached")
+                        .replace("N=5, 60 steps", "N=5 · ≤60 steps") for label in labels]
         title = old.get_title().get_text() if j == 0 else "Best-of-N action decision scaling"
         legend = fig.legend(handles, labels, title=title, loc="upper left",
                             bbox_to_anchor=(sidebar_x, top), ncol=2, fontsize=8,
@@ -110,7 +130,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
     fig.canvas.draw()
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
-             "GPT-6 high unless xhigh. N=candidates.\nLuna baseline: 12,288 tokens · 30 steps.",
+             "GPT-6 high unless xhigh. N=candidates.\nStep limits are maxima; default: 30.\nLuna baseline: 12,288 tokens.",
              fontsize=7.2, color=PALETTE["MUTED"], va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -155,7 +175,7 @@ def build():
         fade = .18 if "parallel2" in method else .08 if "parallel3" in method or "n3_cached" in method else 0
         rgb = matplotlib.colors.to_rgb(SELECTION_PURPLE)
         color = matplotlib.colors.to_hex([v * (1 - fade) + fade for v in rgb])
-        return label, marker, color, filled
+        return label, SELECTION_MARKERS[method], color, filled
     def gray_style(method, style):
         label, marker, color, filled = style
         if method == ORIGINAL.BASE.SOL60_METHOD:
@@ -195,10 +215,13 @@ def build():
                 line.set_markerfacecolor(color if filled else "white")
                 line.set_markeredgewidth(1.0)
                 line.set_markersize(5.5)
+    for legend in fig.legends[:2]:
+        for line, text in zip(legend.get_lines(), legend.texts):
+            for method, label in ORIGINAL.BASE.SELECTION_LEGEND:
+                if text.get_text() == label:
+                    line.set_marker(SELECTION_MARKERS[method])
     matplotlib.rcParams["hatch.linewidth"] = .5
     assert len(rows) == 16
-    circle = MarkerStyle("o")
-    circle_path = circle.get_path().transformed(circle.get_transform())
     for ax in fig.axes:
         for row, point in zip(rows, ax.collections[:len(rows)]):
             if row["method"] in singles:
@@ -210,11 +233,14 @@ def build():
                 point.set_sizes([SINGLE_SIZE])
                 point.set_linewidths([1.0])
             if row["method"].startswith("parallel") or row["method"] in ORIGINAL.CACHED:
+                shape = MarkerStyle(SELECTION_MARKERS[row["method"]])
+                point.set_paths([shape.get_path().transformed(shape.get_transform())])
                 point.set_sizes([FOCUS_SIZE if row["method"] == ORIGINAL.FOCUS else SELECTION_SIZE])
                 point.set_linewidths([1.2])
                 point.set_zorder(5)
             if row["method"] in ORIGINAL.CACHED:
-                point.set_paths([circle_path])
+                shape = MarkerStyle(SELECTION_MARKERS[row["method"]])
+                point.set_paths([shape.get_path().transformed(shape.get_transform())])
                 point.set_sizes([CACHE_SIZE])
                 point.set_edgecolors("white")
                 point.set_linewidths([0])
@@ -245,8 +271,10 @@ def main():
                               single_call_markers={key: dict(marker=style[0], filled=style[1]) for key, style in SINGLE_MARKERS.items()},
                               sol_color=SOL_GREEN, single_call_size_pt2=SINGLE_SIZE,
                               single_call_color=SINGLE_GRAY, selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
-                              cached="Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
-                              cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
+                              selection_markers=SELECTION_MARKERS,
+                              selection_encoding="N=2 triangle; N=3 square; N=5 circle. Uncached 30-step runs hollow, 60-step run solid; cached runs white diagonal shading. Step labels show maxima with ≤.",
+                              cached="Purple squares for N3 and circles for N5 with white diagonal shading and no outline; shaded gray circle key",
+                              cached_marker=dict(markers={key: SELECTION_MARKERS[key] for key in ORIGINAL.CACHED}, size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),
                   source_sha256={**original_report["source_sha256"],

@@ -760,9 +760,21 @@
     "selection_color": "#8246E5",
     "selection_size_pt2": 42,
     "focus_size_pt2": 49,
-    "cached": "Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+    "selection_markers": {
+      "parallel2_select_high": "^",
+      "parallel3_select_high": "s",
+      "parallel5_select_high": "o",
+      "parallel5_select_high_60steps": "o",
+      "luna_n3_cached_high30": "s",
+      "luna_n5_cached_high60": "o"
+    },
+    "selection_encoding": "N=2 triangle; N=3 square; N=5 circle. Uncached 30-step runs hollow, 60-step run solid; cached runs white diagonal shading. Step labels show maxima with \u2264.",
+    "cached": "Purple squares for N3 and circles for N5 with white diagonal shading and no outline; shaded gray circle key",
     "cached_marker": {
-      "marker": "o",
+      "markers": {
+        "luna_n3_cached_high30": "s",
+        "luna_n5_cached_high60": "o"
+      },
       "size_pt2": 46,
       "hatch": "////////",
       "hatch_color": "white",
@@ -784,10 +796,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "abe3dd6094fb2c81b0fb7420ebafe2735d3c0677df86e7018ff8337a17a9854d",
+  "renderer_sha256": "34dacf75c2b04bb4f34a1bddf053f26c5ae44c2b01edfbafed83a4b8a1795a80",
   "output_sha256": {
-    "png": "5c22a20d11a851d2549dac21b8fd4072d42d6e080ccdd8d770a617fc1e019b82",
-    "pdf": "0240d22e9abb58175613c8bbc825d62ae9d9c8b583848f9df7d8e83c2b5f790b",
-    "svg": "c528a452c272e34efb89e1a043bb38aaced2841e8eb49fdc18df624a6e8444a6"
+    "png": "9ca38d79cb4c2efb9c7cd7e3df24a8aebcd3dc7593db7059709dd7d4fa097fb1",
+    "pdf": "abe22bc08da5e6279da2e56e86f7d1bd2bdf77d9859646e98ef7af85a6724282",
+    "svg": "661c7abeb66f82a8a6ce1584e30ed874e2047cededf97ff4af0e424c86c3b468"
   }
 }
