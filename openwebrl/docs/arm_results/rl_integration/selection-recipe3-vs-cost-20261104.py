@@ -132,7 +132,7 @@ def legend(fig, axes, *, sft_only, grouped=False):
                                  markeredgecolor=FRONTIER, markeredgewidth=.8)
         # Matplotlib fills columns: each visual row is one method family.
         columns = [
-            [(blank, "Actors"), (blank, "Our ADM"), (blank, "Selectors")],
+            [(blank, "Actors"), (blank, "Our ADM"), (blank, "Baselines")],
             [(by_label["SFT 4B"], "SFT 4B"), (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"), (by_label["Best-of-Q"], "Best-of-Q")],
             [(by_label["SFT 8B"], "SFT 8B"), (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM")],
             [(by_label["RL 4B"], "RL 4B"), (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"), (by_label["WebDreamer"], "WebDreamer")],
