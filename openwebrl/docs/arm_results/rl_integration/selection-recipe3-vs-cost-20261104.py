@@ -105,7 +105,10 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         best = max(fr, key=lambda xy: xy[1])
         ax.annotate("Pareto-optimal", best, xytext=(9, -2), textcoords="offset points",
                     fontsize=6.3, color=C["MUTED"], ha="left", va="top", zorder=5)
-    ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
+    if circle_encoding and success_metric == "overall":
+        ax.grid(False)
+    else:
+        ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
     ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=3, integer=True))
     ax.tick_params(colors=C["MUTED"], length=3, width=0.6, pad=2)
@@ -130,24 +133,30 @@ def legend(fig, axes, *, sft_only, grouped=False):
         frontier_handle = Line2D([], [], linestyle="--", color=FRONTIER, linewidth=1,
                                  marker="o", markerfacecolor="none", markersize=5,
                                  markeredgecolor=FRONTIER, markeredgewidth=.8)
-        # Matplotlib fills columns: each visual row is one method family.
         columns = [
-            [(blank, "Actors"), (blank, "Our ADM"), (blank, "Baselines")],
-            [(by_label["SFT 4B"], "SFT 4B"), (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"), (by_label["Best-of-Q"], "Best-of-Q")],
-            [(by_label["SFT 8B"], "SFT 8B"), (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM")],
-            [(by_label["RL 4B"], "RL 4B"), (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"), (by_label["WebDreamer"], "WebDreamer")],
-            [(by_label["RL 8B"], "RL 8B"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"), (by_label["Kev-4B"], "Kev-4B")],
-            [(frontier_handle, "Frontier"), (blank, ""), (blank, "")],
+            [(blank, "Actors"),
+             (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
+             (by_label["RL 4B"], "RL 4B"), (by_label["RL 8B"], "RL 8B"),
+             (blank, "Our ADM"),
+             (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+             (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
+             (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B"),
+             (by_label["ADM-distilled actor"], "ADM-distilled 4B")],
+            [(blank, "Baselines"),
+             (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
+             (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B"),
+             (blank, ""), (frontier_handle, "Frontier"),
+             (blank, ""), (blank, ""), (blank, "")],
         ]
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
-                         loc="lower center", bbox_to_anchor=(.52, .01), ncol=6,
+                         loc="center left", bbox_to_anchor=(.735, .5), ncol=2,
                          frameon=False, fontsize=6.4, handlelength=1.1,
-                         handletextpad=.3, columnspacing=.75, labelspacing=.6,
+                         handletextpad=.3, columnspacing=.8, labelspacing=.22,
                          borderaxespad=0)
-        for label in leg.texts[:3]:
-            label.set_fontweight("medium")
-            label.set_color(C["MUTED"])
+        for index in (0, 5, 10):
+            leg.texts[index].set_fontweight("medium")
+            leg.texts[index].set_color(C["MUTED"])
         return leg
     handles.append(Line2D([], [], linestyle="--", color=FRONTIER, linewidth=0.95, marker="o", markerfacecolor="white",
                           markeredgecolor=FRONTIER, markeredgewidth=0.6, markersize=4.4))
@@ -192,7 +201,8 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
                          "text.color": C["INK"], "axes.labelcolor": C["INK"], "axes.titlecolor": C["INK"],
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
-    fig, axes = plt.subplots(len(benches), 3, figsize=(7, height), sharey="row", squeeze=False)
+    right_legend = circle_encoding and success_metric == "overall"
+    fig, axes = plt.subplots(len(benches), 3, figsize=(9 if right_legend else 7, height), sharey="row", squeeze=False)
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric)
@@ -209,9 +219,10 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
-    fig.subplots_adjust(left=0.085, right=0.99,
-                        bottom=(legend_height + 0.26) / height,
-                        top=1 - 0.18 / height, hspace=0.32, wspace=0.17)
+    fig.subplots_adjust(left=.065 if right_legend else .085,
+                        right=.715 if right_legend else .99,
+                        bottom=.23 / height if right_legend else (legend_height + .26) / height,
+                        top=1 - .18 / height, hspace=.32, wspace=.17)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_bounds = bottom_legend.get_window_extent(renderer)
@@ -246,7 +257,7 @@ if __name__ == "__main__":
     sft = [m for m in methods if not m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.60, sft))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
-    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.78, sft, success_metric="overall")
-    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 4.35, sft, success_metric="overall")
+    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.42, sft, success_metric="overall")
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 3.90, sft, success_metric="overall")
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))
