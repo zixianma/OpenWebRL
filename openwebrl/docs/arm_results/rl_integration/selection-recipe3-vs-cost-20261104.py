@@ -106,7 +106,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
             size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3") else 24
         else:
             size = 44 if circle_encoding and "lora" in key else 24
-        if key in ("sft1", "sft8b"):
+        if key in ("sft1", "sft8b", "adm-distilled"):
             size = sft_marker_size
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
