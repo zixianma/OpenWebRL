@@ -92,8 +92,8 @@ arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
 arrow(2.80, 1.725, 2.80, 1.655, color=HEAD, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
 box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
-text(1.075, 1.565, "a) ADM-23M", size=6.8, color="black", ha="center")
-icon(1.43, 1.565, TRAINED)
+text(1.035, 1.565, "a) ADM-Head-23M", size=6.8, color="black", ha="center")
+icon(1.555, 1.565, TRAINED)
 text(1.075, 1.425, r"Actor features $s, c_i$", size=5.8, color=MUTED, ha="center")
 
 CELL, HEAD_TOP, TOP = .074, 1.16, 1.105
@@ -122,7 +122,7 @@ arrow(1.11, .323, 1.11, .276, color=HEAD, head=4)
 text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
-text(2.80, 1.565, "b) ADM-4B", size=6.8, color="black", ha="center")
+text(2.80, 1.565, "b) ADM-Decoder-4B", size=6.8, color="black", ha="center")
 # Matching theta symbols encode shared initialization without a long arrow.
 box(2.44, 1.355, .29, .12, edge=LINE)
 text(2.545, 1.415, r"$\theta$", size=6.4, ha="center")
@@ -144,7 +144,7 @@ text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 # candidates in one packed sequence; a <decide> token points at a candidate.
 KC = 4.025
 arrow(KC, 1.725, KC, 1.655, color=HEAD, head=4)
-text(KC, 1.565, "c) Kev-style ADM", size=6.8, color="black", ha="center")
+text(KC, 1.565, "c) ADM-Pointer-4B", size=6.8, color="black", ha="center")
 box(KC-.36, 1.355, .29, .12, edge=LINE)
 text(KC-.255, 1.415, r"$\theta$", size=6.4, ha="center")
 icon(KC-.145, 1.415, FROZEN, .075)
