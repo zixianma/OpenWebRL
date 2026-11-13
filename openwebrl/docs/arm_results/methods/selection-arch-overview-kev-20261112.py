@@ -141,6 +141,8 @@ text(KC-.01, 1.415, "+", size=7, color=KEV, ha="center")
 box(KC+.08, 1.355, .35, .12, edge=KEV, fill=tint("ADM_4B", .93))
 text(KC+.255, 1.415, r"$\Delta\theta$", size=6.4, color=KEV, ha="center")
 text(KC+.255, 1.310, "LoRA", size=5.2, color=KEV, ha="center")
+# Kev-A adapts every token; Kev-B zeroes the LoRA on prompt tokens (p = unadapted actor, cache-reusable).
+text(KC, 1.247, r"A: $\Delta\theta$ on all tokens · B: not on $p$", size=4.8, color=KEV, ha="center")
 KX = KC - 3.5*DCELL + .02
 KTOK = [r"$p$"]+[rf"$c_{{{i}}}$" for i in range(1,K+1)]+[r"$d$"]
 # p causal; each c_i sees p and itself; <decide> d sees p, every c_i and itself.
