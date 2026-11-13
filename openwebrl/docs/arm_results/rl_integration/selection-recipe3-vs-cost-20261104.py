@@ -160,6 +160,35 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
         frontier_handle = Line2D([], [], linestyle="--", color=FRONTIER, linewidth=1,
                                  marker="o" if frontier_rings else "None", markerfacecolor="none", markersize=5,
                                  markeredgecolor=FRONTIER, markeredgewidth=.8)
+        if not frontier_rings and "Best-of-Q" in by_label:
+            # Separate blocks keep the long distilled label from widening the
+            # selector columns and give the shared actor heading one clear scope.
+            top = .98
+            def block(entries, *, title=None, ncol=1, gap=.025):
+                nonlocal top
+                leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
+                                 title=title, loc="upper left", bbox_to_anchor=(.730, top),
+                                 ncol=ncol, frameon=False, fontsize=6.4, title_fontsize=6.6,
+                                 handlelength=1.1, handletextpad=.6, columnspacing=.9,
+                                 labelspacing=.20, borderaxespad=0, borderpad=0, alignment="left")
+                leg.get_title().set_fontweight("medium")
+                fig.canvas.draw()
+                top = leg.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - gap / fig.get_figheight()
+                return leg
+            block([(by_label["SFT 4B"], "SFT 4B"),
+                   (by_label["ADM-distilled actor"], "Distilled 4B (ours)"),
+                   (by_label["SFT 8B"], "SFT 8B"), (blank, "")], title="Actors", ncol=2)
+            comparison = block([
+                (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
+                (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (blank, ""), (blank, ""),
+                (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
+                (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
+                (by_label["Kev-4B"], "Kev-4B")], title="SFT + ADM", ncol=2)
+            for index in (0, 5):
+                comparison.texts[index].set_color(C["MUTED"])
+                comparison.texts[index].set_fontweight("medium")
+            block([(frontier_handle, "Frontier")])
+            return comparison
         columns = [
             [(blank, "Actors"),
              (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
@@ -184,18 +213,6 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                 (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (frontier_handle, "Frontier"),
             ]]
             headings = (0, 3)
-            if "Best-of-Q" in by_label:
-                columns = [
-                    [(blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"),
-                     (by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)"), (blank, ""),
-                     (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
-                     (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (blank, ""), (blank, "")],
-                    [(blank, ""), (by_label["SFT 8B"], "SFT 8B"), (frontier_handle, "Frontier"),
-                     (blank, ""), (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
-                     (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
-                     (by_label["Kev-4B"], "Kev-4B")],
-                ]
-                headings = (0, 4, 13)
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
                          loc="center left", bbox_to_anchor=(.730, .5), ncol=len(columns),
@@ -205,15 +222,6 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
         for index in headings:
             leg.texts[index].set_fontweight("medium")
             leg.texts[index].set_color(C["MUTED"])
-        if not frontier_rings and "Best-of-Q" in by_label:
-            fig.canvas.draw()
-            renderer = fig.canvas.get_renderer()
-            bounds = leg.get_window_extent(renderer)
-            ours = leg.texts[4].get_window_extent(renderer)
-            previous = leg.texts[2].get_window_extent(renderer)
-            fig.text((bounds.x0 + bounds.x1) / 2 / fig.bbox.width,
-                     (ours.y1 + previous.y0) / 2 / fig.bbox.height,
-                     "SFT + ADM", ha="center", va="center", fontsize=6.4, fontweight="medium")
         return leg
     handles.append(Line2D([], [], linestyle="--", color=FRONTIER, linewidth=0.95, marker="o", markerfacecolor="white",
                           markeredgecolor=FRONTIER, markeredgewidth=0.6, markersize=4.4))
@@ -292,17 +300,19 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
                         top=1 - (.06 if not include_rl else .18) / height, hspace=.32, wspace=.17)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
-    legend_bounds = bottom_legend.get_window_extent(renderer)
+    legend_boxes = [leg.get_window_extent(renderer) for leg in fig.legends]
     if right_legend:
-        text_boxes = [text.get_window_extent(renderer) for text in bottom_legend.texts if text.get_text()]
-        symbols = [line.get_window_extent(renderer) for line in bottom_legend.get_lines()
+        text_boxes = [text.get_window_extent(renderer) for leg in fig.legends
+                      for text in [leg.get_title(), *leg.texts] if text.get_text()]
+        symbols = [line.get_window_extent(renderer) for leg in fig.legends for line in leg.get_lines()
                    if line.get_marker() not in (None, "None", "", " ")]
         assert all(not a.overlaps(b) for i, a in enumerate(text_boxes) for b in text_boxes[i + 1:]), "Legend labels overlap"
         assert all(not a.overlaps(b) for a in text_boxes for b in symbols), "Legend symbol overlaps text"
-    assert fig.bbox.contains(*legend_bounds.p0) and fig.bbox.contains(*legend_bounds.p1)
-    for ax in axes.flat:
-        assert not legend_bounds.overlaps(ax.get_tightbbox(renderer)), "Legend overlaps panel labels"
-    labels = [bottom_legend.get_title(), *bottom_legend.texts]
+    for bounds in legend_boxes:
+        assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), "Legend outside figure"
+        for ax in axes.flat:
+            assert not bounds.overlaps(ax.get_tightbbox(renderer)), "Legend overlaps panel labels"
+    labels = [text for leg in fig.legends for text in [leg.get_title(), *leg.texts]]
     for ax in axes.flat:
         labels.extend([ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts])
         for axis, limits in ((ax.xaxis, ax.get_xlim()), (ax.yaxis, ax.get_ylim())):
