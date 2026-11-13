@@ -1164,6 +1164,16 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 ³ **RL 8B actor** (`OpenWebRL/OpenWebRL-8B` 824a54f, 4,096 response tokens; November 4–5, the window right after the rows above), 3 runs on all 1,045 tasks. Valid-only Online-Mind2Web / WebVoyager / DeepShop, then mean overall / mean valid-only: RL 8B alone 43.8% / 57.5% / 58.2%, 50.9% / 53.2%; + GPT-5.5 H = 4 LoRA 49.6% / 60.0% / 59.5%, 53.6% / 56.4%; + GPT-5.5 pre LoRA 48.2% / 60.8% / 64.5%, 54.7% / 57.8%. Same-day against RL 8B alone: H = 4 LoRA **+2.7 [+0.6, +4.8]**, pre LoRA **+3.8 [+1.9, +5.8]**; pre − H = 4 +1.1 [−0.9, +3.1]. Adjacent-window: RL 8B alone is +9.8 [+7.6, +12.1] over RL 4B and +5.7 [+3.4, +8.0] over SFT 4B + SelectionARM ([data](arm_results/rl_integration/selection-rl8b-gpt55-lora-20261105.json) · [script](arm_results/rl_integration/selection-rl8b-gpt55-lora-20261105.py)).
 
+**RL 8B, local browsers: performance, compute and latency** (November 4–5, same runs as ³).
+
+| Condition | Runs | Mean overall | Mean valid-only | Actor TFLOP / step | Selector TFLOP / step | PFLOP / episode | Selection ms, mean / p90 | Model time / episode | End-to-end / episode, mean / median | Steps / episode |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| RL 8B alone (1 sample) | 3 | 50.9% | 53.2% | 39.4 | — | 0.49 | — | 51 s | 117 / 91 s | 12.6 |
+| + 4B LoRA, Recipe 3 GPT-5.5 H = 4 | 3 | 53.6% | 56.4% | 136.2 | 36.3 | 2.13 | 518 / 808 | 143 s | 212 / 155 s | 12.4 |
+| + 4B LoRA, Recipe 3 panels GPT-5.5 pre | 3 | 54.7% | 57.8% | 138.0 | 36.6 | 2.19 | 519 / 802 | 147 s | 218 / 161 s | 12.5 |
+
+*Forward FLOPs = 2 × params × tokens per decision step: actor 2 × 8.77B × (uncached prompt + completion tokens) of the step's actor requests (run 1), selector 2 × 4.44B × (uncached selection-prompt + generated tokens); PFLOP per episode = (actor + selector) × steps per episode. N = 5 costs the actor about 3.5× one sample (shared prompt prefix cached). Selection and model time from each step's decision trace (browser excluded); end-to-end = each episode record's wall clock incl. browser (judge excluded), local browsers. 1 H200 per run. Evidence: [data](arm_results/rl_integration/selection-rl8b-cost-20261113.json) · [script](arm_results/rl_integration/selection-rl8b-cost-20261113.py).*
+
 **Which labels to train our head on** (SFT 4B actor, November 1–3; six heads on the same 1,380 branch states, differing only in label source). [Details](#final-selection-label-live-3run-20261103)
 
 | Selector | Labels | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
@@ -1947,6 +1957,15 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 | RL 8B + ADM | 286 / 300 | 179 | 579 / 595 | 463 | 141 / 150 | 67 |
 
 *Per-benchmark columns and their differences are valid-only success; mean columns as labelled; paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently). Overall differences per benchmark: Online-Mind2Web +1.7 [−4.0, +7.3], WebVoyager +3.4 [−0.7, +7.4], DeepShop −1.3 [−10.7, +8.0]. The ADM arm has more invalid episodes (DeepShop 9 vs 1, Online-Mind2Web 14 vs 9), so it gains less overall than valid-only; about 1–2% of episodes in both arms end on the actor's 32K context limit (prompt + 4,096 response tokens), as in the local RL 8B runs. Browser Use proxy cost: about $0.15 per episode on Online-Mind2Web and DeepShop, $0.07 on WebVoyager (about $215 in all); the Online-Mind2Web ADM job paused on credit at 268 tasks and was resumed. Evidence: [rates and contrasts](arm_results/rl_integration/selection-rl8b-stealth-20261112.json) · [script](arm_results/rl_integration/selection-rl8b-stealth-20261112.py). Runtime: `recipe3-ablations-20261104/stealth/rl8b-proxy-1112/`.*
+
+**Compute and latency** (same runs).
+
+| Condition | Runs | Mean overall | Mean valid-only | Actor TFLOP / step | Selector TFLOP / step | PFLOP / episode | Selection ms, mean / p90 | Model time / episode | End-to-end / episode, mean / median | Steps / episode |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| RL 8B alone (1 sample) | 1 | 59.5% | 60.7% | 39.1 | — | 0.43 | — | 39 s | 132 / 92 s | 10.9 |
+| RL 8B + default ADM (N = 5) | 1 | 60.7% | 63.4% | 140.3 | 35.3 | 1.92 | 503 / 782 | 112 s | 207 / 138 s | 10.9 |
+
+*Forward FLOPs = 2 × params × tokens per decision step: actor 2 × 8.77B × (uncached prompt + completion tokens) of the step's actor requests (run 1), selector 2 × 4.44B × (uncached selection-prompt + generated tokens); PFLOP per episode = (actor + selector) × steps per episode. N = 5 costs the actor about 3.5× one sample (shared prompt prefix cached). Selection and model time from each step's decision trace (browser excluded); end-to-end = each episode record's wall clock incl. browser (judge excluded), remote Browser Use sessions with US proxy, so end-to-end is not comparable with local. 1 H200 per run. Evidence: [data](arm_results/rl_integration/selection-rl8b-cost-20261113.json) · [script](arm_results/rl_integration/selection-rl8b-cost-20261113.py).*
 
 #### Many Piotr-style panels per state instead of one
 
