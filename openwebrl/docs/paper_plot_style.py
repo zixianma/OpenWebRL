@@ -41,3 +41,7 @@ def use_paper_style():
 
 
 use_paper_style()
+
+# Display-label conventions are shared by every renderer using paper typography.
+from paper_plot_labels import install as _install_paper_labels
+_install_paper_labels()

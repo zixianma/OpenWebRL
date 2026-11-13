@@ -267,7 +267,7 @@ inference_points = [(inference_pflops(key), inference_mean(key), label, color, m
 inference_point_keys = {(point[0], point[1]): method[0]
                         for method, point in zip(inference_methods, inference_points)}
 parameter_chart = chart_axes(1585, 188, 180, 150)
-parameter_chart.set_title("Success (%)", fontsize=5.6, color=MUTED, pad=4)
+parameter_chart.set_title("Mean success (%)", fontsize=5.6, color=MUTED, pad=4)
 # Frontier of the four displayed Figure 7 systems after omitting Luna variants.
 inference_frontier = []
 for point in sorted(inference_points, key=lambda p: (p[0], -p[1])):

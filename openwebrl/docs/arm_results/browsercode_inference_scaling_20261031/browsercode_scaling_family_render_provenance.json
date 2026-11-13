@@ -8,14 +8,15 @@
   "bootstrap_draws": 50000,
   "compact_coverage_sha256": "1b1f9f229ea6e2d46af727de47d63dc3033161cfa85104c89e23d15bf3910b12",
   "artifacts": {
-    "browsercode_selection_scaling.png": "ca052087a95b49176fb9aeeff83b5b6f3c915a3857b77ee852fe4ff6dd9c7475",
-    "browsercode_selection_scaling.pdf": "ddaead5e5014f11a1c7027d282e3ab0357332d04c23c72e7be1eb4c6de26533b",
-    "browsercode_selection_scaling.svg": "4576105ac62ad9839586f3d944a3170a84a38d5363999a0ce04a778477149fbc",
-    "browsercode_scaling_by_family.png": "cc521d32db55aee1fb67bbe7d2bd36539396c15ff3b61709c55547974857d9be",
-    "browsercode_scaling_by_family.pdf": "a13b7383cd87b1b666567ed28570393341f08b061b81b96f0f3c0e4bb8662320",
-    "browsercode_scaling_by_family.svg": "1e35b991edd7189b7b779bc48795eece1308bdca211f73c3801607c5662e5469",
-    "browsercode_scaling_strategies_compact.png": "d1c9de604b5f03854e8dbd01ff149bdc411d8fa0d0e33716f71192395352c4f6",
-    "browsercode_scaling_strategies_compact.pdf": "50ba6062a7eeec57d48c45da136682a9adb318b6de7e2e18388be40686f5d4f8",
-    "browsercode_scaling_strategies_compact.svg": "31704842c269019e4b9a2fadfbf2550c46d816a6a2ab9d60f53822ae892c3935"
-  }
+    "browsercode_selection_scaling.png": "25e508f5ae8aa41cbf2c07caa95ce53acddf51d69dcea44fedcb9bb16281333b",
+    "browsercode_selection_scaling.pdf": "26a62f0794525aa3d821efc542e820ad0285e15c6f0298c4d0075f8931f27976",
+    "browsercode_selection_scaling.svg": "6b0e27473dd67311b15c543f80df3e8be3103ce970794abc23b78c3e2c9ab3b7",
+    "browsercode_scaling_by_family.png": "370a79e0f8d9522b51e22b47c02a4b40ffd25ad54f43f7afd31514d99390308c",
+    "browsercode_scaling_by_family.pdf": "babd5f548d2026fc5ca884e32a5dea79693e0ac3acbfedb4f0366b17b8a2c239",
+    "browsercode_scaling_by_family.svg": "8172ad3cafc780134a45ba6f3476eb2e4313abd7d7522f9534754072fc31ad11",
+    "browsercode_scaling_strategies_compact.png": "0e20194f32a9da60230ec4325f8b2410c9ff31768b3ba3c0140078313aa1621a",
+    "browsercode_scaling_strategies_compact.pdf": "e9c2e19c9f8a3d0bb61c42f62011b0ac5dbeb891c1441148c508ed95b43b569f",
+    "browsercode_scaling_strategies_compact.svg": "97d7635c887c3ac6082744dc034cb8e77cafcf1d73dfc1240a472673ff1ac699"
+  },
+  "display_label_policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
 }

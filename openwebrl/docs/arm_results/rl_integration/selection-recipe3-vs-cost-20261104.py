@@ -185,9 +185,12 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [m for m in methods if "luna" not in m[0]]
         methods = [(key, label, params, "#8246E5" if key == "adm-distilled" else color, marker, hollow)
                    for key, label, params, color, marker, hollow in methods]
+        methods = [(key, label, params,
+                    tint("ADM_4B", .35) if key == "sft1" else C["ADM_4B"] if key == "sft8b" else color,
+                    marker, hollow) for key, label, params, color, marker, hollow in methods]
         methods.extend([
-            ("rl4b", "RL 4B", SFT, C["BASELINE_LIGHT"], "^", False),
-            ("rl8b", "RL 8B", 8.77e9, C["BASELINE_DARK"], "^", False),
+            ("rl4b", "RL 4B", SFT, tint("ADM_4B", .35), "^", False),
+            ("rl8b", "RL 8B", 8.77e9, C["ADM_4B"], "^", False),
             ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
         ])
         for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")):

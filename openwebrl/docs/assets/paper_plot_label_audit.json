@@ -1,0 +1,613 @@
+{
+  "scope": "All figures linked from ARM_FINAL_RESULTS.md and ARM_FIGURES.md",
+  "convention": "Mean success (%) for benchmark aggregates; Success (%) for individual benchmarks; no valid-only qualification in figure text. Denominators and weighting retained in captions.",
+  "figures": [
+    {
+      "stem": "arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_tokens",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs_common_valid",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-compact-20261105",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-states-20261105",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-panels-20261105",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-scaling-20261112",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-20261109",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-rerun-20261109",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-data-ablations-rerun-per-benchmark-20261109",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-scale-pooled-20261112",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-scale-agreement-20261112",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-scale-20261111",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-labels-vs-cost-20261021",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-stages-kfold-20261101",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-stages-20261027",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-same-state-kfold-20261101",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-same-state-20261027",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-setups-kfold-20261101",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-setups-20261027",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-state-scale-1panel-mean-20261027",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-state-scale-1panel-paired-20261027",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "rl_results/rl_eval_learning_curves",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_final_20261108/rl_learning_compact",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_final_20261108/rl_learning_compact_with_repetition",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_final_20261108/rl_learning_compact_overall",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_final_20261108/validation_success",
+      "formats": [
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_final_20261108/training_success",
+      "formats": [
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/methods/selection-offline-eval-20261022",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/methods/selection-arch-overview-20261107",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/methods/selection-arch-overview-kev-20261112",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/methods/adm_overview/figure1",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/luna_pre_post_k3_20261105/examples-compact",
+      "formats": [
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "rl_results/rl_repetition_success_robustness",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    }
+  ],
+  "figure_count": 76,
+  "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
+}

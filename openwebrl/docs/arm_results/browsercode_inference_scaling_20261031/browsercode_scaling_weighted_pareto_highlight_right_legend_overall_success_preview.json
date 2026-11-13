@@ -863,13 +863,14 @@
   ],
   "source_sha256": {
     "plot_browsercode_pareto_highlight_population_previews.py": "5cdcd42b6611fb656d975272c63dca9f1355b5f3b4721768566b7e32e04fa2ca",
-    "plot_browsercode_pareto_highlight_right_legend_preview.py": "c26daf28aa119c4e2a65f78a9d10427e80c24119524e4531ce8ae032d047ece7",
-    "browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "66b1f7b5a7299d5f25b42706557cc76dfce50ec82e7147ca210aa7baddbd9a6b",
+    "plot_browsercode_pareto_highlight_right_legend_preview.py": "44e62056093142cc5dfbe2ede1a8c90c4c7ba259f5f8c755d1a60fcc21cb62f0",
+    "browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "701f758acbf79c9a450f09dd06294e79149e04b7b0ccbc0777e2d3bb6b3cda86",
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea"
   },
   "output_sha256": {
-    "png": "1e63d195ac89503c7689dcb1d41d82dbde1bb2e30b178fabf7bbb9cb680065cc",
-    "pdf": "90b65aa325af0bcc3ba9085356eb48a518cbebec4bd9aff2d5fcb2549c32fc69",
-    "svg": "c824f5b82853cf758dab597f14eb48c88e7530e75ebb802f5395610f850f74eb"
-  }
+    "png": "f60fb57826024d6f4e336579bbf1990efe998f26dd756426f0d21f1fc6e2038f",
+    "pdf": "60882c901556cc05e000fb982c8de9fbe1ecd076cfbb73f071a8f26f45bac580",
+    "svg": "797df5b660eb696b7ed9e1f1ae356f818190819a24871bfbc09b3922cb503d26"
+  },
+  "display_label_policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
 }

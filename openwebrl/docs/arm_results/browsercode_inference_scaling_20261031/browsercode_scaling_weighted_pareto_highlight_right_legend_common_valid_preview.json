@@ -1060,15 +1060,15 @@
   ],
   "source_sha256": {
     "plot_browsercode_pareto_highlight_population_previews.py": "5cdcd42b6611fb656d975272c63dca9f1355b5f3b4721768566b7e32e04fa2ca",
-    "plot_browsercode_pareto_highlight_right_legend_preview.py": "c26daf28aa119c4e2a65f78a9d10427e80c24119524e4531ce8ae032d047ece7",
-    "browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "66b1f7b5a7299d5f25b42706557cc76dfce50ec82e7147ca210aa7baddbd9a6b",
+    "plot_browsercode_pareto_highlight_right_legend_preview.py": "44e62056093142cc5dfbe2ede1a8c90c4c7ba259f5f8c755d1a60fcc21cb62f0",
+    "browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "701f758acbf79c9a450f09dd06294e79149e04b7b0ccbc0777e2d3bb6b3cda86",
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "common16_aggregate.json": "dc7cdd4c452bb8c8b53fb3c20548fd8403bc7bed502cec674ac9246f285f91db"
   },
   "output_sha256": {
-    "png": "2e8fa8feb9bfe62f6f5c9240714743b75b8f6ec4278bbea8a99fe18365969370",
-    "pdf": "88068efd24ea94bd2e6a08a8b2ed7f2c5da2df1d4f47ea1952b2b0f1511658e6",
-    "svg": "bca3f3c57c36eef2b53c881cca857a505f944bda828159658983769e83b032bd"
+    "png": "bd21db827d4c70c23ef4f765a997c34d18ddf517755b51833d7bf291ccd5a57f",
+    "pdf": "f58ecfc13be83dd8e73471becb2339c7ea3228399ba0fc5345c3047e3093aca2",
+    "svg": "9381f7bd39a382588ec990366fdcec9f7c292d4c99e2006344788f37c22e144e"
   },
   "benchmark_counts": {
     "online_mind2web": {
@@ -1086,5 +1086,6 @@
       "common_valid": 104,
       "excluded": 46
     }
-  }
+  },
+  "display_label_policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
 }
