@@ -144,6 +144,12 @@
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg)
 
+### RL learning and repetition: merged four-panel figure
+
+![RL learning and repetition: merged four-panel figure](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.png)
+
+[PDF](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.svg)
+
 ### Training and validation: overall success
 
 ![Training and validation: overall success](arm_results/rl_final_20261108/rl_learning_compact_overall.png)

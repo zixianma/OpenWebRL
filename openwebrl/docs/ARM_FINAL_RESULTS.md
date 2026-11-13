@@ -2289,6 +2289,15 @@ The GPT-4.1-judged matched bars are omitted; the shared-Terra comparison is the 
 
 [PDF](arm_results/rl_final_20261108/rl_learning_compact.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact.svg) · [Renderer](arm_results/rl_final_20261108/plot_rl_learning_compact.py) · [Coordinates, protocols and hashes](arm_results/rl_final_20261108/rl_learning_compact.json).
 
+
+**Merged learning and repetition version.**
+
+![Four RL panels: training success, OM2W evaluation success, iteration-90 success versus repetition, and repetition-threshold robustness; shared legend on the right](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.png)
+
+*Same three methods and unchanged source values as the separate figures. (a) Training: valid-only collected task success, with a trailing-five-iteration mean. (b) OM2W: valid-only evaluation success, with faint raw dots and the trailing-three-evaluation pooled ratio. (c) Iteration 90: valid-only OM2W success versus the percentage of valid episodes containing at least three identical eligible tool calls; success intervals are 95% task-cluster bootstrap intervals. (d) The same repeated-action incidence at K = 2–5, with 95% task-cluster intervals. Calls need not be consecutive; `wait` and `done` are excluded. Panel (c) pools three repeats per checkpoint; it is not the final smoothed point in (b). Panels use their original method-specific valid populations and historical evaluation windows, without asserting matched cohorts across panels. The single-row 8.8 × 2.10-inch layout uses four square panels and one vertical legend. See the [learning definitions above](#final-rl-learning-compact) and [repetition methodology](RL_BEHAVIOR.md#rl-repetition-incidence-paper).*
+
+[PDF](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.pdf) · [SVG](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.svg) · [Source](arm_results/rl_final_20261108/plot_rl_learning_repetition_merged.py) · [Coordinates and provenance](arm_results/rl_final_20261108/rl_learning_compact_with_repetition.json).
+
 <details>
 <summary>Overall-success version: invalid attempts included</summary>
 

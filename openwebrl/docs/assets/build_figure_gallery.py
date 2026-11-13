@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "rl_learning_compact_with_repetition": "RL learning and repetition: merged four-panel figure",
     "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
