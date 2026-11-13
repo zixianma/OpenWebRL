@@ -34,6 +34,18 @@ EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.j
 EXTERNAL = {**EXTRA_RESULTS["systems"], "kev-4b": json.loads((HERE / "selection-kev-costs-20261113.json").read_text())}
 OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"], *EXTRA_RESULTS["rl_overall_updates"]]
 FRONTIER = C["FRONTIER"]
+# Overall-success paper view: shape denotes the actor/selector architecture.
+OVERALL_STYLES = {
+    "sft1": (tint("ADM_4B", .35), "o"),
+    "sft8b": (C["ADM_4B"], "o"),
+    "rl4b": (tint("ADM_4B", .35), "s"),
+    "rl8b": (C["ADM_4B"], "s"),
+    "head-gpt55-k3": ("#B69AE8", "D"),
+    "lora-gpt55-k3": ("#8246E5", "D"),
+    "rl8b-lora-gpt55-k3": ("#5429A3", "D"),
+    # Distillation produces a standalone SFT actor, without an inference selector.
+    "adm-distilled": ("#B65CB8", "o"),
+}
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
     ("sft8b", "SFT 8B", 8.77e9, C["BASELINE_DARK"], "s", False),
@@ -127,6 +139,13 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
 def legend(fig, axes, *, sft_only, grouped=False):
     handles, labels = axes.flat[0].get_legend_handles_labels()
     if grouped:
+        # Line proxies have finite symbol bounds, allowing checks against every
+        # label in the neighboring column, including oversized diamonds.
+        handles = [Line2D([], [], linestyle="none", marker=h.get_paths()[0],
+                          markersize=float(h.get_sizes()[0]) ** .5,
+                          markerfacecolor=h.get_facecolors()[0],
+                          markeredgecolor=h.get_edgecolors()[0],
+                          markeredgewidth=float(h.get_linewidths()[0])) for h in handles]
         by_label = {label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""): handle
                     for label, handle in zip(labels, handles)}
         blank = Line2D([], [], linestyle="none")
@@ -150,9 +169,9 @@ def legend(fig, axes, *, sft_only, grouped=False):
         ]
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
-                         loc="center left", bbox_to_anchor=(.735, .5), ncol=2,
+                         loc="center left", bbox_to_anchor=(.730, .5), ncol=2,
                          frameon=False, fontsize=6.4, handlelength=1.1,
-                         handletextpad=.3, columnspacing=.8, labelspacing=.22,
+                         handletextpad=.7, columnspacing=1.5, labelspacing=.22,
                          borderaxespad=0)
         for index in (0, 5, 10):
             leg.texts[index].set_fontweight("medium")
@@ -193,6 +212,8 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
             ("rl8b", "RL 8B", 8.77e9, C["ADM_4B"], "^", False),
             ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B", 8.77e9 + SFT, "#5429A3", "D", False),
         ])
+        methods = [(key, label, params, OVERALL_STYLES[key][0], OVERALL_STYLES[key][1], hollow)
+                   for key, label, params, color, marker, hollow in methods]
         for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
@@ -229,6 +250,12 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_bounds = bottom_legend.get_window_extent(renderer)
+    if right_legend:
+        text_boxes = [text.get_window_extent(renderer) for text in bottom_legend.texts if text.get_text()]
+        symbols = [line.get_window_extent(renderer) for line in bottom_legend.get_lines()
+                   if line.get_marker() not in (None, "None", "", " ")]
+        assert all(not a.overlaps(b) for i, a in enumerate(text_boxes) for b in text_boxes[i + 1:]), "Legend labels overlap"
+        assert all(not a.overlaps(b) for a in text_boxes for b in symbols), "Legend symbol overlaps text"
     assert fig.bbox.contains(*legend_bounds.p0) and fig.bbox.contains(*legend_bounds.p1)
     for ax in axes.flat:
         assert not legend_bounds.overlaps(ax.get_tightbbox(renderer)), "Legend overlaps panel labels"
