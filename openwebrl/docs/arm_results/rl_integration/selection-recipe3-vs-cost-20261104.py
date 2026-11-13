@@ -32,7 +32,7 @@ HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
 EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
 EXTERNAL = EXTRA_RESULTS["systems"]
-ADM_OVERALL = EXTRA_RESULTS["adm_overall_update"]
+OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"]]
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
@@ -69,9 +69,11 @@ def point(key, bench, success_metric="valid_only"):
 
 def plot_point(key, bench, success_metric, *, circle_encoding=False):
     r = point(key, bench, success_metric)
-    if circle_encoding and success_metric == "overall" and key == ADM_OVERALL["plot_key"]:
-        r["success"] = (ADM_OVERALL["reported_mean_overall"] if bench == "mean"
-                        else ADM_OVERALL["benchmarks"][bench])
+    if circle_encoding and success_metric == "overall":
+        for update in OVERALL_UPDATES:
+            if key == update["plot_key"]:
+                r["success"] = (update["reported_mean_overall"] if bench == "mean"
+                                else update["benchmarks"][bench])
     return r
 
 

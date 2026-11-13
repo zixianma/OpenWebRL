@@ -104,5 +104,16 @@
     },
     "reported_mean_overall": 48.9,
     "accounting": "Updates the best ADM-4B point in the SFT overall-success views only. Existing GPT-5.5 ADM-4B cost coordinates are retained; matching costs, evaluation date, exact counts and run count for this success row were not supplied. Historical pooled results and valid-only figures remain unchanged."
+  },
+  "sft_overall_update": {
+    "source": "User-provided OpenWebRL-SFT 4B (Qwen3VL-4B) overall-success row, 2026-11-13",
+    "plot_key": "sft1",
+    "benchmarks": {
+      "webvoyager": 48.0,
+      "online_mind2web": 32.5,
+      "deepshop": 45.5
+    },
+    "reported_mean_overall": 42.0,
+    "accounting": "Updates SFT 4B success in the SFT overall-success views only. Existing SFT 4B cost coordinates are retained. Exact counts, evaluation date and run count for the supplied success row were not specified."
   }
 }
