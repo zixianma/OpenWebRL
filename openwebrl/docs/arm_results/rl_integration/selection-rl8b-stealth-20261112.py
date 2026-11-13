@@ -1,13 +1,13 @@
 """RL 8B actor (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 response tokens) on Browser Use stealth browsers with US residential
 proxy, November 12: RL 8B alone (1 sample) vs RL 8B + default ADM (R3+WA 4B LoRA, arm5-d470d7e52a38, N = 5), T 1.0 / top-p 0.9,
-30 steps, 1 run, rolled out judge-deferred and judged afterwards. Benchmarks present so far (credit-limited: WebVoyager pending).
+30 steps, 1 run, rolled out judge-deferred and judged afterwards. All three benchmarks, all 1,045 tasks per arm (Browser Use credit topped up twice; the Online-Mind2Web ADM job resumed after a credit pause).
 Paired bootstrap over tasks common to both arms (10,000 resamples, seed 20261029, benchmarks resampled independently).
 Refuses DEFERRED and dead-key records. Writes the adjacent JSON. Runtime: recipe3-ablations-20261104/stealth/rl8b-proxy-1112/."""
 import glob, json, sys
 from pathlib import Path
 import numpy as np
 ROOT = "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/stealth/rl8b-proxy-1112/run1"
-BENCH = [b for b in ["online_mind2web", "webvoyager", "deepshop"] if b in (sys.argv[1:] or ["online_mind2web", "deepshop"])]
+BENCH = [b for b in ["online_mind2web", "webvoyager", "deepshop"] if b in (sys.argv[1:] or ["online_mind2web", "webvoyager", "deepshop"])]
 COND = {"sft1": "RL 8B alone (1 sample)", "arm5-d470d7e52a38": "RL 8B + ADM (R3+WA 4B LoRA, N = 5)"}
 B, SEED = 10000, 20261029
 

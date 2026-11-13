@@ -1917,20 +1917,20 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 
 <a id="final-selection-our-data-panels-20261027"></a>
 
-<a id="final-selection-rl8b-stealth-20261112"></a>**RL 8B actor with the default ADM on stealth browsers (November 12, partial: Online-Mind2Web and DeepShop).** *On stealth browsers the default ADM does not measurably help the RL 8B actor: −0.3 [−6.0, +5.3] pp mean overall, +1.8 [−3.7, +7.3] valid-only (2-benchmark means). RL 8B alone is already strong here (52.5% mean overall, Online-Mind2Web 60.5% valid-only). Locally the GPT-5.5 H = 4 LoRA added +2.7 [+0.6, +4.8] to RL 8B (3 benchmarks), so this interval is wide enough to contain that.* RL 8B (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 response tokens) alone vs + the default ADM (R3+WA 4B LoRA, `arm5-d470d7e52a38`, N = 5); US residential proxy, T 1.0 / top-p 0.9, 30 steps, one run, judge-deferred and judged afterwards (Online-Mind2Web gpt-5.6-terra, DeepShop GPT-4o; no record refused).
+<a id="final-selection-rl8b-stealth-20261112"></a>**RL 8B actor with the default ADM on stealth browsers (November 12–13).** *On stealth browsers the default ADM adds +1.2 [−2.6, +5.2] pp mean overall (+2.7 [−1.0, +6.6] valid-only) to the RL 8B actor: positive on Online-Mind2Web and WebVoyager (+4.1 [+0.1, +8.1] valid-only), flat on DeepShop, and not significant on the 3-benchmark mean with one run. RL 8B alone is already strong under stealth (59.5% mean overall, WebVoyager 75.9% valid-only). Locally a Recipe 3 LoRA added +2.7 [+0.6, +4.8] to RL 8B, within this interval.* RL 8B (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 response tokens) alone vs + the default ADM (R3+WA 4B LoRA, `arm5-d470d7e52a38`, N = 5); US residential proxy, T 1.0 / top-p 0.9, 30 steps, one run on all 1,045 tasks, judge-deferred and judged afterwards (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o; no record refused).
 
-| Condition | Online-Mind2Web | DeepShop | Mean overall | Mean valid-only |
-| --- | ---: | ---: | ---: | ---: |
-| RL 8B alone (1 sample) | 60.5% | 46.3% | 52.5% | 53.4% |
-| RL 8B + ADM (N = 5) | 63.0% | 47.5% | 52.2% | 55.3% |
-| *ADM − alone, pp [95% CI]* | +2.5 [−3.3, +8.2] | +1.2 [−8.3, +10.5] | −0.3 [−6.0, +5.3] | +1.8 [−3.7, +7.3] |
+| Condition | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| RL 8B alone (1 sample) | 59.8% | 75.9% | 46.3% | 59.5% | 60.7% |
+| RL 8B + ADM (N = 5) | 62.6% | **80.0%** | 47.5% | 60.7% | 63.4% |
+| *ADM − alone, pp [95% CI]* | +2.8 [−2.6, +8.2] | **+4.1 [+0.1, +8.1]** | +1.2 [−8.1, +10.7] | +1.2 [−2.6, +5.2] | +2.7 [−1.0, +6.6] |
 
-| Condition | Online-Mind2Web valid / tasks | Online-Mind2Web successes | DeepShop valid / tasks | DeepShop successes |
-| --- | ---: | ---: | ---: | ---: |
-| RL 8B alone | 261 / 268 | 158 | 149 / 150 | 69 |
-| RL 8B + ADM | 254 / 268 | 160 | 141 / 150 | 67 |
+| Condition | Online-Mind2Web valid / tasks | Online-Mind2Web successes | WebVoyager valid / tasks | WebVoyager successes | DeepShop valid / tasks | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| RL 8B alone | 291 / 300 | 174 | 584 / 595 | 443 | 149 / 150 | 69 |
+| RL 8B + ADM | 286 / 300 | 179 | 579 / 595 | 463 | 141 / 150 | 67 |
 
-*Per-benchmark columns are valid-only success; paired bootstrap over tasks both arms completed (10,000 resamples, seed 20261029, benchmarks resampled independently). Online-Mind2Web is compared on 268 of 300 tasks: the Browser Use credit ran out with 32 ADM episodes left (job cancelled while idle; resumable). WebVoyager is not run (about $190 of proxy credit; measured cost about $0.16 per episode). The ADM arm has more invalid episodes (DeepShop 9 vs 1, Online-Mind2Web 14 vs 7), which is why it gains valid-only but not overall; about 1–2% of episodes in both arms end on the actor's 32K context limit (prompt + 4,096 response tokens), as in the local RL 8B runs. Evidence: [rates and contrasts](arm_results/rl_integration/selection-rl8b-stealth-20261112.json) · [script](arm_results/rl_integration/selection-rl8b-stealth-20261112.py). Runtime: `recipe3-ablations-20261104/stealth/rl8b-proxy-1112/`.*
+*Per-benchmark columns and their differences are valid-only success; mean columns as labelled; paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently). Overall differences per benchmark: Online-Mind2Web +1.7 [−4.0, +7.3], WebVoyager +3.4 [−0.7, +7.4], DeepShop −1.3 [−10.7, +8.0]. The ADM arm has more invalid episodes (DeepShop 9 vs 1, Online-Mind2Web 14 vs 9), so it gains less overall than valid-only; about 1–2% of episodes in both arms end on the actor's 32K context limit (prompt + 4,096 response tokens), as in the local RL 8B runs. Browser Use proxy cost: about $0.15 per episode on Online-Mind2Web and DeepShop, $0.07 on WebVoyager (about $215 in all); the Online-Mind2Web ADM job paused on credit at 268 tasks and was resumed. Evidence: [rates and contrasts](arm_results/rl_integration/selection-rl8b-stealth-20261112.json) · [script](arm_results/rl_integration/selection-rl8b-stealth-20261112.py). Runtime: `recipe3-ablations-20261104/stealth/rl8b-proxy-1112/`.*
 
 #### Many Piotr-style panels per state instead of one
 
