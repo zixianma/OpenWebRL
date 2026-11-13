@@ -31,7 +31,7 @@ rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text()
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
 EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
-EXTERNAL = EXTRA_RESULTS["systems"]
+EXTERNAL = {**EXTRA_RESULTS["systems"], "kev-4b": json.loads((HERE / "selection-kev-costs-20261113.json").read_text())}
 OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"]]
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
@@ -148,7 +148,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
         methods = [m for m in methods if "luna" not in m[0]]
-        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X")):
+        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X"), ("kev-4b", "v")):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
             methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, False))

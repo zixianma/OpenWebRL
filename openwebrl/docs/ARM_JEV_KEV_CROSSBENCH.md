@@ -28,6 +28,20 @@ Paired differences in overall success, in percentage points, with 95% paired-boo
 
 WebVoyager SFT + Jev was interrupted when TypeSafe credits ran out (HTTP 402). The 24 rollouts that aborted on 402 were set aside and rerun, so all 595 tasks have exactly one recorded episode.
 
+
+## Kev-4B system cost
+
+Released `jaredpalmer/kev-4b` selector plus the SFT 4B actor, from the same November 11 run linked above. Latency sums actor generation and selection time per episode, excluding browser execution. PFLOP uses the same 2 × parameters × tokens proxy as the Recipe 3 plot: actor uncached prompt plus generated tokens, and Kev's reported input tokens. Kev's response is a choice classification; its reported output tokens count serialized answers and are excluded from model compute.
+
+| Benchmark | Recorded episodes | System parameters (B) | PFLOP / episode | Model latency (s / episode) |
+|---|---:|---:|---:|---:|
+| OM2W | 300 | 8.644 | 1.444 | 100.8 |
+| WebVoyager | 595 | 8.644 | 1.470 | 96.3 |
+| DeepShop | 150 | 8.644 | 2.569 | 148.4 |
+| Equal-weight mean | — | 8.644 | 1.828 | 115.2 |
+
+The Kev text backbone has 4,205,751,296 parameters, counted from the pinned base checkpoint tensor headers, excluding vision and MTP modules; actor parameters are 4,437,815,808. The small pointer head and merged LoRA overhead are excluded, consistent with backbone parameter accounting for other selectors. Selector cache savings are not exposed in saved responses, so its entire reported input is charged: this is a full-input compute proxy, not an exact hardware FLOP count. Costs average recorded episodes (300 / 595 / 150); invalid episodes are included. The plot retains the user's rounded overall rates (OM2W 31.3%, WebVoyager 42.5%, DeepShop 43.3%, reported mean 39.1%). [Aggregate audit](arm_results/rl_integration/selection-kev-costs-20261113.json) · [Reproduce from saved telemetry](arm_results/rl_integration/selection-kev-costs-20261113.py).
+
 ## Jev as the actor {#jev-actor-20261111}
 
 - **Direct Jev:** Jev 1.13.0 chooses and runs its own actions. On DONE, GPT-4.1-mini extracts the answer, and the benchmark's own judge grades it.

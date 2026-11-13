@@ -1,0 +1,80 @@
+{
+  "label": "Kev-4B",
+  "source_doc": "ARM_JEV_KEV_CROSSBENCH.md#jev-kev-selectors-20261111",
+  "run_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/jev-kev-crossbench-eval-md-20261111/run1",
+  "actor_parameters": 4437815808,
+  "selector_parameters": 4205751296,
+  "system_parameters": 8643567104,
+  "accounting": "Actor PFLOP = 2 \u00d7 actor params \u00d7 (prompt \u2212 cached + generated tokens) / 1e15. Selector PFLOP proxy = 2 \u00d7 text-backbone params \u00d7 reported input tokens / 1e15. Serialized response tokens are excluded: Kev scores choices without generating text. Model seconds = summed generation + selection decision seconds / recorded episodes; browser time excluded.",
+  "caveats": [
+    "Selector cache savings are not exposed in responses; all selector input tokens are charged. Selector FLOPs are a full-input proxy, not an exact hardware count.",
+    "System parameters exclude the small pointer head and merged LoRA overhead, matching the backbone-only parameter convention of the other selectors.",
+    "Run 1 costs from November 11; reported success rates supplied by user. Recorded-episode cost denominators are reported separately from scheduled-task success denominators."
+  ],
+  "reported_mean_overall": 39.1,
+  "benchmarks": {
+    "online_mind2web": {
+      "overall": 31.3,
+      "recorded_episodes": 300,
+      "actor_pflop_per_episode": 0.750195543617065,
+      "selector_pflop_per_episode": 0.693945823545699,
+      "pflop_per_episode": 1.444141367162764,
+      "model_seconds_per_episode": 100.80099705402763,
+      "totals": {
+        "actor_prompt": 170732210,
+        "actor_cached": 151421792,
+        "actor_generated": 6046500,
+        "selector_input": 24749888,
+        "selector_calls": 3739,
+        "decision_seconds": 30240.29911620829,
+        "steps": 3739,
+        "missing_selector_usage": 0,
+        "traces": 3739
+      },
+      "selector_state_hashes": 3739,
+      "unique_selector_state_hashes": 3666
+    },
+    "webvoyager": {
+      "overall": 42.5,
+      "recorded_episodes": 595,
+      "actor_pflop_per_episode": 0.6717997492590162,
+      "selector_pflop_per_episode": 0.7981524109351101,
+      "pflop_per_episode": 1.4699521601941261,
+      "model_seconds_per_episode": 96.28661829371583,
+      "totals": {
+        "actor_prompt": 307241085,
+        "actor_cached": 273125002,
+        "actor_generated": 10919681,
+        "selector_input": 56458484,
+        "selector_calls": 6706,
+        "decision_seconds": 57290.537884760924,
+        "steps": 6706,
+        "missing_selector_usage": 0,
+        "traces": 6706
+      },
+      "selector_state_hashes": 6706,
+      "unique_selector_state_hashes": 6348
+    },
+    "deepshop": {
+      "overall": 43.3,
+      "recorded_episodes": 150,
+      "actor_pflop_per_episode": 1.0152159274122035,
+      "selector_pflop_per_episode": 1.553950409728983,
+      "pflop_per_episode": 2.5691663371411866,
+      "model_seconds_per_episode": 148.43205853024284,
+      "totals": {
+        "actor_prompt": 112304965,
+        "actor_cached": 99349831,
+        "actor_generated": 4202224,
+        "selector_input": 27711168,
+        "selector_calls": 2214,
+        "decision_seconds": 22264.808779536426,
+        "steps": 2214,
+        "missing_selector_usage": 0,
+        "traces": 2214
+      },
+      "selector_state_hashes": 2214,
+      "unique_selector_state_hashes": 2203
+    }
+  }
+}
