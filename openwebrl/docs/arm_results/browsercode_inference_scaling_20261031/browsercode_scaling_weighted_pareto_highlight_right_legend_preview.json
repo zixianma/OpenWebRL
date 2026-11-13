@@ -710,6 +710,12 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
+    "axis_labels": [
+      "API cost / task ($, log)",
+      "Browser steps / task",
+      "Latency / task (s)"
+    ],
+    "encoding_key": "Single key for fill (30 vs 60/120 step caps), hatch (cached context), and observed frontier; cached method labels omit redundant cache text.",
     "selection": "Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
     "single_call_encoding": "Baseline: diamond; xhigh: star; 0.5x/2x tokens: left/right triangle; 60/120 steps: hexagon/pentagon. Luna gray, Sol green. Shapes reserved separately from candidate-count shapes.",
     "single_call_markers": {
@@ -799,10 +805,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "645b8b2beea3590babaf5f0e3d4091e4e57328edf4b5a78e9f07196a6aac9385",
+  "renderer_sha256": "44e62056093142cc5dfbe2ede1a8c90c4c7ba259f5f8c755d1a60fcc21cb62f0",
   "output_sha256": {
-    "png": "f0994921612a5cedc1a2ae8c7a55b6535fef6a8fc38c8c390efa6e55b8712404",
-    "pdf": "62305ee91012b4888c94c7f177d27afca623e4526c31c10c9c5c6990a13d151e",
-    "svg": "102f619e3357caae1a10f8bf93d478a45ea904eb127f650d4bc2a17a3a6c8061"
+    "png": "5bd24179ce09012000096e7109d452c5c482fc8b2ea83a0188c1c9461fbcd475",
+    "pdf": "0778c919bb78872658a7fe72491b1f97c9ad30f3d975ba7e584e285612b7e9c2",
+    "svg": "2312c3f3665da815e71fd4c70d5173e1faf0cce36db73407d832796ac5883d89"
   }
 }

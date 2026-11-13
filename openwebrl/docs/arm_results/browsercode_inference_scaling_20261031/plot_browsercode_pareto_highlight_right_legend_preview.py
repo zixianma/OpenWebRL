@@ -22,6 +22,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.legend_handler import HandlerPatch
+from matplotlib.lines import Line2D
 from matplotlib.markers import MarkerStyle
 from matplotlib.patches import Circle, Rectangle
 
@@ -87,8 +88,9 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         text.remove()
     fig.set_size_inches(8.8, height)
     fig.subplots_adjust(left=.065, right=.68, top=.95, bottom=.22, wspace=.10)
-    for ax in fig.axes:
+    for ax, label in zip(fig.axes, ("API cost / task ($, log)", "Browser steps / task", "Latency / task (s)")):
         ax.set_box_aspect(1)
+        ax.set_xlabel(label)
     fig.axes[0].set_ylabel("")
     sidebar_x, top = .72, .95
     handlers = {Circle: HandlerPatch(patch_func=legend_circle), Rectangle: HandlerPatch(patch_func=legend_square)}
@@ -110,8 +112,8 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         # Explicit maximum-step notation in both legend groups.
         labels = [label.replace("30 steps", "≤30 steps").replace("60 steps", "≤60 steps")
                         .replace("120 steps", "≤120 steps")
-                        .replace("N=3/30 cached", "N=3 · ≤30 cached")
-                        .replace("N=5/60 cached", "N=5 · ≤60 cached")
+                        .replace("N=3/30 cached", "N=3 · ≤30 steps")
+                        .replace("N=5/60 cached", "N=5 · ≤60 steps")
                         .replace("N=5, 60 steps", "N=5 · ≤60 steps") for label in labels]
         title = old.get_title().get_text() if j == 0 else "Best-of-N action decision scaling"
         legend = fig.legend(handles, labels, title=title, loc="upper left",
@@ -122,7 +124,12 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         fig.canvas.draw()
         top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     frontier = copy.copy(previous[2].get_lines()[0])
-    encoding = fig.legend([frontier, cache_handle()], ["Observed frontier", "Cached context"],
+    white_fill = Line2D([], [], linestyle="none", marker="o", markersize=5.5,
+                        markerfacecolor="white", markeredgecolor=SINGLE_GRAY, markeredgewidth=1)
+    color_fill = Line2D([], [], linestyle="none", marker="o", markersize=5.5,
+                        markerfacecolor=SINGLE_GRAY, markeredgecolor=SINGLE_GRAY, markeredgewidth=1)
+    encoding = fig.legend([white_fill, cache_handle(), color_fill, frontier],
+                          ["30-step cap", "Cached context", "60/120-step cap", "Observed frontier"],
                           loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=2,
                           fontsize=8, frameon=False, handlelength=1.2, handletextpad=.4,
                           columnspacing=.7, labelspacing=.10, borderaxespad=0,
@@ -130,7 +137,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
     fig.canvas.draw()
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
-             "GPT-6 high unless xhigh. N=candidates.\nStep limits are maxima; default: 30.\nFill: white ≤30; color ≥60. Hatch: cache.\nLuna baseline: 12,288 tokens.",
+             "GPT-6 high unless xhigh. N=candidates.\nLuna baseline: 12,288 tokens · ≤30 steps.",
              fontsize=7.2, color=PALETTE["MUTED"], va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -165,7 +172,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
     for ax in fig.axes:
         box = ax.get_window_extent(renderer)
         assert abs(box.width - box.height) < .01, "Plotting area must be square"
-    assert [len(legend.texts) for legend in fig.legends] == [10, 6, 2]
+    assert [len(legend.texts) for legend in fig.legends] == [10, 6, 4]
 
 
 def build():
@@ -285,6 +292,8 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
+                              axis_labels=["API cost / task ($, log)", "Browser steps / task", "Latency / task (s)"],
+                              encoding_key="Single key for fill (30 vs 60/120 step caps), hatch (cached context), and observed frontier; cached method labels omit redundant cache text.",
                               selection="Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
                               single_call_encoding="Baseline: diamond; xhigh: star; 0.5x/2x tokens: left/right triangle; 60/120 steps: hexagon/pentagon. Luna gray, Sol green. Shapes reserved separately from candidate-count shapes.",
                               single_call_markers={key: dict(marker=style[0], filled=style[1]) for key, style in SINGLE_MARKERS.items()},

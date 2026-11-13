@@ -152,7 +152,7 @@ L 0 2
      </g>
     </g>
     <g id="text_3">
-     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="102.069" y="157.925968" transform="rotate(-0 102.069 157.925968)">Actor cost ($, log)</text>
+     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="102.069" y="157.925968" transform="rotate(-0 102.069 157.925968)">API cost / task ($, log)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -555,7 +555,7 @@ z
      </g>
     </g>
     <g id="text_12">
-     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="236.016" y="157.205968" transform="rotate(-0 236.016 157.205968)">Browser steps</text>
+     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="236.016" y="157.925968" transform="rotate(-0 236.016 157.925968)">Browser steps / task</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -765,7 +765,7 @@ z
      </g>
     </g>
     <g id="text_17">
-     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="369.963" y="157.925968" transform="rotate(-0 369.963 157.925968)">Actor latency (s)</text>
+     <text style="fill: #211a33; font: 9px 'Albert Sans'; text-anchor: middle" x="369.963" y="157.925968" transform="rotate(-0 369.963 157.925968)">Latency / task (s)</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -961,10 +961,8 @@ z
    </g>
   </g>
   <g id="text_19">
-   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 132.527276)">GPT-6 high unless xhigh. N=candidates.</text>
-   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 140.231276)">Step limits are maxima; default: 30.</text>
-   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 147.892076)">Fill: white ≤30; color ≥60. Hatch: cache.</text>
-   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 155.552876)">Luna baseline: 12,288 tokens.</text>
+   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 141.607276)">GPT-6 high unless xhigh. N=candidates.</text>
+   <text style="fill: #423c54; font: 7.2px 'Albert Sans'" transform="translate(456.192 149.268076)">Luna baseline: 12,288 tokens · ≤30 steps.</text>
   </g>
   <g id="text_20">
    <text style="fill: #211a33; font: 9px 'Albert Sans'" transform="translate(12.4776 98.337609) rotate(-90)">Success (%)</text>
@@ -1237,7 +1235,7 @@ z
 " style="fill: url(#h0aae6f1e1d); stroke: #8c55e7; stroke-width: 0.65; stroke-linejoin: miter"/>
    </g>
    <g id="text_37">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="544.66575" y="99.904526" transform="rotate(-0 544.66575 99.904526)">N=3 · ≤30 cached</text>
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="544.66575" y="99.904526" transform="rotate(-0 544.66575 99.904526)">N=3 · ≤30 steps</text>
    </g>
    <g id="patch_12">
     <path d="M 537.86575 107.840526
@@ -1253,14 +1251,72 @@ z
 " style="fill: url(#h866d086e63)"/>
    </g>
    <g id="text_38">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="544.66575" y="108.064526" transform="rotate(-0 544.66575 108.064526)">N=5 · ≤60 cached</text>
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="544.66575" y="108.064526" transform="rotate(-0 544.66575 108.064526)">N=5 · ≤60 steps</text>
    </g>
   </g>
   <g id="legend_3">
    <g id="line2d_50">
-    <path d="M 459.392 118.823276
-L 464.192 118.823276
-L 468.992 118.823276
+    <defs>
+     <path id="mc51473ab39" d="M 0 2.75
+C 0.729309 2.75 1.428845 2.460243 1.944544 1.944544
+C 2.460243 1.428845 2.75 0.729309 2.75 0
+C 2.75 -0.729309 2.460243 -1.428845 1.944544 -1.944544
+C 1.428845 -2.460243 0.729309 -2.75 0 -2.75
+C -0.729309 -2.75 -1.428845 -2.460243 -1.944544 -1.944544
+C -2.460243 -1.428845 -2.75 -0.729309 -2.75 0
+C -2.75 0.729309 -2.460243 1.428845 -1.944544 1.944544
+C -1.428845 2.460243 -0.729309 2.75 0 2.75
+z
+" style="stroke: #687580"/>
+    </defs>
+    <g>
+     <use xlink:href="#mc51473ab39" x="464.192" y="119.463276" style="fill: #ffffff; stroke: #687580"/>
+    </g>
+   </g>
+   <g id="text_39">
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="472.192" y="122.263276" transform="rotate(-0 472.192 122.263276)">30-step cap</text>
+   </g>
+   <g id="patch_13">
+    <path d="M 464.192 130.199276
+C 464.875163 130.199276 465.530438 129.927853 466.013507 129.444783
+C 466.496576 128.961714 466.768 128.30644 466.768 127.623276
+C 466.768 126.940113 466.496576 126.284839 466.013507 125.801769
+C 465.530438 125.3187 464.875163 125.047276 464.192 125.047276
+C 463.508837 125.047276 462.853562 125.3187 462.370493 125.801769
+C 461.887424 126.284839 461.616 126.940113 461.616 127.623276
+C 461.616 128.30644 461.887424 128.961714 462.370493 129.444783
+C 462.853562 129.927853 463.508837 130.199276 464.192 130.199276
+z
+" style="fill: url(#hf85b1fb79b)"/>
+   </g>
+   <g id="text_40">
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="472.192" y="130.423276" transform="rotate(-0 472.192 130.423276)">Cached context</text>
+   </g>
+   <g id="line2d_51">
+    <defs>
+     <path id="mf00a2f77ef" d="M 0 2.75
+C 0.729309 2.75 1.428845 2.460243 1.944544 1.944544
+C 2.460243 1.428845 2.75 0.729309 2.75 0
+C 2.75 -0.729309 2.460243 -1.428845 1.944544 -1.944544
+C 1.428845 -2.460243 0.729309 -2.75 0 -2.75
+C -0.729309 -2.75 -1.428845 -2.460243 -1.944544 -1.944544
+C -2.460243 -1.428845 -2.75 -0.729309 -2.75 0
+C -2.75 0.729309 -2.460243 1.428845 -1.944544 1.944544
+C -1.428845 2.460243 -0.729309 2.75 0 2.75
+z
+" style="stroke: #687580"/>
+    </defs>
+    <g>
+     <use xlink:href="#mf00a2f77ef" x="541.26325" y="119.463276" style="fill: #687580; stroke: #687580"/>
+    </g>
+   </g>
+   <g id="text_41">
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="549.26325" y="122.263276" transform="rotate(-0 549.26325 122.263276)">60/120-step cap</text>
+   </g>
+   <g id="line2d_52">
+    <path d="M 536.46325 127.623276
+L 541.26325 127.623276
+L 546.06325 127.623276
 " style="fill: none; stroke-dasharray: 3.515,1.52; stroke-dashoffset: 0; stroke: #7c7887; stroke-width: 0.95"/>
     <defs>
      <path id="m44f1935f17" d="M 0 2.2
@@ -1276,27 +1332,11 @@ z
 " style="stroke: #7c7887; stroke-width: 0.6"/>
     </defs>
     <g>
-     <use xlink:href="#m44f1935f17" x="464.192" y="118.823276" style="fill: #ffffff; stroke: #7c7887; stroke-width: 0.6"/>
+     <use xlink:href="#m44f1935f17" x="541.26325" y="127.623276" style="fill: #ffffff; stroke: #7c7887; stroke-width: 0.6"/>
     </g>
    </g>
-   <g id="text_39">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="472.192" y="121.623276" transform="rotate(-0 472.192 121.623276)">Observed frontier</text>
-   </g>
-   <g id="patch_13">
-    <path d="M 547.6645 121.399276
-C 548.347663 121.399276 549.002938 121.127853 549.486007 120.644783
-C 549.969076 120.161714 550.2405 119.50644 550.2405 118.823276
-C 550.2405 118.140113 549.969076 117.484839 549.486007 117.001769
-C 549.002938 116.5187 548.347663 116.247276 547.6645 116.247276
-C 546.981337 116.247276 546.326062 116.5187 545.842993 117.001769
-C 545.359924 117.484839 545.0885 118.140113 545.0885 118.823276
-C 545.0885 119.50644 545.359924 120.161714 545.842993 120.644783
-C 546.326062 121.127853 546.981337 121.399276 547.6645 121.399276
-z
-" style="fill: url(#hf85b1fb79b)"/>
-   </g>
-   <g id="text_40">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="555.6645" y="121.623276" transform="rotate(-0 555.6645 121.623276)">Cached context</text>
+   <g id="text_42">
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="549.26325" y="130.423276" transform="rotate(-0 549.26325 130.423276)">Observed frontier</text>
    </g>
   </g>
  </g>
