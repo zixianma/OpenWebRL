@@ -124,6 +124,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
         fig.canvas.draw()
         top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     frontier = copy.copy(previous[2].get_lines()[0])
+    frontier.set_marker("None")
     white_fill = Line2D([], [], linestyle="none", marker="o", markersize=5.5,
                         markerfacecolor="white", markeredgecolor=SINGLE_GRAY, markeredgewidth=1)
     color_fill = Line2D([], [], linestyle="none", marker="o", markersize=5.5,
@@ -257,12 +258,8 @@ def build():
                 point.set_edgecolors("white" if cached_filled else color)
                 point.set_linewidths([0 if cached_filled else .65])
                 point.set_hatch(CACHE_HATCH)
-        # Keep the observed-frontier rings visible around the enlarged points.
-        emphasized = [point.get_offsets()[0] for row, point in zip(rows, ax.collections[:len(rows)])
-                      if row["method"].startswith("parallel") or row["method"] in ORIGINAL.CACHED]
-        rings = ax.collections[len(rows)]
-        rings.set_sizes([90 if any(all(abs(float(a) - float(b)) < 1e-10 for a, b in zip(xy, p))
-                                   for p in emphasized) else 57 for xy in rings.get_offsets()])
+        # Preserve method markers and dashed links; omit the extra frontier rings.
+        ax.collections[len(rows)].remove()
     # Audit visible channels independently: shapes, fill and hatching must
     # agree with the method in every panel, including cached 30-step runs.
     import numpy as np
@@ -303,7 +300,7 @@ def main():
                               selection_encoding="N=2 triangle; N=3 square; N=5 circle. White background means 30-step maximum, colored background means 60-step maximum, also for cached runs. Hatching independently means cache. Step labels show maxima with ≤.",
                               cached="N3/30: white square with purple stripes; N5/60: purple circle with white stripes. Thin purple boundary for white N3/30; no outline for colored N5/60. Fill denotes step cap and stripes denote caching independently.",
                               cached_marker=dict(markers={key: SELECTION_MARKERS[key] for key in ORIGINAL.CACHED}, size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="purple for 30 steps, white for 60 steps", hatch_linewidth=.5, linewidth={"30_steps": .65, "60_steps": 0}),
-                              frontier="Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
+                              frontier="Same observed frontier; dashed links only, no rings in panels or legend",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),
                   source_sha256={**original_report["source_sha256"],
                                  SOURCE.name: ORIGINAL.BASE.sha(SOURCE),

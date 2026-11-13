@@ -56,9 +56,9 @@
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.pdf": "60882c901556cc05e000fb982c8de9fbe1ecd076cfbb73f071a8f26f45bac580",
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.png": "f60fb57826024d6f4e336579bbf1990efe998f26dd756426f0d21f1fc6e2038f",
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.svg": "797df5b660eb696b7ed9e1f1ae356f818190819a24871bfbc09b3922cb503d26",
-    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.pdf": "0f6fe3eaf3570ce5786039054f5f6e1c82d49aa87654e994d6b0c7425ac6885a",
-    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.png": "0cc069c73ad3327be7172ef5b131a16d834c52f1e00243fe533906c220c7e9fd",
-    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.svg": "0f974ac73a6f6f9635c5d54aa5e77cec5a7e93220762a2467cf429f6202157e4",
+    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.pdf": "e2005eed80c4afbe387d26e03fac05baabba905b11d8adb430347793c1bc9472",
+    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.png": "07f463ef3df1c68fc2d6f7716bc36862e97a2deebc2faf6dddb4350cb0cac8f9",
+    "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.svg": "420b39eab7fc1c8f71c9dc0e59e5d89dd195a8039b0eab6a498d7adf7f79a300",
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf": "f05640a8114a3f6696adc6d96e6b46e1c14b080a7e0dc953ae3e1f4423d1a464",
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png": "d1dd8f51e9e2e9967a417605aa6a964ee2c9ce970e94facccb4e7ec85f67421f",
     "openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg": "8d04116f69ccd856d37f5e83db3a29cbe29892babc6d0a3acc6b67085e02cc2a",
@@ -384,7 +384,10 @@
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.svg": "cdf1d5c2f94136f1bd69a7939737618b01a986856d62012e20b757e317fc5422",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.png": "1fe1c606806f46a0df6741d848445340758377f3dffaa7ab815ac88d25e6b640",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.pdf": "43c95fa2f4aed306ee35cf7a20c661f8b4a9dfa1d12117b75783f2bfaa9c62eb",
-    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg": "cbdfd06428f9803c25919af40612180808b0883c61d1d44813b4fee2ee65522e"
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg": "cbdfd06428f9803c25919af40612180808b0883c61d1d44813b4fee2ee65522e",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png": "1b57a00229dacb0012554de94b95f102bd2fd130e6abee8cb895b76fe3c38074",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.svg": "eaf1c1de1e03b3c6c616787b90c5ff29ac667c1549cc91c07849a106b59e7205",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.pdf": "43d5cb8f078658e678d725aceb9675311f111996e82433db45e612ecfea6bade"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
@@ -396,6 +399,6 @@
     "validity_qualifiers": "Defined in captions, omitted from plot text",
     "policy": "openwebrl/docs/paper_plot_labels.py",
     "audit": "openwebrl/docs/assets/paper_plot_label_audit.json",
-    "policy_sha256": "3379f94655b8afcf5dbc7daab59299244de0e4f994ad14dd8b0d2064c4fb42e7"
+    "policy_sha256": "d5396277d833a4707740a7436b3c71b2d5e9013b33a52e6378b7a4cb3f3264a1"
   }
 }

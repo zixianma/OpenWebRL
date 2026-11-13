@@ -790,7 +790,7 @@
         "60_steps": 0
       }
     },
-    "frontier": "Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
+    "frontier": "Same observed frontier; dashed links only, no rings in panels or legend",
     "typography": "Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"
   },
   "source_sha256": {
@@ -805,11 +805,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "3909001010810834c7b828c69e247f1a414e03f93bee26c36bcaaf1668dd7b6c"
   },
-  "renderer_sha256": "44e62056093142cc5dfbe2ede1a8c90c4c7ba259f5f8c755d1a60fcc21cb62f0",
+  "renderer_sha256": "5cbb6527a51f0866b8f396c9d49bb47663b060cbe5984939773c9755c3f0e501",
   "output_sha256": {
-    "png": "0cc069c73ad3327be7172ef5b131a16d834c52f1e00243fe533906c220c7e9fd",
-    "pdf": "0f6fe3eaf3570ce5786039054f5f6e1c82d49aa87654e994d6b0c7425ac6885a",
-    "svg": "0f974ac73a6f6f9635c5d54aa5e77cec5a7e93220762a2467cf429f6202157e4"
-  },
-  "display_label_policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
+    "png": "07f463ef3df1c68fc2d6f7716bc36862e97a2deebc2faf6dddb4350cb0cac8f9",
+    "pdf": "e2005eed80c4afbe387d26e03fac05baabba905b11d8adb430347793c1bc9472",
+    "svg": "420b39eab7fc1c8f71c9dc0e59e5d89dd195a8039b0eab6a498d7adf7f79a300"
+  }
 }

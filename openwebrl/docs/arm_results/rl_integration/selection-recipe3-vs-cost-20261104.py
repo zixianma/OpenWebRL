@@ -184,6 +184,14 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                 (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (frontier_handle, "Frontier"),
             ]]
             headings = (0, 3)
+            if "Best-of-Q" in by_label:
+                columns.append([
+                    (blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
+                    (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
+                    (by_label["Kev-4B"], "Kev-4B"), (blank, ""), (blank, ""), (blank, ""), (blank, ""),
+                ])
+                headings = (0, 3, 9)
+
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
                          loc="center left", bbox_to_anchor=(.730, .5), ncol=len(columns),
@@ -203,11 +211,12 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None):
     assert success_metric in ("valid_only", "overall")
     if not include_rl:
         methods = [method for method in methods if not method[0].startswith("rl")]
-    updates = NO_RL_UPDATES if not include_rl else ()
+    updates = (NO_RL_UPDATES if not include_rl else ()) if success_updates is None else success_updates
+    include_baselines = include_rl if include_baselines is None else include_baselines
     metric_label = "Overall" if success_metric == "overall" else "Valid-only"
     canonical_name = name.replace("-no-rl", "").replace("-overall-", "-")
     circle_encoding = "sft-actors" in name
@@ -230,7 +239,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         ])
         methods = [(key, label, params, OVERALL_STYLES[key][0], OVERALL_STYLES[key][1], hollow)
                    for key, label, params, color, marker, hollow in methods]
-        for key, marker in ((("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")) if include_rl else ()):
+        for key, marker in ((("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")) if include_baselines else ()):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
             methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, True))
@@ -312,5 +321,7 @@ if __name__ == "__main__":
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 3.90, sft, success_metric="overall")
     render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104", 1.42, sft, success_metric="overall", include_rl=False)
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104", 3.90, sft, success_metric="overall", include_rl=False)
+    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104", 1.42, sft,
+           success_metric="overall", include_rl=False, include_baselines=True, success_updates=())
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))

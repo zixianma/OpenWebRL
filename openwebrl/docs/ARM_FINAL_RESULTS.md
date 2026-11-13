@@ -1244,6 +1244,12 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 [Per-benchmark PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg).
 
+**Earlier baseline comparison, revised markers and legend:**
+
+![Earlier SFT actor and ADM baseline comparison with larger SFT circles](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
+
+*Retains the success values and cost coordinates from commit 472a1a4, including the external baseline ADMs; these are descriptive comparisons across differing cohorts. SFT circles now match the ADM diamonds in marker area. Ours groups the distilled actor and the added selectors; the shared SFT 4B + ADM label applies to ADM-23M and ADM-4B. Baseline ADMs remain in the right legend column. Frontier links are dashed without rings. Success uses scheduled-task denominators, including invalid outcomes as failures; the mean equally weights the three benchmarks. The newer cohort comparison below is retained separately.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.svg).
+
 **Separate version without RL checkpoints:**
 
 ![SFT actors and ADM methods without RL checkpoints: mean success versus cost](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104.png)
