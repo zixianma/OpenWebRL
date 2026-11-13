@@ -1,0 +1,97 @@
+{
+  "source": "User-provided table, 2026-11-13",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT",
+    "candidates": 5,
+    "temperature": 1.0,
+    "run": 1
+  },
+  "accounting": {
+    "pflop_per_episode": "2 × parameter count × (uncached prompt tokens + generated tokens), summed over all models, divided by 1e15",
+    "model_seconds_per_episode": "Estimated steps/episode × (7.96 s/step five-candidate actor generation on one H200 + measured selector s/step); excludes browser time",
+    "aggregation": "Equal-weight mean across OM2W, WebVoyager and DeepShop",
+    "caveats": [
+      "Best-of-Q embedder state text estimated at 300 tokens/step, a slight compute undercount.",
+      "PRO-CUA and WebDreamer share the actor GPU and slow actor generation; their model-second estimates are lower bounds.",
+      "External-selector results are run 1; existing SFT/ADM plot points pool runs. Protocol and run-count differences make this a descriptive comparison."
+    ]
+  },
+  "systems": {
+    "best-of-q": {
+      "label": "Best-of-Q",
+      "system_parameters": 8190000000,
+      "benchmarks": {
+        "online_mind2web": {
+          "pflop_per_episode": 0.85,
+          "model_seconds_per_episode": 127,
+          "overall": 35.1
+        },
+        "webvoyager": {
+          "pflop_per_episode": 0.71,
+          "model_seconds_per_episode": 107,
+          "overall": 47.3
+        },
+        "deepshop": {
+          "pflop_per_episode": 0.89,
+          "model_seconds_per_episode": 120,
+          "overall": 45.3
+        }
+      },
+      "reported_mean_overall": 42.5
+    },
+    "pro-cua-prm": {
+      "label": "PRO-CUA PRM",
+      "system_parameters": 8880000000,
+      "benchmarks": {
+        "online_mind2web": {
+          "pflop_per_episode": 1.61,
+          "model_seconds_per_episode": 157,
+          "overall": 35.2
+        },
+        "webvoyager": {
+          "pflop_per_episode": 1.4,
+          "model_seconds_per_episode": 142,
+          "overall": 45.5
+        },
+        "deepshop": {
+          "pflop_per_episode": 2.33,
+          "model_seconds_per_episode": 209,
+          "overall": 46.6
+        }
+      },
+      "reported_mean_overall": 42.5
+    },
+    "webdreamer": {
+      "label": "WebDreamer (1 value sample)",
+      "system_parameters": 17170000000,
+      "benchmarks": {
+        "online_mind2web": {
+          "pflop_per_episode": 2.77,
+          "model_seconds_per_episode": 177,
+          "overall": 37.4
+        },
+        "webvoyager": {
+          "pflop_per_episode": 2.18,
+          "model_seconds_per_episode": 146,
+          "overall": 50.1
+        },
+        "deepshop": {
+          "pflop_per_episode": 2.96,
+          "model_seconds_per_episode": 176,
+          "overall": 49.8
+        }
+      },
+      "reported_mean_overall": 45.8
+    }
+  },
+  "success_source": {
+    "source": "User-provided overall-success table, 2026-11-13",
+    "column_order": [
+      "webvoyager",
+      "online_mind2web",
+      "deepshop",
+      "mean"
+    ],
+    "mean": "Use reported three-benchmark averages; displayed benchmark percentages are rounded and do not exactly reconstruct every reported average."
+  }
+}

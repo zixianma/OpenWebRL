@@ -30,6 +30,7 @@ HERE = Path(__file__).parent
 rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text())["rows"]
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
+EXTERNAL = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())["systems"]
 FRONTIER = C["FRONTIER"]
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, C["BASELINE_LIGHT"], "s", False),
@@ -50,6 +51,13 @@ cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seco
 
 
 def point(key, bench, success_metric="valid_only"):
+    if key in EXTERNAL:
+        source = EXTERNAL[key]
+        rs = [source["benchmarks"][b] for b in (BENCH if bench == "mean" else (bench,))]
+        assert success_metric == "overall", "External valid-only success not supplied"
+        return dict(success=source["reported_mean_overall"] if bench == "mean" else rs[0]["overall"],
+                    pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
+                    seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
     rs = ([DISTILLED["benchmarks"][b] for b in (BENCH if bench == "mean" else (bench,))]
           if key == "adm-distilled" else
           [next(r for r in rows if r["key"] == key and r["benchmark"] == b) for b in (BENCH if bench == "mean" else (bench,))])
@@ -81,7 +89,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
     ax.scatter([x for x, _ in fr], [y for _, y in fr], s=80 if emphasize else 57,
                facecolors="none", edgecolors=FRONTIER, linewidths=1.2 if emphasize else .6,
                zorder=4.5 if emphasize else 2.4)
-    if emphasize and bench == "mean":
+    if emphasize and bench == "mean" and not any(m[0] in EXTERNAL for m in methods):
         best = max(fr, key=lambda xy: xy[1])
         ax.annotate("Pareto-optimal", best, xytext=(9, -2), textcoords="offset points",
                     fontsize=6.3, color=C["MUTED"], ha="left", va="top", zorder=5)
@@ -92,6 +100,10 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
     for spine in ax.spines.values():
         spine.set_color(C["MUTED"]); spine.set_linewidth(0.6)
     if k == "params":
+        if any(m[0] in EXTERNAL for m in methods):
+            ax.set_xlim(3.5, 18.5)
+            ax.set_xticks([4.44, 8.88, 17.17], ["4.44", "8.88", "17.17"])
+            return
         wide = any(m[2] > 9e9 for m in methods)
         ax.set_xlim(3.5, 14.2 if wide else 9.5)
         ax.set_xticks(*([[4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"]] if wide else [[4.44, 8.88], ["4.44", "8.88"]]))
@@ -122,6 +134,11 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
                 label = label.replace("ADM-22M", "ADM-23M")
             styled.append((key, label, params, color, marker, hollow))
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
+    if circle_encoding and success_metric == "overall":
+        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X")):
+            source = EXTERNAL[key]
+            label = source["label"].replace(" (1 value sample)", "")
+            methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, False))
     compact_sft_mean = canonical_name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
@@ -182,7 +199,7 @@ if __name__ == "__main__":
     sft = [m for m in methods if not m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.60, sft))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
-    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.60, sft, success_metric="overall")
+    render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-20261104", 1.78, sft, success_metric="overall")
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104", 4.35, sft, success_metric="overall")
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))
