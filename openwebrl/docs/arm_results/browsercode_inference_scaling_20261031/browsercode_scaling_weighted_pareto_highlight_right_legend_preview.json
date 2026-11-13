@@ -710,8 +710,53 @@
   "styles": {
     "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
     "axes_box_aspect": 1,
-    "selection": "Saturated purple action decision scaling; cool-gray single-call controls; slightly lighter purple for smaller candidate sets",
-    "single_call_color": "#78838C",
+    "selection": "Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
+    "single_call_encoding": "Baseline: circle; xhigh: diamond; 0.5x/2x tokens: down/up triangle; 60/120 steps: filled square/pentagon. Luna gray, Sol green.",
+    "single_call_markers": {
+      "luna_single_high": {
+        "marker": "o",
+        "filled": false
+      },
+      "luna_single_xhigh_12288": {
+        "marker": "D",
+        "filled": false
+      },
+      "luna_single_high_6144": {
+        "marker": "v",
+        "filled": false
+      },
+      "luna_single_high_24576": {
+        "marker": "^",
+        "filled": false
+      },
+      "luna_single_high_60steps": {
+        "marker": "s",
+        "filled": true
+      },
+      "luna_single_high_120steps": {
+        "marker": "p",
+        "filled": true
+      },
+      "serial_high": {
+        "marker": "o",
+        "filled": false
+      },
+      "sol_single_high60": {
+        "marker": "s",
+        "filled": true
+      },
+      "sol_single_high120": {
+        "marker": "p",
+        "filled": true
+      },
+      "sol_single_xhigh30": {
+        "marker": "D",
+        "filled": false
+      }
+    },
+    "sol_color": "#489379",
+    "single_call_size_pt2": 32,
+    "single_call_color": "#687580",
     "selection_color": "#8246E5",
     "selection_size_pt2": 42,
     "focus_size_pt2": 49,
@@ -739,10 +784,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "3aaf8d1d027cfb9aca67a448c0afeff5e35ae845b0b6595fe00c8e16b52abfea",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "577424bfd7103d0c99114a0badcaee379e37f85b3b95bdff6f56bba2a62973e6"
   },
-  "renderer_sha256": "705500975ccd506051d7faffae6630eb24fc1766bc3371fbf6f33acefeab5ac5",
+  "renderer_sha256": "abe3dd6094fb2c81b0fb7420ebafe2735d3c0677df86e7018ff8337a17a9854d",
   "output_sha256": {
-    "png": "8d3c3a9d42e600bd314242afdb2b105a689fb8df33169fe7357df569a359cefe",
-    "pdf": "fa028a35c2a98d4fe148e5c29f437ebf0db5773e6226ec0a41cebd15b9fbd127",
-    "svg": "b83822458dad95fea48b2905aa910f6bef28760438e614c1ac61005e591d2573"
+    "png": "5c22a20d11a851d2549dac21b8fd4072d42d6e080ccdd8d770a617fc1e019b82",
+    "pdf": "0240d22e9abb58175613c8bbc825d62ae9d9c8b583848f9df7d8e83c2b5f790b",
+    "svg": "c528a452c272e34efb89e1a043bb38aaced2841e8eb49fdc18df624a6e8444a6"
   }
 }

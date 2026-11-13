@@ -31,7 +31,22 @@ spec = importlib.util.spec_from_file_location("original_highlight", SOURCE)
 ORIGINAL = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ORIGINAL)
 STEM = "browsercode_scaling_weighted_pareto_highlight_right_legend_preview"
-SINGLE_GRAY = "#78838C"
+SINGLE_GRAY = "#687580"
+SOL_GREEN = PALETTE["ADM_4B"]
+# Markers encode the intervention rather than relying on nearby gray shades.
+SINGLE_MARKERS = {
+    "luna_single_high": ("o", False),
+    "luna_single_xhigh_12288": ("D", False),
+    "luna_single_high_6144": ("v", False),
+    "luna_single_high_24576": ("^", False),
+    "luna_single_high_60steps": ("s", True),
+    "luna_single_high_120steps": ("p", True),
+    "serial_high": ("o", False),
+    "sol_single_high60": ("s", True),
+    "sol_single_high120": ("p", True),
+    "sol_single_xhigh30": ("D", False),
+}
+SINGLE_SIZE = 32
 SELECTION_PURPLE = "#8246E5"
 SELECTION_SIZE = 42
 FOCUS_SIZE = 49
@@ -143,7 +158,11 @@ def build():
         return label, marker, color, filled
     def gray_style(method, style):
         label, marker, color, filled = style
-        color = "#A0AAB1" if method == "luna_single_high_6144" else "#626E77" if "xhigh" in method or method in ORIGINAL.SOL else SINGLE_GRAY
+        if method == ORIGINAL.BASE.SOL60_METHOD:
+            marker, filled = "s", True
+        else:
+            marker, filled = SINGLE_MARKERS[method]
+        color = SOL_GREEN if method == ORIGINAL.BASE.SOL60_METHOD or method in ORIGINAL.SOL or method == "serial_high" else SINGLE_GRAY
         return label, marker, color, filled
     ORIGINAL.SOL = {method: gray_style(method, style) for method, style in ORIGINAL.SOL.items()}
     ORIGINAL.BASE.SOL60_STYLE = gray_style(ORIGINAL.BASE.SOL60_METHOD, ORIGINAL.BASE.SOL60_STYLE)
@@ -156,12 +175,40 @@ def build():
     ORIGINAL.CACHED = {method: purple_style(method, style)
                        for method, style in ORIGINAL.CACHED.items()}
     fig, frontier, rows = ORIGINAL.build()
+    styles = {**ORIGINAL.BASE.SCALING.STYLES, **ORIGINAL.SOL,
+              ORIGINAL.BASE.SOL60_METHOD: ORIGINAL.BASE.SOL60_STYLE}
+    singles = {row["method"]: styles[row["method"]] for row in rows
+               if not row["method"].startswith("parallel") and row["method"] not in ORIGINAL.CACHED}
+    assert len(singles) == 10
+    assert len({style[1:] for style in singles.values()}) == 10, "Single-call marker/color/fill must be unique"
+    # The inherited paper formatter normalizes markers; reapply the explicit
+    # single-call mapping to both points and handles after that formatter runs.
+    labels_to_styles = {label: (marker, color, filled) for label, marker, color, filled in singles.values()}
+    labels_to_styles.update({label: singles[method][1:] for method, label in ORIGINAL.BASE.SINGLE_LEGEND if method in singles})
+    labels_to_styles[ORIGINAL.BASE.SOL60_STYLE[0]] = ORIGINAL.BASE.SOL60_STYLE[1:]
+    for legend in fig.legends:
+        for line, text in zip(legend.get_lines(), legend.texts):
+            if text.get_text() in labels_to_styles:
+                marker, color, filled = labels_to_styles[text.get_text()]
+                line.set_marker(marker)
+                line.set_markeredgecolor(color)
+                line.set_markerfacecolor(color if filled else "white")
+                line.set_markeredgewidth(1.0)
+                line.set_markersize(5.5)
     matplotlib.rcParams["hatch.linewidth"] = .5
     assert len(rows) == 16
     circle = MarkerStyle("o")
     circle_path = circle.get_path().transformed(circle.get_transform())
     for ax in fig.axes:
         for row, point in zip(rows, ax.collections[:len(rows)]):
+            if row["method"] in singles:
+                _, marker, color, filled = singles[row["method"]]
+                shape = MarkerStyle(marker)
+                point.set_paths([shape.get_path().transformed(shape.get_transform())])
+                point.set_facecolors(color if filled else "white")
+                point.set_edgecolors(color)
+                point.set_sizes([SINGLE_SIZE])
+                point.set_linewidths([1.0])
             if row["method"].startswith("parallel") or row["method"] in ORIGINAL.CACHED:
                 point.set_sizes([FOCUS_SIZE if row["method"] == ORIGINAL.FOCUS else SELECTION_SIZE])
                 point.set_linewidths([1.2])
@@ -193,7 +240,10 @@ def main():
                   frontier=frontier,
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
-                              selection="Saturated purple action decision scaling; cool-gray single-call controls; slightly lighter purple for smaller candidate sets",
+                              selection="Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
+                              single_call_encoding="Baseline: circle; xhigh: diamond; 0.5x/2x tokens: down/up triangle; 60/120 steps: filled square/pentagon. Luna gray, Sol green.",
+                              single_call_markers={key: dict(marker=style[0], filled=style[1]) for key, style in SINGLE_MARKERS.items()},
+                              sol_color=SOL_GREEN, single_call_size_pt2=SINGLE_SIZE,
                               single_call_color=SINGLE_GRAY, selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
                               cached="Saturated purple circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
                               cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
