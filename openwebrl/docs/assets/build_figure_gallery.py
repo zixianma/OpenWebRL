@@ -41,6 +41,7 @@ TITLES = {
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
     "selection-head-scale-20261111": "Selection head scaling: single-seed screen (November 11)",
     "selection-head-scale-pooled-20261112": "Selection head scaling: success and selection time, all runs pooled",
+    "selection-head-scale-agreement-20261112": "Selection head scaling: held-out agreement with the teacher",
     "selection-recipe3-data-scaling-20261112": "Training data scaling versus SFT alone",
     "selection-recipe3-vs-cost-sft-actors-overall-20261104": "SFT actors and distillation: mean overall success",
     "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104": "SFT actors and distillation: overall success by benchmark",

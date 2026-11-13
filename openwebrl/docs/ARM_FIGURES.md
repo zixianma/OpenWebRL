@@ -108,6 +108,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-scale-pooled-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-pooled-20261112.svg)
 
+### Selection head scaling: held-out agreement with the teacher
+
+![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)
+
+[PDF](arm_results/rl_integration/selection-head-scale-agreement-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-agreement-20261112.svg)
+
 ### Selection head scaling: single-seed screen (November 11)
 
 ![Selection head scaling: single-seed screen (November 11)](arm_results/rl_integration/selection-head-scale-20261111.png)
