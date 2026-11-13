@@ -102,15 +102,15 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
 
-### Selection head scaling: pooled results
+### Selection head scaling: success and selection time, all runs pooled
 
-![Selection head scaling: pooled results](arm_results/rl_integration/selection-head-scale-pooled-20261112.png)
+![Selection head scaling: success and selection time, all runs pooled](arm_results/rl_integration/selection-head-scale-pooled-20261112.png)
 
 [PDF](arm_results/rl_integration/selection-head-scale-pooled-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-pooled-20261112.svg)
 
-### Selection head scaling
+### Selection head scaling: single-seed screen (November 11)
 
-![Selection head scaling](arm_results/rl_integration/selection-head-scale-20261111.png)
+![Selection head scaling: single-seed screen (November 11)](arm_results/rl_integration/selection-head-scale-20261111.png)
 
 [PDF](arm_results/rl_integration/selection-head-scale-20261111.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-20261111.svg)
 
@@ -128,9 +128,9 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg)
 
-### Recipe 3 training data scaling
+### Training data scaling versus SFT alone
 
-![Recipe 3 training data scaling](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.png)
+![Training data scaling versus SFT alone](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg)
 
