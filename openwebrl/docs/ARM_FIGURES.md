@@ -92,6 +92,12 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-rl-actors-20261104.svg)
 
+### Selection head scaling: pooled results
+
+![Selection head scaling: pooled results](arm_results/rl_integration/selection-head-scale-pooled-20261112.png)
+
+[PDF](arm_results/rl_integration/selection-head-scale-pooled-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-pooled-20261112.svg)
+
 ### Selection head scaling
 
 ![Selection head scaling](arm_results/rl_integration/selection-head-scale-20261111.png)
@@ -111,6 +117,12 @@
 ![Training states and panels: per benchmark](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-ablations-per-benchmark-20261105.svg)
+
+### Recipe 3 training data scaling
+
+![Recipe 3 training data scaling](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-data-scaling-20261112.svg)
 
 ### Training data ablations: matched-window results
 

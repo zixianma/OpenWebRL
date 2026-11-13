@@ -123,7 +123,7 @@ L -2.5 0
      </g>
     </g>
     <g id="text_9">
-     <text style="fill: #423c54; font: 7.5px 'Albert Sans'; text-anchor: middle" x="12.869067" y="71.064" transform="rotate(-90 12.869067 71.064)">Success %</text>
+     <text style="fill: #423c54; font: 7.5px 'Albert Sans'; text-anchor: middle" x="12.869067" y="71.064" transform="rotate(-90 12.869067 71.064)">Reward</text>
     </g>
    </g>
    <g id="patch_3">
@@ -371,7 +371,7 @@ z
     </g>
    </g>
    <g id="text_10">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="31.857505" y="18.192" transform="rotate(-0 31.857505 18.192)">a) Training</text>
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="31.857505" y="18.192" transform="rotate(-0 31.857505 18.192)">a) Training Rewards</text>
    </g>
    <g id="line2d_10">
     <path d="M 32.854782 106.111934
@@ -796,7 +796,7 @@ z
     </g>
    </g>
    <g id="text_22">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="158.891168" y="18.192" transform="rotate(-0 158.891168 18.192)">b) OM2W</text>
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="158.891168" y="18.192" transform="rotate(-0 158.891168 18.192)">b) OM2W across Iterations</text>
    </g>
    <g id="line2d_22">
     <path d="M 162.591589 66.247579
@@ -1220,7 +1220,7 @@ L 501.680495 104.310353
     </g>
    </g>
    <g id="text_43">
-    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="412.958495" y="18.192" transform="rotate(-0 412.958495 18.192)">d) Robustness</text>
+    <text style="fill: #211a33; font: 8px 'Albert Sans'; text-anchor: start" x="412.958495" y="18.192" transform="rotate(-0 412.958495 18.192)">d) Iter 90’s Repetition</text>
    </g>
    <g id="line2d_51">
     <path d="M 417.980495 35.292522

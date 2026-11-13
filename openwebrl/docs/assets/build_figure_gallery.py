@@ -32,6 +32,8 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-recipe3-data-scaling-20261112": "Recipe 3 training data scaling",
+    "selection-head-scale-pooled-20261112": "Selection head scaling: pooled results",
     "rl_learning_compact_with_repetition": "RL learning and repetition: merged four-panel figure",
     "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
@@ -114,7 +116,7 @@ def figure_group(stem: str) -> str:
         return GROUPS[1]
     if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale")):
         return GROUPS[2]
-    if name.startswith("selection-recipe3-data-ablations"):
+    if name.startswith(("selection-recipe3-data-ablations", "selection-recipe3-data-scaling")):
         return GROUPS[3]
     if name.startswith("rl_learning_compact") or name == "rl_repetition_success_robustness":
         return GROUPS[4]

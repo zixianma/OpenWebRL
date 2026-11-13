@@ -1960,6 +1960,7 @@
       "Failures in main batch and 40M+16F are excluded from the compact curves and retained in the results table and all-run archive."
     ]
   },
+  "training_axis_note": "Reward is the binary outcome reward displayed as a valid-only percentage; ADM bonus excluded.",
   "repetition_definition": "100 * valid episodes with >= k identical non-wait/non-done calls / valid episodes; successes included; occurrences need not be consecutive",
   "repetition_uncertainty": {
     "method": "Pointwise percentile bootstrap of 300 task clusters, preserving all three repeats, methods and thresholds; ratio recomputed in each resample",
@@ -1985,11 +1986,11 @@
     "arm_results/rl_final_20261108/plot_rl_learning_compact.py": "fc36d7df055ff2e45d7f3b3838a37b2aefbfaa7aa33b5b80519b41c6b8d3f183",
     "arm_results/rl_integration/behavior/plot_rl_repetition_success_robustness.py": "c00c3d874bd47ac9a27d511356ed566c8a5754d1fbb7446edd4761f24e824d52",
     "rl_plot_layout.py": "6c3bb9bb48694bbf4afdade2499a03093e530968c2dedc8ff525499fb2b8a047",
-    "arm_results/rl_final_20261108/plot_rl_learning_repetition_merged.py": "09b47d2cc9773ed889347bd1e9ca80a8b0b168eecbe13dba7ff1aeaf71c3232d"
+    "arm_results/rl_final_20261108/plot_rl_learning_repetition_merged.py": "b76be3f05e1ba29cc10ad413e729a8096d8f7f911fb8ce801f85d370e4201c80"
   },
   "output_sha256": {
-    "png": "3e9bafaf465453d49d601c943fb8269e63962208d9f15db9f55bde1435fc63e4",
-    "pdf": "cc9b6f3d5d7317da62027843887709ecfe26f2dbd71241e8baed970fa67b4678",
-    "svg": "6d7de91ba88edfcb485ce7c98897d9b714dd54b2e12ef6221b92137745b8de1c"
+    "png": "b715204afc4069d6375e4503ce4a343e6fadd31c018ceb5e53f36d68f0dd63a7",
+    "pdf": "9fd79d6589d5e43a36f5d22be3f594bfd3a77fbdad2a5ec0f6898a52b9da0aeb",
+    "svg": "ddd4da2673306a6786dbb1b7e619481e01780241be804d55f932a4002c1e6bfc"
   }
 }

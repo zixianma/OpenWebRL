@@ -75,14 +75,14 @@ def main():
                          color=color, marker="o", markersize=4, linewidth=1.2,
                          linestyle=ls, capsize=2, elinewidth=.9, zorder=z)
     axes[0].set(xlim=(0, 94), xticks=[0, 30, 60, 90], ylim=(39, 61), yticks=[40, 50, 60],
-                xlabel="Iteration", ylabel="Success %")
+                xlabel="Iteration", ylabel="Reward")
     axes[1].set(xlim=(17, 93), xticks=[20, 40, 60, 80, 90], ylim=(25, 60), yticks=[30, 40, 50, 60],
                 xlabel="Iteration", ylabel="Success %")
     axes[2].set(xlim=(13, 47), xticks=[20, 30, 40], ylim=(35, 60), yticks=[40, 45, 50, 55],
                 xlabel="Repetition % (K=3)", ylabel="Success %")
     axes[3].set(xlim=(1.82, 5.18), xticks=behavior.THRESHOLDS, ylim=(0, 70), yticks=[0, 20, 40, 60],
                 xlabel="Repetition threshold, K", ylabel="Repetition (%)")
-    for ax, title in zip(axes, ("a) Training", "b) OM2W", "c) Iter 90 on OM2W", "d) Robustness")):
+    for ax, title in zip(axes, ("a) Training Rewards", "b) OM2W across Iterations", "c) Iter 90 on OM2W", "d) Iter 90’s Repetition")):
         style_axis(ax, title)
     handles = [Line2D([], [], color=color, linestyle=ls, marker="o", linewidth=1.2, markersize=3.5)
                for _, color, ls in learning.METHODS.values()]
@@ -112,6 +112,7 @@ def main():
                   learning_points=points, repetition_points={k: success["methods"][k] for k in ("outcome48", "outcome56", "gate-b")},
                   thresholds=behavior.THRESHOLDS, threshold_points=repetition["methods"],
                   learning_protocols={k: published[k] for k in ("training", "validation", "caveats")},
+                  training_axis_note="Reward is the binary outcome reward displayed as a valid-only percentage; ADM bonus excluded.",
                   repetition_definition=repetition["definition"], repetition_uncertainty=repetition["uncertainty"],
                   success_uncertainty=success["uncertainty"],
                   sources={str(p.relative_to(DOCS)): sha(p) for p in
