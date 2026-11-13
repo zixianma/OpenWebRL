@@ -145,6 +145,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
             styled.append((key, label, params, color, marker, hollow))
         methods = [*styled, ("adm-distilled", "ADM-distilled actor", DISTILLED["system_parameters"], C["ADM_4B"], "s", False)]
     if circle_encoding and success_metric == "overall":
+        methods = [m for m in methods if "luna" not in m[0]]
         for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "P"), ("webdreamer", "X")):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
