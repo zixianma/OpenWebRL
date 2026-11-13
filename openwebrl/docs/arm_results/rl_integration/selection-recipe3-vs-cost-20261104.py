@@ -96,7 +96,7 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only", frontier_rings=True, updates=()):
+def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only", frontier_rings=True, updates=(), sft_marker_size=24):
     pts = []
     for key, label, p, color, marker, hollow in methods:
         r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding, updates=updates)
@@ -106,6 +106,8 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
             size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3") else 24
         else:
             size = 44 if circle_encoding and "lora" in key else 24
+        if key in ("sft1", "sft8b"):
+            size = sft_marker_size
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=.95 if hollow and circle_encoding and success_metric == "overall" else 1.25 if hollow and circle_encoding else 1.0 if hollow else 0.6, label=label)
@@ -176,9 +178,10 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
         if "RL 4B" not in by_label:
             columns = [[
                 (blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
-                (blank, "Our ADM"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
-                (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
-                (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (frontier_handle, "Frontier"),
+                (blank, "Ours"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
+                (blank, "SFT 4B + ADM:"),
+                (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
+                (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (frontier_handle, "Frontier"),
             ]]
             headings = (0, 3)
         entries = [entry for column in columns for entry in column]
@@ -243,7 +246,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric,
-                  frontier_rings=include_rl, updates=updates)
+                  frontier_rings=include_rl, updates=updates, sft_marker_size=44 if not include_rl else 24)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
