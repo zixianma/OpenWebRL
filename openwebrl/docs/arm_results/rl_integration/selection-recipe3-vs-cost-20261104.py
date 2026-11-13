@@ -185,23 +185,35 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
             ]]
             headings = (0, 3)
             if "Best-of-Q" in by_label:
-                columns.append([
-                    (blank, "Baseline ADMs"), (blank, "SFT 4B + ADM:"),
-                    (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
-                    (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B"),
-                    (blank, ""), (blank, ""), (blank, ""),
-                ])
-                headings = (0, 3, 9)
-
+                columns = [
+                    [(blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"),
+                     (by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)"), (blank, ""),
+                     (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
+                     (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (blank, ""), (blank, "")],
+                    [(blank, ""), (by_label["SFT 8B"], "SFT 8B"), (frontier_handle, "Frontier"),
+                     (blank, ""), (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
+                     (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
+                     (by_label["Kev-4B"], "Kev-4B")],
+                ]
+                headings = (0, 4, 13)
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
                          loc="center left", bbox_to_anchor=(.730, .5), ncol=len(columns),
                          frameon=False, fontsize=6.4, handlelength=1.1,
-                         handletextpad=.7, columnspacing=1.5, labelspacing=.22,
+                         handletextpad=.7, columnspacing=.7 if not frontier_rings else 1.5, labelspacing=.22,
                          borderaxespad=0)
         for index in headings:
             leg.texts[index].set_fontweight("medium")
             leg.texts[index].set_color(C["MUTED"])
+        if not frontier_rings and "Best-of-Q" in by_label:
+            fig.canvas.draw()
+            renderer = fig.canvas.get_renderer()
+            bounds = leg.get_window_extent(renderer)
+            ours = leg.texts[4].get_window_extent(renderer)
+            previous = leg.texts[2].get_window_extent(renderer)
+            fig.text((bounds.x0 + bounds.x1) / 2 / fig.bbox.width,
+                     (ours.y1 + previous.y0) / 2 / fig.bbox.height,
+                     "SFT + ADM", ha="center", va="center", fontsize=6.4, fontweight="medium")
         return leg
     handles.append(Line2D([], [], linestyle="--", color=FRONTIER, linewidth=0.95, marker="o", markerfacecolor="white",
                           markeredgecolor=FRONTIER, markeredgewidth=0.6, markersize=4.4))
