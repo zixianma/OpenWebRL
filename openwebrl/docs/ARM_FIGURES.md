@@ -16,9 +16,19 @@
 
 ![Rollout collection and action decision labeling](arm_results/methods/selection-offline-eval-20261022.png)
 
+[PDF](arm_results/methods/selection-offline-eval-20261022.pdf) · [SVG](arm_results/methods/selection-offline-eval-20261022.svg)
+
 ### ADM architecture
 
 ![ADM architecture](arm_results/methods/selection-arch-overview-20261107.png)
+
+[PDF](arm_results/methods/selection-arch-overview-20261107.pdf) · [SVG](arm_results/methods/selection-arch-overview-20261107.svg)
+
+### ADM architectures with the Kev-style pointer
+
+![ADM architectures with the Kev-style pointer](arm_results/methods/selection-arch-overview-kev-20261112.png)
+
+[PDF](arm_results/methods/selection-arch-overview-kev-20261112.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-20261112.svg)
 
 ### Teacher decisions: worked examples
 

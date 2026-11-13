@@ -458,6 +458,17 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 [PDF](arm_results/methods/selection-arch-overview-20261107.pdf) · [SVG](arm_results/methods/selection-arch-overview-20261107.svg) · [Source](arm_results/methods/selection-arch-overview-20261107.py). One-column 3.35 × 1.95-inch layout (51% less height than the previous figure), with all five candidates, separate Transformer/MLP rows, 300 dpi PNG, editable SVG and embedded-font PDF. The joint/independent masks retain 36/11 allowed connections; the decoder retains its 28-connection causal mask. Labels use 5.5–6.8 pt Albert Sans. Both selector paths converge on the executed actor action.
 
+<a id="selection-arch-overview-kev-20261112"></a>
+
+![Three selectors from one frozen actor: ADM-23M feature heads, an ADM-4B causal text decoder, and a Kev-style LoRA with isolated candidate attention and a decide-token pointer](arm_results/methods/selection-arch-overview-kev-20261112.png)
+
+*Separate three-panel version; the original two-panel figure is preserved. (a) ADM-23M scores actor features. (b) ADM-4B reads prompt and candidate text causally and generates an index. (c) Kev-style ADM re-encodes the prompt $p$, all five candidate responses and a `<decide>` token $d$ using an actor-initialized frozen backbone plus LoRA, a trainable decide-token embedding offset and a pointer head. At token level, the prompt and each candidate are causal; each candidate sees the prompt and itself, and $d$ sees the prompt and all candidates. Candidate positions restart after the prompt, preventing candidate-order effects. The block-level mask has 18 allowed entries, versus 28 for the causal decoder; the feature-head masks remain 36/11 for joint/independent. The pointer uses final candidate-end states: $z_i=q(d)\cdot k(c_i^{\mathrm{end}})/\sqrt{d_k}$, then $i^*=\arg\max_i z_i$; the figure omits the common scale factor for space. Every selector executes the original actor action $a_t^{i^*}$. Matching $\theta$ symbols indicate initialization from the actor, not tied live weights. Both text selectors use the same green/teal LoRA encoding; purple cells denote allowed attention. [Kev implementation](../selection_kev.py) and [design details](#selection-head-designs).*
+
+[PDF](arm_results/methods/selection-arch-overview-kev-20261112.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-20261112.svg) · [Source](arm_results/methods/selection-arch-overview-kev-20261112.py). 4.55 × 1.95 inches, Albert Sans, 300 dpi PNG and embedded-font PDF.
+
+<details>
+<summary>Earlier Kev architecture variant (November 11)</summary>
+
 <a id="selection-arch-overview-kev-20261111"></a>
 
 ![The same two selectors plus the Kev-style ADM. The Kev-style pass adds a LoRA to a separate copy of the actor weights and re-encodes the prompt and all five candidates in one packed sequence. Each candidate attends to the prompt and itself; a decide token attends to everything and a pointer scores each candidate](arm_results/methods/selection-arch-overview-kev-20261111.png)
@@ -465,6 +476,8 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 *The figure above with a third selector. (c) ADM-Kev: the Kev-style decision pass ([design](#selection-head-designs), `openwebrl/selection_kev.py`), a LoRA on all 36 layers of a separate OpenWebRL-4B-SFT copy plus a pointer head. One packed sequence holds the selection prompt $p$ (with screenshot), the five candidate responses and a `<decide>` token $d$. The prompt is causal; each candidate attends to the prompt and to itself only, and all candidates restart at the same positions after the prompt, so candidate order cannot matter (18 allowed connections). $d$ attends to the prompt and every candidate. The pointer scores $z_i = q(d)\cdot k(c_i^{\text{end}})/\sqrt{d_k}$ on the final normed states, and the highest-scoring candidate's original action executes. Kev-A applies the LoRA to every token; Kev-B leaves the prompt unadapted so the actor's prompt cache could be reused. On Recipe 3 labels Kev-A is +8.8 [+6.3, +11.4] pp over one SFT sample, mean overall across the three benchmarks ([results](ARM_FINAL_RESULTS.md#final-selection-recipe3-kev-3bench-20261110)). Panels (a) and (b) are unchanged.*
 
 [PDF](arm_results/methods/selection-arch-overview-kev-20261111.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-20261111.svg) · [Source](arm_results/methods/selection-arch-overview-kev-20261111.py). 4.55 × 1.95 inches, wider than the one-column figure above; 300 dpi PNG, editable SVG, embedded-font PDF.
+
+</details>
 
 <details>
 <summary>Loss functions and original worked example</summary>

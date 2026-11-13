@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-arch-overview-kev-20261112": "ADM architectures with the Kev-style pointer",
     "selection-recipe3-data-scaling-20261112": "Recipe 3 training data scaling",
     "selection-head-scale-pooled-20261112": "Selection head scaling: pooled results",
     "rl_learning_compact_with_repetition": "RL learning and repetition: merged four-panel figure",
@@ -158,9 +159,9 @@ def collect_figures() -> tuple[dict[str, list[str]], set[str]]:
         formats = figures.setdefault(path.with_suffix("").as_posix(), [])
         if url not in formats:
             formats.append(url)
-    for name in ("selection-offline-eval-20261022", "selection-arch-overview-20261107"):
+    for name in ("selection-offline-eval-20261022", "selection-arch-overview-20261107", "selection-arch-overview-kev-20261112"):
         stem = f"arm_results/methods/{name}"
-        figures.setdefault(stem, [stem + ".png"])
+        figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf", ".svg")])
     stem = "arm_results/methods/adm_overview/figure1"
     figures.setdefault(stem, [stem + ext for ext in (".png", ".pdf", ".svg")])
     stem = "arm_results/luna_pre_post_k3_20261105/examples-compact"
