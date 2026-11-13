@@ -89,7 +89,7 @@ arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
 box(1.66, 1.735, 2.86, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(3.09, 1.83, r"$K=5$ responses $c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
 arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
-arrow(2.80, 1.725, 2.80, 1.655, color=DECODER, head=4)
+arrow(2.80, 1.725, 2.80, 1.655, color=HEAD, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
 box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
 text(1.075, 1.565, "a) ADM-23M", size=6.8, color="black", ha="center")
@@ -137,13 +137,13 @@ causal_mask = [[c <= r for c in range(K+2)] for r in range(K+2)]
 assert sum(map(sum, causal_mask)) == 28
 matrix(DX, TOP, TOKENS, DCELL, causal_mask, answer=True)
 mid = DX + len(TOKENS)*DCELL/2
-arrow(mid, .330, mid, .280, color=DECODER, head=4)
+arrow(mid, .330, mid, .280, color=HEAD, head=4)
 text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 
 # Kev-style pass: the same weights theta plus a LoRA, re-encoding prompt and
 # candidates in one packed sequence; a <decide> token points at a candidate.
 KC = 4.025
-arrow(KC, 1.725, KC, 1.655, color=KEV, head=4)
+arrow(KC, 1.725, KC, 1.655, color=HEAD, head=4)
 text(KC, 1.565, "c) Kev-style ADM", size=6.8, color="black", ha="center")
 box(KC-.36, 1.355, .29, .12, edge=LINE)
 text(KC-.255, 1.415, r"$\theta$", size=6.4, ha="center")
@@ -162,14 +162,14 @@ kev_mask = [[c == 0 or c == r or r == K+1 for c in range(K+2)] for r in range(K+
 assert sum(map(sum, kev_mask)) == 18
 matrix(KX, TOP, KTOK, DCELL, kev_mask, answer=True, out=KEV)
 kmid = KX + len(KTOK)*DCELL/2
-arrow(kmid, .330, kmid, .280, color=KEV, head=4)
+arrow(kmid, .330, kmid, .280, color=HEAD, head=4)
 text(kmid, .235, r"$q(d)\!\cdot\!k(c_i)\rightarrow z_i\rightarrow i^*$", size=5.4, color=KEV, ha="center")
 
 EXC = 2.40
-# One original action executes, whichever alternative selector is used.
+# One original action executes, whichever alternative selector is used. All data-flow arrows are purple.
 ax.plot([1.11, 1.11, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
-ax.plot([mid, mid, EXC], [.185, .17, .17], color=DECODER, linewidth=.65)
-ax.plot([kmid, kmid, mid], [.185, .17, .17], color=KEV, linewidth=.65)
+ax.plot([mid, mid, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
+ax.plot([kmid, kmid, mid], [.185, .17, .17], color=HEAD, linewidth=.65)
 arrow(EXC, .17, EXC, .137, color=C["ACTION_INK"], head=3)
 box(EXC-.565, .015, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(EXC, .075, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")
