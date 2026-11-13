@@ -28,8 +28,8 @@ for x in xs:
         p, (lo, hi) = 100 * r["final_agreement"], r["final_agreement_ci95"]
         ax.errorbar(x / 1e6 * (JIT[r["seed"]] if len(by[x]) > 1 else 1), p, yerr=[[p - 100 * lo], [100 * hi - p]], fmt="o", markersize=4.5,
                     color=COL, markerfacecolor=COL if r["seed"] == 0 else "white", capsize=1.5, linewidth=0.8, zorder=3)
-ax.set_xscale("log"); ax.set_xticks([4, 10, 25, 100, 300, 1800]); ax.set_xticklabels(["4M", "10M", "25M", "100M", "300M", "1.8B"]); ax.minorticks_off()
-ax.set_xlim(3, 2800); ax.set_ylim(40, 50)
+ax.set_xscale("log"); ax.set_xticks([0.25, 1, 4, 25, 300, 1800]); ax.set_xticklabels(["0.25M", "1M", "4M", "25M", "300M", "1.8B"]); ax.minorticks_off()
+ax.set_xlim(0.17, 2800); ax.set_ylim(40, 50)
 ax.set_xlabel("Head parameters"); ax.set_ylabel("Agreement with teacher pick, held out (%)")
 ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
 for sp in ("top", "right"): ax.spines[sp].set_visible(False)
