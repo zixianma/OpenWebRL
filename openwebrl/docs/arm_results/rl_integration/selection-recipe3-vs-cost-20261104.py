@@ -176,7 +176,7 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                 top = leg.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - gap / fig.get_figheight()
                 return leg
             block([(by_label["SFT 4B"], "SFT 4B"),
-                   (by_label["ADM-distilled actor"], "Distilled 4B (ours)"),
+                   (by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)"),
                    (by_label["SFT 8B"], "SFT 8B"), (blank, "")], title="Actors", ncol=2)
             comparison = block([
                 (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
