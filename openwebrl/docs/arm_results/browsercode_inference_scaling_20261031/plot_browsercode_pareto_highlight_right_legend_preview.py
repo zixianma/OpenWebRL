@@ -35,16 +35,16 @@ SINGLE_GRAY = "#687580"
 SOL_GREEN = PALETTE["ADM_4B"]
 # Markers encode the intervention rather than relying on nearby gray shades.
 SINGLE_MARKERS = {
-    "luna_single_high": ("o", False),
-    "luna_single_xhigh_12288": ("D", False),
-    "luna_single_high_6144": ("v", False),
-    "luna_single_high_24576": ("^", False),
-    "luna_single_high_60steps": ("s", True),
+    "luna_single_high": ("D", False),
+    "luna_single_xhigh_12288": ("*", False),
+    "luna_single_high_6144": ("<", False),
+    "luna_single_high_24576": (">", False),
+    "luna_single_high_60steps": ("h", True),
     "luna_single_high_120steps": ("p", True),
-    "serial_high": ("o", False),
-    "sol_single_high60": ("s", True),
+    "serial_high": ("D", False),
+    "sol_single_high60": ("h", True),
     "sol_single_high120": ("p", True),
-    "sol_single_xhigh30": ("D", False),
+    "sol_single_xhigh30": ("*", False),
 }
 SINGLE_SIZE = 32
 SELECTION_PURPLE = "#8246E5"
@@ -59,11 +59,11 @@ SELECTION_MARKERS = {
 }
 
 
-def cache_handle(color=PALETTE["BASELINE_LIGHT"], marker="o"):
+def cache_handle(color=PALETTE["BASELINE_LIGHT"], marker="o", filled=True):
     shape = Rectangle((-1, -1), 2, 2) if marker == "s" else Circle((0, 0), radius=1)
-    shape.set_facecolor(color)
-    shape.set_edgecolor("white")
-    shape.set_linewidth(0)
+    shape.set_facecolor(color if filled else "white")
+    shape.set_edgecolor("white" if filled else color)
+    shape.set_linewidth(0 if filled else .65)
     shape.set_hatch(CACHE_HATCH)
     return shape
 
@@ -92,7 +92,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
     fig.axes[0].set_ylabel("")
     sidebar_x, top = .72, .95
     handlers = {Circle: HandlerPatch(patch_func=legend_circle), Rectangle: HandlerPatch(patch_func=legend_square)}
-    cached_labels = {style[0]: (style[2], SELECTION_MARKERS[method]) for method, style in ORIGINAL.CACHED.items()}
+    cached_labels = {style[0]: (style[2], SELECTION_MARKERS[method], "60" in method) for method, style in ORIGINAL.CACHED.items()}
     for j, old in enumerate(previous[:2]):
         handles, labels = [], [text.get_text() for text in old.texts]
         for line, label in zip(old.get_lines(), labels):
@@ -130,7 +130,7 @@ def right_layout(fig, previous=None, height=2.4451461988304095):
     fig.canvas.draw()
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .015 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
-             "GPT-6 high unless xhigh. N=candidates.\nStep limits are maxima; default: 30.\nLuna baseline: 12,288 tokens.",
+             "GPT-6 high unless xhigh. N=candidates.\nStep limits are maxima; default: 30.\nFill: white ≤30; color ≥60. Hatch: cache.\nLuna baseline: 12,288 tokens.",
              fontsize=7.2, color=PALETTE["MUTED"], va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -179,7 +179,7 @@ def build():
     def gray_style(method, style):
         label, marker, color, filled = style
         if method == ORIGINAL.BASE.SOL60_METHOD:
-            marker, filled = "s", True
+            marker, filled = "h", True
         else:
             marker, filled = SINGLE_MARKERS[method]
         color = SOL_GREEN if method == ORIGINAL.BASE.SOL60_METHOD or method in ORIGINAL.SOL or method == "serial_high" else SINGLE_GRAY
@@ -200,6 +200,8 @@ def build():
     singles = {row["method"]: styles[row["method"]] for row in rows
                if not row["method"].startswith("parallel") and row["method"] not in ORIGINAL.CACHED}
     assert len(singles) == 10
+    assert {style[1] for style in singles.values()}.isdisjoint(SELECTION_MARKERS.values()), "Shape meanings must not conflict across groups"
+    assert len(set(SELECTION_MARKERS.values())) == 3
     assert len({style[1:] for style in singles.values()}) == 10, "Single-call marker/color/fill must be unique"
     # The inherited paper formatter normalizes markers; reapply the explicit
     # single-call mapping to both points and handles after that formatter runs.
@@ -242,8 +244,11 @@ def build():
                 shape = MarkerStyle(SELECTION_MARKERS[row["method"]])
                 point.set_paths([shape.get_path().transformed(shape.get_transform())])
                 point.set_sizes([CACHE_SIZE])
-                point.set_edgecolors("white")
-                point.set_linewidths([0])
+                cached_filled = "60" in row["method"]
+                color = ORIGINAL.CACHED[row["method"]][2]
+                point.set_facecolors(color if cached_filled else "white")
+                point.set_edgecolors("white" if cached_filled else color)
+                point.set_linewidths([0 if cached_filled else .65])
                 point.set_hatch(CACHE_HATCH)
         # Keep the observed-frontier rings visible around the enlarged points.
         emphasized = [point.get_offsets()[0] for row, point in zip(rows, ax.collections[:len(rows)])
@@ -251,6 +256,20 @@ def build():
         rings = ax.collections[len(rows)]
         rings.set_sizes([90 if any(all(abs(float(a) - float(b)) < 1e-10 for a, b in zip(xy, p))
                                    for p in emphasized) else 57 for xy in rings.get_offsets()])
+    # Audit visible channels independently: shapes, fill and hatching must
+    # agree with the method in every panel, including cached 30-step runs.
+    import numpy as np
+    for ax in fig.axes:
+        for row, point in zip(rows, ax.collections[:len(rows)]):
+            method = row["method"]
+            marker = singles[method][1] if method in singles else SELECTION_MARKERS[method]
+            shape = MarkerStyle(marker)
+            expected = shape.get_path().transformed(shape.get_transform())
+            assert np.array_equal(point.get_paths()[0].vertices, expected.vertices), method
+            colored = singles[method][3] if method in singles else method == ORIGINAL.FOCUS or method == "luna_n5_cached_high60"
+            white = np.allclose(point.get_facecolors()[0][:3], (1, 1, 1))
+            assert white != colored, (method, "step-limit fill")
+            assert bool(point.get_hatch()) == (method in ORIGINAL.CACHED), (method, "cache hatch")
     right_layout(fig)
     return fig, frontier, rows
 
@@ -267,14 +286,14 @@ def main():
                   styles=dict(layout=f"8.8 x {fig.get_figheight():.3f} inches; square panels; legends and footer on the right; no gridlines",
                               axes_box_aspect=1,
                               selection="Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
-                              single_call_encoding="Baseline: circle; xhigh: diamond; 0.5x/2x tokens: down/up triangle; 60/120 steps: filled square/pentagon. Luna gray, Sol green.",
+                              single_call_encoding="Baseline: diamond; xhigh: star; 0.5x/2x tokens: left/right triangle; 60/120 steps: hexagon/pentagon. Luna gray, Sol green. Shapes reserved separately from candidate-count shapes.",
                               single_call_markers={key: dict(marker=style[0], filled=style[1]) for key, style in SINGLE_MARKERS.items()},
                               sol_color=SOL_GREEN, single_call_size_pt2=SINGLE_SIZE,
                               single_call_color=SINGLE_GRAY, selection_color=SELECTION_PURPLE, selection_size_pt2=SELECTION_SIZE, focus_size_pt2=FOCUS_SIZE,
                               selection_markers=SELECTION_MARKERS,
-                              selection_encoding="N=2 triangle; N=3 square; N=5 circle. Uncached 30-step runs hollow, 60-step run solid; cached runs white diagonal shading. Step labels show maxima with ≤.",
-                              cached="Purple squares for N3 and circles for N5 with white diagonal shading and no outline; shaded gray circle key",
-                              cached_marker=dict(markers={key: SELECTION_MARKERS[key] for key in ORIGINAL.CACHED}, size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
+                              selection_encoding="N=2 triangle; N=3 square; N=5 circle. White background means 30-step maximum, colored background means 60-step maximum, also for cached runs. Hatching independently means cache. Step labels show maxima with ≤.",
+                              cached="N3/30: white square with purple stripes; N5/60: purple circle with white stripes. Thin purple boundary for white N3/30; no outline for colored N5/60. Fill denotes step cap and stripes denote caching independently.",
+                              cached_marker=dict(markers={key: SELECTION_MARKERS[key] for key in ORIGINAL.CACHED}, size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="purple for 30 steps, white for 60 steps", hatch_linewidth=.5, linewidth={"30_steps": .65, "60_steps": 0}),
                               frontier="Same observed frontier; gray rings enlarged around emphasized points, dashed links unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),
                   source_sha256={**original_report["source_sha256"],
