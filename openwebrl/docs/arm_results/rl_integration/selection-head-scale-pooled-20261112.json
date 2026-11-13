@@ -1,0 +1,330 @@
+{
+ "windows": [
+  "eval-scale",
+  "eval-seed",
+  "eval-sizes3"
+ ],
+ "conditions": {
+  "sft1": {
+   "label": "SFT 4B alone (1 sample)",
+   "params": null,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 1200,
+    "valid": 1072,
+    "successes": 361,
+    "overall": 0.30083333333333334,
+    "valid_only": 0.33675373134328357
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 2380,
+    "valid": 2153,
+    "successes": 982,
+    "overall": 0.4126050420168067,
+    "valid_only": 0.45610775661867164
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 600,
+    "valid": 597,
+    "successes": 238,
+    "overall": 0.39666666666666667,
+    "valid_only": 0.39865996649916247
+   },
+   "mean_overall": 0.3700350140056023,
+   "mean_valid_only": 0.3971738181537059
+  },
+  "head5-5fbddd8b2031": {
+   "label": "d128-L2",
+   "params": 4360000.0,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1"
+    ],
+    "episodes": 900,
+    "valid": 784,
+    "successes": 313,
+    "overall": 0.34777777777777774,
+    "valid_only": 0.39923469387755095
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1"
+    ],
+    "episodes": 1785,
+    "valid": 1614,
+    "successes": 919,
+    "overall": 0.5148459383753502,
+    "valid_only": 0.5693928128872368
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1"
+    ],
+    "episodes": 450,
+    "valid": 446,
+    "successes": 237,
+    "overall": 0.5266666666666666,
+    "valid_only": 0.531390134529148
+   },
+   "mean_overall": 0.46309679427326483,
+   "mean_valid_only": 0.5000058804313119,
+   "minus_sft_mean_overall_pp": [
+    9.306178026766254,
+    7.342298863990043,
+    11.257889822595702
+   ],
+   "minus_default_mean_overall_pp": [
+    3.8783068783068755,
+    1.927238951136012,
+    5.824649859943976
+   ]
+  },
+  "head5-fa31796f1fe0": {
+   "label": "d256-L2",
+   "params": 9580000.0,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 900,
+    "valid": 785,
+    "successes": 327,
+    "overall": 0.36333333333333334,
+    "valid_only": 0.4165605095541401
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 1785,
+    "valid": 1610,
+    "successes": 875,
+    "overall": 0.4901960784313725,
+    "valid_only": 0.5434782608695652
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 450,
+    "valid": 446,
+    "successes": 217,
+    "overall": 0.4822222222222223,
+    "valid_only": 0.4865470852017938
+   },
+   "mean_overall": 0.4452505446623094,
+   "mean_valid_only": 0.4821952852084997,
+   "minus_sft_mean_overall_pp": [
+    7.521553065670711,
+    5.632107843137252,
+    9.42385426392779
+   ],
+   "minus_default_mean_overall_pp": [
+    2.093681917211332,
+    0.1905189853719291,
+    4.00859982882041
+   ]
+  },
+  "head5-91e7a5a67417": {
+   "label": "d512-L2 (default)",
+   "params": 22560000.0,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 1200,
+    "valid": 1046,
+    "successes": 428,
+    "overall": 0.3566666666666667,
+    "valid_only": 0.4091778202676864
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 2380,
+    "valid": 2135,
+    "successes": 1078,
+    "overall": 0.45294117647058824,
+    "valid_only": 0.5049180327868853
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-seed/run1",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 600,
+    "valid": 597,
+    "successes": 278,
+    "overall": 0.4633333333333333,
+    "valid_only": 0.4656616415410385
+   },
+   "mean_overall": 0.4243137254901961,
+   "mean_valid_only": 0.45991916486520346,
+   "minus_sft_mean_overall_pp": [
+    5.427871148459379,
+    3.681337535014007,
+    7.208292483660131
+   ]
+  },
+  "head5-938477dffad2": {
+   "label": "d2048-L4",
+   "params": 272760000.0,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 900,
+    "valid": 792,
+    "successes": 317,
+    "overall": 0.3522222222222222,
+    "valid_only": 0.4002525252525252
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 1785,
+    "valid": 1608,
+    "successes": 820,
+    "overall": 0.45938375350140054,
+    "valid_only": 0.5099502487562189
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 450,
+    "valid": 447,
+    "successes": 233,
+    "overall": 0.5177777777777777,
+    "valid_only": 0.5212527964205816
+   },
+   "mean_overall": 0.4431279178338001,
+   "mean_valid_only": 0.47715185680977523,
+   "minus_sft_mean_overall_pp": [
+    7.309290382819783,
+    5.376439464674756,
+    9.24458839091192
+   ],
+   "minus_default_mean_overall_pp": [
+    1.8814192343604041,
+    -0.061336756924992575,
+    3.7853738717709313
+   ]
+  },
+  "head5-7bbad4567d44": {
+   "label": "d4096-L8",
+   "params": 1770000000.0,
+   "online_mind2web": {
+    "tasks": 300,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 900,
+    "valid": 784,
+    "successes": 296,
+    "overall": 0.32888888888888884,
+    "valid_only": 0.37755102040816324
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 1785,
+    "valid": 1610,
+    "successes": 811,
+    "overall": 0.45434173669467776,
+    "valid_only": 0.5037267080745339
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": [
+     "eval-scale/run1",
+     "eval-scale/run2",
+     "eval-sizes3/run1"
+    ],
+    "episodes": 450,
+    "valid": 444,
+    "successes": 212,
+    "overall": 0.47111111111111104,
+    "valid_only": 0.47747747747747743
+   },
+   "mean_overall": 0.4181139122315592,
+   "mean_valid_only": 0.4529184019867249,
+   "minus_sft_mean_overall_pp": [
+    4.8078898225956905,
+    2.668679971988791,
+    6.9365196078431355
+   ],
+   "minus_default_mean_overall_pp": [
+    -0.6199813258636888,
+    -2.7413476501711815,
+    1.4366402116402095
+   ]
+  }
+ }
+}

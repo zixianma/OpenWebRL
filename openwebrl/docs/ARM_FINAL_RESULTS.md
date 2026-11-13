@@ -1501,6 +1501,30 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 *Same protocol, judges and bootstrap as the tables above; training seed 0 for every size; one run per condition, so intervals are wider than in the seed replication. With this window every size has three eval runs (9.6M and 272.8M: 2 in the November 11 morning screen + this one; 1.8B: 2 on the evening of November 11 + this one). All heads ran through the head-lock launcher (serialized head load; same scores). Evidence: [rates and contrasts](arm_results/rl_integration/selection-head-sizes-sameday-20261112.json) · [script](arm_results/rl_integration/selection-head-sizes-sameday-20261112.py). Runtime: `recipe3-ablations-20261104/eval-sizes3/`.*
 
+<a id="final-selection-recipe3-head-scale-pooled-20261112"></a>**Every eval run pooled (November 11–12).** Each size pools all of its training-seed-0 eval runs from the three windows above (3 per head, 4 for the 22.6M default and SFT). All heads beat SFT by +4.8 to +9.3 pp; selection time grows from 15 ms to 337 ms with size while success does not rise. The 4.4M head's +3.9 over the default is its seed-0 head: over three training seeds the two sizes are level (−0.2 [−1.8, +1.4], above).
+
+| Head | Params | Runs | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | — | 4 | 33.7% | 45.6% | 39.9% | 37.0% | 39.7% | — | — |
+| d128-L2 | 4.4M | 3 | 39.9% | 56.9% | 53.1% | 46.3% | 50.0% | +9.3 [+7.3, +11.3] | +3.9 [+1.9, +5.8] |
+| d256-L2 | 9.6M | 3 | 41.7% | 54.3% | 48.7% | 44.5% | 48.2% | +7.5 [+5.6, +9.4] | +2.1 [+0.2, +4.0] |
+| d512-L2 (default) | 22.6M | 4 | 40.9% | 50.5% | 46.6% | 42.4% | 46.0% | +5.4 [+3.7, +7.2] | — |
+| d2048-L4 | 272.8M | 3 | 40.0% | 51.0% | 52.1% | 44.3% | 47.7% | +7.3 [+5.4, +9.2] | +1.9 [−0.1, +3.8] |
+| d4096-L8 | 1.8B | 3 | 37.8% | 50.4% | 47.7% | 41.8% | 45.3% | +4.8 [+2.7, +6.9] | −0.6 [−2.7, +1.4] |
+
+| Head | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 1,072 / 1,200 | 361 | 2,153 / 2,380 | 982 | 597 / 600 | 238 |
+| d128-L2 | 784 / 900 | 313 | 1,614 / 1,785 | 919 | 446 / 450 | 237 |
+| d256-L2 | 785 / 900 | 327 | 1,610 / 1,785 | 875 | 446 / 450 | 217 |
+| d512-L2 | 1,046 / 1,200 | 428 | 2,135 / 2,380 | 1,078 | 597 / 600 | 278 |
+| d2048-L4 | 792 / 900 | 317 | 1,608 / 1,785 | 820 | 447 / 450 | 233 |
+| d4096-L8 | 784 / 900 | 296 | 1,610 / 1,785 | 811 | 444 / 450 | 212 |
+
+![Selection-head model scale with every eval run pooled: mean overall success minus SFT 4B alone, and mean selection time per step, versus head parameters](arm_results/rl_integration/selection-head-scale-pooled-20261112.png)
+
+*Left: mean overall success (equal-weight 3-benchmark mean) minus SFT 4B alone, paired 95% bootstrap intervals over tasks common to every condition (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over a condition's runs); hollow = 22.6M default. Right: mean selection time per step from the [cost table](#final-selection-recipe3-head-scale-cost-20261112), with the 4B LoRA decoder (474 ms). Runs come from different windows in different mixes (4.4M: November 11 morning ×2 + evening; 9.6M and 272.8M: morning ×2 + November 12; 1.8B: evening ×2 + November 12; 22.6M and SFT: morning ×2 + evening + November 12), and SFT itself ranged 32.2–38.7% across these windows, so the per-window tables above are the controlled comparisons. Per-benchmark columns are valid-only success. [PDF](arm_results/rl_integration/selection-head-scale-pooled-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-pooled-20261112.svg) · [plot script](arm_results/rl_integration/selection-head-scale-pooled-20261112-plot.py) · [data](arm_results/rl_integration/selection-head-scale-pooled-20261112.json) · [analysis script](arm_results/rl_integration/selection-head-scale-pooled-20261112.py).*
+
 **Single-seed screen (November 11 morning).** One training seed per size, 2 runs each, SFT in the same window (00:59–09:30 PST). Superseded by the seed replication above for the size comparison.
 
 | Head | Params | Validation agreement | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | − 22.6M default, pp [95% CI] |
