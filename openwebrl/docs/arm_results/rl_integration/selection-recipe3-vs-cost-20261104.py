@@ -186,9 +186,10 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
             headings = (0, 3)
             if "Best-of-Q" in by_label:
                 columns.append([
-                    (blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
-                    (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
-                    (by_label["Kev-4B"], "Kev-4B"), (blank, ""), (blank, ""), (blank, ""), (blank, ""),
+                    (blank, "Baseline ADMs"), (blank, "SFT 4B + ADM:"),
+                    (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
+                    (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B"),
+                    (blank, ""), (blank, ""), (blank, ""),
                 ])
                 headings = (0, 3, 9)
 
