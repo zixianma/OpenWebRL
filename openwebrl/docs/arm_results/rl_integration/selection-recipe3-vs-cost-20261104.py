@@ -118,7 +118,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         ax.scatter([x for x, _ in fr], [y for _, y in fr], s=70 if emphasize else 57,
                    facecolors="none", edgecolors=FRONTIER, linewidths=.8 if emphasize else .6,
                    zorder=4.5 if emphasize else 2.4)
-    if emphasize and bench == "mean" and not any(m[0] in EXTERNAL for m in methods):
+    if emphasize and frontier_rings and bench == "mean" and not any(m[0] in EXTERNAL for m in methods):
         best = max(fr, key=lambda xy: xy[1])
         ax.annotate("Pareto-optimal", best, xytext=(9, -2), textcoords="offset points",
                     fontsize=6.3, color=C["MUTED"], ha="left", va="top", zorder=5)
@@ -169,24 +169,21 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
             [(blank, ""), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
              (blank, ""), (frontier_handle, "Frontier"), (blank, ""),
              (blank, "Baseline ADMs"),
-             (by_label["Best-of-Q"], "Best-of-Q"), (by_label["PRO-CUA PRM"], "PRO-CUA PRM"),
-             (by_label["WebDreamer"], "WebDreamer"), (by_label["Kev-4B"], "Kev-4B")],
+             (by_label.get("Best-of-Q", blank), "Best-of-Q"), (by_label.get("PRO-CUA PRM", blank), "PRO-CUA PRM"),
+             (by_label.get("WebDreamer", blank), "WebDreamer"), (by_label.get("Kev-4B", blank), "Kev-4B")],
         ]
         headings = (0, 5, 15)
         if "RL 4B" not in by_label:
-            columns = [
-                [(blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
-                 (blank, "Our ADM"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
-                 (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
-                 (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (blank, "")],
-                [(blank, "Baseline ADMs"), (by_label["Best-of-Q"], "Best-of-Q"),
-                 (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
-                 (by_label["Kev-4B"], "Kev-4B"), (blank, ""), (frontier_handle, "Frontier"), (blank, "")],
-            ]
-            headings = (0, 3, 8)
+            columns = [[
+                (blank, "Actors"), (by_label["SFT 4B"], "SFT 4B"), (by_label["SFT 8B"], "SFT 8B"),
+                (blank, "Our ADM"), (by_label["ADM-distilled actor"], "ADM-distilled 4B"),
+                (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+                (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"), (frontier_handle, "Frontier"),
+            ]]
+            headings = (0, 3)
         entries = [entry for column in columns for entry in column]
         leg = fig.legend([h for h, _ in entries], [label for _, label in entries],
-                         loc="center left", bbox_to_anchor=(.730, .5), ncol=2,
+                         loc="center left", bbox_to_anchor=(.730, .5), ncol=len(columns),
                          frameon=False, fontsize=6.4, handlelength=1.1,
                          handletextpad=.7, columnspacing=1.5, labelspacing=.22,
                          borderaxespad=0)
@@ -230,7 +227,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         ])
         methods = [(key, label, params, OVERALL_STYLES[key][0], OVERALL_STYLES[key][1], hollow)
                    for key, label, params, color, marker, hollow in methods]
-        for key, marker in (("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")):
+        for key, marker in ((("best-of-q", "^"), ("pro-cua-prm", "v"), ("webdreamer", "D"), ("kev-4b", "o")) if include_rl else ()):
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
             methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, True))
