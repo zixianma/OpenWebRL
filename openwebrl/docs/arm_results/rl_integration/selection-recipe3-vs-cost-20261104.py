@@ -33,6 +33,7 @@ DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").re
 EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
 EXTERNAL = {**EXTRA_RESULTS["systems"], "kev-4b": json.loads((HERE / "selection-kev-costs-20261113.json").read_text())}
 OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"], *EXTRA_RESULTS["rl_overall_updates"]]
+NO_RL_UPDATES = json.loads((HERE / "selection-no-rl-success-20261113.json").read_text())["updates"]
 FRONTIER = C["FRONTIER"]
 # Overall-success paper view: shape denotes the actor/selector architecture.
 OVERALL_STYLES = {
@@ -79,10 +80,10 @@ def point(key, bench, success_metric="valid_only"):
                 seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
 
 
-def plot_point(key, bench, success_metric, *, circle_encoding=False):
+def plot_point(key, bench, success_metric, *, circle_encoding=False, updates=()):
     r = point(key, bench, success_metric)
     if circle_encoding and success_metric == "overall":
-        for update in OVERALL_UPDATES:
+        for update in [*OVERALL_UPDATES, *updates]:
             if key == update["plot_key"]:
                 r["success"] = (update["reported_mean_overall"] if bench == "mean"
                                 else update["benchmarks"][bench])
@@ -95,10 +96,10 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only", frontier_rings=True):
+def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid_only", frontier_rings=True, updates=()):
     pts = []
     for key, label, p, color, marker, hollow in methods:
-        r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding)
+        r = plot_point(key, bench, success_metric, circle_encoding=circle_encoding, updates=updates)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
         if circle_encoding and success_metric == "overall":
@@ -206,6 +207,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     assert success_metric in ("valid_only", "overall")
     if not include_rl:
         methods = [method for method in methods if not method[0].startswith("rl")]
+    updates = NO_RL_UPDATES if not include_rl else ()
     metric_label = "Overall" if success_metric == "overall" else "Valid-only"
     canonical_name = name.replace("-no-rl", "").replace("-overall-", "-")
     circle_encoding = "sft-actors" in name
@@ -244,7 +246,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric,
-                  frontier_rings=include_rl)
+                  frontier_rings=include_rl, updates=updates)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
@@ -296,7 +298,7 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
-    return {bench: {k: frontier([(p / 1e9 if k == "params" else plot_point(key, bench, success_metric, circle_encoding=circle_encoding)[k], plot_point(key, bench, success_metric, circle_encoding=circle_encoding)["success"])
+    return {bench: {k: frontier([(p / 1e9 if k == "params" else plot_point(key, bench, success_metric, circle_encoding=circle_encoding, updates=updates)[k], plot_point(key, bench, success_metric, circle_encoding=circle_encoding, updates=updates)["success"])
                                  for key, _, p, *_ in methods]) for k, _ in cols} for bench in benches}
 
 

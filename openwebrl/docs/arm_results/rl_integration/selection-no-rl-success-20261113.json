@@ -1,0 +1,37 @@
+{
+  "source": "User-requested success update, 2026-11-13; applies only to no-RL cost views.",
+  "evidence": [
+    "selection-recipe3-head-arch-20261107.json",
+    "selection-recipe3-vs-cost-20261104.json"
+  ],
+  "caveat": "Success cohorts differ from retained historical cost measurements; cost coordinates are unchanged. Joint Transformer represents ADM-23M. Other architecture variants are not assigned unmeasured costs.",
+  "updates": [
+    {
+      "plot_key": "sft1",
+      "reported_mean_overall": 39.4,
+      "benchmarks": {
+        "online_mind2web": 29.7,
+        "webvoyager": 43.7,
+        "deepshop": 44.9
+      }
+    },
+    {
+      "plot_key": "head-gpt55-k3",
+      "reported_mean_overall": 43.6,
+      "benchmarks": {
+        "online_mind2web": 33.0,
+        "webvoyager": 46.6,
+        "deepshop": 51.3
+      }
+    },
+    {
+      "plot_key": "lora-gpt55-k3",
+      "reported_mean_overall": 44.7,
+      "benchmarks": {
+        "online_mind2web": 35.67,
+        "webvoyager": 51.54,
+        "deepshop": 46.89
+      }
+    }
+  ]
+}
