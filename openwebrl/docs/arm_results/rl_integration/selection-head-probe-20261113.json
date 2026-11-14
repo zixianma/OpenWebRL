@@ -1,0 +1,106 @@
+{
+ "runs": 2,
+ "benchmarks": [
+  "online_mind2web",
+  "webvoyager",
+  "deepshop"
+ ],
+ "conditions": {
+  "head5-91e7a5a67417": {
+   "label": "d512-L2 (22.6M, default)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 600,
+    "valid": 517,
+    "successes": 217,
+    "overall": 0.3616666666666667,
+    "valid_only": 0.4197292069632495
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1190,
+    "valid": 1081,
+    "successes": 559,
+    "overall": 0.46974789915966386,
+    "valid_only": 0.517113783533765
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 300,
+    "valid": 297,
+    "successes": 141,
+    "overall": 0.47,
+    "valid_only": 0.47474747474747475
+   },
+   "mean_overall": 0.4338048552754435,
+   "mean_valid_only": 0.4705301550814964
+  },
+  "head5-ef597d45f3b1": {
+   "label": "linear probe (23K)",
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 600,
+    "valid": 518,
+    "successes": 213,
+    "overall": 0.355,
+    "valid_only": 0.4111969111969112
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1190,
+    "valid": 1073,
+    "successes": 581,
+    "overall": 0.48823529411764705,
+    "valid_only": 0.5414725069897484
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 300,
+    "valid": 297,
+    "successes": 139,
+    "overall": 0.4633333333333333,
+    "valid_only": 0.468013468013468
+   },
+   "mean_overall": 0.4355228758169935,
+   "mean_valid_only": 0.47356096206670917,
+   "minus_default": {
+    "online_mind2web_valid_only_pp": [
+     -0.8532295766338294,
+     -5.601119747763389,
+     3.8856880693171205
+    ],
+    "webvoyager_valid_only_pp": [
+     2.4358723455983333,
+     -0.650384070178678,
+     5.5057801368835175
+    ],
+    "deepshop_valid_only_pp": [
+     -0.6734006734006759,
+     -7.190684148313741,
+     5.762711864406778
+    ],
+    "mean_overall_pp": [
+     0.17180205415500138,
+     -2.520098039215684,
+     2.815149393090566
+    ],
+    "mean_valid_only_pp": [
+     0.30308069852127417,
+     -2.5447932057470775,
+     3.120345913344364
+    ]
+   }
+  }
+ },
+ "judge_models": {
+  "online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "webvoyager": [
+   "gpt-4o"
+  ],
+  "deepshop": [
+   "gpt-4o"
+  ]
+ }
+}

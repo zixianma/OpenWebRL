@@ -1,5 +1,51 @@
 {
  "heads": {
+  "linear-probe-s0": {
+   "arch": "linear-probe",
+   "seed": 0,
+   "params": 23041,
+   "dir": "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/heads-scale/linear-probe",
+   "val_panels": 1727,
+   "epochs": 20,
+   "final_agreement": 0.4308,
+   "final_agreement_ci95": [
+    0.4076239988895004,
+    0.45428317967611764
+   ],
+   "best_agreement": 0.4424,
+   "best_epoch": 10,
+   "agreement_by_epoch": [
+    0.4204,
+    0.4157,
+    0.4418,
+    0.4349,
+    0.4146,
+    0.4227,
+    0.4308,
+    0.432,
+    0.4302,
+    0.4424,
+    0.425,
+    0.4285,
+    0.4372,
+    0.4302,
+    0.4372,
+    0.4343,
+    0.4337,
+    0.4314,
+    0.4302,
+    0.4308
+   ],
+   "test_states": 348,
+   "offline_success_head": 38.74,
+   "offline_success_uniform": 36.26,
+   "offline_success_oracle": 47.96,
+   "offline_head_minus_uniform_pp": [
+    2.478004658037175,
+    0.9363583856761247,
+    4.3279409223308365
+   ]
+  },
   "d8-L1-s0": {
    "arch": "d8-L1",
    "seed": 0,
@@ -508,6 +554,17 @@
   }
  },
  "pairwise_pick_agreement_test": {
+  "linear-probe-s0 | d8-L1-s0": 0.5977011494252874,
+  "linear-probe-s0 | d32-L1-s0": 0.617816091954023,
+  "linear-probe-s0 | d128-L2-s0": 0.6350574712643678,
+  "linear-probe-s0 | d128-L2-s1": 0.6293103448275862,
+  "linear-probe-s0 | d128-L2-s2": 0.6120689655172413,
+  "linear-probe-s0 | d256-L2-s0": 0.6264367816091954,
+  "linear-probe-s0 | d512-L2-s0": 0.6005747126436781,
+  "linear-probe-s0 | d512-L2-s1": 0.5919540229885057,
+  "linear-probe-s0 | d512-L2-s2": 0.6005747126436781,
+  "linear-probe-s0 | d2048-L4-s0": 0.603448275862069,
+  "linear-probe-s0 | d4096-L8-s0": 0.646551724137931,
   "d8-L1-s0 | d32-L1-s0": 0.5862068965517241,
   "d8-L1-s0 | d128-L2-s0": 0.6091954022988506,
   "d8-L1-s0 | d128-L2-s1": 0.5775862068965517,

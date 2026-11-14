@@ -1,5 +1,5 @@
 """Selection-head model scale, offline: agreement with the GPT-5.5 H = 4 teacher's pick on the 1,727 held-out validation panels
-(199 states, 90 tasks) at the final (20th) epoch, for every head size (0.25M d8-L1 to 1.8B d4096-L8; d8-L1 and d32-L1 added November 13) and training seed. Joint transformer, soft CE, Recipe 3 labels,
+(199 states, 90 tasks) at the final (20th) epoch, for every head size (23K linear probe and 0.25M d8-L1 to 1.8B d4096-L8; the probe, d8-L1 and d32-L1 added November 13) and training seed. Joint transformer, soft CE, Recipe 3 labels,
 lr 3e-4, same data and split; only width/depth and seed change. Also: best-epoch agreement (picked on the same validation panels,
 so optimistic), offline success of the head's pick on the 348 held-out test states (continuation draws) and pairwise pick agreement
 on those states. Interval: Wilson 95% over panels (panels of one state are correlated, so it is a lower bound on the noise).
@@ -8,7 +8,7 @@ import itertools, json, math
 from pathlib import Path
 R = "/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3-ablations-20261104/heads-scale"
 DEF = "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/p16-k3-20261031/train/heads-all2/k3-best/seed0"
-HEADS = {("d8-L1", 0): f"{R}/d8-L1", ("d32-L1", 0): f"{R}/d32-L1", ("d128-L2", 0): f"{R}/d128-L2", ("d128-L2", 1): f"{R}/d128-L2-seed1", ("d128-L2", 2): f"{R}/d128-L2-seed2",
+HEADS = {("linear-probe", 0): f"{R}/linear-probe", ("d8-L1", 0): f"{R}/d8-L1", ("d32-L1", 0): f"{R}/d32-L1", ("d128-L2", 0): f"{R}/d128-L2", ("d128-L2", 1): f"{R}/d128-L2-seed1", ("d128-L2", 2): f"{R}/d128-L2-seed2",
          ("d256-L2", 0): f"{R}/d256-L2", ("d512-L2", 0): DEF, ("d512-L2", 1): f"{R}/d512-L2-seed1", ("d512-L2", 2): f"{R}/d512-L2-seed2",
          ("d2048-L4", 0): f"{R}/d2048-L4", ("d4096-L8", 0): f"{R}/d4096-L8"}
 
