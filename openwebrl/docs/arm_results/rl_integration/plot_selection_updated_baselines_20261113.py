@@ -20,5 +20,5 @@ if __name__ == "__main__":
     print(renderer["render"](("mean",), rl_stem, 1.65, sft, success_metric="overall",
                              include_rl=True, include_baselines=True, success_updates=updates,
                              method_keys=[*[row["plot_key"] for row in updates], "sft8b", "adm-distilled",
-                                          "head-gpt55-k3", "rl4b", "rl8b", "rl8b-lora-gpt55-k3"],
-                             paper_layout=True))
+                                          "head-gpt55-k3", "rl4b", "rl8b", "rl8b-lora-gpt55-k3", "rl8b-head-gpt55-k3"],
+                             paper_layout=True, include_rl_head=True))

@@ -32,6 +32,8 @@ HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 DISTILLED = json.loads((HERE / "selection-adm-distilled-actor-20261110.json").read_text())
 EXTRA_RESULTS = json.loads((HERE / "selection-external-selector-costs-20261113.json").read_text())
 EXTERNAL = {**EXTRA_RESULTS["systems"], "kev-4b": json.loads((HERE / "selection-kev-costs-20261113.json").read_text())}
+RL8B_HEAD = json.loads((HERE / "selection-rl8b-head-cost-20261114.json").read_text())
+EXTERNAL["rl8b-head-gpt55-k3"] = RL8B_HEAD
 OVERALL_UPDATES = [EXTRA_RESULTS["adm_overall_update"], EXTRA_RESULTS["sft_overall_update"], *EXTRA_RESULTS["rl_overall_updates"]]
 NO_RL_UPDATES = json.loads((HERE / "selection-no-rl-success-20261113.json").read_text())["updates"]
 FRONTIER = C["FRONTIER"]
@@ -103,7 +105,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["success"]))
         if circle_encoding and success_metric == "overall":
-            size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3") else 24
+            size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3", "rl8b-head-gpt55-k3") else 24
         else:
             size = 44 if circle_encoding and "lora" in key else 24
         if key in ("sft1", "sft8b", "rl4b", "rl8b", "adm-distilled"):
@@ -194,6 +196,12 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                                (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
                                (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
                                (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B")]
+            if "RL 8B + ADM-23M" in by_label:
+                own_entries = [(blank, "Ours"),
+                               (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+                               (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
+                               (by_label["RL 8B + ADM-23M"], "RL 8B + ADM-23M"),
+                               (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B")]
             own_entries += [(blank, "")] * (5 - len(own_entries))
             comparison = block([*own_entries,
                 (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
@@ -257,7 +265,7 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None, method_keys=None, paper_layout=False):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None, method_keys=None, paper_layout=False, include_rl_head=False):
     assert success_metric in ("valid_only", "overall")
     if not include_rl:
         methods = [method for method in methods if not method[0].startswith("rl")]
@@ -291,6 +299,9 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
             methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, True))
+    if include_rl_head:
+        assert include_rl and success_metric == "overall"
+        methods.append(("rl8b-head-gpt55-k3", "RL 8B + ADM-23M", RL8B_HEAD["system_parameters"], "#B69AE8", "D", False))
     if method_keys is not None:
         methods = [m for m in methods if m[0] in method_keys]
         assert {m[0] for m in methods} == set(method_keys)

@@ -205,3 +205,15 @@ The heads read OpenWebRL-4B-SFT features, so with the RL 8B actor (`OpenWebRL/Op
 | *Nov 4–5:* + 4B LoRA, GPT-5.5 H = 4 | 790 / 900 | 392 | 1,749 / 1,785 | 1,049 | 442 / 450 | 263 |
 
 *In this window 73 tasks (mostly WebVoyager sites) failed at page load in every run (572 episodes), against almost none on November 4–5, so overall success is lower than on November 4–5 for reasons unrelated to selection; the head-vs-head column is same-window and unaffected. On valid-only success the heads are −0.3 to +3.2 pp against RL 8B alone and at or below the 4B LoRA ([ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#final-selection-rl8b-heads-20261114)). The 4.4M lead is all DeepShop and one seed. Re-encoding makes selection slow here (about 4–5 s per step), so this tests transfer, not cost.* Evidence: [data](arm_results/rl_integration/selection-rl8b-heads-20261114.json) · [script](arm_results/rl_integration/selection-rl8b-heads-20261114.py). Runtime: `eval-rl8b-heads/`.
+
+
+**Cost of the default head with RL 8B (plot accounting, November 14).** The system has **13.228B parameters**: RL 8B actor (8.767B), frozen SFT-4B encoder (4.438B), and the 22.6M head. The encoder re-encodes the actor's prompt and five candidates; its logged FLOPs and latency are included. Success is the two-run result above; cost is audited from run 1, with scheduled tasks as the denominator, including page-load failures with no decisions. The mean weights the three benchmarks equally.
+
+| Benchmark | Cost tasks | Overall success (%) | PFLOP / task | Model latency / task (s) |
+| --- | ---: | ---: | ---: | ---: |
+| Online-Mind2Web | 300 | 43.7 | 3.591 | 218.6 |
+| WebVoyager | 595 | 53.9 | 2.847 | 169.0 |
+| DeepShop | 150 | 46.3 | 3.638 | 214.0 |
+| **Mean** | — | **48.0** | **3.359** | **200.5** |
+
+*Actor FLOPs = 2 × actor parameters × (uncached prompt + generated tokens), summed over logged actor requests. Selector FLOPs are the logged SFT-4B re-encoding and head FLOPs. Model latency sums decision time and excludes browser time. The audit covers all 1,045 run-1 records; 150 failed actor requests have no token telemetry and are excluded from FLOPs, so compute is a lower bound if they performed model work. The existing cross-window/page-availability caveat applies: the 48.0% result does not estimate the effect of adding the head to the earlier RL baseline.* [Cost aggregates](arm_results/rl_integration/selection-rl8b-head-cost-20261114.json) · [audit script](arm_results/rl_integration/selection-rl8b-head-cost-20261114.py) · [updated cost plot](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.png).

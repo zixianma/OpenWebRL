@@ -1,0 +1,71 @@
+{
+  "label": "RL 8B + ADM-23M",
+  "plot_key": "rl8b-head-gpt55-k3",
+  "system_parameters": 13227502322,
+  "parameters": {
+    "actor": 8767123696,
+    "frozen_sft_encoder": 4437815808,
+    "head": 22562818
+  },
+  "source_success": "selection-rl8b-heads-20261114.json",
+  "cost_run": 1,
+  "success_runs": 2,
+  "accounting": "Audit run-1 cost for RL 8B + default 22.6M SFT-feature head.\nActor FLOPs = 2 * RL8B params * (uncached prompt + generated tokens).\nSelector FLOPs are the logged frozen-SFT4B re-encoding + head FLOPs.\nModel latency sums decision_seconds, excluding browser time. Scheduled-task\nmeans include page-load failures with no decisions. Success is the published\ntwo-run overall result; cost is run 1, matching existing cost-plot accounting.\nOnly aggregates are exported; task payloads and model responses remain local.\n",
+  "reported_mean_overall": 47.983193277310924,
+  "benchmarks": {
+    "online_mind2web": {
+      "cost_tasks": 300,
+      "overall": 43.666666666666664,
+      "pflop_per_episode": 3.590623764121474,
+      "model_seconds_per_episode": 218.61210121764918,
+      "steps_per_episode": 14.263333333333334,
+      "cost_totals": {
+        "actor_flops": 621214257974148608,
+        "selector_flops": 455972871262293580,
+        "seconds": 65583.63036529475,
+        "steps": 4279,
+        "requests": 21395,
+        "trace_count": 274,
+        "unmetered_failed_requests": 65
+      },
+      "records_sha256": "47bb945e59ac52da7cb57b4242247eb33dbec6012d40fbc80557502c5cd8267d"
+    },
+    "webvoyager": {
+      "cost_tasks": 595,
+      "overall": 53.94957983193277,
+      "pflop_per_episode": 2.847204859781307,
+      "model_seconds_per_episode": 168.9570509852229,
+      "steps_per_episode": 11.663865546218487,
+      "cost_totals": {
+        "actor_flops": 997418689742444544,
+        "selector_flops": 696668201827433008,
+        "seconds": 100529.44533620763,
+        "steps": 6940,
+        "requests": 34700,
+        "trace_count": 549,
+        "unmetered_failed_requests": 60
+      },
+      "records_sha256": "32dcb9eba15ee1dfc161b2c696213411a62f9ed4ff619d0a2a3fecf55ced32d3"
+    },
+    "deepshop": {
+      "cost_tasks": 150,
+      "overall": 46.33333333333333,
+      "pflop_per_episode": 3.638012743742086,
+      "model_seconds_per_episode": 214.03283353031068,
+      "steps_per_episode": 13.62,
+      "cost_totals": {
+        "actor_flops": 315567514971528928,
+        "selector_flops": 230134396589783964,
+        "seconds": 32104.925029546604,
+        "steps": 2043,
+        "requests": 10215,
+        "trace_count": 150,
+        "unmetered_failed_requests": 25
+      },
+      "records_sha256": "f2fb29a6bce2906e79d68fcb3e0a8cdb424acd0d41a5069a65ccc321bd832e46"
+    }
+  },
+  "mean_pflop_per_episode": 3.358613789214956,
+  "mean_model_seconds_per_episode": 200.53399524439428,
+  "caveat": "Different evaluation window from existing RL references; 73 tasks failed page load in every head run. Overall success is not a matched estimate of adding the head. Frozen SFT-4B re-encoding is included in system parameters, FLOPs and latency. Failed actor requests without token telemetry are counted separately and excluded from FLOPs, making FLOPs a lower bound if those requests performed model work."
+}
