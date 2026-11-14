@@ -8,18 +8,20 @@ All success rates in this document are **overall success** (successes / episodes
 
 ## Summary: every size against the 22.6M default
 
-| Head | Params | SFT 4B actor: − 22.6M head, pp [95% CI] | Window, runs | RL 8B actor: − 22.6M head, pp [95% CI] |
-| --- | ---: | ---: | --- | ---: |
-| linear probe | 23K | +0.2 [−2.5, +2.8] | Nov 13, 2 runs | +1.2 [−1.5, +3.9] |
-| d8-L1 | 0.25M | **+3.1 [+0.7, +5.6]** | Nov 12–13, 2 runs | — |
-| d32-L1 | 1.0M | **+4.0 [+1.6, +6.4]** | Nov 12–13, 2 runs | — |
-| d128-L2 | 4.4M | −0.2 [−1.8, +1.4] | Nov 11 evening, 3 seeds pooled | **+3.3 [+0.8, +5.9]** (seed 0) |
-| d256-L2 | 9.6M | +2.1 [−1.4, +5.6] | Nov 12, 1 run | — |
-| d512-L2 (default) | 22.6M | — | | — |
-| d2048-L4 | 272.8M | +3.2 [−0.3, +6.6] | Nov 12, 1 run | +1.8 [−0.8, +4.5] |
-| d4096-L8 | 1.8B | −1.1 [−4.3, +2.2] | Nov 11 evening, 2 runs | — |
+| Head | Params | SFT 4B: mean overall, head vs 22.6M | SFT 4B: mean valid-only, head vs 22.6M | SFT 4B: − 22.6M, pp [95% CI] | SFT 4B window, runs | RL 8B: mean overall | RL 8B: mean valid-only | RL 8B: − 22.6M, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| linear probe | 23K | 43.6% vs 43.4% | 47.4% vs 47.1% | +0.2 [−2.5, +2.8] | Nov 13, 2 runs | 49.2% | 53.7% | +1.2 [−1.5, +3.9] |
+| d8-L1 | 0.25M | 43.4% vs 40.2% | 46.9% vs 43.6% | **+3.1 [+0.7, +5.6]** | Nov 12–13, 2 runs | — | — | — |
+| d32-L1 | 1.0M | 44.2% vs 40.2% | 47.9% vs 43.6% | **+4.0 [+1.6, +6.4]** | Nov 12–13, 2 runs | — | — | — |
+| d128-L2 | 4.4M | 42.2% vs 42.4% | 45.8% vs 45.8% | −0.2 [−1.8, +1.4] | Nov 11 evening, 3 seeds pooled | 51.3% | 56.4% | **+3.3 [+0.8, +5.9]** (seed 0) |
+| d256-L2 | 9.6M | 43.3% vs 41.2% | 46.9% vs 44.8% | +2.1 [−1.4, +5.6] | Nov 12, 1 run | — | — | — |
+| **d512-L2 (default)** | 22.6M | reference | reference | — | each window | 48.0% | 52.9% | — |
+| d2048-L4 | 272.8M | 44.4% vs 41.2% | 47.8% vs 44.8% | +3.2 [−0.3, +6.6] | Nov 12, 1 run | 49.8% | 53.8% | +1.8 [−0.8, +4.5] |
+| d4096-L8 | 1.8B | 42.3% vs 43.4% | 45.8% vs 46.9% | −1.1 [−4.3, +2.2] | Nov 11 evening, 2 runs (default 1 run) | — | — | — |
+| *RL 8B alone, Nov 4–5 (cross-window)* | | | | | | 50.9% | 53.2% | |
+| *RL 8B + 4B LoRA, Nov 4–5 (cross-window)* | | | | | | 53.6% | 56.4% | |
 
-*Each SFT 4B entry is from its own same-window comparison (tables below); the RL 8B column is from [RL 8B actor](#rl-8b-actor). The 1.8B head was evaluated against the 22.6M default re-run in the same evening window (1 run).*
+*SFT 4B: each head is shown next to the 22.6M default of its own window (tables below), since absolute rates drift between windows; differences are on mean overall. RL 8B: all heads in one window, 2 runs each ([RL 8B actor](#rl-8b-actor)); RL 8B overall success in this window is depressed by 73 tasks whose sites failed to load in every run, so compare RL 8B rows with the November 4–5 references on valid-only. Valid-only is successes / valid episodes, equal-weight mean over the three benchmarks. The 1.8B head was evaluated against the 22.6M default re-run once in the same evening window.*
 
 ## SFT 4B actor
 
