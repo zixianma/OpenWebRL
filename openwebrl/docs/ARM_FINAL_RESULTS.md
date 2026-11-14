@@ -1244,6 +1244,12 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 [Per-benchmark PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg).
 
+**Updated comparison with RL checkpoints (November 13):**
+
+![Updated actor and ADM cost comparison with RL checkpoints](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.png)
+
+*Adds the preceding RL 4B (41.0%), RL 8B (50.9%), and RL 8B + ADM-4B (54.7%) results to the updated comparison below, with their prior cost coordinates. Other success values and costs are unchanged. Means equally weight the three benchmarks; success uses scheduled-task denominators with invalid outcomes counted as failures. These points combine different evaluation cohorts and historical cost measurements, so the comparison is descriptive. Model latency excludes browser time; external shared-GPU latency estimates remain lower bounds. Circles mark SFT actors, squares RL actors, and diamonds added ADMs; the distilled actor remains a purple circle. Baseline ADMs use SFT 4B. Dashed frontier links are recomputed over all retained points, without rings. The version without RL below is preserved.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.svg) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_20261113.py).
+
 **Updated overall-success comparison (November 13):**
 
 ![Updated overall success for SFT 4B and five ADMs](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.png)

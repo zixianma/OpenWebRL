@@ -638,8 +638,16 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
     }
   ],
-  "figure_count": 80,
+  "figure_count": 81,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

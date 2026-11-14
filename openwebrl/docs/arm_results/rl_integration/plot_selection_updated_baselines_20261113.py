@@ -15,3 +15,10 @@ if __name__ == "__main__":
     print(renderer["render"](("mean",), STEM, 1.42, sft, success_metric="overall",
                              include_rl=False, include_baselines=True, success_updates=updates,
                              method_keys=[*[row["plot_key"] for row in updates], "sft8b", "adm-distilled", "head-gpt55-k3"]))
+
+    rl_stem = "selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113"
+    print(renderer["render"](("mean",), rl_stem, 1.65, sft, success_metric="overall",
+                             include_rl=True, include_baselines=True, success_updates=updates,
+                             method_keys=[*[row["plot_key"] for row in updates], "sft8b", "adm-distilled",
+                                          "head-gpt55-k3", "rl4b", "rl8b", "rl8b-lora-gpt55-k3"],
+                             paper_layout=True))

@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views",
 ]
 TITLES = {
+    "selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113": "Updated cost comparison with RL actors and ADM",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113": "SFT 4B and baseline ADMs: updated overall success",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104": "SFT actors and ADMs: earlier baseline comparison, revised markers",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104": "SFT actors and ADMs: without RL checkpoints",

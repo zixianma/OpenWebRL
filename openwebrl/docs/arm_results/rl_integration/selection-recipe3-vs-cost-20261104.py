@@ -106,7 +106,7 @@ def panel(ax, bench, k, methods, *, circle_encoding=False, success_metric="valid
             size = 44 if key in ("head-gpt55-k3", "lora-gpt55-k3", "rl8b-lora-gpt55-k3") else 24
         else:
             size = 44 if circle_encoding and "lora" in key else 24
-        if key in ("sft1", "sft8b", "adm-distilled"):
+        if key in ("sft1", "sft8b", "rl4b", "rl8b", "adm-distilled"):
             size = sft_marker_size
         ax.scatter(x, r["success"], s=size, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
@@ -178,26 +178,36 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
             actor_entries = [(by_label["SFT 4B"], "SFT 4B")]
             if "SFT 8B" in by_label:
                 actor_entries.append((by_label["SFT 8B"], "SFT 8B"))
-            actors = block(actor_entries, title="Actors", ncol=len(actor_entries), gap=.005)
+            has_rl = "RL 4B" in by_label
+            if has_rl:
+                actor_entries = [(by_label["SFT 4B"], "SFT 4B"), (by_label["RL 4B"], "RL 4B"),
+                                 (by_label["SFT 8B"], "SFT 8B"), (by_label["RL 8B"], "RL 8B")]
+            actors = block(actor_entries, title="Actors", ncol=2 if has_rl else len(actor_entries), gap=.005)
             if "ADM-distilled actor" in by_label:
                 block([(by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)")])
             own_entries = [(blank, "Ours")]
             if "ADM-23M (GPT-5.5)" in by_label:
                 own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))
             own_entries.append((by_label["ADM-4B (GPT-5.5)"], "ADM-4B"))
+            if has_rl:
+                own_entries = [(blank, "Ours"),
+                               (by_label["ADM-23M (GPT-5.5)"], "SFT 4B + ADM-23M"),
+                               (by_label["ADM-4B (GPT-5.5)"], "SFT 4B + ADM-4B"),
+                               (by_label["RL 8B + ADM-4B"], "RL 8B + ADM-4B")]
             own_entries += [(blank, "")] * (5 - len(own_entries))
             comparison = block([*own_entries,
                 (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
                 (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
-                (by_label["Kev-4B"], "Kev-4B")], title="SFT + ADM", ncol=2)
+                (by_label["Kev-4B"], "Kev-4B")], title="Actor + ADM" if has_rl else "SFT + ADM", ncol=2)
             # Match the text/marker columns across independently sized blocks.
             renderer = fig.canvas.get_renderer()
+            actor_column_index = 2 if has_rl else 1
             if len(actors.texts) > 1:
                 delta = (comparison.texts[5].get_window_extent(renderer).x0
-                         - actors.texts[1].get_window_extent(renderer).x0)
+                         - actors.texts[actor_column_index].get_window_extent(renderer).x0)
                 actors._legend_handle_box.sep += delta / renderer.points_to_pixels(1)
                 fig.canvas.draw()
-                assert abs(actors.texts[1].get_window_extent(renderer).x0
+                assert abs(actors.texts[actor_column_index].get_window_extent(renderer).x0
                            - comparison.texts[5].get_window_extent(renderer).x0) < .1
             for index in (0, 5):
                 comparison.texts[index].set_color(C["MUTED"])
@@ -247,12 +257,14 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None, method_keys=None):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None, method_keys=None, paper_layout=False):
     assert success_metric in ("valid_only", "overall")
     if not include_rl:
         methods = [method for method in methods if not method[0].startswith("rl")]
     updates = (NO_RL_UPDATES if not include_rl else ()) if success_updates is None else success_updates
     include_baselines = include_rl if include_baselines is None else include_baselines
+    compact_axes = not include_rl or paper_layout
+    draw_rings = include_rl and not paper_layout
     metric_label = "Overall" if success_metric == "overall" else "Valid-only"
     canonical_name = name.replace("-no-rl", "").replace("-overall-", "-")
     circle_encoding = "sft-actors" in name
@@ -294,11 +306,11 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods, circle_encoding=circle_encoding, success_metric=success_metric,
-                  frontier_rings=include_rl, updates=updates, sft_marker_size=44 if not include_rl else 24)
+                  frontier_rings=draw_rings, updates=updates, sft_marker_size=44 if compact_axes else 24)
             # Keep frontier rings whole at the edge of short panels.
             for collection in ax.collections:
                 collection.set_clip_on(False)
-            if not include_rl:
+            if compact_axes:
                 if i == len(benches) - 1:
                     ax.set_xlabel({"params": "System parameters (B)", "pflop": "PFLOP / task",
                                    "seconds": "Latency / task (s)"}[k])
@@ -308,14 +320,14 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
         ax_row[0].set_ylabel(f"{metric_label}\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\n{metric_label.lower()} (%)" if len(benches) > 1 else f"{NAMES[bench]}\n{metric_label.lower()} success (%)"))
     bottom_legend = legend(fig, axes, sft_only=circle_encoding or all(not m[0].startswith("rl") for m in methods),
-                           grouped=circle_encoding and success_metric == "overall", frontier_rings=include_rl)
+                           grouped=circle_encoding and success_metric == "overall", frontier_rings=draw_rings)
     fig.canvas.draw()
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
     fig.subplots_adjust(left=.065 if right_legend else .085,
                         right=.715 if right_legend else .99,
-                        bottom=(.35 if not include_rl else .23) / height if right_legend else (legend_height + .26) / height,
-                        top=1 - (.06 if not include_rl else .18) / height, hspace=.32, wspace=.17)
+                        bottom=(.35 if compact_axes else .23) / height if right_legend else (legend_height + .26) / height,
+                        top=1 - (.06 if compact_axes else .18) / height, hspace=.32, wspace=.17)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_boxes = [leg.get_window_extent(renderer) for leg in fig.legends]
