@@ -175,23 +175,30 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                 fig.canvas.draw()
                 top = leg.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - gap / fig.get_figheight()
                 return leg
-            actors = block([(by_label["SFT 4B"], "SFT 4B"),
-                            (by_label["SFT 8B"], "SFT 8B")], title="Actors", ncol=2, gap=.005)
-            block([(by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)")])
-            comparison = block([
-                (blank, "Ours"), (by_label["ADM-23M (GPT-5.5)"], "ADM-23M"),
-                (by_label["ADM-4B (GPT-5.5)"], "ADM-4B"), (blank, ""), (blank, ""),
+            actor_entries = [(by_label["SFT 4B"], "SFT 4B")]
+            if "SFT 8B" in by_label:
+                actor_entries.append((by_label["SFT 8B"], "SFT 8B"))
+            actors = block(actor_entries, title="Actors", ncol=len(actor_entries), gap=.005)
+            if "ADM-distilled actor" in by_label:
+                block([(by_label["ADM-distilled actor"], "ADM-distilled 4B (ours)")])
+            own_entries = [(blank, "Ours")]
+            if "ADM-23M (GPT-5.5)" in by_label:
+                own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))
+            own_entries.append((by_label["ADM-4B (GPT-5.5)"], "ADM-4B"))
+            own_entries += [(blank, "")] * (5 - len(own_entries))
+            comparison = block([*own_entries,
                 (blank, "Baselines"), (by_label["Best-of-Q"], "Best-of-Q"),
                 (by_label["PRO-CUA PRM"], "PRO-CUA PRM"), (by_label["WebDreamer"], "WebDreamer"),
                 (by_label["Kev-4B"], "Kev-4B")], title="SFT + ADM", ncol=2)
             # Match the text/marker columns across independently sized blocks.
             renderer = fig.canvas.get_renderer()
-            delta = (comparison.texts[5].get_window_extent(renderer).x0
-                     - actors.texts[1].get_window_extent(renderer).x0)
-            actors._legend_handle_box.sep += delta / renderer.points_to_pixels(1)
-            fig.canvas.draw()
-            assert abs(actors.texts[1].get_window_extent(renderer).x0
-                       - comparison.texts[5].get_window_extent(renderer).x0) < .1
+            if len(actors.texts) > 1:
+                delta = (comparison.texts[5].get_window_extent(renderer).x0
+                         - actors.texts[1].get_window_extent(renderer).x0)
+                actors._legend_handle_box.sep += delta / renderer.points_to_pixels(1)
+                fig.canvas.draw()
+                assert abs(actors.texts[1].get_window_extent(renderer).x0
+                           - comparison.texts[5].get_window_extent(renderer).x0) < .1
             for index in (0, 5):
                 comparison.texts[index].set_color(C["MUTED"])
                 comparison.texts[index].set_fontweight("medium")
@@ -240,7 +247,7 @@ def legend(fig, axes, *, sft_only, grouped=False, frontier_rings=True):
                       labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None):
+def render(benches, name, height, methods=methods, *, success_metric="valid_only", include_rl=True, include_baselines=None, success_updates=None, method_keys=None):
     assert success_metric in ("valid_only", "overall")
     if not include_rl:
         methods = [method for method in methods if not method[0].startswith("rl")]
@@ -272,6 +279,9 @@ def render(benches, name, height, methods=methods, *, success_metric="valid_only
             source = EXTERNAL[key]
             label = source["label"].replace(" (1 value sample)", "")
             methods.append((key, label, source["system_parameters"], C["BASELINE_DARK"], marker, True))
+    if method_keys is not None:
+        methods = [m for m in methods if m[0] in method_keys]
+        assert {m[0] for m in methods} == set(method_keys)
     compact_sft_mean = canonical_name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
         methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]

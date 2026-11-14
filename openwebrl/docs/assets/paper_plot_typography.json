@@ -387,7 +387,10 @@
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104.svg": "cbdfd06428f9803c25919af40612180808b0883c61d1d44813b4fee2ee65522e",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png": "2d4e54564b2ed6ab04c0f30ab8e1c03e09faf8e24b7790f5b96c1661b229b8a8",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.svg": "a5681fb17cfe238ebef7817fa2ac8b7c45bafb3754de6fdcebd17178c0c9e6aa",
-    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.pdf": "0458a54ae52875dd512326f0170d030a05fe39c9a048ab8aa1b2e03b3c25270a"
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.pdf": "0458a54ae52875dd512326f0170d030a05fe39c9a048ab8aa1b2e03b3c25270a",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.png": "828dc368cd8176c7090f93d34abc3288610d020ec59246e2a43c452e54b6aa2c",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.svg": "97f76a1f8e60e1c1d934dca792f883b005de13667e6714228687060fe6cd6fed",
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf": "fee5cd0115f22c980a496f5491ad22886f4941a2abb3b108043a329e656e5024"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
@@ -399,6 +402,6 @@
     "validity_qualifiers": "Defined in captions, omitted from plot text",
     "policy": "openwebrl/docs/paper_plot_labels.py",
     "audit": "openwebrl/docs/assets/paper_plot_label_audit.json",
-    "policy_sha256": "d5396277d833a4707740a7436b3c71b2d5e9013b33a52e6378b7a4cb3f3264a1"
+    "policy_sha256": "4ad937e09a762b69fcd4dc6aa5d59750e131c62f3b833579e6eb432d41d36936"
   }
 }

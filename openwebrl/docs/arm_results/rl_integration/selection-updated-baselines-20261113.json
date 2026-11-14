@@ -1,0 +1,65 @@
+{
+  "source": "User-provided success table, 2026-11-13; last column is the supplied mean overall success.",
+  "benchmark_column_order": [
+    "webvoyager",
+    "online_mind2web",
+    "deepshop"
+  ],
+  "accounting": "Existing system parameters, PFLOP/task and model seconds/task retained. No new cost measurement; costs and success may come from different cohorts. Reported mean is used exactly, not reconstructed from rounded benchmark rates.",
+  "updates": [
+    {
+      "plot_key": "sft1",
+      "benchmarks": {
+        "webvoyager": 47.1,
+        "online_mind2web": 28.9,
+        "deepshop": 43.8
+      },
+      "reported_mean_overall": 39.9
+    },
+    {
+      "plot_key": "best-of-q",
+      "benchmarks": {
+        "webvoyager": 42.1,
+        "online_mind2web": 29.4,
+        "deepshop": 42.4
+      },
+      "reported_mean_overall": 38.0
+    },
+    {
+      "plot_key": "pro-cua-prm",
+      "benchmarks": {
+        "webvoyager": 39.3,
+        "online_mind2web": 28.3,
+        "deepshop": 41.6
+      },
+      "reported_mean_overall": 36.4
+    },
+    {
+      "plot_key": "webdreamer",
+      "benchmarks": {
+        "webvoyager": 43.9,
+        "online_mind2web": 30.7,
+        "deepshop": 45.1
+      },
+      "reported_mean_overall": 39.9
+    },
+    {
+      "plot_key": "kev-4b",
+      "benchmarks": {
+        "webvoyager": 42.5,
+        "online_mind2web": 31.3,
+        "deepshop": 43.3
+      },
+      "reported_mean_overall": 39.1
+    },
+    {
+      "plot_key": "lora-gpt55-k3",
+      "benchmarks": {
+        "webvoyager": 51.0,
+        "online_mind2web": 37.3,
+        "deepshop": 48.9
+      },
+      "reported_mean_overall": 45.7
+    }
+  ]
+}

@@ -90,6 +90,12 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-20261104.svg)
 
+### SFT 4B and baseline ADMs: updated overall success
+
+![SFT 4B and baseline ADMs: updated overall success](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.svg)
+
 ### SFT actors and ADMs: earlier baseline comparison, revised markers
 
 ![SFT actors and ADMs: earlier baseline comparison, revised markers](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
