@@ -1,27 +1,54 @@
 # Selection-head size ablations
 
-**Head size barely matters. From a 23K-parameter linear probe to a 1.8B transformer, every head trained on the same Recipe 3 GPT-5.5 H = 4 panels scores within about 4 pp of the 22.6M default on the SFT 4B actor, and none is reliably better: the only clear leads came from single training seeds and windows (the 4.4M head's +4.3 pp in the first screen vanished over three seeds, −0.2 [−1.8, +1.4]). The two smallest heads (0.25M, 1.0M) score +3 to +4 pp over the default in one window. Selection cost grows with size (15 ms per step at 4.4M, 337 ms at 1.8B, against 474 ms for the 4B LoRA), but end-to-end episode time does not, because generating five candidates dominates.** On the RL 8B actor, with the frozen SFT-4B model re-encoding its candidates, the heads are again close to each other (the seed-0 4.4M head +3.3 [+0.8, +5.9] pp over the default, all on DeepShop).
+**Head size barely matters. On the SFT 4B actor every head from a 23K-parameter linear probe to a 1.8B transformer beats one SFT 4B sample by +4.7 to +9.2 pp mean overall (the 4B LoRA: +7.9), with no trend in size; the apparent differences between sizes come from single training seeds and evaluation windows (over three seeds the 4.4M and 22.6M heads are level). On the RL 8B actor, scoring through the frozen SFT-4B encoder, the heads add −0.3 to +3.2 pp valid-only over RL 8B alone, at most matching the 4B LoRA (+3.2). Selection cost grows with size (15 ms per step at 4.4M, 337 ms at 1.8B, 474 ms for the 4B LoRA), but end-to-end episode time does not, because generating five candidates dominates.**
 
 All success rates in this document are **overall success** (successes / episodes; invalid episodes count as failures); "Mean overall" weights the three benchmarks equally. Differences are in mean overall success, pp [paired 95% bootstrap over tasks common to both arms, 10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs]; bold intervals exclude 0. Compare rows only within a table: absolute rates drift between windows (the SFT 4B baseline moved from 32.2% to 38.7% mean overall across these windows). Valid-only rates are in [ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#final-selection-recipe3-head-scale-20261111).
 
 **Setup.** Every head is the joint (bidirectional) transformer selection head with soft cross-entropy on the Recipe 3 GPT-5.5 H = 4 panels (18,781 training panels, 2,110 states, 802 tasks; 1,727 validation panels), learning rate 3e-4, batch 256, 20 epochs, best validation epoch, training seed 0 unless stated; only width (d) and depth (L) change, and the linear probe replaces the transformer with a linear readout of the standardized features. Heads read the actor's hidden states at layers 18/27/36 (prompt end and, per candidate, thought mean, action mean and last token). Evaluation: OpenWebRL-4B-SFT actor (unless stated), N = 5, T 1.0 / top-p 0.9, 30 steps, all 1,045 tasks (Online-Mind2Web 300, WebVoyager 595, DeepShop 150), 1 H200 per run, rolled out judge-deferred and judged afterwards (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o); no record refused.
 
-## Summary: every size against the 22.6M default
+## Summary: one row per method
 
-| Head | Params | SFT 4B: mean overall, head vs 22.6M | SFT 4B: mean valid-only, head vs 22.6M | SFT 4B: − 22.6M, pp [95% CI] | SFT 4B window, runs | RL 8B: mean overall | RL 8B: mean valid-only | RL 8B: − 22.6M, pp [95% CI] |
-| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| linear probe | 23K | 43.6% vs 43.4% | 47.4% vs 47.1% | +0.2 [−2.5, +2.8] | Nov 13, 2 runs | 49.2% | 53.7% | +1.2 [−1.5, +3.9] |
-| d8-L1 | 0.25M | 43.4% vs 40.2% | 46.9% vs 43.6% | **+3.1 [+0.7, +5.6]** | Nov 12–13, 2 runs | — | — | — |
-| d32-L1 | 1.0M | 44.2% vs 40.2% | 47.9% vs 43.6% | **+4.0 [+1.6, +6.4]** | Nov 12–13, 2 runs | — | — | — |
-| d128-L2 | 4.4M | 42.2% vs 42.4% | 45.8% vs 45.8% | −0.2 [−1.8, +1.4] | Nov 11 evening, 3 seeds pooled | 51.3% | 56.4% | **+3.3 [+0.8, +5.9]** (seed 0) |
-| d256-L2 | 9.6M | 43.3% vs 41.2% | 46.9% vs 44.8% | +2.1 [−1.4, +5.6] | Nov 12, 1 run | — | — | — |
-| **d512-L2 (default)** | 22.6M | reference | reference | — | each window | 48.0% | 52.9% | — |
-| d2048-L4 | 272.8M | 44.4% vs 41.2% | 47.8% vs 44.8% | +3.2 [−0.3, +6.6] | Nov 12, 1 run | 49.8% | 53.8% | +1.8 [−0.8, +4.5] |
-| d4096-L8 | 1.8B | 42.3% vs 43.4% | 45.8% vs 46.9% | −1.1 [−4.3, +2.2] | Nov 11 evening, 2 runs (default 1 run) | — | — | — |
-| *RL 8B alone, Nov 4–5 (cross-window)* | | | | | | 50.9% | 53.2% | |
-| *RL 8B + 4B LoRA, Nov 4–5 (cross-window)* | | | | | | 53.6% | 56.4% | |
+| Method | Params | Runs | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − actor alone, overall, pp [95% CI] | − actor alone, valid-only, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***SFT 4B actor*** (November 11–13) | | | | | | | | | |
+| **SFT 4B alone (1 sample)** | — | 7 | 30.0% | 41.7% | 39.5% | 37.1% | 39.8% | — | — |
+| + linear probe | 23K | 2 | 35.5% | 48.8% | 46.3% | 43.6% | 47.4% | **+6.5 [+4.2, +8.8]** | **+7.5 [+5.1, +10.0]** |
+| + d8-L1 head | 0.25M | 2 | 35.2% | 48.9% | 46.0% | 43.4% | 46.9% | **+6.3 [+4.0, +8.5]** | **+7.1 [+4.8, +9.4]** |
+| + d32-L1 head | 1.0M | 2 | 37.0% | 49.5% | 46.0% | 44.2% | 47.9% | **+7.1 [+4.9, +9.2]** | **+8.1 [+5.8, +10.3]** |
+| + d128-L2 head | 4.4M | 3 | 34.8% | 51.5% | 52.7% | 46.3% | 50.0% | **+9.2 [+7.4, +11.1]** | **+10.2 [+8.2, +12.1]** |
+| + d256-L2 head | 9.6M | 3 | 36.3% | 49.0% | 48.2% | 44.5% | 48.2% | **+7.5 [+5.7, +9.3]** | **+8.4 [+6.5, +10.3]** |
+| + d512-L2 head (default ADM-22M) | 22.6M | 8 | 34.7% | 45.9% | 45.8% | 42.1% | 45.7% | **+5.0 [+3.7, +6.5]** | **+5.8 [+4.4, +7.4]** |
+| + d2048-L4 head | 272.8M | 3 | 35.2% | 45.9% | 51.8% | 44.3% | 47.7% | **+7.2 [+5.5, +9.0]** | **+7.9 [+6.0, +9.8]** |
+| + d4096-L8 head | 1.8B | 3 | 32.9% | 45.4% | 47.1% | 41.8% | 45.3% | **+4.7 [+2.8, +6.7]** | **+5.5 [+3.4, +7.5]** |
+| + 4B LoRA decoder (ADM-4B) | 4.4B | 3 | 36.9% | 48.5% | 49.6% | 45.0% | 48.6% | **+7.9 [+6.0, +9.8]** | **+8.8 [+6.8, +10.8]** |
+| ***RL 8B actor*** (heads November 13–14 via frozen SFT-4B re-encoding; actor alone and 4B LoRA November 4–5) | | | | | | | | | |
+| **RL 8B alone (1 sample)** | — | 3 | 38.3% | 56.5% | 57.8% | 50.9% | 53.2% | — | — |
+| + linear probe | 23K | 2 | 42.7% | 56.5% | 48.3% | 49.2% | 53.7% | −1.7 [−4.1, +0.7] | +0.6 [−1.9, +3.1] |
+| + d128-L2 head | 4.4M | 2 | 42.2% | 54.8% | 57.0% | 51.3% | 56.4% | +0.5 [−2.0, +2.9] | **+3.2 [+0.7, +5.7]** |
+| + d512-L2 head (default ADM-22M) | 22.6M | 2 | 43.7% | 53.9% | 46.3% | 48.0% | 52.9% | **−2.9 [−5.4, −0.4]** | −0.3 [−2.9, +2.4] |
+| + d2048-L4 head | 272.8M | 2 | 38.7% | 55.8% | 55.0% | 49.8% | 53.8% | −1.0 [−3.5, +1.3] | +0.7 [−1.9, +3.2] |
+| + 4B LoRA decoder (GPT-5.5 H = 4) | 4.4B | 3 | 43.6% | 58.8% | 58.4% | 53.6% | 56.4% | **+2.7 [+0.6, +4.8]** | **+3.2 [+1.0, +5.4]** |
 
-*SFT 4B: each head is shown next to the 22.6M default of its own window (tables below), since absolute rates drift between windows; differences are on mean overall. RL 8B: all heads in one window, 2 runs each ([RL 8B actor](#rl-8b-actor)); RL 8B overall success in this window is depressed by 73 tasks whose sites failed to load in every run, so compare RL 8B rows with the November 4–5 references on valid-only. Valid-only is successes / valid episodes, equal-weight mean over the three benchmarks. The 1.8B head was evaluated against the 22.6M default re-run once in the same evening window.*
+| Method | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | 1,868 / 2,100 | 629 | 3,778 / 4,165 | 1,738 | 1,044 / 1,050 | 415 |
+| SFT 4B + linear probe | 518 / 600 | 213 | 1,073 / 1,190 | 581 | 297 / 300 | 139 |
+| SFT 4B + d8-L1 head | 518 / 600 | 211 | 1,077 / 1,190 | 582 | 300 / 300 | 138 |
+| SFT 4B + d32-L1 head | 517 / 600 | 222 | 1,082 / 1,190 | 589 | 298 / 300 | 138 |
+| SFT 4B + d128-L2 head | 784 / 900 | 313 | 1,614 / 1,785 | 919 | 446 / 450 | 237 |
+| SFT 4B + d256-L2 head | 785 / 900 | 327 | 1,610 / 1,785 | 875 | 446 / 450 | 217 |
+| SFT 4B + d512-L2 head (default ADM-22M) | 2,085 / 2,400 | 832 | 4,293 / 4,760 | 2,186 | 1,190 / 1,200 | 549 |
+| SFT 4B + d2048-L4 head | 792 / 900 | 317 | 1,608 / 1,785 | 820 | 447 / 450 | 233 |
+| SFT 4B + d4096-L8 head | 784 / 900 | 296 | 1,610 / 1,785 | 811 | 444 / 450 | 212 |
+| SFT 4B + 4B LoRA decoder (ADM-4B) | 793 / 900 | 332 | 1,606 / 1,785 | 865 | 446 / 450 | 223 |
+| RL 8B alone (1 sample) | 787 / 900 | 345 | 1,752 / 1,785 | 1,008 | 447 / 450 | 260 |
+| RL 8B + linear probe | 530 / 600 | 256 | 1,083 / 1,190 | 672 | 285 / 300 | 145 |
+| RL 8B + d128-L2 head | 520 / 600 | 253 | 1,077 / 1,190 | 652 | 285 / 300 | 171 |
+| RL 8B + d512-L2 head (default ADM-22M) | 521 / 600 | 262 | 1,072 / 1,190 | 642 | 286 / 300 | 139 |
+| RL 8B + d2048-L4 head | 532 / 600 | 232 | 1,085 / 1,190 | 664 | 291 / 300 | 165 |
+| RL 8B + 4B LoRA decoder (GPT-5.5 H = 4) | 790 / 900 | 392 | 1,749 / 1,785 | 1,049 | 442 / 450 | 263 |
+
+*One row per method, each against its actor alone. Per-benchmark columns and mean overall are overall success (invalid = failure); mean valid-only is successes / valid episodes; both are equal-weight 3-benchmark means. Each row pools every run of that method (heads: training seed 0) across its evaluation windows, and the SFT 4B control pools its 7 runs from November 11 (eval-scale, eval-seed, eval-1111) and 12 (eval-sizes3); differences are paired bootstrap over tasks on run-averaged per-task success (10,000 resamples, seed 20261029, benchmarks resampled independently); bold intervals exclude 0. Because the pooling spans windows, a row's difference also carries the drift of its windows (the 0.25M, 1.0M and probe heads ran only on November 12–13, with no SFT run in their windows; the 22.6M default ran in every window). Same-window comparisons are in the per-window tables below. RL 8B: overall success in the heads' window is depressed by 73 tasks whose sites failed to load in every run, against almost none on November 4–5, so its overall differences understate the heads; use valid-only there.* Evidence: [data](arm_results/rl_integration/selection-head-size-pooled-20261114.json) · [script](arm_results/rl_integration/selection-head-size-pooled-20261114.py).
 
 ## SFT 4B actor
 
