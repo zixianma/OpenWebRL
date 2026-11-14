@@ -61,5 +61,11 @@
       },
       "reported_mean_overall": 45.7
     }
-  ]
+  ],
+  "retained_previous_methods": [
+    "sft8b",
+    "adm-distilled",
+    "head-gpt55-k3"
+  ],
+  "retained_source": "Previous cost comparison, selection-recipe3-vs-cost-20261104.json and selection-adm-distilled-actor-20261110.json; success and cost unchanged for these three methods."
 }

@@ -1,4 +1,4 @@
-"""Render the user-supplied six-method overall success comparison."""
+"""Render the user-supplied overall success comparison with retained SFT 8B, distilled actor and ADM-23M."""
 import json
 from pathlib import Path
 import runpy
@@ -14,4 +14,4 @@ if __name__ == "__main__":
         assert point["success"] == row["reported_mean_overall"]
     print(renderer["render"](("mean",), STEM, 1.42, sft, success_metric="overall",
                              include_rl=False, include_baselines=True, success_updates=updates,
-                             method_keys=[row["plot_key"] for row in updates]))
+                             method_keys=[*[row["plot_key"] for row in updates], "sft8b", "adm-distilled", "head-gpt55-k3"]))
