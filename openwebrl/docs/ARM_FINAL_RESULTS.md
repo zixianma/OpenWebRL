@@ -1512,6 +1512,8 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 #### Head model scale with Recipe 3 labels (November 11)
 
+*All head-size results in one place, as overall success: [ARM_HEAD_SIZE_ABLATIONS.md](ARM_HEAD_SIZE_ABLATIONS.md).*
+
 **Head size does not matter from a 23K-parameter linear probe to a 1.8B transformer. A linear probe on the actor's hidden states is level with the 22.6M default (+0.2 [−2.5, +2.8] pp; [linear probe](#final-selection-recipe3-head-probe-20261113)), and heads of 1.0M and 0.25M are no worse than the 22.6M default in one window (+4.0 / +3.1 pp, one training seed each; [smaller heads](#final-selection-recipe3-head-small-20261113)). Over three training seeds in one window, the 4.4M and 22.6M heads are level (−0.2 [−1.8, +1.4] pp mean overall, pooled), and the 1.8B head is level with the 22.6M default (−1.1 [−4.3, +2.2]). The single-seed screen's 4.4M lead (+4.3 [+1.9, +6.7]) was a seed and window effect.** All heads are the joint (bidirectional) transformer with soft-CE loss on the Recipe 3 GPT-5.5 H = 4 panels, same data, split, recipe and learning rate (3e-4); only width and depth change. Every head beats one SFT 4B sample.
 
 <a id="final-selection-recipe3-head-seeds-20261111"></a>**Training-seed replication (November 11 evening).** Seeds 1 and 2 of the 4.4M (d128-L2) and 22.6M (d512-L2) heads, 2 runs each, with seed 0 of both and SFT 4B alone re-run in the same window (1 run each; 16:00–21:00 PST).
