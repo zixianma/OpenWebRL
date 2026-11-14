@@ -10,7 +10,7 @@ All success rates in this document are **overall success** (successes / episodes
 
 | Method | Params | Runs | Eval dates | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − actor alone, overall, pp [95% CI] | − actor alone, valid-only, pp [95% CI] |
 | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| ***SFT 4B actor*** (November 11–13) | | | | |  | | | | | |
+| ***SFT 4B actor*** (November 11–13) | | | | | | | | | | |
 | **SFT 4B alone (1 sample)** | — | 7 | Nov 11–12 | 30.0% | 41.7% | 39.5% | 37.1% | 39.8% | — | — |
 | + linear probe | 23K | 2 | Nov 13 | 35.5% | 48.8% | 46.3% | 43.6% | 47.4% | **+6.5 [+4.2, +8.8]** | **+7.5 [+5.1, +10.0]** |
 | + d8-L1 head | 0.25M | 2 | Nov 12–13 | 35.2% | 48.9% | 46.0% | 43.4% | 46.9% | **+6.3 [+4.0, +8.5]** | **+7.1 [+4.8, +9.4]** |
@@ -21,7 +21,7 @@ All success rates in this document are **overall success** (successes / episodes
 | + d2048-L4 head | 272.8M | 3 | Nov 11–12 | 35.2% | 45.9% | 51.8% | 44.3% | 47.7% | **+7.2 [+5.5, +9.0]** | **+7.9 [+6.0, +9.8]** |
 | + d4096-L8 head | 1.8B | 3 | Nov 11–12 | 32.9% | 45.4% | 47.1% | 41.8% | 45.3% | **+4.7 [+2.8, +6.7]** | **+5.5 [+3.4, +7.5]** |
 | + 4B LoRA decoder (ADM-4B) | 4.4B | 3 | Nov 11 | 36.9% | 48.5% | 49.6% | 45.0% | 48.6% | **+7.9 [+6.0, +9.8]** | **+8.8 [+6.8, +10.8]** |
-| ***RL 8B actor*** (heads November 13–14 via frozen SFT-4B re-encoding; actor alone and 4B LoRA November 4–5) | | | | |  | | | | | |
+| ***RL 8B actor*** (heads November 13–14 via frozen SFT-4B re-encoding; actor alone and 4B LoRA November 4–5) | | | | | | | | | | |
 | **RL 8B alone (1 sample)** | — | 3 | Nov 4–5 | 38.3% | 56.5% | 57.8% | 50.9% | 53.2% | — | — |
 | + linear probe | 23K | 2 | Nov 13–14 | 42.7% | 56.5% | 48.3% | 49.2% | 53.7% | −1.7 [−4.1, +0.7] | +0.6 [−1.9, +3.1] |
 | + d128-L2 head | 4.4M | 2 | Nov 13–14 | 42.2% | 54.8% | 57.0% | 51.3% | 56.4% | +0.5 [−2.0, +2.9] | **+3.2 [+0.7, +5.7]** |
