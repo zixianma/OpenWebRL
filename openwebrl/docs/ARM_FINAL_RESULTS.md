@@ -1176,6 +1176,28 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 *Forward FLOPs = 2 × params × tokens per decision step: actor 2 × 8.77B × (uncached prompt + completion tokens) of the step's actor requests (run 1), selector 2 × 4.44B × (uncached selection-prompt + generated tokens); PFLOP per episode = (actor + selector) × steps per episode. N = 5 costs the actor about 3.5× one sample (shared prompt prefix cached). Selection and model time from each step's decision trace (browser excluded); end-to-end = each episode record's wall clock incl. browser (judge excluded), local browsers. 1 H200 per run. Evidence: [data](arm_results/rl_integration/selection-rl8b-cost-20261113.json) · [script](arm_results/rl_integration/selection-rl8b-cost-20261113.py).*
 
+<a id="final-selection-rl8b-heads-20261114"></a>**RL 8B actor with the Recipe 3 heads (November 13–14).** *Heads trained on SFT-4B features also select for the RL 8B actor when the frozen SFT-4B model re-encodes its candidates, but they add little: valid-only success is level with RL 8B alone from November 4–5 (−0.3 to +3.2 pp) and at or below the 4B LoRA. Among the heads (same window), the 4.4M head is best (+3.3 [+0.8, +5.9] pp mean overall over the 22.6M default), all of it on DeepShop (+11.4 [+5.4, +17.6] valid-only); the 272.8M head and the 23K linear probe are level with the default.* Recipe 3 GPT-5.5 H = 4 heads, training seed 0; each step the frozen OpenWebRL-4B-SFT encoder re-encodes the RL 8B prompt and its five candidates and the unchanged head picks (`head5x`). RL 8B (`OpenWebRL/OpenWebRL-8B` 824a54f, 4,096 response tokens), N = 5, T 1.0 / top-p 0.9, 30 steps, 2 runs on all 1,045 tasks, judge-deferred and judged afterwards (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o; no record refused).
+
+| RL 8B + | Params | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − 22.6M head, pp [95% CI] | − RL 8B alone, valid-only, pp ¹ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 22.6M head (default) | 22.6M | 50.3% | 59.9% | 48.6% | 48.0% | 52.9% | — | −0.3 [−2.9, +2.4] |
+| 4.4M head (d128-L2) | 4.4M | 48.7% | 60.5% | 60.0% | 51.3% | 56.4% | +3.3 [+0.8, +5.9] | +3.2 [+0.7, +5.7] |
+| 272.8M head (d2048-L4) | 272.8M | 43.6% | 61.2% | 56.7% | 49.8% | 53.8% | +1.8 [−0.8, +4.5] | +0.7 [−1.9, +3.2] |
+| 23K linear probe | 23K | 48.3% | 62.0% | 50.9% | 49.2% | 53.7% | +1.2 [−1.5, +3.9] | +0.6 [−1.9, +3.1] |
+| *Nov 4–5:* RL 8B alone (1 sample) | | 43.8% | 57.5% | 58.2% | 50.9% | 53.2% | | — |
+| *Nov 4–5:* + 4B LoRA, GPT-5.5 H = 4 | | 49.6% | 60.0% | 59.5% | 53.6% | 56.4% | | +3.2 |
+
+| RL 8B + | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 22.6M head (default) | 521 / 600 | 262 | 1,072 / 1,190 | 642 | 286 / 300 | 139 |
+| 4.4M head (d128-L2) | 520 / 600 | 253 | 1,077 / 1,190 | 652 | 285 / 300 | 171 |
+| 272.8M head (d2048-L4) | 532 / 600 | 232 | 1,085 / 1,190 | 664 | 291 / 300 | 165 |
+| 23K linear probe | 530 / 600 | 256 | 1,083 / 1,190 | 672 | 285 / 300 | 145 |
+| RL 8B alone (Nov 4–5) | 787 / 900 | 345 | 1,752 / 1,785 | 1,008 | 447 / 450 | 260 |
+| 4B LoRA (Nov 4–5) | 790 / 900 | 392 | 1,749 / 1,785 | 1,049 | 442 / 450 | 263 |
+
+*Per-benchmark columns are valid-only success, pooled over runs; paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently). ¹ Cross-window against the November 4–5 runs, on valid-only success: overall success is not comparable across these windows, because 73 tasks (mostly WebVoyager sites) failed at page load in every run of this window (572 episodes, `ERR_HTTP2_PROTOCOL_ERROR` and similar at `/reset`), against almost none on November 4–5; the head-vs-head columns are same-window and unaffected. Per benchmark against the 22.6M head (valid-only): 4.4M −1.6 [−6.1, +2.8] / +0.7 [−2.2, +3.5] / +11.4 [+5.4, +17.6]; 272.8M −6.7 [−11.1, −2.1] / +1.3 [−1.5, +4.2] / +8.1 [+1.5, +14.8]; probe −2.0 [−6.4, +2.5] / +2.2 [−0.7, +5.0] / +2.3 [−4.4, +9.2] (Online-Mind2Web / WebVoyager / DeepShop). One training seed per size: on the SFT 4B actor the seed-0 4.4M head's lead over the 22.6M head also did not survive seed replication ([seeds](#final-selection-recipe3-head-seeds-20261111)). Re-encoding makes selection slow here (about 4–5 s per step against 17 ms when the head reads the actor's own features), so this tests transfer, not cost. 73.1 H200-hours (1 H200 per job, vlm/normal); one model-server crash resumed. Evidence: [rates and contrasts](arm_results/rl_integration/selection-rl8b-heads-20261114.json) · [script](arm_results/rl_integration/selection-rl8b-heads-20261114.py). Runtime: `recipe3-ablations-20261104/eval-rl8b-heads/` (launcher `deferjudge/xbench_defer_probe_x.py`, scorer `deferjudge/serve_frozen_head_scorer_probe.py`).*
+
 **Which labels to train our head on** (SFT 4B actor, November 1–3; six heads on the same 1,380 branch states, differing only in label source). [Details](#final-selection-label-live-3run-20261103)
 
 | Selector | Labels | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
