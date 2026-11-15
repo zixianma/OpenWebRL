@@ -1,6 +1,8 @@
 """Pre-execution vs lookahead labels across selection-head sizes (November 14-15, one window, 3 runs each): 3-benchmark mean overall
 success minus SFT 4B alone (same window, 3 runs) versus head parameters, one line per label type. Bars: paired 95% bootstrap
-intervals. Data: selection-head-pre-vs-lookahead-20261115.json."""
+intervals of each head - SFT. Right: the paired difference pre - lookahead at each size and pooled over sizes (paired bootstrap
+over tasks, the test of the label effect; marginal intervals on the left can overlap while this one excludes 0).
+Data: selection-head-pre-vs-lookahead-20261115.json."""
 import json
 import os
 from pathlib import Path
@@ -18,7 +20,7 @@ HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
 sizes = d["sizes"]
 X = [s["params"] / 1e6 for s in sizes]
-fig, ax = plt.subplots(figsize=(4.6, 3.2))
+fig, (ax, ax2) = plt.subplots(1, 2, figsize=(7.2, 3.2), gridspec_kw=dict(width_ratios=[1.6, 1]))
 for lab, col, mk, off in (("lookahead", C["LOOKAHEAD_TEACHER"], "o", 0.93), ("pre", C["PRE_EXEC"], "s", 1.075)):
     pts = [d["conditions"][f"{s['key']}-{lab}"]["minus_sft"]["mean_overall_pp"] for s in sizes]
     xs = [x * off for x in X]
@@ -35,7 +37,18 @@ for sp in ("top", "right"): ax.spines[sp].set_visible(False)
 ax.legend(handles=[Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", linewidth=1.2, markersize=5, label="lookahead H = 4 labels"),
                    Line2D([], [], color=C["PRE_EXEC"], marker="s", linewidth=1.2, markersize=5, label="pre-execution labels")],
           fontsize=6.5, frameon=False, loc="upper right")
-fig.tight_layout()
+names = [s["key"] for s in sizes]
+lab2 = ["23K", "4.4M", "22.6M", "1.8B", "pooled"]
+diffs = [d["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in names] + [d["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
+for i, (pt, lo, hi) in enumerate(diffs):
+    ax2.errorbar(i, pt, yerr=[[pt - lo], [hi - pt]], fmt="D" if i == 4 else "o", color=C["INK"], markersize=5.5, capsize=2.5, linewidth=1.0, zorder=3)
+ax2.axhline(0, color=C["MUTED"], linestyle="--", linewidth=0.9, zorder=0)
+ax2.axvline(3.5, color=C["BORDER"], linewidth=0.8, linestyle=":", zorder=1)
+ax2.set_xticks(range(5)); ax2.set_xticklabels(lab2); ax2.set_xlim(-0.6, 4.6); ax2.set_ylim(-9, 1.5)
+ax2.set_ylabel("Pre − lookahead (pp)"); ax2.set_xlabel("Head parameters")
+ax2.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
+for sp in ("top", "right"): ax2.spines[sp].set_visible(False)
+fig.tight_layout(w_pad=2.5)
 for ext in ("png", "pdf", "svg"):
     out = HERE / f"selection-head-pre-vs-lookahead-20261115.{ext}"
     fig.savefig(out, dpi=220 if ext == "png" else None, bbox_inches="tight")
