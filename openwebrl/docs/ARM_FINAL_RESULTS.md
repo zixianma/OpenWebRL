@@ -5,21 +5,19 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 <a id="offline-policy-distillation-20261114"></a>
 ## Offline policy distillation: Table 7
 
-**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero. The dot plot shows Table 7 gains over actor-only with 95% CIs; the bar graph shows Table 7 absolute success rates, including actor-only.
+**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero.
 
-**Dot plot:**
+**Standalone mean: selected paper figure**
 
-![Table 7 offline distillation dot plot: mean and benchmark success gains with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.png)
+![Table 7 offline distillation: standalone mean success gain over actor-only with paired 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg).
+*Dots show the supplied Table 7 differences in mean overall success from actor-only, in percentage points; whiskers are the supplied paired 95% confidence intervals for those differences. The dashed zero line means no difference from actor-only. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. These are CIs on paired differences, not absolute success rates, and do not test DPO versus RPO. The table-provided mean and all interval endpoints are retained without recomputation. Some supplied contrasts differ by 0.1 pp from displayed rounded table deltas; detailed interval construction and task/run counts were not supplied.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg).
 
-**Bar graph: absolute success**
+**Per-benchmark detail:**
 
-![Table 7 offline distillation bar graph: absolute mean and benchmark overall success rates](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
+![Table 7 offline distillation: paired actor-relative confidence intervals for WebVoyager, OM2W and DeepShop](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg).
-
-*Both figures use Table 7 only: the reported mean plus WebVoyager, OM2W and DeepShop. **Dot plot:** point differences and 95% confidence intervals relative to actor-only, in percentage points; the dashed zero line means no difference. The mean panel has a narrower, explicitly ticked x range; benchmark panels share a common range. **Bar graph:** absolute overall success (%) from the table, with an explicit actor-only row, zero-based axes and a common range across panels. No absolute-success CIs were supplied, so the bars have no error bars; the actor-relative CIs remain in the dot plot. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. The supplied intervals compare each method with actor-only and do not establish pairwise differences between DPO and RPO. Contrasts and endpoints are reproduced without recomputation; some differ by 0.1 pp from the displayed rounded table deltas. The table-provided mean is used directly. Interval-construction details and task/run counts were not supplied. Table A4's numbers remain in the source archive below and are not included in these plots.*
+*Same point estimates, method colors and supplied actor-relative 95% CIs, with a shared x range across benchmarks. This detail figure excludes the mean, which is exported separately above. Table A4's numbers remain in the source archive below and are not included in these plots.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg).
 
 <details><summary>Supplied absolute success rates and mean contrasts</summary>
 

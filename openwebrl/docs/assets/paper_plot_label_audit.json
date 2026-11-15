@@ -648,22 +648,20 @@
       "mean_success": true
     },
     {
-      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_dot",
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot",
       "formats": [
         "svg",
         "pdf"
       ],
-      "mean_success": true,
-      "mixed_mean_and_benchmark_panels": true
+      "mean_success": true
     },
     {
-      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_bar",
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark",
       "formats": [
         "svg",
         "pdf"
       ],
-      "mean_success": true,
-      "mixed_mean_and_benchmark_panels": true
+      "mean_success": false
     }
   ],
   "figure_count": 83,

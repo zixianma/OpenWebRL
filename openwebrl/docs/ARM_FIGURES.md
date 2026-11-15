@@ -500,14 +500,14 @@
 
 ## Offline distillation
 
-### Offline distillation Table 7: dot plot with 95% CIs
+### Offline distillation Table 7: standalone mean gain with paired 95% CIs
 
-![Offline distillation Table 7: dot plot with 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.png)
+![Offline distillation Table 7: standalone mean gain with paired 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg)
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg)
 
-### Offline distillation Table 7: absolute-success bar graph
+### Offline distillation Table 7: benchmark gains and CIs
 
-![Offline distillation Table 7: absolute-success bar graph](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
+![Offline distillation Table 7: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg)
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg)

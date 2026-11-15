@@ -300,6 +300,57 @@
       },
       "metric": "absolute overall success (%)",
       "intervals": "not supplied for absolute success; omitted"
+    },
+    "offline_distillation_table7_mean_dot": {
+      "points": [
+        {
+          "table": "table7",
+          "method": "Teacher SFT",
+          "benchmark": "mean",
+          "estimate_pp": 0.1,
+          "ci95_pp": [
+            -3.5,
+            3.5
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "Filtered SFT",
+          "benchmark": "mean",
+          "estimate_pp": -1.4,
+          "ci95_pp": [
+            -5,
+            2.3
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "DPO",
+          "benchmark": "mean",
+          "estimate_pp": 2.7,
+          "ci95_pp": [
+            -0.7,
+            6.2
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "RPO",
+          "benchmark": "mean",
+          "estimate_pp": 5.7,
+          "ci95_pp": [
+            2.1,
+            9.4
+          ]
+        }
+      ],
+      "output_sha256": {
+        "png": "481d85dc0b5232eeaea9da5bde401fa7a3c35861eeab01527b13d986a1b0e146",
+        "svg": "0882ec00cadb17767ffe29a771b4fc73099540c392104505a64071984217aa3a",
+        "pdf": "0194d484f008e3148cb4f75de82416e0b4d638a886b1d7ee7bcb8a446c067b7e"
+      },
+      "metric": "mean overall success gain over actor (pp)",
+      "intervals": "supplied paired 95% CIs versus actor-only"
     }
   }
 }
