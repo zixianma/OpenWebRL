@@ -670,8 +670,16 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/methods/selection-arch-overview-kev-linear-20261115",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
     }
   ],
-  "figure_count": 84,
+  "figure_count": 85,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

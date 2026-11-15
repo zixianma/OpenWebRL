@@ -47,6 +47,7 @@ TITLES = {
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104": "SFT actors and ADMs: updated success at original figure path",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104": "SFT actors and ADMs: without RL checkpoints",
     "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104": "SFT actors and ADMs: without RL, per benchmark",
+    "selection-arch-overview-kev-linear-20261115": "ADM architectures with the 23K linear scorer",
     "selection-arch-overview-kev-20261112": "ADM architectures with the Kev-style pointer",
     "selection-recipe3-data-scaling-20261112": "Recipe 3 training data scaling",
     "selection-head-scale-pooled-20261112": "Selection head scaling: pooled results",

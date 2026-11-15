@@ -12,6 +12,12 @@
 
 [PDF](arm_results/methods/adm_overview/figure1.pdf) · [SVG](arm_results/methods/adm_overview/figure1.svg) · [Plot script](arm_results/methods/adm_overview/plot_figure1.py) · [Reproduce](arm_results/methods/adm_overview/README.md)
 
+### ADM architectures with the 23K linear scorer
+
+![ADM architectures with the 23K linear scorer](arm_results/methods/selection-arch-overview-kev-linear-20261115.png)
+
+[PDF](arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-linear-20261115.svg)
+
 ### Rollout collection and action decision labeling
 
 ![Rollout collection and action decision labeling](arm_results/methods/selection-offline-eval-20261022.png)
