@@ -180,6 +180,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.svg)
 
+### Lookahead and pre-execution labels: 23K, 4M and 23M heads (paper version)
+
+![Lookahead and pre-execution labels: 23K, 4M and 23M heads (paper version)](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.svg)
+
 ### Selection head scaling: held-out agreement with the teacher
 
 ![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)
