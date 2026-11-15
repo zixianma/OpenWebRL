@@ -34,7 +34,7 @@ ICONS = Path(__file__).resolve().parents[2] / "assets/icons"
 FROZEN, TRAINED = (plt.imread(ICONS / f) for f in ("twemoji-snowflake-2744.png", "twemoji-fire-1f525.png"))
 ALLOWED, MASKED = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
 K = 5
-W, H = 6.0, 1.95
+W, H = 6.0, 2.15
 plt.rcParams.update({"font.family": "Albert Sans", "font.size": 6,
                      "text.color": INK, "svg.fonttype": "none", "pdf.fonttype": 42,
                      "savefig.facecolor": "white"})
@@ -80,23 +80,27 @@ def matrix(x0, top, labels, cell, mask, answer=False, row_labels=True, out=None)
                                    edgecolor="white", linewidth=.45, zorder=3))
 
 
-# Shared actor sampling; both outgoing arrows remain explicit at printed size.
-box(.025, 1.735, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
-text(.29, 1.83, "Context", ha="center")
-arrow(.565, 1.83, .665, 1.83, color=MUTED)
-box(.675, 1.735, .80, .19, edge=INK)
-text(1.045, 1.83, r"Actor $\theta$", size=6.0, ha="center")
-icon(1.26, 1.83, FROZEN)
-arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
-box(1.66, 1.735, 4.315, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
-text(3.82, 1.83, r"$K=5$ responses $c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
-arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
-arrow(2.80, 1.725, 2.80, 1.655, color=HEAD, head=4)
+# One frozen actor provides the same extracted features to both small heads.
+box(.025, 1.935, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
+text(.29, 2.03, "Context", ha="center")
+arrow(.565, 2.03, .665, 2.03, color=MUTED)
+box(.675, 1.935, .80, .19, edge=INK)
+text(1.045, 2.03, r"Actor $\theta$", size=6.0, ha="center")
+icon(1.26, 2.03, FROZEN)
+arrow(1.485, 2.03, 1.65, 2.03, color=HEAD)
+box(1.66, 1.935, 4.315, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
+text(3.82, 2.03, r"$K=5$ responses $c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
+arrow(1.075, 1.925, 1.075, 1.86, color=HEAD, head=4)
+box(.025, 1.69, 3.45, .16, edge=HEAD, fill=tint("ADM_22M", .95))
+text(1.75, 1.77, "Frozen actor features", size=6.1, color=HEAD, ha="center")
+for x in (1.075, 2.85):
+    arrow(x, 1.685, x, 1.65, color=HEAD, head=4)
+arrow(4.10, 1.925, 4.10, 1.655, color=HEAD, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
-box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
+box(.025, .325, 3.45, 1.32, edge=LINE, lw=.5)
 text(1.035, 1.565, "a) ADM-Head-23M", size=6.8, color="black", ha="center")
 icon(1.555, 1.565, TRAINED)
-text(1.075, 1.425, r"Actor features $s, c_i$", size=5.8, color=MUTED, ha="center")
+text(1.075, 1.425, r"$s, c_i$", size=5.8, color=MUTED, ha="center")
 
 CELL, HEAD_TOP, TOP = .074, 1.16, 1.105
 labels = [r"$s$"]+[rf"$c_{{{i}}}$" for i in range(1, K+1)]
@@ -124,16 +128,16 @@ arrow(1.11, .323, 1.11, .276, color=HEAD, head=4)
 text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 
 # Decoder uses text rather than the head's projected feature vectors.
-text(2.80, 1.565, "b) ADM-Decoder-4B", size=6.8, color="black", ha="center")
+text(4.10, 1.565, "c) ADM-Decoder-4B", size=6.8, color="black", ha="center")
 # Matching theta symbols encode shared initialization without a long arrow.
-box(2.44, 1.355, .29, .12, edge=LINE)
-text(2.545, 1.415, r"$\theta$", size=6.4, ha="center")
-icon(2.655, 1.415, FROZEN, .075)
-text(2.81, 1.415, "+", size=7, color=DECODER, ha="center")
-box(2.90, 1.355, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
-text(3.025, 1.415, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
-icon(3.175, 1.415, TRAINED, .075)
-DX, DCELL = 2.48, .109
+box(3.74, 1.355, .29, .12, edge=LINE)
+text(3.845, 1.415, r"$\theta$", size=6.4, ha="center")
+icon(3.955, 1.415, FROZEN, .075)
+text(4.11, 1.415, "+", size=7, color=DECODER, ha="center")
+box(4.20, 1.355, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
+text(4.325, 1.415, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
+icon(4.475, 1.415, TRAINED, .075)
+DX, DCELL = 3.78, .109
 TOKENS = [r"$p$"]+[rf"$c_{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
 causal_mask = [[c <= r for c in range(K+2)] for r in range(K+2)]
 assert sum(map(sum, causal_mask)) == 28
@@ -144,9 +148,9 @@ text(mid, .235, r"$y\rightarrow i^*$", size=6.3, color=DECODER, ha="center")
 
 # Kev-style pass: the same weights theta plus a LoRA, re-encoding prompt and
 # candidates in one packed sequence; a <decide> token points at a candidate.
-KC = 4.025
-arrow(KC, 1.725, KC, 1.655, color=HEAD, head=4)
-text(KC, 1.565, "c) ADM-Pointer-4B", size=6.8, color="black", ha="center")
+KC = 5.325
+arrow(KC, 1.925, KC, 1.655, color=HEAD, head=4)
+text(KC, 1.565, "d) ADM-Pointer-4B", size=6.8, color="black", ha="center")
 box(KC-.36, 1.355, .29, .12, edge=LINE)
 text(KC-.255, 1.415, r"$\theta$", size=6.4, ha="center")
 icon(KC-.145, 1.415, FROZEN, .075)
@@ -170,10 +174,9 @@ text(kmid, .235, r"$q(d)\!\cdot\!k(c_i)\rightarrow z_i\rightarrow i^*$", size=5.
 # LinearProbeHead: candidate-only standardization followed by a single shared
 # nn.Linear(candidate_dim, 1). No projection, hidden layer or state term.
 # Source: recipe3-ablations-20261104/source-probe/openwebrl/linear_probe.py.
-LC = 5.30
-arrow(LC, 1.725, LC, 1.655, color=HEAD, head=4)
-text(LC, 1.565, "d) ADM-Linear-23K", size=6.8, color="black", ha="center")
-text(LC, 1.425, r"Actor features $c_i$", size=5.8, color=MUTED, ha="center")
+LC = 2.85
+text(LC, 1.565, "b) ADM-Linear-23K", size=6.8, color="black", ha="center")
+text(LC, 1.425, r"$c_i$", size=5.8, color=MUTED, ha="center")
 arrow(LC, 1.345, LC, 1.26, color=HEAD, head=4)
 box(LC-.48, 1.065, .96, .19, edge=LINE)
 text(LC, 1.16, "Standardize", size=6, ha="center")
@@ -192,7 +195,7 @@ EXC = 2.95
 ax.plot([LC, LC, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
 ax.plot([1.11, 1.11, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
 ax.plot([mid, mid, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
-ax.plot([kmid, kmid, mid], [.185, .17, .17], color=HEAD, linewidth=.65)
+ax.plot([kmid, kmid, EXC], [.185, .17, .17], color=HEAD, linewidth=.65)
 arrow(EXC, .17, EXC, .137, color=C["ACTION_INK"], head=3)
 box(EXC-.565, .015, 1.13, .12, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(EXC, .075, r"Execute $a_t^{i^*}$", size=6, color=C["ACTION_INK"], ha="center")

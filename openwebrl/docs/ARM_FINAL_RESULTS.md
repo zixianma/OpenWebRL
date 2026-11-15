@@ -5,9 +5,9 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 <a id="adm-architectures-linear-20261115"></a>
 ## ADM architectures with the 23K linear variant
 
-![ADM architectures: feature head, decoder, pointer and 23K linear scorer](arm_results/methods/selection-arch-overview-kev-linear-20261115.png)
+![ADM architectures: feature-based 23M and 23K heads, decoder and pointer](arm_results/methods/selection-arch-overview-kev-linear-20261115.png)
 
-*New version of the Kev-inclusive architecture figure. Panel d adds ADM-Linear-23K: frozen actor candidate features are standardized using training-set statistics, then scored by one shared linear layer, $z_i=w^\top\widetilde{c}_i+b$. It has no hidden layer, candidate interaction or separate state input. All selectors choose an original actor action. The original three-panel figure is preserved. Implementation (`openwebrl/linear_probe.py`) is recorded in the frozen `recipe3-ablations-20261104/source-probe` snapshot; see [head definitions](ARM_HEAD_SIZE_ABLATIONS.md).* [PDF](arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-linear-20261115.svg) · [Renderer](arm_results/methods/selection-arch-overview-kev-linear-20261115.py).
+*New version of the Kev-inclusive architecture figure. Panels a–b group the feature-based heads under a shared frozen-actor feature input. Panel b is ADM-Linear-23K: frozen actor candidate features are standardized using training-set statistics, then scored by one shared linear layer, $z_i=w^\top\widetilde{c}_i+b$. It has no hidden layer, candidate interaction or separate state input. All selectors choose an original actor action. The original three-panel figure is preserved. Implementation (`openwebrl/linear_probe.py`) is recorded in the frozen `recipe3-ablations-20261104/source-probe` snapshot; see [head definitions](ARM_HEAD_SIZE_ABLATIONS.md).* [PDF](arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-linear-20261115.svg) · [Renderer](arm_results/methods/selection-arch-overview-kev-linear-20261115.py).
 
 <a id="offline-policy-distillation-20261114"></a>
 ## Offline policy distillation: Table 7
