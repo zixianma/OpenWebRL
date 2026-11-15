@@ -1,0 +1,276 @@
+{
+  "source": "User-supplied Tables 7 and A4 and actor-relative 95% confidence intervals, 2026-11-14.",
+  "units": "Contrasts and confidence interval endpoints are percentage points of overall success relative to actor only. Absolute rates are percentages.",
+  "confidence_level": 0.95,
+  "interval_method": null,
+  "task_counts": null,
+  "run_counts": null,
+  "benchmark_aggregation": "User-provided Avg/Mean over WebVoyager, OM2W and DeepShop; benchmark weights were not explicitly supplied.",
+  "rounding": "Preserve supplied point contrasts and intervals exactly. Do not derive contrasts from rounded absolute rates, or treat actor-relative CIs as CIs on absolute method success.",
+  "teacher_control": "Qwen teacher SFT (235B); same teacher rates and supplied teacher contrast reused in both tables.",
+  "methods": [
+    "Teacher SFT",
+    "Filtered SFT",
+    "DPO",
+    "RPO"
+  ],
+  "tables": {
+    "table7": {
+      "label": "ADM-4B policy distillation",
+      "contrasts": {
+        "Teacher SFT": {
+          "mean": [
+            0.1,
+            -3.5,
+            3.5
+          ],
+          "online_mind2web": [
+            2.7,
+            -2.7,
+            8.0
+          ],
+          "webvoyager": [
+            2.2,
+            -1.8,
+            6.2
+          ],
+          "deepshop": [
+            -4.7,
+            -13.3,
+            3.3
+          ]
+        },
+        "Filtered SFT": {
+          "mean": [
+            -1.4,
+            -5,
+            2.3
+          ],
+          "online_mind2web": [
+            0,
+            -4.7,
+            4.7
+          ],
+          "webvoyager": [
+            -1.7,
+            -5.4,
+            2.2
+          ],
+          "deepshop": [
+            -2.7,
+            -12,
+            6
+          ]
+        },
+        "DPO": {
+          "mean": [
+            2.7,
+            -0.7,
+            6.2
+          ],
+          "online_mind2web": [
+            5.3,
+            0.7,
+            10.3
+          ],
+          "webvoyager": [
+            2.7,
+            -1.3,
+            6.6
+          ],
+          "deepshop": [
+            0,
+            -8,
+            8
+          ]
+        },
+        "RPO": {
+          "mean": [
+            5.7,
+            2.1,
+            9.4
+          ],
+          "online_mind2web": [
+            8.7,
+            3.3,
+            14
+          ],
+          "webvoyager": [
+            4.5,
+            0.7,
+            8.4
+          ],
+          "deepshop": [
+            4,
+            -4.7,
+            12.7
+          ]
+        }
+      },
+      "overall_success_pct": {
+        "Actor only": {
+          "webvoyager": 41.5,
+          "online_mind2web": 30.7,
+          "deepshop": 46,
+          "mean": 39.4
+        },
+        "Teacher SFT": {
+          "webvoyager": 43.7,
+          "online_mind2web": 33.3,
+          "deepshop": 41.3,
+          "mean": 39.4
+        },
+        "Filtered SFT": {
+          "webvoyager": 39.8,
+          "online_mind2web": 30.7,
+          "deepshop": 43.3,
+          "mean": 37.9
+        },
+        "DPO": {
+          "webvoyager": 44.2,
+          "online_mind2web": 36,
+          "deepshop": 46,
+          "mean": 42.1
+        },
+        "RPO": {
+          "webvoyager": 46.1,
+          "online_mind2web": 39.3,
+          "deepshop": 50,
+          "mean": 45.1
+        }
+      }
+    },
+    "table_a4": {
+      "label": "GPT-5.5-Lookahead ADM-4B policy distillation",
+      "contrasts": {
+        "Teacher SFT": {
+          "mean": [
+            0.1,
+            -3.5,
+            3.5
+          ],
+          "online_mind2web": [
+            2.7,
+            -2.7,
+            8.0
+          ],
+          "webvoyager": [
+            2.2,
+            -1.8,
+            6.2
+          ],
+          "deepshop": [
+            -4.7,
+            -13.3,
+            3.3
+          ]
+        },
+        "Filtered SFT": {
+          "mean": [
+            -4.3,
+            -7.8,
+            -0.7
+          ],
+          "online_mind2web": [
+            -4,
+            -9.3,
+            1
+          ],
+          "webvoyager": [
+            -0.8,
+            -4.5,
+            2.7
+          ],
+          "deepshop": [
+            -8,
+            -16.7,
+            0.7
+          ]
+        },
+        "DPO": {
+          "mean": [
+            3.9,
+            0.9,
+            6.9
+          ],
+          "online_mind2web": [
+            5.2,
+            1,
+            9.2
+          ],
+          "webvoyager": [
+            3.5,
+            0.3,
+            6.8
+          ],
+          "deepshop": [
+            3,
+            -4,
+            10
+          ]
+        },
+        "RPO": {
+          "mean": [
+            4.7,
+            1.6,
+            7.8
+          ],
+          "online_mind2web": [
+            5.3,
+            1,
+            9.8
+          ],
+          "webvoyager": [
+            4.4,
+            0.9,
+            7.8
+          ],
+          "deepshop": [
+            4.3,
+            -3,
+            11.7
+          ]
+        }
+      },
+      "overall_success_pct": {
+        "Actor only": {
+          "webvoyager": 41.5,
+          "online_mind2web": 30.7,
+          "deepshop": 46,
+          "mean": 39.4
+        },
+        "Teacher SFT": {
+          "webvoyager": 43.7,
+          "online_mind2web": 33.3,
+          "deepshop": 41.3,
+          "mean": 39.4
+        },
+        "Filtered SFT": {
+          "webvoyager": 40.7,
+          "online_mind2web": 26.7,
+          "deepshop": 38,
+          "mean": 35.1
+        },
+        "DPO": {
+          "webvoyager": 45,
+          "online_mind2web": 35.8,
+          "deepshop": 49,
+          "mean": 43.3
+        },
+        "RPO": {
+          "webvoyager": 45.9,
+          "online_mind2web": 36,
+          "deepshop": 50.3,
+          "mean": 44.1
+        }
+      },
+      "mean_valid_only_pct": {
+        "Actor only": 42.4,
+        "Teacher SFT": 42.1,
+        "Filtered SFT": 38.7,
+        "DPO": 46.7,
+        "RPO": 47.5
+      }
+    }
+  }
+}

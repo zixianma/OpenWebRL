@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 from matplotlib.text import Text
 
 MEAN_STEMS = {
+    "offline_distillation_mean_gain",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104",

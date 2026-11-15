@@ -29,9 +29,12 @@ GROUPS = [
     "BrowserCode on US-residential stealth browsers", "Claude BrowserCode",
     "Shared-Terra comparisons", "API comparisons: earlier cohorts",
     "Selection labels: historical comparisons", "Selection data: earlier sweeps",
-    "RL curves: historical and all-run views",
+    "RL curves: historical and all-run views", "Offline distillation",
 ]
 TITLES = {
+    "offline_distillation_mean_gain": "Offline policy distillation: mean gains versus actor-only",
+    "offline_distillation_table7_by_benchmark": "Offline distillation Table 7: benchmark gains and CIs",
+    "offline_distillation_table_a4_by_benchmark": "Offline distillation Table A4: benchmark gains and CIs",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113": "Updated cost comparison with RL actors and ADM",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113": "SFT 4B and baseline ADMs: updated overall success",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104": "SFT actors and ADMs: updated success at original figure path",
@@ -119,6 +122,8 @@ TITLES = {
 
 def figure_group(stem: str) -> str:
     name = Path(stem).name
+    if name.startswith("offline_distillation_"):
+        return "Offline distillation"
     if "/methods/" in stem or Path(stem).name == "examples-compact":
         return GROUPS[0]
     if name.startswith("selection-label-") and "kfold" in name:

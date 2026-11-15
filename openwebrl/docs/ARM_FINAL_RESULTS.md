@@ -2,6 +2,55 @@
 
 Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%)** for individual benchmarks. Validity denominators and benchmark weighting are specified in captions.
 
+<a id="offline-policy-distillation-20261114"></a>
+## Offline policy distillation: gains over actor-only
+
+**RPO improves the table-reported mean overall success over the actor-only baseline in both settings: +5.7 [2.1, 9.4] pp in Table 7 and +4.7 [1.6, 7.8] pp in Table A4.** DPO's mean interval crosses zero in Table 7 and is positive in A4. Teacher SFT has no clear mean gain; Filtered SFT's mean interval is negative in A4.
+
+![Offline policy distillation: mean success gain over actor only with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.png)
+
+*Dots and bars are the user-supplied point differences and 95% confidence intervals **relative to actor-only**, in percentage points of overall success. The dashed zero line denotes no difference from actor-only. These are not CIs on absolute method success and do not test differences between DPO and RPO. Table 7 uses ADM-4B policy distillation; A4 uses GPT-5.5-lookahead ADM-4B policy distillation. The Qwen-235B Teacher SFT control is shared and displayed in both panels, not two independent estimates. All supplied contrasts and interval endpoints are preserved; some differ by 0.1 pp from the displayed rounded table deltas. The table-provided Mean is used directly; no aggregation or uncertainty is recomputed. Interval-construction details and task/run counts were not supplied. Gray denotes SFT controls, light purple DPO, and saturated purple RPO.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.svg).
+
+**Table 7, by benchmark:**
+
+![Table 7 offline policy distillation: actor relative confidence intervals by benchmark](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
+
+*Same contrasts and colors, with identical x-axis ranges across benchmarks and both detailed figures. Bars are 95% CIs relative to actor-only. Teacher SFT is Qwen-235B SFT.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg).
+
+**Table A4, by benchmark:**
+
+![Table A4 GPT-5.5 lookahead policy distillation: actor relative confidence intervals by benchmark](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.png)
+
+*Same convention. This figure plots overall-success differences; A4's additional mean valid-only success column is retained in the source table below and is not plotted.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.svg).
+
+<details><summary>Supplied absolute success rates and mean contrasts</summary>
+
+Absolute rates below are reproduced separately from the supplied actor-relative contrasts; CIs are not transferred onto absolute rates.
+
+**Table 7: ADM-4B policy distillation**
+
+| Method | WebVoyager overall (%) | OM2W overall (%) | DeepShop overall (%) | Mean overall (%) | Mean gain vs actor, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Actor only | 41.5 | 30.7 | 46.0 | 39.4 | — |
+| Teacher SFT | 43.7 | 33.3 | 41.3 | 39.4 | +0.1 [-3.5, +3.5] |
+| Filtered SFT | 39.8 | 30.7 | 43.3 | 37.9 | -1.4 [-5.0, +2.3] |
+| DPO | 44.2 | 36.0 | 46.0 | 42.1 | +2.7 [-0.7, +6.2] |
+| RPO | 46.1 | 39.3 | 50.0 | 45.1 | +5.7 [+2.1, +9.4] |
+
+**Table A4: GPT-5.5-lookahead ADM-4B policy distillation**
+
+| Method | WebVoyager overall (%) | OM2W overall (%) | DeepShop overall (%) | Mean overall (%) | Mean gain vs actor, pp [95% CI] | Mean valid-only (%) |
+| --- | ---: | ---: | ---: | ---: | --- | ---: |
+| Actor only | 41.5 | 30.7 | 46.0 | 39.4 | — | 42.4 |
+| Teacher SFT | 43.7 | 33.3 | 41.3 | 39.4 | +0.1 [-3.5, +3.5] | 42.1 |
+| Filtered SFT | 40.7 | 26.7 | 38.0 | 35.1 | -4.3 [-7.8, -0.7] | 38.7 |
+| DPO | 45.0 | 35.8 | 49.0 | 43.3 | +3.9 [+0.9, +6.9] | 46.7 |
+| RPO | 45.9 | 36.0 | 50.3 | 44.1 | +4.7 [+1.6, +7.8] | 47.5 |
+
+</details>
+
+[All supplied rates, contrasts and CIs](arm_results/offline_distillation_20261114/offline_distillation_actor_differences.json) · [renderer](arm_results/offline_distillation_20261114/plot_offline_distillation.py) · [plot-coordinate audit](arm_results/offline_distillation_20261114/offline_distillation_plot_audit.json).
+
 <!-- openwebrl-luna-n5-t1-three-repeats-20261111:start -->
 <a id="openwebrl-luna-n5-t1-three-repeats-20261111"></a>
 

@@ -646,8 +646,32 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_mean_gain",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
+    },
+    {
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
     }
   ],
-  "figure_count": 81,
+  "figure_count": 84,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

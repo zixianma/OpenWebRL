@@ -393,7 +393,16 @@
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf": "85a5325e38bc92d73a04d0ab2f489230f01f5529859586d0451a3803afc4e2f0",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.png": "a6afca5a4fd3953ae1a5c4aa0c51c95d85fdceceb0d5fc207b29546ad9966747",
     "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.svg": "39fd02f559e8fbc96e5de230b7c73232ff893c56f2722b8c5426ffddca2e585a",
-    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.pdf": "e2088106b02ce229056f5002305cb85496ee5c740febcc86ca969011bba4a9c3"
+    "openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113.pdf": "e2088106b02ce229056f5002305cb85496ee5c740febcc86ca969011bba4a9c3",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg": "28da9ec37c2a3851ed434542dacf70899154c053244f2866bb24a029ea7ed79a",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.svg": "4d6e5a7f2a31fcb6f611562f377bdc93bc1de656ee479b517150a8f4d6d022a8",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png": "1146d8ca99563050c2ac386dde063137f5968f999a15479a2dd61bc90b364a7a",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.pdf": "7b1c5668cbd78fa0cecb79f232651d636e5f25fe6950e711e228e13759684993",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_mean_gain.pdf": "95441c2b0fcb8de8ac2d2958556475d9c9f5265d1c7ebef7d9e0b20215be34c2",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_mean_gain.png": "82ee180e73845215b44d12c03bc6b057034b75212b7824b004f0a88572450eef",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf": "3783b4c9d65e4cceb8c9047801fe0710a6260c10bf65d3dd07dcbd51ef176583",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_mean_gain.svg": "684471cadf20faca321c82c4fe14d6a5abf7846f20a67ecd991dc717f1a39899",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.png": "12837881f8293693f0e5680a1a63f0549a672543a9140e86c16d9d590bbac318"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
@@ -405,6 +414,6 @@
     "validity_qualifiers": "Defined in captions, omitted from plot text",
     "policy": "openwebrl/docs/paper_plot_labels.py",
     "audit": "openwebrl/docs/assets/paper_plot_label_audit.json",
-    "policy_sha256": "800ecf8b1f48ee69205dd75eaae53afa9bd78b56935460ccc1304eb2d5eb5311"
+    "policy_sha256": "5ac58424b84e4ed6e74b8f97c4611afb170951b6e2c5fa2e90fe48259c64d690"
   }
 }

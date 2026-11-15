@@ -497,3 +497,23 @@
 ![Training success: all runs](arm_results/rl_final_20261108/training_success.png)
 
 [PDF](arm_results/rl_final_20261108/training_success.pdf)
+
+## Offline distillation
+
+### Offline policy distillation: mean gains versus actor-only
+
+![Offline policy distillation: mean gains versus actor-only](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.png)
+
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.svg)
+
+### Offline distillation Table 7: benchmark gains and CIs
+
+![Offline distillation Table 7: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
+
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg)
+
+### Offline distillation Table A4: benchmark gains and CIs
+
+![Offline distillation Table A4: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.png)
+
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.svg)
