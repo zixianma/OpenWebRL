@@ -44,13 +44,13 @@ ROWS = [  # tick label, colour, source key, live key
     ("H=6", C["LOOKAHEAD_TEACHER"], "teacher_k5", "K5"),
     ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 P = K["pooled"]
-SUBTITLE = {"offline": "Luna labels · 1,725 states",
-            "live": "ADM-23M · Luna labels · 1,380 states",
-            "sizes": "GPT-5.5 labels · 2,110 states"}
+SUBTITLE = {"offline": "Teacher ADM (no training)\nscored on 1.7K held-out states",
+            "live": "Student ADM-23M\ntrained on 1.4K states (1.4K examples)",
+            "sizes": "Student ADMs 23K–1.8B\ntrained on 2.1K states (18.8K examples)"}
 PANELS = [
     ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: 3-benchmark mean success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
@@ -62,7 +62,7 @@ def point(ax, x, v, color, marker, filled, outline=None):
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
 
-fig = plt.figure(figsize=(5.6, 2.4))
+fig = plt.figure(figsize=(5.8, 2.5))
 outer = fig.add_gridspec(1, 2, width_ratios=[2, 1.05], wspace=0.30)
 inner = outer[0, 0].subgridspec(1, 2, wspace=0.17)
 axes = [fig.add_subplot(inner[0, 0])]; axes.append(fig.add_subplot(inner[0, 1], sharey=axes[0])); ax3 = fig.add_subplot(outer[0, 1])
@@ -79,7 +79,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             point(ax, x if TEACHER_ONLY_OFFLINE else x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             if not TEACHER_ONLY_OFFLINE:
                 point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
-    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=14)
+    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=21)
     ax.text(0, 1.035, SUBTITLE[kind], transform=ax.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -108,7 +108,7 @@ for x, v in enumerate(diffs):
                  capsize=1.5, lw=0.75, zorder=3, markeredgewidth=1.0)
     ax3.text(x, hi + 0.15, f"{d:+.1f}", ha="center", va="bottom", fontsize=5.8, color=INK)
 
-ax3.set_title("Online: lookahead vs pre-exec", fontsize=7, loc="left", color=INK, pad=14)
+ax3.set_title("Online: 3-benchmark mean success", fontsize=7, loc="left", color=INK, pad=21)
 ax3.text(0, 1.035, SUBTITLE["sizes"], transform=ax3.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
 ax3.set_xticks(range(5), ["23K", "4.4M", "22.6M", "1.8B", "Pooled"], fontsize=6.2); ax3.set_xlim(-0.45, 4.45)
 ax3.text(1.5, -.24, "Student ADM size", transform=ax3.get_xaxis_transform(), ha="center", va="top", fontsize=6, color=INK)
@@ -129,7 +129,7 @@ handles = [
 fig.legend(handles, ["Teacher ADM", "Student ADM", "Student ADM, lookahead − pre-exec"], frameon=False, fontsize=6.8,
            loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.085, right=0.99, top=0.78, bottom=0.28)
+fig.subplots_adjust(left=0.085, right=0.99, top=0.75, bottom=0.27)
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[text for ax in axes for text in
