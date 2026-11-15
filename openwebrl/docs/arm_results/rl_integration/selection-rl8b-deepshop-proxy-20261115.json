@@ -1,0 +1,86 @@
+{
+ "local-1115": {
+  "label": "Local, RL 8B alone (Nov 15)",
+  "episodes": 150,
+  "valid": 149,
+  "successes": 81,
+  "overall": 0.54,
+  "valid_only": 0.5436241610738255,
+  "minus_local_1115_pp": null
+ },
+ "local-1104": {
+  "label": "Local, RL 8B alone (Nov 4-5, 3 runs)",
+  "episodes": 450,
+  "valid": 447,
+  "successes": 260,
+  "overall": 0.5777777777777777,
+  "valid_only": 0.5816554809843401,
+  "minus_local_1115_pp": [
+   3.77777777777778,
+   -3.11111111111112,
+   11.1111111111111
+  ]
+ },
+ "noproxy-alone": {
+  "label": "Stealth no proxy, RL 8B alone (Nov 15)",
+  "episodes": 150,
+  "valid": 145,
+  "successes": 74,
+  "overall": 0.49333333333333335,
+  "valid_only": 0.5103448275862069,
+  "minus_local_1115_pp": [
+   -4.666666666666669,
+   -14.000000000000002,
+   4.666666666666663
+  ]
+ },
+ "noproxy-adm": {
+  "label": "Stealth no proxy, RL 8B + ADM (Nov 15)",
+  "episodes": 150,
+  "valid": 137,
+  "successes": 72,
+  "overall": 0.48,
+  "valid_only": 0.5255474452554745,
+  "minus_local_1115_pp": [
+   -6.000000000000005,
+   -15.333333333333337,
+   3.3333333333333326
+  ]
+ },
+ "proxy-alone": {
+  "label": "Stealth US proxy, RL 8B alone (Nov 12)",
+  "episodes": 150,
+  "valid": 149,
+  "successes": 69,
+  "overall": 0.46,
+  "valid_only": 0.46308724832214765,
+  "minus_local_1115_pp": [
+   -8.000000000000002,
+   -17.999999999999993,
+   1.9999999999999962
+  ]
+ },
+ "proxy-adm": {
+  "label": "Stealth US proxy, RL 8B + ADM (Nov 12)",
+  "episodes": 150,
+  "valid": 141,
+  "successes": 67,
+  "overall": 0.44666666666666666,
+  "valid_only": 0.475177304964539,
+  "minus_local_1115_pp": [
+   -9.333333333333337,
+   -19.33333333333333,
+   0.6666666666666654
+  ]
+ },
+ "noproxy_adm_minus_alone_pp": [
+  -1.3333333333333364,
+  -10.666666666666663,
+  7.9999999999999964
+ ],
+ "proxy_adm_minus_alone_pp": [
+  -1.3333333333333364,
+  -10.666666666666668,
+  8.000000000000002
+ ]
+}

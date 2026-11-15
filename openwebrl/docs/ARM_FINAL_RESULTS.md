@@ -1329,16 +1329,6 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 *Uses the user-supplied final column exactly as mean overall success: SFT 4B 39.9%, Best-of-Q 38.0%, PRO-CUA PRM 36.4%, WebDreamer 39.9%, Kev-4B 39.1%, and our ADM-4B 45.7% (+5.8 pp). The mean equally weights the three benchmarks; success uses scheduled-task denominators with invalid outcomes counted as failures. Rounded per-benchmark entries need not reconstruct the reported means exactly. Also retains the preceding SFT 8B, ADM-distilled 4B and ADM-23M points, with their previous success values and costs. All selectors use SFT 4B. System parameters and historical PFLOP/task and model latency/task coordinates are retained from the preceding cost comparisons; these are not new measurements for the updated success cohort. Model latency excludes browser time; external shared-GPU latency estimates retain their lower-bound caveat. This is a descriptive cost comparison. Frontiers are recomputed over the retained points, with ADM-distilled and ADM-4B forming the parameter/compute frontier; latency additionally retains SFT 4B. Earlier figures are preserved.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.svg) · [success values](arm_results/rl_integration/selection-updated-baselines-20261113.json) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_20261113.py).
 
-**Variants adding the small heads (November 15).** Every existing point is unchanged; each added head's PFLOP and model seconds per task are measured with the same accounting on run 1 of the November 14–15 window, and its success is its raw mean overall success there (3 runs), a different window from the other points (as for ADM-23M). Thin rings mark frontier points.
-
-![Cost figure with ADM-4M (4.4M head) added next to ADM-23M and ADM-4B](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm4m-20261115.png)
-
-*ADM-4M (4.4M head, training seed 0): 45.7% mean overall, 0.85 PFLOP and 110 s per task; it ties ADM-4B at about half its parameters and compute. Over three training seeds the 4.4M and 22.6M heads are level (−0.2 [−1.8, +1.4] pp), so its lead over ADM-23M is a seed effect.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm4m-20261115.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm4m-20261115.svg) · [cost and success](arm_results/rl_integration/selection-adm4m-cost-20261115.json) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_adm4m_20261115.py).
-
-![Cost figure with ADM-23K (linear probe) and ADM-4M added next to ADM-23M and ADM-4B](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm4m-20261115.png)
-
-*Adds ADM-23K (23K linear probe: 44.6% mean overall, 0.89 PFLOP, 119 s per task), which lands on ADM-23M (44.5%, 0.91 PFLOP, 121 s).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm4m-20261115.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm4m-20261115.svg) · [ADM-23K cost and success](arm_results/rl_integration/selection-adm23k-cost-20261115.json) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_adm23k_adm4m_20261115.py).
-
 **Baseline comparison at the original figure path (success updated November 14):**
 
 ![Updated SFT actor and ADM baseline comparison with larger circles](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
@@ -2137,6 +2127,19 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 | RL 8B + default ADM (N = 5) | 1 | 60.7% | 63.4% | 140.3 | 35.3 | 1.92 | 503 / 782 | 112 s | 207 / 138 s | 10.9 |
 
 *Forward FLOPs = 2 × params × tokens per decision step: actor 2 × 8.77B × (uncached prompt + completion tokens) of the step's actor requests (run 1), selector 2 × 4.44B × (uncached selection-prompt + generated tokens); PFLOP per episode = (actor + selector) × steps per episode. N = 5 costs the actor about 3.5× one sample (shared prompt prefix cached). Selection and model time from each step's decision trace (browser excluded); end-to-end = each episode record's wall clock incl. browser (judge excluded), remote Browser Use sessions with US proxy, so end-to-end is not comparable with local. 1 H200 per run. Evidence: [data](arm_results/rl_integration/selection-rl8b-cost-20261113.json) · [script](arm_results/rl_integration/selection-rl8b-cost-20261113.py).*
+
+<a id="final-selection-rl8b-deepshop-proxy-20261115"></a>**Why RL 8B scores low on stealth DeepShop (November 15).** *The US residential proxy explains only part of the gap. RL 8B alone scores 54.0% on DeepShop locally (Nov 15; 57.8% on Nov 4–5), 49.3% on stealth browsers without the proxy and 46.0% with it; no difference is significant with one run of 150 tasks (intervals about ±9 pp). CAPTCHA and bot-detection pages are only 2–3% of stealth DeepShop episodes. The ADM does not help RL 8B on stealth DeepShop with or without the proxy (−1.3 [−10.7, +8.0] pp each).*
+
+| RL 8B on DeepShop | Date | Valid / episodes | Successes | Overall | Valid-only | − local Nov 15, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Local, alone | Nov 15 | 149 / 150 | 81 | **54.0%** | 54.4% | — |
+| Local, alone (3 runs) | Nov 4–5 | 447 / 450 | 260 | 57.8% | 58.2% | +3.8 [−3.1, +11.1] |
+| Stealth, no proxy, alone | Nov 15 | 145 / 150 | 74 | 49.3% | 51.0% | −4.7 [−14.0, +4.7] |
+| Stealth, no proxy, + ADM | Nov 15 | 137 / 150 | 72 | 48.0% | 52.6% | −6.0 [−15.3, +3.3] |
+| Stealth, US proxy, alone | Nov 12 | 149 / 150 | 69 | 46.0% | 46.3% | −8.0 [−18.0, +2.0] |
+| Stealth, US proxy, + ADM | Nov 12 | 141 / 150 | 67 | 44.7% | 47.5% | −9.3 [−19.3, +0.7] |
+
+*Overall success counts invalid episodes as failures; paired bootstrap over tasks (10,000 resamples, seed 20261029). Same actor, sampling, 30-step limit and GPT-4o DeepShop judge throughout; the ADM is the default R3+WA 4B LoRA. The no-proxy stealth runs cost about $0.003 of Browser Use credit per episode. Settling a 3–5 pp stealth effect needs about 2 more runs per arm. Some Nov 15 verdicts are read from the judge sidecar file (scrubbed refused writes). Evidence: [data](arm_results/rl_integration/selection-rl8b-deepshop-proxy-20261115.json) · [script](arm_results/rl_integration/selection-rl8b-deepshop-proxy-20261115.py). Runtime: `recipe3-ablations-20261104/stealth/noproxy-ds-1114/`, `eval-rl8b-ds-1114/`.*
 
 #### Many Piotr-style panels per state instead of one
 
