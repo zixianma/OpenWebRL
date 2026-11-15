@@ -662,8 +662,16 @@
         "pdf"
       ],
       "mean_success": false
+    },
+    {
+      "stem": "arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
     }
   ],
-  "figure_count": 83,
+  "figure_count": 84,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

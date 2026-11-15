@@ -5,13 +5,19 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 <a id="offline-policy-distillation-20261114"></a>
 ## Offline policy distillation: Table 7
 
-**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero.
+**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4]%.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero.
 
-**Standalone mean: selected paper figure**
+**Standalone mean: horizontal dot plot**
 
 ![Table 7 offline distillation: standalone mean success gain over actor-only with paired 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.png)
 
-*Dots show the supplied Table 7 differences in mean overall success from actor-only, in percentage points; whiskers are the supplied paired 95% confidence intervals for those differences. The dashed zero line means no difference from actor-only. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. These are CIs on paired differences, not absolute success rates, and do not test DPO versus RPO. The table-provided mean and all interval endpoints are retained without recomputation. Some supplied contrasts differ by 0.1 pp from displayed rounded table deltas; detailed interval construction and task/run counts were not supplied.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg).
+*Dots show the supplied Table 7 differences in mean overall success from actor-only. The axis displays `%` for differences between percent-valued success rates (percentage-point gains); no values are rescaled. Whiskers are the supplied paired 95% confidence intervals for those differences. The dashed zero line means no difference from actor-only. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. These are CIs on paired differences, not absolute success rates, and do not test DPO versus RPO. The table-provided mean and all interval endpoints are retained without recomputation. Some supplied contrasts differ by 0.1 pp from displayed rounded table deltas; detailed interval construction and task/run counts were not supplied.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg).
+
+**Standalone mean: vertical dot plot**
+
+![Table 7 offline distillation: vertical mean success gain dot plot with paired 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.png)
+
+*Same four estimates, paired 95% intervals, colors and `%` display convention as the horizontal version; only orientation and label placement change.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.svg).
 
 **Per-benchmark detail:**
 

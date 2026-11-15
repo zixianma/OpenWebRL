@@ -15,32 +15,49 @@ REPORT=json.loads(AUDIT.read_text()) if AUDIT.exists() else {'figures':{}}
 REPORT['source_sha256']=hashlib.sha256(M['SOURCE'].read_bytes()).hexdigest()
 PANELS=[('mean','Mean'),*M['BENCHES']]
 
-def render_mean():
-    fig,ax=plt.subplots(figsize=(3.4,1.8))
-    ax.axvline(0,color=C['MUTED'],linestyle=(0,(3,3)),linewidth=.8,zorder=0)
+def render_mean(vertical=False):
+    fig,ax=plt.subplots(figsize=(3.4,2.3) if vertical else (3.4,1.8))
+    (ax.axhline if vertical else ax.axvline)(0,color=C['MUTED'],linestyle=(0,(3,3)),linewidth=.8,zorder=0)
     points=[]
     for i,method in enumerate(METHODS):
         value,lo,hi=D['tables']['table7']['contrasts'][method]['mean']
         y=len(METHODS)-1-i;color=COLORS[method]
-        ax.errorbar(value,y,xerr=[[value-lo],[hi-value]],fmt='o',color=color,
-                    markersize=5.3,elinewidth=1.05,capsize=2.4,capthick=.95,
-                    markeredgecolor='white',markeredgewidth=.6,zorder=3)
-        ax.text(13.6,y,f'{value:+.1f}',color=color,ha='right',va='center',fontsize=7.5)
+        if vertical:
+            ax.errorbar(i,value,yerr=[[value-lo],[hi-value]],fmt='o',color=color,
+                        markersize=5.3,elinewidth=1.05,capsize=2.4,capthick=.95,
+                        markeredgecolor='white',markeredgewidth=.6,zorder=3)
+            ax.text(i,hi+.55,f'{value:+.1f}',color=color,ha='center',va='bottom',fontsize=7.5)
+        else:
+            ax.errorbar(value,y,xerr=[[value-lo],[hi-value]],fmt='o',color=color,
+                        markersize=5.3,elinewidth=1.05,capsize=2.4,capthick=.95,
+                        markeredgecolor='white',markeredgewidth=.6,zorder=3)
+            ax.text(13.6,y,f'{value:+.1f}',color=color,ha='right',va='center',fontsize=7.5)
         points.append({'table':'table7','method':method,'benchmark':'mean',
                        'estimate_pp':value,'ci95_pp':[lo,hi]})
-    ax.set_yticks([3,2,1,0],METHODS)
-    ax.tick_params(axis='y',length=0,pad=6,labelsize=8)
-    ax.tick_params(axis='x',length=3,width=.6,pad=3,colors=C['MUTED'],labelsize=7.5)
-    ax.set_xlim(-6,14.5);ax.set_xticks([-5,0,5,10]);ax.set_ylim(-.48,3.48)
-    ax.set_xlabel('Mean success gain over actor (pp)',fontsize=8,labelpad=5)
+    if vertical:
+        ax.set_xticks(range(4),['Teacher\nSFT','Filtered\nSFT','DPO','RPO'])
+        ax.tick_params(axis='x',length=0,pad=6,labelsize=8)
+        ax.tick_params(axis='y',length=3,width=.6,pad=3,colors=C['MUTED'],labelsize=7.5)
+        ax.set_xlim(-.45,3.45);ax.set_ylim(-6,11);ax.set_yticks([-5,0,5,10])
+        ax.set_ylabel('Mean success gain over actor (%)',fontsize=8,labelpad=5)
+        hidden=['top','right','bottom']; visible='left'
+        fig.subplots_adjust(left=.18,right=.98,bottom=.18,top=.97)
+    else:
+        ax.set_yticks([3,2,1,0],METHODS)
+        ax.tick_params(axis='y',length=0,pad=6,labelsize=8)
+        ax.tick_params(axis='x',length=3,width=.6,pad=3,colors=C['MUTED'],labelsize=7.5)
+        ax.set_xlim(-6,14.5);ax.set_xticks([-5,0,5,10]);ax.set_ylim(-.48,3.48)
+        ax.set_xlabel('Mean success gain over actor (%)',fontsize=8,labelpad=5)
+        hidden=['top','right','left'];visible='bottom'
+        fig.subplots_adjust(left=.30,right=.985,bottom=.28,top=.98)
     ax.grid(False)
-    for side in ['top','right','left']:ax.spines[side].set_visible(False)
-    ax.spines['bottom'].set_color(C['MUTED']);ax.spines['bottom'].set_linewidth(.6)
-    fig.subplots_adjust(left=.30,right=.985,bottom=.28,top=.98)
-    stem='offline_distillation_table7_mean_dot'
+    for side in hidden:ax.spines[side].set_visible(False)
+    ax.spines[visible].set_color(C['MUTED']);ax.spines[visible].set_linewidth(.6)
+    stem='offline_distillation_table7_mean_dot'+('_vertical' if vertical else '')
     M['save'](fig,stem,points)
     REPORT['figures'][stem]=M['REPORT']['figures'][stem]
-    REPORT['figures'][stem]['metric']='mean overall success gain over actor (pp)'
+    REPORT['figures'][stem]['metric']='difference in mean overall success rates, displayed as % (percentage-point differences)'
+    REPORT['figures'][stem]['orientation']='vertical' if vertical else 'horizontal'
     REPORT['figures'][stem]['intervals']='supplied paired 95% CIs versus actor-only'
     assert len(points)==4
 
@@ -50,6 +67,7 @@ if __name__=='__main__':
     args=parser.parse_args()
     if args.variant=='mean':
         render_mean()
+        render_mean(vertical=True)
     for kind in (['dot','bar'] if args.variant=='both' else [] if args.variant=='mean' else [args.variant]):
         absolute=kind=='bar'
         methods=['Actor only',*METHODS] if absolute else METHODS

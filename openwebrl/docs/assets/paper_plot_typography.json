@@ -409,9 +409,12 @@
     "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png": "163d04407598823df23c62cb1db2e5310658a49f82914de6f641b50bbc51e77a",
     "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg": "d6b80b3c9d332e1cd12c0aac18279d59e14f9f04ad79c3b7673a3effdb587172",
     "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf": "3b7bc1b5f8ee3eeeb253979ffbf69250db5ed99725a293f167a34c52e7324545",
-    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.png": "481d85dc0b5232eeaea9da5bde401fa7a3c35861eeab01527b13d986a1b0e146",
-    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg": "0882ec00cadb17767ffe29a771b4fc73099540c392104505a64071984217aa3a",
-    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf": "0194d484f008e3148cb4f75de82416e0b4d638a886b1d7ee7bcb8a446c067b7e"
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.png": "22ca361c3c9635890ad01ae6a6c2dae9d9925835cf018b3be3d7bc0e9b90261d",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg": "515dff6de51ed01429343bdb7018de1671591faf274e92401d516dc04b263f3a",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf": "5f7413ab122174b1ceab74400ba71759f58698e921cbf1dbfc4fd8a20d8d29d5",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.png": "42e65448ea6536888453bedc1be49259008f27a74daf49931bcb8e52966b5ea9",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.svg": "49ee71851334ea29c9f1c3a2d113cf2a427a0e69eca839ab76eb241ac8e89dd3",
+    "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf": "2f322b46f3371b6f84fbfd3f0281fef531c17c411e0029800548892abbed37fe"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
@@ -423,6 +426,6 @@
     "validity_qualifiers": "Defined in captions, omitted from plot text",
     "policy": "openwebrl/docs/paper_plot_labels.py",
     "audit": "openwebrl/docs/assets/paper_plot_label_audit.json",
-    "policy_sha256": "da76e7f1865671ffb1f208dc4fbdf7e14e57373c9bb1b40bb6731a391ade03fe"
+    "policy_sha256": "2eeb91115d9fac5429f91a711b8f44e8f94246a0821b191708529941a79a338b"
   }
 }

@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views", "Offline distillation",
 ]
 TITLES = {
+    "offline_distillation_table7_mean_dot_vertical": "Offline distillation Table 7: vertical mean gain with paired 95% CIs",
     "offline_distillation_table7_mean_dot": "Offline distillation Table 7: standalone mean gain with paired 95% CIs",
     "offline_distillation_table7_dot": "Offline distillation Table 7: dot plot with 95% CIs",
     "offline_distillation_table7_bar": "Offline distillation Table 7: absolute-success bar graph",

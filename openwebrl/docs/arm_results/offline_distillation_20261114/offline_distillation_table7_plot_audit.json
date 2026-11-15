@@ -345,11 +345,64 @@
         }
       ],
       "output_sha256": {
-        "png": "481d85dc0b5232eeaea9da5bde401fa7a3c35861eeab01527b13d986a1b0e146",
-        "svg": "0882ec00cadb17767ffe29a771b4fc73099540c392104505a64071984217aa3a",
-        "pdf": "0194d484f008e3148cb4f75de82416e0b4d638a886b1d7ee7bcb8a446c067b7e"
+        "png": "22ca361c3c9635890ad01ae6a6c2dae9d9925835cf018b3be3d7bc0e9b90261d",
+        "svg": "515dff6de51ed01429343bdb7018de1671591faf274e92401d516dc04b263f3a",
+        "pdf": "5f7413ab122174b1ceab74400ba71759f58698e921cbf1dbfc4fd8a20d8d29d5"
       },
-      "metric": "mean overall success gain over actor (pp)",
+      "metric": "difference in mean overall success rates, displayed as % (percentage-point differences)",
+      "orientation": "horizontal",
+      "intervals": "supplied paired 95% CIs versus actor-only"
+    },
+    "offline_distillation_table7_mean_dot_vertical": {
+      "points": [
+        {
+          "table": "table7",
+          "method": "Teacher SFT",
+          "benchmark": "mean",
+          "estimate_pp": 0.1,
+          "ci95_pp": [
+            -3.5,
+            3.5
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "Filtered SFT",
+          "benchmark": "mean",
+          "estimate_pp": -1.4,
+          "ci95_pp": [
+            -5,
+            2.3
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "DPO",
+          "benchmark": "mean",
+          "estimate_pp": 2.7,
+          "ci95_pp": [
+            -0.7,
+            6.2
+          ]
+        },
+        {
+          "table": "table7",
+          "method": "RPO",
+          "benchmark": "mean",
+          "estimate_pp": 5.7,
+          "ci95_pp": [
+            2.1,
+            9.4
+          ]
+        }
+      ],
+      "output_sha256": {
+        "png": "42e65448ea6536888453bedc1be49259008f27a74daf49931bcb8e52966b5ea9",
+        "svg": "49ee71851334ea29c9f1c3a2d113cf2a427a0e69eca839ab76eb241ac8e89dd3",
+        "pdf": "2f322b46f3371b6f84fbfd3f0281fef531c17c411e0029800548892abbed37fe"
+      },
+      "metric": "difference in mean overall success rates, displayed as % (percentage-point differences)",
+      "orientation": "vertical",
       "intervals": "supplied paired 95% CIs versus actor-only"
     }
   }

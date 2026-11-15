@@ -506,6 +506,12 @@
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot.svg)
 
+### Offline distillation Table 7: vertical mean gain with paired 95% CIs
+
+![Offline distillation Table 7: vertical mean gain with paired 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.png)
+
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.svg)
+
 ### Offline distillation Table 7: benchmark gains and CIs
 
 ![Offline distillation Table 7: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
