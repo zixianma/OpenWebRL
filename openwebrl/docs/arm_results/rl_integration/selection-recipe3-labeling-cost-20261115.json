@@ -1,0 +1,391 @@
+{
+  "accounting": "Teacher API labeling cost for the exact matched Recipe 3 head manifests.\nReads saved label usage and frozen run pricing; makes no API calls. Charges one\naccepted label per panel, deduplicated by manifest state_id. Separates training\nand validation. Excludes candidate generation/rollouts, feature extraction,\nstudent training, evaluation, retries and unused labels. These are usage-priced\nattributions, not invoices or total collection budgets. Input is charged at the\nfrozen labeller's full-input rate (including cached tokens), as its ledger did.\nOnly aggregate counts, costs and source fingerprints are exported.\n",
+  "horizon": "H=4 includes the candidate action plus 3 continuation steps.",
+  "conditions": {
+    "luna_pre": {
+      "label": "GPT-6 Luna Pre-exec.",
+      "mean_overall_success_pct": 40.0,
+      "price_usd_per_million": {
+        "input": 0.125,
+        "output": 0.5
+      },
+      "total": {
+        "panels": 20508,
+        "input_tokens": 65527846,
+        "output_tokens": 10854758,
+        "cached_input_tokens": 71524,
+        "long_context_labels": 0,
+        "usd_nano": 13618359750,
+        "estimated_usd": 13.61835975,
+        "usd_per_1000_panels": 0.6640510898186074
+      },
+      "by_split": {
+        "train": {
+          "panels": 18781,
+          "input_tokens": 59981269,
+          "output_tokens": 9992244,
+          "cached_input_tokens": 65799,
+          "long_context_labels": 0,
+          "usd_nano": 12493780625,
+          "estimated_usd": 12.493780625,
+          "usd_per_1000_panels": 0.6652351112826793
+        },
+        "validation": {
+          "panels": 1727,
+          "input_tokens": 5546577,
+          "output_tokens": 862514,
+          "cached_input_tokens": 5725,
+          "long_context_labels": 0,
+          "usd_nano": 1124579125,
+          "estimated_usd": 1.124579125,
+          "usd_per_1000_panels": 0.6511749420961205
+        }
+      },
+      "by_batch": {
+        "p16a": {
+          "panels": 328,
+          "input_tokens": 1043943,
+          "output_tokens": 193771,
+          "cached_input_tokens": 0,
+          "long_context_labels": 0,
+          "usd_nano": 227378375,
+          "estimated_usd": 0.227378375,
+          "usd_per_1000_panels": 0.6932267530487805
+        },
+        "p16d": {
+          "panels": 5395,
+          "input_tokens": 16707083,
+          "output_tokens": 2745443,
+          "cached_input_tokens": 12835,
+          "long_context_labels": 0,
+          "usd_nano": 3461106875,
+          "estimated_usd": 3.461106875,
+          "usd_per_1000_panels": 0.6415397358665431
+        },
+        "p16e": {
+          "panels": 2543,
+          "input_tokens": 7736240,
+          "output_tokens": 1306760,
+          "cached_input_tokens": 2493,
+          "long_context_labels": 0,
+          "usd_nano": 1620410000,
+          "estimated_usd": 1.62041,
+          "usd_per_1000_panels": 0.6372040896578843
+        },
+        "p16f": {
+          "panels": 6127,
+          "input_tokens": 18997218,
+          "output_tokens": 3079211,
+          "cached_input_tokens": 36816,
+          "long_context_labels": 0,
+          "usd_nano": 3914257750,
+          "estimated_usd": 3.91425775,
+          "usd_per_1000_panels": 0.6388538844458952
+        },
+        "p16g": {
+          "panels": 6115,
+          "input_tokens": 21043362,
+          "output_tokens": 3529573,
+          "cached_input_tokens": 19380,
+          "long_context_labels": 0,
+          "usd_nano": 4395206750,
+          "estimated_usd": 4.39520675,
+          "usd_per_1000_panels": 0.7187582583810301
+        }
+      },
+      "states": 2309,
+      "tasks": 896,
+      "manifest_sha256": "d73f2b7556dff5872839e4a68024ffe6eba80b8266e4c24e3b5b221a82fce391",
+      "label_receipts_sha256": "c6efdce661604219d726510efef2f5a3ee975d0c9bd7a1ba583bd4bf47b243d3"
+    },
+    "luna_lookahead": {
+      "label": "GPT-6 Luna Lookahead H=4",
+      "mean_overall_success_pct": 42.9,
+      "price_usd_per_million": {
+        "input": 0.125,
+        "output": 0.5
+      },
+      "total": {
+        "panels": 20508,
+        "input_tokens": 451350423,
+        "output_tokens": 12159955,
+        "cached_input_tokens": 2612331,
+        "long_context_labels": 0,
+        "usd_nano": 62498780375,
+        "estimated_usd": 62.498780375,
+        "usd_per_1000_panels": 3.04753171323386
+      },
+      "by_split": {
+        "train": {
+          "panels": 18781,
+          "input_tokens": 414479320,
+          "output_tokens": 11172929,
+          "cached_input_tokens": 2375188,
+          "long_context_labels": 0,
+          "usd_nano": 57396379500,
+          "estimated_usd": 57.3963795,
+          "usd_per_1000_panels": 3.056087508652362
+        },
+        "validation": {
+          "panels": 1727,
+          "input_tokens": 36871103,
+          "output_tokens": 987026,
+          "cached_input_tokens": 237143,
+          "long_context_labels": 0,
+          "usd_nano": 5102400875,
+          "estimated_usd": 5.102400875,
+          "usd_per_1000_panels": 2.954488057324841
+        }
+      },
+      "by_batch": {
+        "p16a": {
+          "panels": 328,
+          "input_tokens": 8166032,
+          "output_tokens": 216624,
+          "cached_input_tokens": 68683,
+          "long_context_labels": 0,
+          "usd_nano": 1129066000,
+          "estimated_usd": 1.129066,
+          "usd_per_1000_panels": 3.442274390243902
+        },
+        "p16d": {
+          "panels": 5395,
+          "input_tokens": 117030447,
+          "output_tokens": 3095487,
+          "cached_input_tokens": 817283,
+          "long_context_labels": 0,
+          "usd_nano": 16176549375,
+          "estimated_usd": 16.176549375,
+          "usd_per_1000_panels": 2.9984336190917515
+        },
+        "p16e": {
+          "panels": 2543,
+          "input_tokens": 54341678,
+          "output_tokens": 1478523,
+          "cached_input_tokens": 482781,
+          "long_context_labels": 0,
+          "usd_nano": 7531971250,
+          "estimated_usd": 7.53197125,
+          "usd_per_1000_panels": 2.961844769956744
+        },
+        "p16f": {
+          "panels": 6127,
+          "input_tokens": 129501298,
+          "output_tokens": 3507549,
+          "cached_input_tokens": 610443,
+          "long_context_labels": 0,
+          "usd_nano": 17941436750,
+          "estimated_usd": 17.94143675,
+          "usd_per_1000_panels": 2.928257997388608
+        },
+        "p16g": {
+          "panels": 6115,
+          "input_tokens": 142310968,
+          "output_tokens": 3861772,
+          "cached_input_tokens": 633141,
+          "long_context_labels": 0,
+          "usd_nano": 19719757000,
+          "estimated_usd": 19.719757,
+          "usd_per_1000_panels": 3.224817170891251
+        }
+      },
+      "states": 2309,
+      "tasks": 896,
+      "manifest_sha256": "c8c130b69bf841f4647cce6b9480d1b0a866f6da5fc9aa2b327776f9d5102a36",
+      "label_receipts_sha256": "6c24b3430c0fe6feb33f0a2693325c6f1d46a96678ebdec37c1a7bfcd7499820"
+    },
+    "gpt55_pre": {
+      "label": "GPT-5.5 Pre-exec.",
+      "mean_overall_success_pct": 41.3,
+      "price_usd_per_million": {
+        "input": 5.0,
+        "output": 30.0
+      },
+      "total": {
+        "panels": 20508,
+        "input_tokens": 65527846,
+        "output_tokens": 8918048,
+        "cached_input_tokens": 106752,
+        "long_context_labels": 0,
+        "usd_nano": 595180670000,
+        "estimated_usd": 595.18067,
+        "usd_per_1000_panels": 29.021877803783884
+      },
+      "by_split": {
+        "train": {
+          "panels": 18781,
+          "input_tokens": 59981269,
+          "output_tokens": 8210383,
+          "cached_input_tokens": 100608,
+          "long_context_labels": 0,
+          "usd_nano": 546217835000,
+          "estimated_usd": 546.217835,
+          "usd_per_1000_panels": 29.08353309195464
+        },
+        "validation": {
+          "panels": 1727,
+          "input_tokens": 5546577,
+          "output_tokens": 707665,
+          "cached_input_tokens": 6144,
+          "long_context_labels": 0,
+          "usd_nano": 48962835000,
+          "estimated_usd": 48.962835,
+          "usd_per_1000_panels": 28.351381007527504
+        }
+      },
+      "by_batch": {
+        "p16a": {
+          "panels": 328,
+          "input_tokens": 1043943,
+          "output_tokens": 161244,
+          "cached_input_tokens": 0,
+          "long_context_labels": 0,
+          "usd_nano": 10057035000,
+          "estimated_usd": 10.057035,
+          "usd_per_1000_panels": 30.661692073170737
+        },
+        "p16d": {
+          "panels": 5395,
+          "input_tokens": 16707083,
+          "output_tokens": 2270363,
+          "cached_input_tokens": 40960,
+          "long_context_labels": 0,
+          "usd_nano": 151646305000,
+          "estimated_usd": 151.646305,
+          "usd_per_1000_panels": 28.108675625579245
+        },
+        "p16e": {
+          "panels": 2543,
+          "input_tokens": 7736240,
+          "output_tokens": 1088721,
+          "cached_input_tokens": 15360,
+          "long_context_labels": 0,
+          "usd_nano": 71342830000,
+          "estimated_usd": 71.34283,
+          "usd_per_1000_panels": 28.054593000393236
+        },
+        "p16f": {
+          "panels": 6127,
+          "input_tokens": 18997218,
+          "output_tokens": 2575208,
+          "cached_input_tokens": 20736,
+          "long_context_labels": 0,
+          "usd_nano": 172242330000,
+          "estimated_usd": 172.24233,
+          "usd_per_1000_panels": 28.11201730047332
+        },
+        "p16g": {
+          "panels": 6115,
+          "input_tokens": 21043362,
+          "output_tokens": 2822512,
+          "cached_input_tokens": 29696,
+          "long_context_labels": 0,
+          "usd_nano": 189892170000,
+          "estimated_usd": 189.89217,
+          "usd_per_1000_panels": 31.053502861815208
+        }
+      },
+      "states": 2309,
+      "tasks": 896,
+      "manifest_sha256": "52679e1513aec9497889dbfd1b0fac93e2f2389ed090593e8f92f2a072262cc8",
+      "label_receipts_sha256": "b846239d5f0cf8439d41116defaa6a2242121a863a6c86040bb39e73364c48dc"
+    },
+    "gpt55_lookahead": {
+      "label": "GPT-5.5 Lookahead H=4",
+      "mean_overall_success_pct": 44.5,
+      "price_usd_per_million": {
+        "input": 5.0,
+        "output": 30.0
+      },
+      "total": {
+        "panels": 20508,
+        "input_tokens": 458283900,
+        "output_tokens": 26479876,
+        "cached_input_tokens": 65280,
+        "long_context_labels": 0,
+        "usd_nano": 3085815780000,
+        "estimated_usd": 3085.81578,
+        "usd_per_1000_panels": 150.46887946167348
+      },
+      "by_split": {
+        "train": {
+          "panels": 18781,
+          "input_tokens": 420815267,
+          "output_tokens": 24249007,
+          "cached_input_tokens": 65280,
+          "long_context_labels": 0,
+          "usd_nano": 2831546545000,
+          "estimated_usd": 2831.546545,
+          "usd_per_1000_panels": 150.76654837335604
+        },
+        "validation": {
+          "panels": 1727,
+          "input_tokens": 37468633,
+          "output_tokens": 2230869,
+          "cached_input_tokens": 0,
+          "long_context_labels": 0,
+          "usd_nano": 254269235000,
+          "estimated_usd": 254.269235,
+          "usd_per_1000_panels": 147.2317515923567
+        }
+      },
+      "by_batch": {
+        "p16a": {
+          "panels": 328,
+          "input_tokens": 8254187,
+          "output_tokens": 427280,
+          "cached_input_tokens": 0,
+          "long_context_labels": 0,
+          "usd_nano": 54089335000,
+          "estimated_usd": 54.089335,
+          "usd_per_1000_panels": 164.90650914634145
+        },
+        "p16d": {
+          "panels": 5395,
+          "input_tokens": 118944949,
+          "output_tokens": 6492578,
+          "cached_input_tokens": 11264,
+          "long_context_labels": 0,
+          "usd_nano": 789502085000,
+          "estimated_usd": 789.502085,
+          "usd_per_1000_panels": 146.33958943466172
+        },
+        "p16e": {
+          "panels": 2543,
+          "input_tokens": 55266471,
+          "output_tokens": 3065666,
+          "cached_input_tokens": 0,
+          "long_context_labels": 0,
+          "usd_nano": 368302335000,
+          "estimated_usd": 368.302335,
+          "usd_per_1000_panels": 144.82986040110106
+        },
+        "p16f": {
+          "panels": 6127,
+          "input_tokens": 131850110,
+          "output_tokens": 7373584,
+          "cached_input_tokens": 25984,
+          "long_context_labels": 0,
+          "usd_nano": 880458070000,
+          "estimated_usd": 880.45807,
+          "usd_per_1000_panels": 143.70133344214136
+        },
+        "p16g": {
+          "panels": 6115,
+          "input_tokens": 143968183,
+          "output_tokens": 9120768,
+          "cached_input_tokens": 28032,
+          "long_context_labels": 0,
+          "usd_nano": 993463955000,
+          "estimated_usd": 993.463955,
+          "usd_per_1000_panels": 162.46344317252658
+        }
+      },
+      "states": 2309,
+      "tasks": 896,
+      "manifest_sha256": "29c1f13c8f4be682a24d2324a5bfd6015a6e81436b92fa22ba0c9dc6c7b06782",
+      "label_receipts_sha256": "e266858e7f845bd327c249f48c0542e28d794de4a05fccc833223a8fd403ce94"
+    }
+  },
+  "frozen_price_source": "labels/p16*/k3/plan.json; labels/p16_labels.py; labels-luna/p16_labels_luna.py; labels-luna/p16_labels_luna_k3p.py"
+}
