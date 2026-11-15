@@ -27,12 +27,12 @@ LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
 PURPLES = ["#C3AFF6", C["ADM_MAIN"], "#6A4BC2", "#4B3191"]   # light -> dark with size; pooled darkest
 
 
-def point(ax, x, v, color, marker="o", label_dy=0.15, label=True):
+def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=False):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=ms, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
                 zorder=3, markeredgewidth=1.0)
     if label:
-        ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.6, color=INK)
+        ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.2 if bold else 5.6, color=INK, fontweight="bold" if bold else "normal")
 
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1.1], wspace=0.40))
@@ -41,7 +41,9 @@ for x, k in enumerate(KEYS):
     point(a1, x + 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label=False)
 diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS] + [D3["three sizes: pre - lookahead"]["mean_overall_pp"]]
 for x, (pt, lo, hi) in enumerate(diffs):
-    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if x == len(KEYS) else "o")
+    pooled = x == len(KEYS)
+    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if pooled else "o", ms=4.8 if pooled else 4.1, bold=pooled)
+a2.axvline(len(KEYS) - 0.5, color=C["BORDER"], lw=0.8, ls=":", zorder=1)   # marks the pooled estimate off from the per-size points
 for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "Lookahead − pre-exec", [*SIZES, "Pooled"])):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=12)
@@ -49,6 +51,7 @@ for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "
     ax.set_xlim(-0.5, len(ticks) - 0.5)
     ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
+a2.get_xticklabels()[-1].set_fontweight("bold")
 a1.text(0, 1.03, "Student ADMs · full data", transform=a1.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
 a2.text(0, 1.03, "paired, same tasks", transform=a2.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
