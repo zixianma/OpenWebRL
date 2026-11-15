@@ -44,9 +44,9 @@ ROWS = [  # tick label, colour, source key, live key
     ("H=6", "#C8644C", "teacher_k5", "K5"),
     ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 P = K["pooled"]
-SUBTITLE = {"offline": "Teacher ADM (no training)\nscored on 1.7K held-out states",
-            "live": "Student ADM-23M\ntrained on 1.4K states (1.4K examples)",
-            "sizes": "Student ADMs 23K–1.8B\ntrained on 2.1K states (18.8K examples)"}
+SUBTITLE = {"offline": "Teacher ADM · subset data\n1.7K states, held out",
+            "live": "Student ADM-23M · subset data\n1.4K states (1.4K examples)",
+            "sizes": "Student ADMs 23K–1.8B · full data\n2.1K states (18.8K examples)"}
 PANELS = [
     ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
