@@ -39,8 +39,10 @@ def render_mean(vertical=False):
         ax.tick_params(axis='x',length=0,pad=4,labelsize=8)
         ax.tick_params(axis='y',length=3,width=.6,pad=3,colors=C['MUTED'],labelsize=7.5)
         ax.set_xlim(-.45,3.45);ax.set_ylim(-6,11);ax.set_yticks([-5,0,5,10])
-        ax.set_ylabel('Mean success gain (%)',fontsize=8,labelpad=5)
-        hidden=['top','right','bottom']; visible='left'
+        ax.set_ylabel('Mean success − actor only (%)',fontsize=8,labelpad=5)
+        hidden=['top','right']; visible='left'   # 11-15: x axis shown, as in the other paper figures
+        ax.spines['bottom'].set_color(C['MUTED']);ax.spines['bottom'].set_linewidth(.6)
+        ax.tick_params(axis='x',length=3,width=.6,colors=C['MUTED'],labelcolor=C['INK'])
         fig.subplots_adjust(left=.19,right=.98,bottom=.20,top=.96)
     else:
         ax.set_yticks([3,2,1,0],METHODS)

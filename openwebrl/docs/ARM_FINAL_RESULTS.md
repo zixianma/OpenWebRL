@@ -17,7 +17,7 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 
 ![Table 7 offline distillation: vertical mean success gain dot plot with paired 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.png)
 
-*Same four estimates, paired 95% intervals, colors and `%` display convention as the horizontal version; only orientation and label placement change.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.svg).
+*Same four estimates, paired 95% intervals, colors and `%` display convention as the horizontal version; only orientation and label placement change. The y axis is each method's mean overall success minus actor-only, in percentage points; the x axis is drawn as in the other paper figures.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.svg).
 
 **Per-benchmark detail:**
 
