@@ -1730,6 +1730,25 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 *Per-benchmark columns are overall success (invalid episodes and tasks with no recorded episode count as failures). Mean overall is the equal-weight 3-benchmark mean; differences are paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs); one training run per selector. Overall − SFT, Online-Mind2Web / WebVoyager / DeepShop: Kev-A +4.7 [+1.6, +7.8] / +7.3 [+4.9, +9.8] / +14.2 [+9.6, +19.1], Kev-B +6.1 [+3.1, +9.0] / +7.1 [+4.6, +9.6] / +7.8 [+2.7, +12.9]. Valid-only rates: SFT 32.2 / 45.3 / 38.5%, Kev-A 37.8 / 53.5 / 52.6%, Kev-B 39.8 / 53.6 / 46.0%.*
 
+<a id="final-selection-recipe3-kevA-decoder-3run-20261115"></a>
+
+**Settled: Kev-A, the Recipe 3 decoder and SFT 4B, 3 runs each in one window (November 14–15).** *Kev-A and the 4B LoRA decoder are level (Kev-A − decoder +1.1 [−1.2, +3.4] pp mean overall), both well above one SFT 4B sample (+9.3 [+6.9, +11.7] and +8.2 [+6.1, +10.3]). Kev-A's small edge is WebVoyager (+2.7 [+0.3, +5.2]); DeepShop and Online-Mind2Web are level.*
+
+| Method | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | 32.2% | 39.6% | 33.1% | 35.0% | 37.6% | — |
+| + Kev-A (Recipe 3 GPT-5.5 K = 3, LoRA on all tokens) | 36.0% | **49.1%** | 47.6% | **44.2%** | **48.0%** | **+9.3 [+6.9, +11.7]** |
+| + 4B LoRA decoder (Recipe 3 GPT-5.5 K = 3) | 35.1% | 46.4% | **48.0%** | 43.2% | 46.8% | **+8.2 [+6.1, +10.3]** |
+| *Kev-A − decoder, pp [95% CI]* | +0.9 [−2.6, +4.2] | **+2.7 [+0.3, +5.2]** | −0.4 [−6.0, +5.1] | +1.1 [−1.2, +3.4] | +1.2 [−1.2, +3.6] | |
+
+| Method | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 806 / 900 | 290 | 1,622 / 1,785 | 706 | 449 / 450 | 149 |
+| Kev-A | 779 / 900 | 324 | 1,612 / 1,785 | 877 | 446 / 450 | 214 |
+| 4B LoRA decoder | 794 / 900 | 316 | 1,600 / 1,785 | 828 | 443 / 450 | 216 |
+
+*Per-benchmark columns are overall success (invalid = failure); differences are on overall success, paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs). SFT 4B actor, N = 5, T 1.0 / top-p 0.9, 30 steps, all 1,045 tasks per run. Kev-A = `kev/kevA-r3` (`head5x-9ff81e7c894f`), decoder = `arm5-9fadc8dc4655` (`eval-kevA-1114/run1-3`, Nov 14–15); SFT 4B = `eval-pre/run1-3 sft1` (another session's batch, same tasks and protocol, Nov 14–15). Judges: Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o. On Nov 15 /gpfs/scrubbed refused writes (EDQUOT), so Kev-A and decoder verdicts were produced by the same native judges through `deferjudge/xbench_defer_sidecar.py` and stored in a sidecar file on the project space (`/gpfs/projects/krishna/zixianma/judge-sidecar-20261115/verdicts.jsonl`) rather than written back into the records; the analysis reads them from there. 51.7 H200-hours. Evidence: [data](arm_results/rl_integration/selection-kevA-decoder-sft-20261115.json) · [script](arm_results/rl_integration/selection-kevA-decoder-sft-20261115.py).*
+
 <a id="final-selection-recipe3-kev-decoder-20261112"></a>
 
 **Run 3, same window: Kev-style vs the Recipe 3 decoder.**

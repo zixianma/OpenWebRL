@@ -1,0 +1,164 @@
+{
+ "sft": {
+  "label": "SFT 4B alone (1 sample)",
+  "runs": 3,
+  "online_mind2web": {
+   "episodes": 900,
+   "valid": 806,
+   "successes": 290,
+   "overall": 0.32222222222222224,
+   "valid_only": 0.3598014888337469
+  },
+  "webvoyager": {
+   "episodes": 1785,
+   "valid": 1622,
+   "successes": 706,
+   "overall": 0.39551820728291315,
+   "valid_only": 0.4352651048088779
+  },
+  "deepshop": {
+   "episodes": 450,
+   "valid": 449,
+   "successes": 149,
+   "overall": 0.33111111111111113,
+   "valid_only": 0.33184855233853006
+  },
+  "mean_overall": 0.3496171802054155,
+  "mean_valid_only": 0.37563838199371835
+ },
+ "kevA": {
+  "label": "+ Kev-A (Recipe 3 GPT-5.5 K = 3, LoRA on all tokens)",
+  "runs": 3,
+  "online_mind2web": {
+   "episodes": 900,
+   "valid": 779,
+   "successes": 324,
+   "overall": 0.36,
+   "valid_only": 0.4159178433889602
+  },
+  "webvoyager": {
+   "episodes": 1785,
+   "valid": 1612,
+   "successes": 877,
+   "overall": 0.49131652661064423,
+   "valid_only": 0.544044665012407
+  },
+  "deepshop": {
+   "episodes": 450,
+   "valid": 446,
+   "successes": 214,
+   "overall": 0.47555555555555556,
+   "valid_only": 0.4798206278026906
+  },
+  "mean_overall": 0.4422906940553999,
+  "mean_valid_only": 0.47992771206801926,
+  "minus_sft": {
+   "online_mind2web_overall_pp": [
+    3.77777777777778,
+    0.44444444444445275,
+    7.000000000000001
+   ],
+   "webvoyager_overall_pp": [
+    9.579831932773109,
+    7.170868347338944,
+    11.988795518207285
+   ],
+   "deepshop_overall_pp": [
+    14.444444444444438,
+    8.666666666666673,
+    20.222222222222225
+   ],
+   "mean_overall_pp": [
+    9.267351384998442,
+    6.929964207905379,
+    11.671366324307499
+   ],
+   "mean_valid_only_pp": [
+    10.428933007430093,
+    7.976859410429771,
+    12.934145046671008
+   ]
+  },
+  "minus_decoder": {
+   "online_mind2web_overall_pp": [
+    0.8888888888888891,
+    -2.55555555555555,
+    4.222222222222216
+   ],
+   "webvoyager_overall_pp": [
+    2.745098039215682,
+    0.3361344537815114,
+    5.210084033613449
+   ],
+   "deepshop_overall_pp": [
+    -0.4444444444444473,
+    -5.999999999999995,
+    5.1111111111111
+   ],
+   "mean_overall_pp": [
+    1.063180827886708,
+    -1.1958138811079992,
+    3.36048085901027
+   ],
+   "mean_valid_only_pp": [
+    1.2237866480438897,
+    -1.1726547426564444,
+    3.6156108556372852
+   ]
+  }
+ },
+ "decoder": {
+  "label": "+ 4B LoRA decoder (Recipe 3 GPT-5.5 K = 3)",
+  "runs": 3,
+  "online_mind2web": {
+   "episodes": 900,
+   "valid": 794,
+   "successes": 316,
+   "overall": 0.3511111111111111,
+   "valid_only": 0.3979848866498741
+  },
+  "webvoyager": {
+   "episodes": 1785,
+   "valid": 1600,
+   "successes": 828,
+   "overall": 0.4638655462184874,
+   "valid_only": 0.5175
+  },
+  "deepshop": {
+   "episodes": 450,
+   "valid": 443,
+   "successes": 216,
+   "overall": 0.48,
+   "valid_only": 0.48758465011286684
+  },
+  "mean_overall": 0.43165888577653283,
+  "mean_valid_only": 0.46768984558758026,
+  "minus_sft": {
+   "online_mind2web_overall_pp": [
+    2.888888888888891,
+    -0.11111111111111738,
+    5.8916666666666355
+   ],
+   "webvoyager_overall_pp": [
+    6.834733893557426,
+    4.537815126050421,
+    9.131652661064427
+   ],
+   "deepshop_overall_pp": [
+    14.888888888888886,
+    9.777777777777786,
+    19.77777777777778
+   ],
+   "mean_overall_pp": [
+    8.204170557111734,
+    6.11048085901027,
+    10.278898225957047
+   ],
+   "mean_valid_only_pp": [
+    9.205146359386204,
+    7.017935520105855,
+    11.394734978936567
+   ]
+  }
+ }
+}
