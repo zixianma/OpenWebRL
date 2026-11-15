@@ -39,6 +39,8 @@ Checkpoint directories are zero-based (`iter_0000089` = 90 completed iterations)
 | Iteration-90 checkpoints with optimizer state and data cursor | HF `zixianma/openwebrl-rl-checkpoints`, `<run>/checkpoint/` (all nine runs). Later checkpoints (Gate B iteration 98, outcome-only 48 iteration 100) are cluster-only ([§1](#rl-handoff-20261110) table) | Continuing a lineage |
 | Controllers (`scripts/run_arm_gate_b_*.py`, `scripts/resume_baseline.py`, `RT/arm-turn-bonus-preparation/*/training-controller.py`) | Partly in git; frozen copies cluster-only | Our Slurm workflow ([§5](#rl-handoff-launch)) |
 
+> **Not yet available (November 15):** the upload to `zixianma/openwebrl-rl-checkpoints` failed (Hugging Face requires paid storage for a private repo this size), so the repo is empty. Until an alternative is set up, get checkpoints from the cluster paths in the table above or ask zixianma.
+
 **Off-cluster, download one run folder** from `zixianma/openwebrl-rl-checkpoints` (ask zixianma for access; about 58 GB per run):
 
 ```bash

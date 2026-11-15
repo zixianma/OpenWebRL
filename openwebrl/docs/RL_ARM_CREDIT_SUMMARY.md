@@ -1,11 +1,65 @@
-# RL with ARM turn credit: results summary (November 11, 2026)
+# RL with ARM turn credit: results summary (November 15, 2026)
 
 <a id="rl-arm-credit-summary-20261111"></a>
 
 **RL improves on the SFT start model, and ARM turn credit roughly doubles the gain.** On Online-Mind2Web
-(300 tasks, three repeats, one Terra judge), outcome-only RL gains +4.1 pp over iteration 0 (p = 0.024)
-and Gate B gains +8.6 pp (p < 0.001). Gate B beats outcome-only 48 by +4.4 pp in that same-day run and by
-+5.2 pp in the separate nine-run comparison. One training run per method; seed variability is not measured.
+(300 tasks, three repeats, Terra judge), outcome-only RL gains +4.1 pp over iteration 0 (p = 0.024)
+and Gate B gains +8.6 pp (p < 0.001). Across three benchmarks Gate B is the only run significantly ahead of
+outcome-only 48 on each: +5.2 pp on Online-Mind2Web, +6.6 pp on WebVoyager and +6.0 pp on DeepShop (official
+GPT-4o judges). One training run per method; seed variability is not measured.
+
+## Three benchmarks at iteration 90
+
+<a id="rl-arm-credit-summary-three-benchmarks"></a>
+
+Gate B leads on every benchmark (mean overall 42.55% vs 36.63% for outcome-only 48). 40M+16F ties Gate B on
+Online-Mind2Web but trails it on WebVoyager. Each benchmark uses its own judge: Online-Mind2Web shared Terra
+(collected November 9–10), WebVoyager and DeepShop their official GPT-4o judges (collected November 15).
+Three repeats per model; rates are means over repeats; the mean columns weight benchmarks equally.
+
+| Model | OM2W valid-only % | WebVoyager valid-only % | DeepShop valid-only % | Mean overall % | Mean valid-only % | Δ mean overall vs outcome-only 48, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only 48 | 35.73 | 43.17 | 38.52 | 36.63 | 39.14 | — |
+| Outcome-only 56 | 34.20 | 43.18 | 31.39 | 33.50 | 36.26 | −3.1 |
+| **Gate B (ours)** | 41.74 | **50.90** | **44.44** | **42.55** | **45.69** | **+5.9** |
+| Gate B 40M+16F | **42.43** | 46.85 | 41.08 | 40.71 | 43.45 | +4.1 |
+
+| Paired comparison | WebVoyager Δ, pp | 95% CI, pp | p | DeepShop Δ, pp | 95% CI, pp | p |
+| --- | ---: | --- | ---: | ---: | --- | ---: |
+| Gate B − outcome-only 48 | +6.55 | [+4.09, +9.02] | < 0.001 | +6.00 | [+0.67, +11.56] | 0.039 |
+| 40M+16F − outcome-only 48 | +3.59 | [+1.23, +5.94] | 0.003 | +2.44 | [−3.11, +8.00] | 0.44 |
+| Outcome-only 56 − outcome-only 48 | −0.84 | [−3.25, +1.51] | 0.52 | −7.33 | [−13.11, −1.56] | 0.018 |
+| 40M+16F − Gate B | −2.97 | [−5.43, −0.50] | 0.021 | −3.56 | [−9.11, +2.00] | 0.23 |
+
+| Model | WebVoyager successes per repeat (of 595) | WebVoyager valid per repeat | DeepShop successes per repeat (of 150) | DeepShop valid per repeat |
+| --- | --- | --- | --- | --- |
+| Outcome-only 48 | 236 / 237 / 229 | 541 / 546 / 539 | 53 / 63 / 57 | 149 / 150 / 150 |
+| Outcome-only 56 | 234 / 227 / 226 | 535 / 525 / 531 | 48 / 50 / 42 | 148 / 149 / 149 |
+| Gate B (ours) | 292 / 271 / 256 | 540 / 532 / 537 | 64 / 66 / 70 | 150 / 150 / 150 |
+| Gate B 40M+16F | 276 / 245 / 245 | 546 / 543 / 546 | 62 / 65 / 57 | 149 / 149 / 150 |
+
+- **Protocol:** local browser, 30 turns, actor T0.6 / top-p 0.95 / top-k 20, 4,096 tokens; one 1-H200 job per
+  model and repeat (WebVoyager then DeepShop), all twelve run together. The in-harness judge was off during
+  collection; the harness's own WebVoyager and DeepShop GPT-4o judges (seed 42) graded the saved episodes
+  afterwards, with the harness's rules: episodes that did not complete score 0 without a call, a verdict with
+  neither SUCCESS nor NOT SUCCESS makes the episode invalid (5–17 per model on WebVoyager, none on DeepShop).
+  7,977 judge calls, $38.28. Paired tests as for Online-Mind2Web below.
+- **Online-Mind2Web column** is the nine-run Terra comparison [below](#rl-arm-credit-summary-iter90).
+
+[GPT-4o aggregate](arm_results/rl_final_20261108/iter90_localbench_gpt4o_20261115.json) · Runner
+`scripts/run_iter90_localbench_terra.py` · Grader `scripts/rejudge_localbench_native_gpt4o.py`
+
+<details>
+<summary>Same WebVoyager/DeepShop episodes graded by Terra (stricter; not the reported numbers)</summary>
+
+Terra with the shared terminal-success prompt scores 4–8 pp lower than GPT-4o on the same episodes; Gate B
+still beats outcome-only 48 on both (WebVoyager +5.2 pp, p < 0.001; DeepShop +6.7 pp, p = 0.010).
+Overall % — WebVoyager: outcome-only 48 35.46, outcome-only 56 32.77, Gate B 40.67, 40M+16F 41.34;
+DeepShop: 33.11, 23.11, 39.78, 33.56. 7,977 calls, $64.76.
+[Terra aggregate](arm_results/rl_final_20261108/iter90_localbench_terra_20261115.json) · Grader
+`scripts/rejudge_localbench_shared_terra.py`.
+
+</details>
 
 ## Iteration 0 vs iteration 90 (same day, November 11)
 

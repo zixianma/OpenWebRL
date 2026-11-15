@@ -1,0 +1,238 @@
+{
+ "rows": {
+  "outcome48-webvoyager": {
+   "successes": [
+    208,
+    215,
+    210
+   ],
+   "valid": [
+    545,
+    548,
+    542
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 35.46,
+   "valid_only": 38.71,
+   "ungraded": 0
+  },
+  "outcome56-webvoyager": {
+   "successes": [
+    193,
+    189,
+    203
+   ],
+   "valid": [
+    541,
+    534,
+    533
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 32.77,
+   "valid_only": 36.38,
+   "ungraded": 0
+  },
+  "gateb-webvoyager": {
+   "successes": [
+    256,
+    240,
+    230
+   ],
+   "valid": [
+    541,
+    536,
+    542
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 40.67,
+   "valid_only": 44.84,
+   "ungraded": 0
+  },
+  "g40m16f-webvoyager": {
+   "successes": [
+    268,
+    237,
+    233
+   ],
+   "valid": [
+    548,
+    545,
+    547
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 41.34,
+   "valid_only": 45.0,
+   "ungraded": 0
+  },
+  "outcome48-deepshop": {
+   "successes": [
+    47,
+    49,
+    53
+   ],
+   "valid": [
+    149,
+    150,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 33.11,
+   "valid_only": 33.18,
+   "ungraded": 0
+  },
+  "outcome56-deepshop": {
+   "successes": [
+    32,
+    39,
+    33
+   ],
+   "valid": [
+    148,
+    149,
+    149
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 23.11,
+   "valid_only": 23.31,
+   "ungraded": 0
+  },
+  "gateb-deepshop": {
+   "successes": [
+    55,
+    60,
+    64
+   ],
+   "valid": [
+    150,
+    150,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 39.78,
+   "valid_only": 39.78,
+   "ungraded": 0
+  },
+  "g40m16f-deepshop": {
+   "successes": [
+    51,
+    50,
+    50
+   ],
+   "valid": [
+    149,
+    149,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 33.56,
+   "valid_only": 33.71,
+   "ungraded": 0
+  }
+ },
+ "diffs": {
+  "outcome56-outcome48-webvoyager": {
+   "diff_pp": -2.69,
+   "ci95": [
+    -4.76,
+    -0.62
+   ],
+   "p": 0.0146,
+   "tasks": 595
+  },
+  "gateb-outcome48-webvoyager": {
+   "diff_pp": 5.21,
+   "ci95": [
+    3.08,
+    7.34
+   ],
+   "p": 0.0,
+   "tasks": 595
+  },
+  "g40m16f-outcome48-webvoyager": {
+   "diff_pp": 5.88,
+   "ci95": [
+    3.59,
+    8.24
+   ],
+   "p": 0.0,
+   "tasks": 595
+  },
+  "g40m16f-gateb-webvoyager": {
+   "diff_pp": 0.67,
+   "ci95": [
+    -1.62,
+    2.97
+   ],
+   "p": 0.5997,
+   "tasks": 595
+  },
+  "outcome56-outcome48-deepshop": {
+   "diff_pp": -10.0,
+   "ci95": [
+    -15.56,
+    -4.44
+   ],
+   "p": 0.001,
+   "tasks": 150
+  },
+  "gateb-outcome48-deepshop": {
+   "diff_pp": 6.67,
+   "ci95": [
+    1.78,
+    11.56
+   ],
+   "p": 0.0104,
+   "tasks": 150
+  },
+  "g40m16f-outcome48-deepshop": {
+   "diff_pp": 0.44,
+   "ci95": [
+    -4.89,
+    5.78
+   ],
+   "p": 0.9342,
+   "tasks": 150
+  },
+  "g40m16f-gateb-deepshop": {
+   "diff_pp": -6.22,
+   "ci95": [
+    -11.56,
+    -0.89
+   ],
+   "p": 0.0266,
+   "tasks": 150
+  }
+ }
+}

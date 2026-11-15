@@ -1,0 +1,231 @@
+{
+ "judge": "official GPT-4o (WebVoyager / DeepShop harness judges, seed 42)",
+ "rows": {
+  "outcome48-webvoyager": {
+   "successes": [
+    236,
+    237,
+    229
+   ],
+   "valid": [
+    541,
+    546,
+    539
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 39.33,
+   "valid_only": 43.17,
+   "judge_invalid": 9
+  },
+  "outcome56-webvoyager": {
+   "successes": [
+    234,
+    227,
+    226
+   ],
+   "valid": [
+    535,
+    525,
+    531
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 38.49,
+   "valid_only": 43.18,
+   "judge_invalid": 17
+  },
+  "gateb-webvoyager": {
+   "successes": [
+    292,
+    271,
+    256
+   ],
+   "valid": [
+    540,
+    532,
+    537
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 45.88,
+   "valid_only": 50.9,
+   "judge_invalid": 10
+  },
+  "g40m16f-webvoyager": {
+   "successes": [
+    276,
+    245,
+    245
+   ],
+   "valid": [
+    546,
+    543,
+    546
+   ],
+   "n": [
+    595,
+    595,
+    595
+   ],
+   "overall": 42.91,
+   "valid_only": 46.85,
+   "judge_invalid": 5
+  },
+  "outcome48-deepshop": {
+   "successes": [
+    53,
+    63,
+    57
+   ],
+   "valid": [
+    149,
+    150,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 38.44,
+   "valid_only": 38.52,
+   "judge_invalid": 0
+  },
+  "outcome56-deepshop": {
+   "successes": [
+    48,
+    50,
+    42
+   ],
+   "valid": [
+    148,
+    149,
+    149
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 31.11,
+   "valid_only": 31.39,
+   "judge_invalid": 0
+  },
+  "gateb-deepshop": {
+   "successes": [
+    64,
+    66,
+    70
+   ],
+   "valid": [
+    150,
+    150,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 44.44,
+   "valid_only": 44.44,
+   "judge_invalid": 0
+  },
+  "g40m16f-deepshop": {
+   "successes": [
+    62,
+    65,
+    57
+   ],
+   "valid": [
+    149,
+    149,
+    150
+   ],
+   "n": [
+    150,
+    150,
+    150
+   ],
+   "overall": 40.89,
+   "valid_only": 41.08,
+   "judge_invalid": 0
+  }
+ },
+ "diffs": {
+  "outcome56-outcome48-webvoyager": {
+   "diff_pp": -0.84,
+   "ci95": [
+    -3.25,
+    1.51
+   ],
+   "p": 0.5242
+  },
+  "gateb-outcome48-webvoyager": {
+   "diff_pp": 6.55,
+   "ci95": [
+    4.09,
+    9.02
+   ],
+   "p": 0.0
+  },
+  "g40m16f-outcome48-webvoyager": {
+   "diff_pp": 3.59,
+   "ci95": [
+    1.23,
+    5.94
+   ],
+   "p": 0.0032
+  },
+  "g40m16f-gateb-webvoyager": {
+   "diff_pp": -2.97,
+   "ci95": [
+    -5.43,
+    -0.5
+   ],
+   "p": 0.021
+  },
+  "outcome56-outcome48-deepshop": {
+   "diff_pp": -7.33,
+   "ci95": [
+    -13.11,
+    -1.56
+   ],
+   "p": 0.0181
+  },
+  "gateb-outcome48-deepshop": {
+   "diff_pp": 6.0,
+   "ci95": [
+    0.67,
+    11.56
+   ],
+   "p": 0.0386
+  },
+  "g40m16f-outcome48-deepshop": {
+   "diff_pp": 2.44,
+   "ci95": [
+    -3.11,
+    8.0
+   ],
+   "p": 0.4363
+  },
+  "g40m16f-gateb-deepshop": {
+   "diff_pp": -3.56,
+   "ci95": [
+    -9.11,
+    2.0
+   ],
+   "p": 0.2324
+  }
+ }
+}
