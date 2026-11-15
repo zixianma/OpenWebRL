@@ -3,25 +3,23 @@
 Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%)** for individual benchmarks. Validity denominators and benchmark weighting are specified in captions.
 
 <a id="offline-policy-distillation-20261114"></a>
-## Offline policy distillation: gains over actor-only
+## Offline policy distillation: Table 7
 
-**RPO improves the table-reported mean overall success over the actor-only baseline in both settings: +5.7 [2.1, 9.4] pp in Table 7 and +4.7 [1.6, 7.8] pp in Table A4.** DPO's mean interval crosses zero in Table 7 and is positive in A4. Teacher SFT has no clear mean gain; Filtered SFT's mean interval is negative in A4.
+**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero. The two views below contain exactly the same Table 7 estimates and confidence intervals.
 
-![Offline policy distillation: mean success gain over actor only with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.png)
+**Dot plot:**
 
-*Dots and bars are the user-supplied point differences and 95% confidence intervals **relative to actor-only**, in percentage points of overall success. The dashed zero line denotes no difference from actor-only. These are not CIs on absolute method success and do not test differences between DPO and RPO. Table 7 uses ADM-4B policy distillation; A4 uses GPT-5.5-lookahead ADM-4B policy distillation. The Qwen-235B Teacher SFT control is shared and displayed in both panels, not two independent estimates. All supplied contrasts and interval endpoints are preserved; some differ by 0.1 pp from the displayed rounded table deltas. The table-provided Mean is used directly; no aggregation or uncertainty is recomputed. Interval-construction details and task/run counts were not supplied. Gray denotes SFT controls, light purple DPO, and saturated purple RPO.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.svg).
+![Table 7 offline distillation dot plot: mean and benchmark success gains with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.png)
 
-**Table 7, by benchmark:**
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg).
 
-![Table 7 offline policy distillation: actor relative confidence intervals by benchmark](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
+**Bar graph:**
 
-*Same contrasts and colors, with identical x-axis ranges across benchmarks and both detailed figures. Bars are 95% CIs relative to actor-only. Teacher SFT is Qwen-235B SFT.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg).
+![Table 7 offline distillation bar graph: mean and benchmark success gains with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
 
-**Table A4, by benchmark:**
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg).
 
-![Table A4 GPT-5.5 lookahead policy distillation: actor relative confidence intervals by benchmark](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.png)
-
-*Same convention. This figure plots overall-success differences; A4's additional mean valid-only success column is retained in the source table below and is not plotted.* [PDF](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.svg).
+*Dots or bar lengths show the supplied percentage-point differences in overall success relative to actor-only; whiskers are the supplied 95% confidence intervals. The dashed zero line means no difference from actor-only. Both plots show Table 7 only: the mean plus WebVoyager, OM2W and DeepShop. The mean panel uses a narrower, explicitly ticked x range; benchmark panels share a common range, and all ranges match between the two variants. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. These intervals compare each method with actor-only; they are not absolute-success CIs and do not establish pairwise differences between DPO and RPO. Point estimates and CIs are reproduced without recomputation; some supplied contrasts differ by 0.1 pp from the displayed rounded table deltas. The table-provided mean is used directly. Interval-construction details and task/run counts were not supplied. Table A4's numbers remain in the source archive below and are not included in these plots.*
 
 <details><summary>Supplied absolute success rates and mean contrasts</summary>
 
@@ -49,7 +47,7 @@ Absolute rates below are reproduced separately from the supplied actor-relative 
 
 </details>
 
-[All supplied rates, contrasts and CIs](arm_results/offline_distillation_20261114/offline_distillation_actor_differences.json) · [renderer](arm_results/offline_distillation_20261114/plot_offline_distillation.py) · [plot-coordinate audit](arm_results/offline_distillation_20261114/offline_distillation_plot_audit.json).
+[All supplied rates, contrasts and CIs](arm_results/offline_distillation_20261114/offline_distillation_actor_differences.json) · [renderer](arm_results/offline_distillation_20261114/plot_offline_distillation_table7.py) · [plot-coordinate audit](arm_results/offline_distillation_20261114/offline_distillation_table7_plot_audit.json).
 
 <!-- openwebrl-luna-n5-t1-three-repeats-20261111:start -->
 <a id="openwebrl-luna-n5-t1-three-repeats-20261111"></a>

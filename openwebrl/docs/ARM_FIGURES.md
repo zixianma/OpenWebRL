@@ -500,20 +500,14 @@
 
 ## Offline distillation
 
-### Offline policy distillation: mean gains versus actor-only
+### Offline distillation Table 7: dot plot with 95% CIs
 
-![Offline policy distillation: mean gains versus actor-only](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.png)
+![Offline distillation Table 7: dot plot with 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_mean_gain.svg)
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg)
 
-### Offline distillation Table 7: benchmark gains and CIs
+### Offline distillation Table 7: bar graph with 95% CIs
 
-![Offline distillation Table 7: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
+![Offline distillation Table 7: bar graph with 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
 
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg)
-
-### Offline distillation Table A4: benchmark gains and CIs
-
-![Offline distillation Table A4: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.png)
-
-[PDF](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table_a4_by_benchmark.svg)
+[PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg)
