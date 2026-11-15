@@ -1,6 +1,6 @@
 """Pre-execution vs lookahead labels across selection-head sizes (November 14-15, one window, 3 runs each): 3-benchmark mean overall
 success minus SFT 4B alone (same window, 3 runs) versus head parameters, one line per label type. Bars: paired 95% bootstrap
-intervals of each head - SFT. Right: the paired difference pre - lookahead at each size and pooled over sizes (paired bootstrap
+intervals of each head - SFT. Right: the paired difference lookahead - pre at each size and pooled over sizes (paired bootstrap
 over tasks, the test of the label effect; marginal intervals on the left can overlap while this one excludes 0).
 Data: selection-head-pre-vs-lookahead-20261115.json."""
 import json
@@ -40,12 +40,13 @@ ax.legend(handles=[Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", line
 names = [s["key"] for s in sizes]
 lab2 = ["23K", "4.4M", "22.6M", "1.8B", "pooled"]
 diffs = [d["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in names] + [d["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
+diffs = [(-pt, -hi, -lo) for pt, lo, hi in diffs]   # lookahead - pre
 for i, (pt, lo, hi) in enumerate(diffs):
     ax2.errorbar(i, pt, yerr=[[pt - lo], [hi - pt]], fmt="D" if i == 4 else "o", color=C["INK"], markersize=5.5, capsize=2.5, linewidth=1.0, zorder=3)
 ax2.axhline(0, color=C["MUTED"], linestyle="--", linewidth=0.9, zorder=0)
 ax2.axvline(3.5, color=C["BORDER"], linewidth=0.8, linestyle=":", zorder=1)
-ax2.set_xticks(range(5)); ax2.set_xticklabels(lab2); ax2.set_xlim(-0.6, 4.6); ax2.set_ylim(-9, 1.5)
-ax2.set_ylabel("Pre − lookahead (pp)"); ax2.set_xlabel("Head parameters")
+ax2.set_xticks(range(5)); ax2.set_xticklabels(lab2); ax2.set_xlim(-0.6, 4.6); ax2.set_ylim(-1.5, 9)
+ax2.set_ylabel("Lookahead − pre-execution (pp)"); ax2.set_xlabel("Head parameters")
 ax2.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
 for sp in ("top", "right"): ax2.spines[sp].set_visible(False)
 fig.tight_layout(w_pad=2.5)
