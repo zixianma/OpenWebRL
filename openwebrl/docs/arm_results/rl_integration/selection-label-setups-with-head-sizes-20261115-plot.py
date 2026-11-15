@@ -39,9 +39,9 @@ LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "
 INK, MUTED = C["INK"], C["MUTED"]
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-\nexec", C["PRE_EXEC"], "teacher_pre", "Ours pre"),
-    ("H=1", C["LOOKAHEAD_TEACHER"], "teacher_post", "Ours post"),
+    ("H=1", "#F4B4A4", "teacher_post", "Ours post"),   # salmon, light -> dark with lookahead horizon
     ("H=4", C["LOOKAHEAD_TEACHER"], "teacher_k3", "Ours K3"),
-    ("H=6", C["LOOKAHEAD_TEACHER"], "teacher_k5", "K5"),
+    ("H=6", "#C8644C", "teacher_k5", "K5"),
     ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 P = K["pooled"]
 SUBTITLE = {"offline": "Teacher ADM (no training)\nscored on 1.7K held-out states",
@@ -96,7 +96,8 @@ for ax, (title, kind, base) in zip(axes, PANELS):
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
 axes[0].set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
-ORANGE = "#E58E2F"   # distinct from the Oracle yellow-orange and the lookahead salmon
+PURPLES = ["#CBB9F7", "#AE93F2", C["ADM_MAIN"], "#6E4FC4", "#4B3191"]   # light -> dark with head size; pooled darkest
+ORANGE = PURPLES[2]
 H = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
 keys = [s["key"] for s in H["sizes"]]
 diffs = [H["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in keys] + [H["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
@@ -104,7 +105,7 @@ diffs = [(-pt, -hi, -lo) for pt, lo, hi in diffs]   # lookahead - pre
 ax3.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
 for x, v in enumerate(diffs):
     d, lo, hi = v
-    ax3.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt="D" if x == 4 else "o", ms=4.1, color=ORANGE, ecolor=C["BASELINE_DARK"],
+    ax3.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt="D" if x == 4 else "o", ms=4.1, color=PURPLES[x], ecolor=C["BASELINE_DARK"],
                  capsize=1.5, lw=0.75, zorder=3, markeredgewidth=1.0)
     ax3.text(x, hi + 0.15, f"{d:+.1f}", ha="center", va="bottom", fontsize=5.8, color=INK)
 
