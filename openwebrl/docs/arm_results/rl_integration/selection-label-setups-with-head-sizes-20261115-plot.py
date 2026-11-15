@@ -91,7 +91,8 @@ for ax, (title, kind, base) in zip(axes, PANELS):
         ax.spines[side].set_visible(False)
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
-axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
+axes[0].set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
+ORANGE = "#E58E2F"   # distinct from the Oracle yellow-orange and the lookahead salmon
 H = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
 keys = [s["key"] for s in H["sizes"]]
 diffs = [H["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in keys] + [H["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
@@ -99,16 +100,16 @@ diffs = [(-pt, -hi, -lo) for pt, lo, hi in diffs]   # lookahead - pre
 ax3.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
 for x, v in enumerate(diffs):
     d, lo, hi = v
-    ax3.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt="D" if x == 4 else "o", ms=4.1, color=C["ADM_MAIN"], ecolor=C["BASELINE_DARK"],
+    ax3.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt="D" if x == 4 else "o", ms=4.1, color=ORANGE, ecolor=C["BASELINE_DARK"],
                  capsize=1.5, lw=0.75, zorder=3, markeredgewidth=1.0)
     ax3.text(x, hi + 0.15, f"{d:+.1f}", ha="center", va="bottom", fontsize=5.8, color=INK)
-ax3.axvline(3.5, color=C["BORDER"], lw=0.6, ls=":", zorder=1)
-ax3.set_title("Online: lookahead − pre-exec", fontsize=7, loc="left", color=INK, pad=6)
+
+ax3.set_title("Online: lookahead vs pre-exec", fontsize=7, loc="left", color=INK, pad=6)
 ax3.set_xticks(range(5), ["23K", "4.4M", "22.6M", "1.8B", "Pooled"], fontsize=6.2); ax3.set_xlim(-0.45, 4.45)
 ax3.text(1.5, -.24, "Student ADM size", transform=ax3.get_xaxis_transform(), ha="center", va="top", fontsize=6, color=INK)
 ax3.plot([-.35, 3.35], [-.19, -.19], transform=ax3.get_xaxis_transform(), color=MUTED, lw=.5, clip_on=False)
-ax3.set_ylim(-1.2, 9.2); ax3.set_yticks([0, 2, 4, 6, 8])
-ax3.set_ylabel("Lookahead − pre-exec (pp)", fontsize=7, color=INK)
+ax3.set_ylim(-1.5, 9.2); ax3.set_yticks([0, 2, 4, 6, 8])
+ax3.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
 ax3.tick_params(axis="y", labelsize=6.5); ax3.tick_params(colors=INK); ax3.grid(False)
 for side in ("top", "right"):
     ax3.spines[side].set_visible(False)
@@ -118,9 +119,10 @@ handles = [
            markeredgewidth=1.0, markerfacecolor="white"),
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
+    Line2D([], [], marker="o", ls="", color=ORANGE, ms=4.1, markeredgewidth=1.0, markerfacecolor=ORANGE),
 ]
-fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
-           loc="lower center", ncol=2, bbox_to_anchor=(0.35, 0.005), columnspacing=1.8)
+fig.legend(handles, ["Teacher ADM", "Student ADM", "Student ADM, lookahead − pre-exec"], frameon=False, fontsize=6.8,
+           loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
 fig.subplots_adjust(left=0.085, right=0.99, top=0.81, bottom=0.28)
 fig.canvas.draw()
