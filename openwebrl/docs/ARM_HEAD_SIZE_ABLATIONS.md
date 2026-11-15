@@ -80,12 +80,18 @@ All success rates in this document are **overall success** (successes / episodes
 | d4096-L8 | lookahead H = 4 | 777 / 900 | 296 | 1,612 / 1,785 | 848 | 440 / 450 | 213 |
 | d4096-L8 | pre-execution | 786 / 900 | 309 | 1,599 / 1,785 | 784 | 446 / 450 | 186 |
 
-![Pre-execution vs lookahead labels across selection-head sizes: mean overall success minus SFT 4B alone versus head parameters](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.png)
+![Pre-execution vs lookahead labels across selection-head sizes and the 4B LoRA decoder: mean overall success minus SFT 4B alone](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.png)
+
+*Hollow markers, right of the dotted line: the 4B LoRA decoders (ADM-4B) trained on the same two label types, from a different window (decoders November 4, SFT November 3; [ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#final-selection-recipe3), rows marked ¹), so their height is not directly comparable with the heads. For the decoder the order flips: same-day pre − lookahead +1.5 [−0.6, +3.6] pp.*
 
 *Same window and runs for every row; differences are paired bootstrap over tasks common to all nine conditions on run-averaged per-task success (10,000 resamples, seed 20261029, benchmarks resampled independently); the pooled row averages per-task success over the four sizes of each label type. On mean valid-only, pre − lookahead is **−3.0 [−5.2, −0.8]** / **−5.5 [−7.7, −3.3]** / **−4.8 [−7.2, −2.4]** / **−3.0 [−5.2, −0.8]** (23K / 4.4M / 22.6M / 1.8B) and **−4.1 [−5.3, −2.9]** pooled. Held-out agreement with each head's own labels at the final epoch: lookahead heads 43–46%, pre heads 58–60% (pre labels are easier to imitate but select worse actions). The two label types pick the same action on 35% of panels. Three WebVoyager runs lost their model server mid-run and were resumed from their saved records (the two resumes after node g003 crashes excluded that node); all 28,215 episodes judged, none refused.* Evidence: [data](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.json) · [script](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.py) · [plot script](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115-plot.py) · [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.svg). Runtime: `recipe3-ablations-20261104/` (pre heads `heads-scale/pre-*/`, evals `eval-pre/run<k>/`, job log `eval-pre/jobs.txt`).
 
 <a id="head-labels-action-types-20261115"></a>
 **What the two label types pick.** *Pre-execution heads scroll far more: 21–25% of their decision steps at every size, above the 17% of offered candidates that are scrolls, against 11–17% for lookahead heads and 13% for one SFT sample. Lookahead heads go back more (5.2% vs 3.5%) and click more (62.6% vs 56.7%).* Pre-execution labels seem to favour the safe, information-gathering action; lookahead labels, which see what each action leads to, favour committing (clicking through) and undoing dead ends.
+
+![Action types chosen by lookahead- and pre-execution-label heads, averaged over the four sizes, with SFT 4B alone and the offered candidates](arm_results/rl_integration/selection-head-action-types-avg-20261115.png)
+
+*Averaged over sizes: the four heads of each label type pooled. [PDF](arm_results/rl_integration/selection-head-action-types-avg-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-action-types-avg-20261115.svg) · [plot script](arm_results/rl_integration/selection-head-action-types-avg-20261115-plot.py). Per size:*
 
 ![Action types chosen by lookahead- and pre-execution-label heads: share of decision steps per tool, with SFT 4B alone and the offered candidates](arm_results/rl_integration/selection-head-action-types-20261115.png)
 
