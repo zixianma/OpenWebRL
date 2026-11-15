@@ -41,6 +41,7 @@ TITLES = {
     "offline_distillation_table_a4_by_benchmark": "Offline distillation Table A4: benchmark gains and CIs",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-with-rl-20261113": "Updated cost comparison with RL actors and ADM",
     "selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113": "SFT 4B and baseline ADMs: updated overall success",
+    "selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-20261115": "SFT 4B and baseline ADMs: ADM-23K (linear probe) variant",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104": "SFT actors and ADMs: updated success at original figure path",
     "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104": "SFT actors and ADMs: without RL checkpoints",
     "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104": "SFT actors and ADMs: without RL, per benchmark",

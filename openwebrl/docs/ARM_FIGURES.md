@@ -102,6 +102,12 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.svg)
 
+### SFT 4B and baseline ADMs: ADM-23K (linear probe) variant
+
+![SFT 4B and baseline ADMs: ADM-23K (linear probe) variant](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-20261115.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-20261115.svg)
+
 ### SFT actors and ADMs: updated success at original figure path
 
 ![SFT actors and ADMs: updated success at original figure path](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
