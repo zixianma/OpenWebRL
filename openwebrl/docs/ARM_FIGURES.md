@@ -150,6 +150,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.svg)
 
+### Lookahead and pre-execution labels across head sizes (paper version)
+
+![Lookahead and pre-execution labels across head sizes (paper version)](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.svg)
+
 ### Selection head scaling: held-out agreement with the teacher
 
 ![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)

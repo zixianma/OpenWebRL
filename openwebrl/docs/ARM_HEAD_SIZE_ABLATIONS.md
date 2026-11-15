@@ -84,6 +84,10 @@ All success rates in this document are **overall success** (successes / episodes
 
 *Main-paper view: lookahead − pre-execution labels, paired difference in mean overall success on the same tasks, at each head size and pooled over the four sizes (95% paired bootstrap intervals). [PDF](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.svg) · [plot script](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115-plot.py).*
 
+![Paper version: student ADM success minus SFT with lookahead and pre-execution labels at four head sizes, and the paired lookahead minus pre-execution difference](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.png)
+
+*Paper version of the two-panel figure (column width, same style as the merged label figure): left, each student ADM minus SFT 4B alone for lookahead (salmon) and pre-execution (gray) labels; right, the paired lookahead − pre-execution difference per size and pooled. [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.svg) · [plot script](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115-plot.py).*
+
 ![Pre-execution vs lookahead labels across selection-head sizes: each head minus SFT 4B alone, and the paired lookahead − pre-execution difference per size](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.png)
 
 *Left: each head minus SFT 4B alone, with that difference's interval; the two labels' intervals overlap at 23K and 1.8B. Right: the paired difference lookahead − pre-execution on the same tasks, the actual test of the label effect: +2.7, +5.7, +4.4 and +2.7 pp (23K, 4.4M, 22.6M, 1.8B) and +3.9 [+2.8, +5.0] pooled, every interval above 0. Each head is one training seed, so differences between sizes are within seed variation (4.4M vs 22.6M over three seeds: −0.2 [−1.8, +1.4]).*

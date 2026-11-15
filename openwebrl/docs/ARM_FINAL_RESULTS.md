@@ -1677,6 +1677,10 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 *Lookahead − pre-execution, paired difference in mean overall success on the same tasks (95% paired bootstrap intervals); each head is one training seed. [PDF](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.svg) · [plot script](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115-plot.py) · [data](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.json).*
 
+![Paper version: student ADM success minus SFT with lookahead and pre-execution labels at four head sizes, and the paired lookahead minus pre-execution difference](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.png)
+
+*Paper version of the two-panel figure (column width, same style as the merged label figure): left, each student ADM minus SFT 4B alone for lookahead (salmon) and pre-execution (gray) labels; right, the paired lookahead − pre-execution difference per size and pooled. [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115.svg) · [plot script](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-20261115-plot.py).*
+
 <a id="final-selection-recipe3-head-scale-agreement-20261112"></a>**Offline: agreement with the teacher.** *Every size from the 23K linear probe to 1.8B agrees with the GPT-5.5 teacher's pick on 42.9–46.2% of held-out panels at the final epoch (chance 20%), and the three training seeds of one size span the same range (4.4M 45.1–46.2%, 22.6M 44.8–45.9%). Size does not change what the head learns.*
 
 ![Selection-head model scale, offline: final-epoch agreement with the GPT-5.5 teacher pick on held-out panels versus head parameters, three training seeds at 4.4M and 22.6M](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)

@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Paper version of selection-head-pre-vs-lookahead-20261115 in the style of selection-label-setups-with-head-sizes-20261115 (column
+width, Albert Sans, gray interval bars, value labels, shared legend). Left: each student ADM's online 3-benchmark mean overall
+success minus SFT 4B alone, lookahead H = 4 vs pre-execution labels (GPT-5.5, full data), at four head sizes. Right: the paired
+difference lookahead - pre-execution per size and pooled. One window (November 14-15), 3 runs each; paired bootstrap over tasks.
+Data: selection-head-pre-vs-lookahead-20261115.json."""
+import json
+from pathlib import Path
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import sys as _paper_sys
+_paper_sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style  # noqa: F401
+from paper_plot_palette import COLORS as C
+from matplotlib.lines import Line2D
+
+plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none"})
+HERE = Path(__file__).resolve().parent
+D = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
+INK, MUTED = C["INK"], C["MUTED"]
+KEYS = [s["key"] for s in D["sizes"]]
+SIZES = ["23K", "4.4M", "22.6M", "1.8B"]
+LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
+PURPLES = ["#CBB9F7", "#AE93F2", C["ADM_MAIN"], "#6E4FC4", "#4B3191"]
+
+
+def point(ax, x, v, color, marker="o", label_dy=0.15, label=True):
+    d, lo, hi = v
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
+                zorder=3, markeredgewidth=1.0)
+    if label:
+        ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.6, color=INK)
+
+
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(4.0, 2.3), gridspec_kw=dict(width_ratios=[1, 1.1], wspace=0.40))
+for x, k in enumerate(KEYS):
+    point(a1, x - 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label=False)
+    point(a1, x + 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label=False)
+diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS] + [D["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
+for x, (pt, lo, hi) in enumerate(diffs):
+    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if x == 4 else "o")
+for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "Lookahead − pre-exec", [*SIZES, "Pooled"])):
+    ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
+    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=12)
+    ax.set_xticks(range(len(ticks)), ticks, fontsize=5.9)
+    ax.set_xlim(-0.5, len(ticks) - 0.5)
+    ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
+    for side in ("top", "right"): ax.spines[side].set_visible(False)
+a1.text(0, 1.03, "Student ADMs · full data", transform=a1.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
+a2.text(0, 1.03, "paired, same tasks", transform=a2.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
+a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
+a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
+a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
+handles = [Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1), Line2D([], [], marker="o", ls="", color=PRE, ms=4.1),
+           Line2D([], [], marker="o", ls="", color=PURPLES[2], ms=4.1)]
+fig.legend(handles, ["Lookahead H=4", "Pre-exec", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
+           loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.0), columnspacing=1.2, handletextpad=0.3)
+fig.subplots_adjust(left=0.12, right=0.985, top=0.80, bottom=0.30)
+fig.canvas.draw()
+r = fig.canvas.get_renderer()
+for artist in [*fig.legends, *[t for ax in (a1, a2) for t in [ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts, *ax.get_xticklabels(), *ax.get_yticklabels()]]]:
+    if artist.get_visible() and (not hasattr(artist, "get_text") or artist.get_text()):
+        b = artist.get_window_extent(r)
+        assert fig.bbox.contains(*b.p0) and fig.bbox.contains(*b.p1), str(artist)
+out = HERE / "selection-head-pre-vs-lookahead-paper-20261115"
+fig.savefig(out.with_suffix(".png"), dpi=300)
+fig.savefig(out.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
+fig.savefig(out.with_suffix(".svg"), metadata={"Date": None})
+svg = out.with_suffix(".svg"); svg.write_text("\n".join(l.rstrip() for l in svg.read_text().splitlines()) + "\n")

@@ -52,6 +52,7 @@ TITLES = {
     "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
+    "selection-head-pre-vs-lookahead-paper-20261115": "Lookahead and pre-execution labels across head sizes (paper version)",
     "selection-head-lookahead-minus-pre-20261115": "Lookahead minus pre-execution labels across head sizes",
     "selection-head-scale-20261111": "Selection head scaling: single-seed screen (November 11)",
     "selection-head-scale-pooled-20261112": "Selection head scaling: success and selection time, all runs pooled",
@@ -134,7 +135,7 @@ def figure_group(stem: str) -> str:
         return GROUPS[0]
     if name.startswith("selection-label-") and ("kfold" in name or "with-head-sizes" in name):
         return GROUPS[1]
-    if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale", "selection-head-lookahead")):
+    if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale", "selection-head-lookahead", "selection-head-pre-vs-lookahead")):
         return GROUPS[2]
     if name.startswith(("selection-recipe3-data-ablations", "selection-recipe3-data-scaling")):
         return GROUPS[3]
