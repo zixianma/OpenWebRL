@@ -48,6 +48,7 @@ TITLES = {
     "selection-recipe3-data-scaling-20261112": "Recipe 3 training data scaling",
     "selection-head-scale-pooled-20261112": "Selection head scaling: pooled results",
     "rl_learning_compact_with_repetition": "RL learning and repetition: merged four-panel figure",
+    "selection-label-setups-with-head-sizes-20261115": "Label sources with lookahead minus pre-execution across head sizes",
     "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
@@ -131,7 +132,7 @@ def figure_group(stem: str) -> str:
         return "Offline distillation"
     if "/methods/" in stem or Path(stem).name == "examples-compact":
         return GROUPS[0]
-    if name.startswith("selection-label-") and "kfold" in name:
+    if name.startswith("selection-label-") and ("kfold" in name or "with-head-sizes" in name):
         return GROUPS[1]
     if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale", "selection-head-lookahead")):
         return GROUPS[2]

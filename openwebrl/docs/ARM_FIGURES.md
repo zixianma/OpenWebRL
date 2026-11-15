@@ -58,6 +58,12 @@
 
 [PDF](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.svg)
 
+### Label sources with lookahead minus pre-execution across head sizes
+
+![Label sources with lookahead minus pre-execution across head sizes](arm_results/rl_integration/selection-label-setups-with-head-sizes-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-label-setups-with-head-sizes-20261115.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-with-head-sizes-20261115.svg)
+
 ## Actor + ADM trade-offs
 
 ### All actors: benchmark mean
