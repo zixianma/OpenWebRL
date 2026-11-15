@@ -506,8 +506,8 @@
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg)
 
-### Offline distillation Table 7: bar graph with 95% CIs
+### Offline distillation Table 7: absolute-success bar graph
 
-![Offline distillation Table 7: bar graph with 95% CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
+![Offline distillation Table 7: absolute-success bar graph](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg)

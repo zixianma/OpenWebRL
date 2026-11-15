@@ -5,7 +5,7 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 <a id="offline-policy-distillation-20261114"></a>
 ## Offline policy distillation: Table 7
 
-**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero. The two views below contain exactly the same Table 7 estimates and confidence intervals.
+**RPO improves the reported mean overall success over actor-only by +5.7 [2.1, 9.4] pp.** Teacher SFT, Filtered SFT and DPO have mean intervals crossing zero. The dot plot shows Table 7 gains over actor-only with 95% CIs; the bar graph shows Table 7 absolute success rates, including actor-only.
 
 **Dot plot:**
 
@@ -13,13 +13,13 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_dot.svg).
 
-**Bar graph:**
+**Bar graph: absolute success**
 
-![Table 7 offline distillation bar graph: mean and benchmark success gains with 95 percent confidence intervals](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
+![Table 7 offline distillation bar graph: absolute mean and benchmark overall success rates](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.png)
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_bar.svg).
 
-*Dots or bar lengths show the supplied percentage-point differences in overall success relative to actor-only; whiskers are the supplied 95% confidence intervals. The dashed zero line means no difference from actor-only. Both plots show Table 7 only: the mean plus WebVoyager, OM2W and DeepShop. The mean panel uses a narrower, explicitly ticked x range; benchmark panels share a common range, and all ranges match between the two variants. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. These intervals compare each method with actor-only; they are not absolute-success CIs and do not establish pairwise differences between DPO and RPO. Point estimates and CIs are reproduced without recomputation; some supplied contrasts differ by 0.1 pp from the displayed rounded table deltas. The table-provided mean is used directly. Interval-construction details and task/run counts were not supplied. Table A4's numbers remain in the source archive below and are not included in these plots.*
+*Both figures use Table 7 only: the reported mean plus WebVoyager, OM2W and DeepShop. **Dot plot:** point differences and 95% confidence intervals relative to actor-only, in percentage points; the dashed zero line means no difference. The mean panel has a narrower, explicitly ticked x range; benchmark panels share a common range. **Bar graph:** absolute overall success (%) from the table, with an explicit actor-only row, zero-based axes and a common range across panels. No absolute-success CIs were supplied, so the bars have no error bars; the actor-relative CIs remain in the dot plot. Teacher SFT is Qwen-235B SFT. Gray denotes SFT controls, light purple DPO, and saturated purple RPO. The supplied intervals compare each method with actor-only and do not establish pairwise differences between DPO and RPO. Contrasts and endpoints are reproduced without recomputation; some differ by 0.1 pp from the displayed rounded table deltas. The table-provided mean is used directly. Interval-construction details and task/run counts were not supplied. Table A4's numbers remain in the source archive below and are not included in these plots.*
 
 <details><summary>Supplied absolute success rates and mean contrasts</summary>
 

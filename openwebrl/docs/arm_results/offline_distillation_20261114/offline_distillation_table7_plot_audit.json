@@ -174,170 +174,132 @@
       "points": [
         {
           "table": "table7",
+          "method": "Actor only",
+          "benchmark": "mean",
+          "success_pct": 39.4
+        },
+        {
+          "table": "table7",
           "method": "Teacher SFT",
           "benchmark": "mean",
-          "estimate_pp": 0.1,
-          "ci95_pp": [
-            -3.5,
-            3.5
-          ]
+          "success_pct": 39.4
         },
         {
           "table": "table7",
           "method": "Filtered SFT",
           "benchmark": "mean",
-          "estimate_pp": -1.4,
-          "ci95_pp": [
-            -5,
-            2.3
-          ]
+          "success_pct": 37.9
         },
         {
           "table": "table7",
           "method": "DPO",
           "benchmark": "mean",
-          "estimate_pp": 2.7,
-          "ci95_pp": [
-            -0.7,
-            6.2
-          ]
+          "success_pct": 42.1
         },
         {
           "table": "table7",
           "method": "RPO",
           "benchmark": "mean",
-          "estimate_pp": 5.7,
-          "ci95_pp": [
-            2.1,
-            9.4
-          ]
+          "success_pct": 45.1
+        },
+        {
+          "table": "table7",
+          "method": "Actor only",
+          "benchmark": "webvoyager",
+          "success_pct": 41.5
         },
         {
           "table": "table7",
           "method": "Teacher SFT",
           "benchmark": "webvoyager",
-          "estimate_pp": 2.2,
-          "ci95_pp": [
-            -1.8,
-            6.2
-          ]
+          "success_pct": 43.7
         },
         {
           "table": "table7",
           "method": "Filtered SFT",
           "benchmark": "webvoyager",
-          "estimate_pp": -1.7,
-          "ci95_pp": [
-            -5.4,
-            2.2
-          ]
+          "success_pct": 39.8
         },
         {
           "table": "table7",
           "method": "DPO",
           "benchmark": "webvoyager",
-          "estimate_pp": 2.7,
-          "ci95_pp": [
-            -1.3,
-            6.6
-          ]
+          "success_pct": 44.2
         },
         {
           "table": "table7",
           "method": "RPO",
           "benchmark": "webvoyager",
-          "estimate_pp": 4.5,
-          "ci95_pp": [
-            0.7,
-            8.4
-          ]
+          "success_pct": 46.1
+        },
+        {
+          "table": "table7",
+          "method": "Actor only",
+          "benchmark": "online_mind2web",
+          "success_pct": 30.7
         },
         {
           "table": "table7",
           "method": "Teacher SFT",
           "benchmark": "online_mind2web",
-          "estimate_pp": 2.7,
-          "ci95_pp": [
-            -2.7,
-            8.0
-          ]
+          "success_pct": 33.3
         },
         {
           "table": "table7",
           "method": "Filtered SFT",
           "benchmark": "online_mind2web",
-          "estimate_pp": 0,
-          "ci95_pp": [
-            -4.7,
-            4.7
-          ]
+          "success_pct": 30.7
         },
         {
           "table": "table7",
           "method": "DPO",
           "benchmark": "online_mind2web",
-          "estimate_pp": 5.3,
-          "ci95_pp": [
-            0.7,
-            10.3
-          ]
+          "success_pct": 36
         },
         {
           "table": "table7",
           "method": "RPO",
           "benchmark": "online_mind2web",
-          "estimate_pp": 8.7,
-          "ci95_pp": [
-            3.3,
-            14
-          ]
+          "success_pct": 39.3
+        },
+        {
+          "table": "table7",
+          "method": "Actor only",
+          "benchmark": "deepshop",
+          "success_pct": 46
         },
         {
           "table": "table7",
           "method": "Teacher SFT",
           "benchmark": "deepshop",
-          "estimate_pp": -4.7,
-          "ci95_pp": [
-            -13.3,
-            3.3
-          ]
+          "success_pct": 41.3
         },
         {
           "table": "table7",
           "method": "Filtered SFT",
           "benchmark": "deepshop",
-          "estimate_pp": -2.7,
-          "ci95_pp": [
-            -12,
-            6
-          ]
+          "success_pct": 43.3
         },
         {
           "table": "table7",
           "method": "DPO",
           "benchmark": "deepshop",
-          "estimate_pp": 0,
-          "ci95_pp": [
-            -8,
-            8
-          ]
+          "success_pct": 46
         },
         {
           "table": "table7",
           "method": "RPO",
           "benchmark": "deepshop",
-          "estimate_pp": 4,
-          "ci95_pp": [
-            -4.7,
-            12.7
-          ]
+          "success_pct": 50
         }
       ],
       "output_sha256": {
-        "png": "ecaa2ebdb37f71469c9fb077019e2e13a7b2ee94055e6577b7b011156e75d608",
-        "svg": "3739a96f38981fb2178e7aed6b8f6c4c744688f2d3d1dd529472531bd293023a",
-        "pdf": "b9a3a89026cae1694cfcc53161c0ad03717d6f84defe86f2d46cc0730bcbd903"
-      }
+        "png": "163d04407598823df23c62cb1db2e5310658a49f82914de6f641b50bbc51e77a",
+        "svg": "d6b80b3c9d332e1cd12c0aac18279d59e14f9f04ad79c3b7673a3effdb587172",
+        "pdf": "3b7bc1b5f8ee3eeeb253979ffbf69250db5ed99725a293f167a34c52e7324545"
+      },
+      "metric": "absolute overall success (%)",
+      "intervals": "not supplied for absolute success; omitted"
     }
   }
 }

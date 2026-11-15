@@ -33,7 +33,7 @@ GROUPS = [
 ]
 TITLES = {
     "offline_distillation_table7_dot": "Offline distillation Table 7: dot plot with 95% CIs",
-    "offline_distillation_table7_bar": "Offline distillation Table 7: bar graph with 95% CIs",
+    "offline_distillation_table7_bar": "Offline distillation Table 7: absolute-success bar graph",
     "offline_distillation_mean_gain": "Offline policy distillation: mean gains versus actor-only",
     "offline_distillation_table7_by_benchmark": "Offline distillation Table 7: benchmark gains and CIs",
     "offline_distillation_table_a4_by_benchmark": "Offline distillation Table A4: benchmark gains and CIs",
