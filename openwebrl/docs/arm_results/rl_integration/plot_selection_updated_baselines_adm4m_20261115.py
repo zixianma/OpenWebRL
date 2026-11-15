@@ -15,6 +15,8 @@ if __name__ == "__main__":
          '    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, C["ADM_22M"], "o", False),\n    ("head-4m-gpt55", "ADM-4M (GPT-5.5)", 4.44e9 + 4.36e6, C["ADM_22M"], "o", False),\n'),
         ('    "head-gpt55-k3": ("#B69AE8", "D"),\n', '    "head-gpt55-k3": ("#B69AE8", "D"),\n    "head-4m-gpt55": ("#D9CBF7", "D"),\n'),
         ('size = 44 if key in ("head-gpt55-k3",', 'size = 44 if key in ("head-4m-gpt55", "head-gpt55-k3",'),
+        # thin rings mark frontier points, so the parameters-panel frontier (two points at ~4.44B) stays visible
+        ('                  frontier_rings=draw_rings, updates=updates,', '                  frontier_rings=True, updates=updates,'),
         ('                own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))\n',
          '                if "ADM-4M (GPT-5.5)" in by_label:\n                    own_entries.append((by_label["ADM-4M (GPT-5.5)"], "ADM-4M"))\n                own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))\n'),
     ]
