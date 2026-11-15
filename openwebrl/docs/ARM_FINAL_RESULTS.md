@@ -1956,6 +1956,12 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
   [PDF](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-20261101.svg). Reproduce with the existing renderer’s `--teacher-only-offline` flag.
 
+  **Same figure, lookahead horizons in graded salmon (H = 1 light, H = 4 base, H = 6 dark):**
+
+  ![Teacher ADM held-out rollout success and student ADM online success by label source, with lookahead horizons in graded salmon](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.png)
+
+  [PDF](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.svg) · [plot script](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115-plot.py). Values identical to the figure above.
+
   **With the head-size label ablation (November 15):**
 
   ![Teacher ADM offline and Student ADM online gains over SFT by label source, plus lookahead minus pre-execution labels at each student head size](arm_results/rl_integration/selection-label-setups-with-head-sizes-20261115.png)

@@ -49,6 +49,7 @@ TITLES = {
     "selection-head-scale-pooled-20261112": "Selection head scaling: pooled results",
     "rl_learning_compact_with_repetition": "RL learning and repetition: merged four-panel figure",
     "selection-label-setups-with-head-sizes-20261115": "Label sources with lookahead minus pre-execution across head sizes",
+    "selection-label-setups-kfold-teacher-only-offline-salmon-20261115": "Teacher offline and student online success: graded salmon horizons",
     "selection-label-setups-kfold-teacher-only-offline-20261101": "Teacher offline success and student online success",
     "selection-recipe3-data-ablations-rerun-clean-20261109": "Training data ablations: matched-window results",
     "selection-recipe3-data-ablations-rerun-clean-per-benchmark-20261109": "Training data ablations: matched-window results by benchmark",
