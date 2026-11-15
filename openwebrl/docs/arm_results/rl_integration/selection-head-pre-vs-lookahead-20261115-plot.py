@@ -19,19 +19,19 @@ from matplotlib.lines import Line2D
 HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
 sizes = d["sizes"]
-X = [s["params"] / 1e6 for s in sizes]
-fig, (ax, ax2) = plt.subplots(1, 2, figsize=(7.2, 3.2), gridspec_kw=dict(width_ratios=[1.6, 1]))
-for lab, col, mk, off in (("lookahead", C["LOOKAHEAD_TEACHER"], "o", 0.93), ("pre", C["PRE_EXEC"], "s", 1.075)):
+X = list(range(len(sizes)))   # evenly spaced, ordered by size
+fig, (ax, ax2) = plt.subplots(1, 2, figsize=(6.6, 3.1), gridspec_kw=dict(width_ratios=[1.15, 1]))
+for lab, col, mk, off in (("lookahead", C["LOOKAHEAD_TEACHER"], "o", -0.09), ("pre", C["PRE_EXEC"], "s", 0.09)):
     pts = [d["conditions"][f"{s['key']}-{lab}"]["minus_sft"]["mean_overall_pp"] for s in sizes]
-    xs = [x * off for x in X]
+    xs = [x + off for x in X]
     ax.plot(xs, [p[0] for p in pts], color=col, linewidth=1.2, zorder=2)
     for x, (pt, lo, hi) in zip(xs, pts):
         ax.errorbar(x, pt, yerr=[[pt - lo], [hi - pt]], fmt=mk, color=col, markersize=5.5, capsize=2, linewidth=0.9, zorder=3)
 ax.axhline(0, color=C["MUTED"], linestyle="--", linewidth=0.9, zorder=0)
-ax.text(2600, 0.3, "SFT 4B alone (1 sample)", fontsize=6.5, color=C["MUTED"], ha="right", va="bottom")
-ax.set_xscale("log"); ax.set_xticks([0.023, 4.4, 22.6, 1770]); ax.set_xticklabels(["23K\nlinear", "4.4M", "22.6M", "1.8B"]); ax.minorticks_off()
-ax.set_xlim(0.012, 3500); ax.set_ylim(-1.5, 14)
-ax.set_xlabel("Head parameters"); ax.set_ylabel("Mean overall − SFT 4B alone (pp)")
+ax.text(3.4, 0.3, "SFT 4B alone (1 sample)", fontsize=6.5, color=C["MUTED"], ha="right", va="bottom")
+ax.set_xticks(X); ax.set_xticklabels(["23K", "4.4M", "22.6M", "1.8B"])
+ax.set_xlim(-0.5, 3.5); ax.set_ylim(-1.5, 14)
+ax.set_xlabel("Head parameters"); ax.set_ylabel("Mean overall − SFT 4B alone (%)")
 ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
 for sp in ("top", "right"): ax.spines[sp].set_visible(False)
 ax.legend(handles=[Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", linewidth=1.2, markersize=5, label="lookahead H = 4 labels"),
@@ -46,7 +46,7 @@ for i, (pt, lo, hi) in enumerate(diffs):
 ax2.axhline(0, color=C["MUTED"], linestyle="--", linewidth=0.9, zorder=0)
 ax2.axvline(3.5, color=C["BORDER"], linewidth=0.8, linestyle=":", zorder=1)
 ax2.set_xticks(range(5)); ax2.set_xticklabels(lab2); ax2.set_xlim(-0.6, 4.6); ax2.set_ylim(-1.5, 9)
-ax2.set_ylabel("Lookahead − pre-execution (pp)"); ax2.set_xlabel("Head parameters")
+ax2.set_ylabel("Lookahead − pre-execution (%)"); ax2.set_xlabel("Head parameters")
 ax2.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
 for sp in ("top", "right"): ax2.spines[sp].set_visible(False)
 fig.tight_layout(w_pad=2.5)
