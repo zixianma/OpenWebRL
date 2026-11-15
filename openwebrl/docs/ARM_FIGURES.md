@@ -102,9 +102,9 @@
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-20261113.svg)
 
-### SFT actors and ADMs: earlier baseline comparison, revised markers
+### SFT actors and ADMs: updated success at original figure path
 
-![SFT actors and ADMs: earlier baseline comparison, revised markers](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
+![SFT actors and ADMs: updated success at original figure path](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.svg)
 

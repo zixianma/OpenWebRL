@@ -386,6 +386,7 @@ if __name__ == "__main__":
     render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-no-rl-20261104", 1.42, sft, success_metric="overall", include_rl=False)
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-overall-no-rl-20261104", 3.90, sft, success_metric="overall", include_rl=False)
     render(("mean",), "selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104", 1.42, sft,
-           success_metric="overall", include_rl=False, include_baselines=True, success_updates=())
+           success_metric="overall", include_rl=False, include_baselines=True,
+           success_updates=json.loads((HERE / "selection-updated-baselines-20261113.json").read_text())["updates"])
     rl = [m for m in methods if m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))
