@@ -345,13 +345,23 @@
         }
       ],
       "output_sha256": {
-        "png": "22ca361c3c9635890ad01ae6a6c2dae9d9925835cf018b3be3d7bc0e9b90261d",
-        "svg": "515dff6de51ed01429343bdb7018de1671591faf274e92401d516dc04b263f3a",
-        "pdf": "5f7413ab122174b1ceab74400ba71759f58698e921cbf1dbfc4fd8a20d8d29d5"
+        "png": "a35ad4960306c794e13dfe5af811aac045084c4ae809264aa91077d8833a4550",
+        "svg": "9691c9b805b47bab396b15d06e90f735f4cb31aff656f57e04b938b88efb4f07",
+        "pdf": "23b74c38fd1b491b9e082ebb43b1248d136ce0189370465df78060b6c8a7f488"
       },
       "metric": "difference in mean overall success rates, displayed as % (percentage-point differences)",
       "orientation": "horizontal",
-      "intervals": "supplied paired 95% CIs versus actor-only"
+      "intervals": "supplied paired 95% CIs versus actor-only",
+      "style": {
+        "figure_inches": [
+          3.0,
+          1.45
+        ],
+        "marker_size_pt": 6.5,
+        "ci_linewidth_pt": 1.5,
+        "cap_size_pt": 3.0,
+        "cap_thickness_pt": 1.3
+      }
     },
     "offline_distillation_table7_mean_dot_vertical": {
       "points": [
@@ -397,13 +407,23 @@
         }
       ],
       "output_sha256": {
-        "png": "42e65448ea6536888453bedc1be49259008f27a74daf49931bcb8e52966b5ea9",
-        "svg": "49ee71851334ea29c9f1c3a2d113cf2a427a0e69eca839ab76eb241ac8e89dd3",
-        "pdf": "2f322b46f3371b6f84fbfd3f0281fef531c17c411e0029800548892abbed37fe"
+        "png": "2b0fd2b1d6836a5363254350ef274ad00ad058ff6b6b4388e5a7c2ce5fc6cdd0",
+        "svg": "f3154f1975fbcc0e0dd8258ec8a5b511d0bf7ca62a83a558a8bfa113ce9d77bf",
+        "pdf": "8c1197b67b8dc8ad5efde3313a7f0e033f3f1d2a75ab078651694f0e502dee65"
       },
       "metric": "difference in mean overall success rates, displayed as % (percentage-point differences)",
       "orientation": "vertical",
-      "intervals": "supplied paired 95% CIs versus actor-only"
+      "intervals": "supplied paired 95% CIs versus actor-only",
+      "style": {
+        "figure_inches": [
+          2.8,
+          1.9
+        ],
+        "marker_size_pt": 6.5,
+        "ci_linewidth_pt": 1.5,
+        "cap_size_pt": 3.0,
+        "cap_thickness_pt": 1.3
+      }
     }
   }
 }
