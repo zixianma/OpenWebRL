@@ -1,8 +1,7 @@
 """Action types chosen by lookahead- vs pre-execution-label heads (November 14-15 window, 3 runs x 1,045 tasks per condition):
-share of decision steps by the chosen action's tool name. Markers: heads pooled over the four sizes (23K probe, 4.4M, 22.6M, 1.8B)
-per label type; thin bars: range over the four sizes. Gray ring: all five candidates offered to the heads (the actor's proposals);
-black diamond: SFT 4B alone (its single sample). Rarer tools (press_keys, drag, switch_tab, close_tab, unparsed) are grouped as "other".
-Data: selection-head-action-types-20261115.json."""
+share of decision steps by the chosen action's tool name, one panel per tool and one bar per method. Bars: all five candidates
+offered to the heads (the actor's proposals), SFT 4B alone (its single sample), then each head by size for lookahead H = 4 labels
+and for pre-execution labels. Data: selection-head-action-types-20261115.json."""
 import collections
 import json
 import os
@@ -15,46 +14,36 @@ import sys as _s
 _s.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / "paper_plot_style.py").is_file())))
 import paper_plot_style as _style  # noqa: F401
 from paper_plot_palette import COLORS as C
-from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 HERE = Path(__file__).parent
 d = json.loads((HERE / "selection-head-action-types-20261115.json").read_text())
-TYPES = ["click", "scroll", "done", "go_back", "new_tab", "goto_url", "write", "wait", "other"]
-LAB = {"go_back": "go back", "new_tab": "new tab", "goto_url": "go to URL"}
-
-
-def shares(c):
-    c = collections.Counter(c); t = sum(c.values()); g = collections.Counter()
-    for k, v in c.items(): g[k if k in TYPES else "other"] += v
-    return {k: 100 * g[k] / t for k in TYPES}
-
-
-L = [k for k in d if k.endswith("-lookahead")]; P = [k for k in d if k.endswith("-pre")]
-pool = lambda keys, f: sum((collections.Counter(d[k][f]) for k in keys), collections.Counter())
-offered, sft = shares(pool(L + P, "offered")), shares(d["sft"]["picked"])
-groups = [("lookahead H = 4 heads", L, C["LOOKAHEAD_TEACHER"], "o", -0.13), ("pre-execution heads", P, C["PRE_EXEC"], "s", 0.13)]
-fig, (a1, a2) = plt.subplots(1, 2, figsize=(7.0, 3.4), gridspec_kw=dict(width_ratios=[1, 3.2]))
-for ax, types, xmax in ((a1, TYPES[:1], 70), (a2, TYPES[1:], 26)):
-    ys = {t: i for i, t in enumerate(types)}
-    for t in types:
-        y = ys[t]
-        ax.plot(offered[t], y, "o", markersize=7.5, markerfacecolor="none", markeredgecolor=C["MUTED"], markeredgewidth=1.2, zorder=2)
-        ax.plot(sft[t], y, "D", markersize=4.5, color=C["INK"], zorder=3)
-        for name, keys, col, mk, dy in groups:
-            per = [shares(d[k]["picked"])[t] for k in keys]
-            ax.plot([min(per), max(per)], [y + dy] * 2, color=col, linewidth=1.0, zorder=3)
-            ax.plot(shares(pool(keys, "picked"))[t], y + dy, mk, markersize=5.5, color=col, zorder=4)
-    ax.set_yticks(range(len(types))); ax.set_yticklabels([LAB.get(t, t) for t in types]); ax.invert_yaxis()
-    ax.set_xlim(0 if xmax < 50 else 50, xmax); ax.grid(axis="x", color=C["BORDER"], linewidth=0.6, zorder=0)
+TOOLS = [("click", "click"), ("scroll", "scroll"), ("go_back", "go back"), ("done", "done"), ("new_tab", "new tab"), ("goto_url", "go to URL")]
+SIZES = [("probe", "23K"), ("d128", "4.4M"), ("d512", "22.6M"), ("d4096", "1.8B")]
+share = lambda c, t: 100 * c.get(t, 0) / sum(c.values())
+offered = sum((collections.Counter(d[k]["offered"]) for k in d if k != "sft"), collections.Counter())
+# (label, counts, face, edge, hatch)
+BARS = [("offered", offered, "white", C["MUTED"]), ("SFT", collections.Counter(d["sft"]["picked"]), C["INK"], C["INK"])]
+BARS += [(s, collections.Counter(d[f"{k}-lookahead"]["picked"]), C["LOOKAHEAD_TEACHER"], C["LOOKAHEAD_TEACHER"]) for k, s in SIZES]
+BARS += [(s, collections.Counter(d[f"{k}-pre"]["picked"]), C["PRE_EXEC"], C["PRE_EXEC"]) for k, s in SIZES]
+XS = [0, 1, 2.6, 3.6, 4.6, 5.6, 7.2, 8.2, 9.2, 10.2]
+fig, axes = plt.subplots(2, 3, figsize=(7.6, 4.6))
+for ax, (tool, title) in zip(axes.flat, TOOLS):
+    vals = [share(c, tool) for _, c, _, _ in BARS]
+    ax.bar(XS, vals, width=0.82, color=[b[2] for b in BARS], edgecolor=[b[3] for b in BARS], linewidth=1.0, zorder=3)
+    ax.set_title(title, fontsize=8, pad=3)
+    ax.set_xticks(XS); ax.set_xticklabels([b[0] for b in BARS], rotation=90, fontsize=5.8)
+    ax.set_xlim(-0.7, 10.9); ax.set_ylim(0, max(vals) * 1.18)
+    ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
     for sp in ("top", "right"): ax.spines[sp].set_visible(False)
-a1.set_ylim(0.5, -0.5)
-a2.set_xlabel("Share of decision steps (%)"); a1.set_xlabel("(%)")
-h = [Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", linewidth=1.0, markersize=5, label="lookahead H = 4 heads (range: 4 sizes)"),
-     Line2D([], [], color=C["PRE_EXEC"], marker="s", linewidth=1.0, markersize=5, label="pre-execution heads (range: 4 sizes)"),
-     Line2D([], [], color=C["INK"], marker="D", linestyle="none", markersize=4.5, label="SFT 4B alone (1 sample)"),
-     Line2D([], [], color=C["MUTED"], marker="o", markerfacecolor="none", linestyle="none", markersize=7, label="all 5 candidates offered")]
-fig.legend(handles=h, loc="lower center", ncol=2, fontsize=6.5, frameon=False, bbox_to_anchor=(0.5, -0.02))
-fig.tight_layout(rect=(0, 0.1, 1, 1), w_pad=2.0)
+    ax.tick_params(axis="y", labelsize=6.5)
+for ax in axes[:, 0]: ax.set_ylabel("% of decision steps", fontsize=7)
+fig.legend(handles=[Patch(facecolor="white", edgecolor=C["MUTED"], label="all 5 candidates offered"),
+                    Patch(facecolor=C["INK"], label="SFT 4B alone (1 sample)"),
+                    Patch(facecolor=C["LOOKAHEAD_TEACHER"], label="heads, lookahead H = 4 labels (by size)"),
+                    Patch(facecolor=C["PRE_EXEC"], label="heads, pre-execution labels (by size)")],
+           loc="lower center", ncol=2, fontsize=6.5, frameon=False, bbox_to_anchor=(0.5, -0.01))
+fig.tight_layout(rect=(0, 0.07, 1, 1), h_pad=1.2, w_pad=1.0)
 for ext in ("png", "pdf", "svg"):
     out = HERE / f"selection-head-action-types-20261115.{ext}"
     fig.savefig(out, dpi=220 if ext == "png" else None, bbox_inches="tight")
