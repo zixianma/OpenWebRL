@@ -1,6 +1,6 @@
 # Selection-head size ablations
 
-**Head size barely matters. On the SFT 4B actor every head from a 23K-parameter linear probe to a 1.8B transformer beats one SFT 4B sample by +4.7 to +9.2 pp mean overall (the 4B LoRA: +7.9), with no trend in size; the apparent differences between sizes come from single training seeds and evaluation windows (over three seeds the 4.4M and 22.6M heads are level). On the RL 8B actor, scoring through the frozen SFT-4B encoder, the heads add −0.3 to +3.2 pp valid-only over RL 8B alone, at most matching the 4B LoRA (+3.2). Selection cost grows with size (15 ms per step at 4.4M, 337 ms at 1.8B, 474 ms for the 4B LoRA), but end-to-end episode time does not, because generating five candidates dominates.**
+**Head size barely matters. On the SFT 4B actor every head from a 23K-parameter linear probe to a 1.8B transformer beats one SFT 4B sample by +4.7 to +9.2 pp mean overall (the 4B LoRA: +7.9), with no trend in size; the apparent differences between sizes come from single training seeds and evaluation windows (over three seeds the 4.4M and 22.6M heads are level). On the RL 8B actor, scoring through the frozen SFT-4B encoder, the heads add −0.3 to +3.2 pp valid-only over RL 8B alone, at most matching the 4B LoRA (+3.2). Selection cost grows with size (15 ms per step at 4.4M, 337 ms at 1.8B, 474 ms for the 4B LoRA), but end-to-end episode time does not, because generating five candidates dominates. Lookahead labels beat pre-execution labels at every size (−3.9 [−5.0, −2.8] pp pooled, [one window](#head-labels-pre-vs-lookahead-20261115)).**
 
 All success rates in this document are **overall success** (successes / episodes; invalid episodes count as failures); "Mean overall" weights the three benchmarks equally. Differences are in mean overall success, pp [paired 95% bootstrap over tasks common to both arms, 10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs]; bold intervals exclude 0. Compare rows only within a table: absolute rates drift between windows (the SFT 4B baseline moved from 32.2% to 38.7% mean overall across these windows). Valid-only rates are in [ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#final-selection-recipe3-head-scale-20261111).
 
@@ -49,6 +49,40 @@ All success rates in this document are **overall success** (successes / episodes
 | RL 8B + 4B LoRA decoder (GPT-5.5 H = 4) | 790 / 900 | 392 | 1,749 / 1,785 | 1,049 | 442 / 450 | 263 |
 
 *One row per method, each against its actor alone. Per-benchmark columns and mean overall are overall success (invalid = failure); mean valid-only is successes / valid episodes; both are equal-weight 3-benchmark means. Each row pools every run of that method (heads: training seed 0) across its evaluation windows, and the SFT 4B control pools its 7 runs from November 11 (eval-scale, eval-seed, eval-1111) and 12 (eval-sizes3); differences are paired bootstrap over tasks on run-averaged per-task success (10,000 resamples, seed 20261029, benchmarks resampled independently); bold intervals exclude 0. Because the pooling spans windows, a row's difference also carries the drift of its windows (the 0.25M, 1.0M and probe heads ran only on November 12–13, with no SFT run in their windows; the 22.6M default ran in every window). Same-window comparisons are in the per-window tables below. RL 8B: overall success in the heads' window is depressed by 73 tasks whose sites failed to load in every run, against almost none on November 4–5, so its overall differences understate the heads; use valid-only there.* Evidence: [data](arm_results/rl_integration/selection-head-size-pooled-20261114.json) · [script](arm_results/rl_integration/selection-head-size-pooled-20261114.py).
+
+<a id="head-labels-pre-vs-lookahead-20261115"></a>
+## Pre-execution vs lookahead labels across sizes (November 14–15)
+
+**Lookahead labels beat pre-execution labels at every head size: pre − lookahead is **−2.7 [−4.8, −0.6]** (23K probe), **−5.7 [−7.8, −3.6]** (4.4M), **−4.4 [−6.7, −2.1]** (22.6M) and **−2.7 [−4.8, −0.6]** (1.8B) pp mean overall, **−3.9 [−5.0, −2.8]** pooled. Size again makes no consistent difference within either label type.** Eight heads (four sizes × two label types) and SFT 4B alone in one window, 3 runs each on all 1,045 tasks (vlm/normal, November 14 15:20 – November 15 03:20 PST). Both label types label the same 18,781 training panels with GPT-5.5: lookahead = H = 4 with K = 3 continuations (the labels used everywhere else in this document), pre-execution = the same teacher choosing before any action is executed. Same recipe, learning rate and training seed for every head; the 22.6M pre head is the November 2 head (`heads-all2/pre-best`), the others were trained November 13–14.
+
+| Head | Params | Labels | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | pre − lookahead, pp [95% CI] |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone (1 sample) | — | — | 32.2% | 39.6% | 33.1% | 35.0% | 37.6% | — | — |
+| linear probe | 23K | lookahead H = 4 | 37.3% | 48.1% | 48.2% | 44.6% | 48.1% | **+9.6 [+7.5, +11.7]** |  |
+| linear probe | 23K | pre-execution | 35.1% | 43.5% | 46.9% | 41.8% | 45.0% | **+6.9 [+4.7, +9.1]** | **−2.7 [−4.8, −0.6]** |
+| d128-L2 | 4.4M | lookahead H = 4 | 38.4% | 51.3% | 47.3% | 45.7% | 49.4% | **+10.7 [+8.5, +12.9]** |  |
+| d128-L2 | 4.4M | pre-execution | 36.6% | 45.2% | 38.2% | 40.0% | 43.9% | **+5.0 [+2.8, +7.3]** | **−5.7 [−7.8, −3.6]** |
+| d512-L2 (default) | 22.6M | lookahead H = 4 | 35.1% | 45.6% | 47.3% | 42.7% | 46.0% | **+7.7 [+5.5, +9.9]** |  |
+| d512-L2 (default) | 22.6M | pre-execution | 32.3% | 43.9% | 38.7% | 38.3% | 41.3% | **+3.3 [+1.1, +5.5]** | **−4.4 [−6.7, −2.1]** |
+| d4096-L8 | 1.8B | lookahead H = 4 | 32.9% | 47.5% | 47.3% | 42.6% | 46.4% | **+7.6 [+5.5, +9.7]** |  |
+| d4096-L8 | 1.8B | pre-execution | 34.3% | 43.9% | 41.3% | 39.9% | 43.3% | **+4.9 [+2.8, +7.1]** | **−2.7 [−4.8, −0.6]** |
+| ***All four sizes, pooled*** | | pre − lookahead | | | | | | | **−3.9 [−5.0, −2.8]** |
+
+| Head | Labels | Online-Mind2Web valid / episodes | Online-Mind2Web successes | WebVoyager valid / episodes | WebVoyager successes | DeepShop valid / episodes | DeepShop successes |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B alone | — | 806 / 900 | 290 | 1,622 / 1,785 | 706 | 449 / 450 | 149 |
+| linear probe | lookahead H = 4 | 788 / 900 | 336 | 1,631 / 1,785 | 859 | 444 / 450 | 217 |
+| linear probe | pre-execution | 796 / 900 | 316 | 1,614 / 1,785 | 777 | 446 / 450 | 211 |
+| d128-L2 | lookahead H = 4 | 795 / 900 | 346 | 1,615 / 1,785 | 915 | 443 / 450 | 213 |
+| d128-L2 | pre-execution | 773 / 900 | 329 | 1,603 / 1,785 | 807 | 444 / 450 | 172 |
+| d512-L2 (default) | lookahead H = 4 | 792 / 900 | 316 | 1,615 / 1,785 | 814 | 446 / 450 | 213 |
+| d512-L2 (default) | pre-execution | 802 / 900 | 291 | 1,613 / 1,785 | 783 | 447 / 450 | 174 |
+| d4096-L8 | lookahead H = 4 | 777 / 900 | 296 | 1,612 / 1,785 | 848 | 440 / 450 | 213 |
+| d4096-L8 | pre-execution | 786 / 900 | 309 | 1,599 / 1,785 | 784 | 446 / 450 | 186 |
+
+![Pre-execution vs lookahead labels across selection-head sizes: mean overall success minus SFT 4B alone versus head parameters](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.png)
+
+*Same window and runs for every row; differences are paired bootstrap over tasks common to all nine conditions on run-averaged per-task success (10,000 resamples, seed 20261029, benchmarks resampled independently); the pooled row averages per-task success over the four sizes of each label type. On mean valid-only, pre − lookahead is **−3.0 [−5.2, −0.8]** / **−5.5 [−7.7, −3.3]** / **−4.8 [−7.2, −2.4]** / **−3.0 [−5.2, −0.8]** (23K / 4.4M / 22.6M / 1.8B) and **−4.1 [−5.3, −2.9]** pooled. Held-out agreement with each head's own labels at the final epoch: lookahead heads 43–46%, pre heads 58–60% (pre labels are easier to imitate but select worse actions). The two label types pick the same action on 35% of panels. Three WebVoyager runs lost their model server mid-run and were resumed from their saved records (the two resumes after node g003 crashes excluded that node); all 28,215 episodes judged, none refused.* Evidence: [data](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.json) · [script](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.py) · [plot script](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115-plot.py) · [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-20261115.svg). Runtime: `recipe3-ablations-20261104/` (pre heads `heads-scale/pre-*/`, evals `eval-pre/run<k>/`, job log `eval-pre/jobs.txt`).
 
 ## SFT 4B actor
 
