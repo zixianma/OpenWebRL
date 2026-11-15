@@ -133,7 +133,7 @@ def figure_group(stem: str) -> str:
         return GROUPS[0]
     if name.startswith("selection-label-") and "kfold" in name:
         return GROUPS[1]
-    if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale")):
+    if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale", "selection-head-lookahead")):
         return GROUPS[2]
     if name.startswith(("selection-recipe3-data-ablations", "selection-recipe3-data-scaling")):
         return GROUPS[3]

@@ -138,6 +138,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-scale-pooled-20261112.pdf) · [SVG](arm_results/rl_integration/selection-head-scale-pooled-20261112.svg)
 
+### Lookahead minus pre-execution labels across head sizes
+
+![Lookahead minus pre-execution labels across head sizes](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.svg)
+
 ### Selection head scaling: held-out agreement with the teacher
 
 ![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)
