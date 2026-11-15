@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Paper version of selection-head-pre-vs-lookahead-20261115 in the style of selection-label-setups-with-head-sizes-20261115 (column
 width, Albert Sans, gray interval bars, value labels, shared legend). Left: each student ADM's online 3-benchmark mean overall
-success minus SFT 4B alone, lookahead H = 4 vs pre-execution labels (GPT-5.5, full data), at four head sizes. Right: the paired
-difference lookahead - pre-execution per size and pooled. One window (November 14-15), 3 runs each; paired bootstrap over tasks.
+success minus SFT 4B alone, lookahead H = 4 vs pre-execution labels (GPT-5.5, full data), at three head sizes (23K, 22.6M, 1.8B;
+the 4.4M head is dropped because its seed-0 lookahead head is a lucky seed). Right: the paired difference lookahead -
+pre-execution per size and pooled over the three sizes (selection-head-pre-vs-lookahead-3sizes-20261115.json). One window (November 14-15), 3 runs each; paired bootstrap over tasks.
 Data: selection-head-pre-vs-lookahead-20261115.json."""
 import json
 from pathlib import Path
@@ -19,10 +20,11 @@ plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42, "ps.fontt
 HERE = Path(__file__).resolve().parent
 D = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
 INK, MUTED = C["INK"], C["MUTED"]
-KEYS = [s["key"] for s in D["sizes"]]
-SIZES = ["23K", "4.4M", "22.6M", "1.8B"]
+KEYS = ["probe", "d512", "d4096"]
+SIZES = ["23K", "23M", "1.8B"]
+D3 = json.loads((HERE / "selection-head-pre-vs-lookahead-3sizes-20261115.json").read_text())
 LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
-PURPLES = ["#CBB9F7", "#AE93F2", C["ADM_MAIN"], "#6E4FC4", "#4B3191"]
+PURPLES = ["#C3AFF6", C["ADM_MAIN"], "#6A4BC2", "#4B3191"]   # light -> dark with size; pooled darkest
 
 
 def point(ax, x, v, color, marker="o", label_dy=0.15, label=True):
@@ -33,13 +35,13 @@ def point(ax, x, v, color, marker="o", label_dy=0.15, label=True):
         ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.6, color=INK)
 
 
-fig, (a1, a2) = plt.subplots(1, 2, figsize=(4.0, 2.3), gridspec_kw=dict(width_ratios=[1, 1.1], wspace=0.40))
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1.1], wspace=0.40))
 for x, k in enumerate(KEYS):
     point(a1, x - 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label=False)
     point(a1, x + 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label=False)
-diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS] + [D["contrasts"]["all sizes: pre - lookahead"]["mean_overall_pp"]]
+diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS] + [D3["three sizes: pre - lookahead"]["mean_overall_pp"]]
 for x, (pt, lo, hi) in enumerate(diffs):
-    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if x == 4 else "o")
+    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if x == len(KEYS) else "o")
 for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "Lookahead − pre-exec", [*SIZES, "Pooled"])):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=12)
@@ -53,7 +55,7 @@ a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SF
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
 a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
 handles = [Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1), Line2D([], [], marker="o", ls="", color=PRE, ms=4.1),
-           Line2D([], [], marker="o", ls="", color=PURPLES[2], ms=4.1)]
+           Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=4.1)]
 fig.legend(handles, ["Lookahead H=4", "Pre-exec", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
            loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.0), columnspacing=1.2, handletextpad=0.3)
 fig.subplots_adjust(left=0.12, right=0.985, top=0.80, bottom=0.30)
