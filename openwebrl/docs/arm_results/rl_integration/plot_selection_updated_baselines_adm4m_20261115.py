@@ -17,6 +17,8 @@ if __name__ == "__main__":
         ('size = 44 if key in ("head-gpt55-k3",', 'size = 44 if key in ("head-4m-gpt55", "head-gpt55-k3",'),
         # thin rings mark frontier points, so the parameters-panel frontier (two points at ~4.44B) stays visible
         ('                  frontier_rings=draw_rings, updates=updates,', '                  frontier_rings=True, updates=updates,'),
+        # legend: the frontier entry shows the ring too (the block layout keeps frontier_rings=False)
+        ('marker="o" if frontier_rings else "None", markerfacecolor="none"', 'marker="o", markerfacecolor="none"'),
         ('                own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))\n',
          '                if "ADM-4M (GPT-5.5)" in by_label:\n                    own_entries.append((by_label["ADM-4M (GPT-5.5)"], "ADM-4M"))\n                own_entries.append((by_label["ADM-23M (GPT-5.5)"], "ADM-23M"))\n'),
     ]
