@@ -1,0 +1,55 @@
+{
+ "note": "Cost and success of the 23K linear-probe head (ADM-23K) for the cost figure variant, with the same accounting as\nselection-recipe3-vs-cost-20261104-analysis.py: actor PFLOP = 2 x 4.44B x (uncached prompt + completion tokens) of the actor\nrequests, plus the head's logged selector FLOPs; model time = summed decision seconds; both per episode, run 1 (all 1,045\ntasks). Success: overall success, 3 runs pooled, November 14-15 window (eval-pre). The 22.6M head of the same window is computed\nalongside as a check against the plotted ADM-23M cost (November 4). Writes the adjacent JSON.",
+ "systems": {
+  "adm-23k": {
+   "slug": "head5-ef597d45f3b1",
+   "system_parameters": 4437838849,
+   "benchmarks": {
+    "online_mind2web": {
+     "cost_tasks": 300,
+     "pflop_per_episode": 0.955,
+     "model_seconds_per_episode": 123.2,
+     "overall": 37.3
+    },
+    "webvoyager": {
+     "cost_tasks": 595,
+     "pflop_per_episode": 0.711,
+     "model_seconds_per_episode": 89.1,
+     "overall": 48.1
+    },
+    "deepshop": {
+     "cost_tasks": 150,
+     "pflop_per_episode": 1.009,
+     "model_seconds_per_episode": 143.8,
+     "overall": 48.2
+    }
+   },
+   "reported_mean_overall": 44.6
+  },
+  "adm-23m-same-window": {
+   "slug": "head5-91e7a5a67417",
+   "system_parameters": 4460378626,
+   "benchmarks": {
+    "online_mind2web": {
+     "cost_tasks": 300,
+     "pflop_per_episode": 1.002,
+     "model_seconds_per_episode": 132.9,
+     "overall": 35.1
+    },
+    "webvoyager": {
+     "cost_tasks": 595,
+     "pflop_per_episode": 0.742,
+     "model_seconds_per_episode": 94.2,
+     "overall": 45.6
+    },
+    "deepshop": {
+     "cost_tasks": 150,
+     "pflop_per_episode": 1.074,
+     "model_seconds_per_episode": 149.6,
+     "overall": 47.3
+    }
+   },
+   "reported_mean_overall": 42.7
+  }
+ }
+}
