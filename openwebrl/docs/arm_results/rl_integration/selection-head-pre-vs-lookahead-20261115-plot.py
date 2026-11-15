@@ -24,7 +24,6 @@ fig, (ax, ax2) = plt.subplots(1, 2, figsize=(6.6, 3.1), gridspec_kw=dict(width_r
 for lab, col, mk, off in (("lookahead", C["LOOKAHEAD_TEACHER"], "o", -0.09), ("pre", C["PRE_EXEC"], "s", 0.09)):
     pts = [d["conditions"][f"{s['key']}-{lab}"]["minus_sft"]["mean_overall_pp"] for s in sizes]
     xs = [x + off for x in X]
-    ax.plot(xs, [p[0] for p in pts], color=col, linewidth=1.2, zorder=2)
     for x, (pt, lo, hi) in zip(xs, pts):
         ax.errorbar(x, pt, yerr=[[pt - lo], [hi - pt]], fmt=mk, color=col, markersize=5.5, capsize=2, linewidth=0.9, zorder=3)
 ax.axhline(0, color=C["MUTED"], linestyle="--", linewidth=0.9, zorder=0)
@@ -34,8 +33,8 @@ ax.set_xlim(-0.5, 3.5); ax.set_ylim(-1.5, 14)
 ax.set_xlabel("Head parameters"); ax.set_ylabel("Mean overall − SFT 4B alone (%)")
 ax.grid(axis="y", color=C["BORDER"], linewidth=0.6, zorder=0)
 for sp in ("top", "right"): ax.spines[sp].set_visible(False)
-ax.legend(handles=[Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", linewidth=1.2, markersize=5, label="lookahead H = 4 labels"),
-                   Line2D([], [], color=C["PRE_EXEC"], marker="s", linewidth=1.2, markersize=5, label="pre-execution labels")],
+ax.legend(handles=[Line2D([], [], color=C["LOOKAHEAD_TEACHER"], marker="o", linestyle="none", markersize=5, label="lookahead H = 4 labels"),
+                   Line2D([], [], color=C["PRE_EXEC"], marker="s", linestyle="none", markersize=5, label="pre-execution labels")],
           fontsize=6.5, frameon=False, loc="upper right")
 names = [s["key"] for s in sizes]
 lab2 = ["23K", "4.4M", "22.6M", "1.8B", "pooled"]
