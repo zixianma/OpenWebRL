@@ -1339,6 +1339,10 @@ All five Recipe 3 cost views use a shared legend below the panels, with Albert S
 
 *Adds ADM-23K (23K linear probe: 44.6% mean overall, 0.89 PFLOP, 119 s per task), which lands on ADM-23M (44.5%, 0.91 PFLOP, 121 s).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm4m-20261115.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm4m-20261115.svg) · [ADM-23K cost and success](arm_results/rl_integration/selection-adm23k-cost-20261115.json) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_adm23k_adm4m_20261115.py).
 
+![Cost figure with ADM-23K (linear probe) and ADM-1.8B added next to ADM-23M and ADM-4B](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm1p8b-20261115.png)
+
+*Adds ADM-23K (lands on ADM-23M) and ADM-1.8B (1.8B head, training seed 0: 6.21B system parameters, 42.6% mean overall, 0.94 PFLOP and 137 s per task), the smallest and largest heads, without the lucky-seed 4.4M head.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm1p8b-20261115.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm23k-adm1p8b-20261115.svg) · [ADM-1.8B cost and success](arm_results/rl_integration/selection-adm1p8b-cost-20261115.json) ([script](arm_results/rl_integration/selection-adm1p8b-cost-20261115.py)) · [renderer](arm_results/rl_integration/plot_selection_updated_baselines_adm23k_adm1p8b_20261115.py).
+
 **Baseline comparison at the original figure path (success updated November 14):**
 
 ![Updated SFT actor and ADM baseline comparison with larger circles](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-no-rl-baselines-20261104.png)

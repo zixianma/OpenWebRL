@@ -1,0 +1,30 @@
+{
+ "note": "Cost and success of the 1.8B d4096-L8 head (ADM-1.8B, training seed 0) for the cost figure variant, with the same accounting\nas selection-recipe3-vs-cost-20261104-analysis.py: actor PFLOP = 2 x 4.44B x (uncached prompt + completion tokens) of the actor\nrequests, plus the head's logged selector FLOPs; model time = summed decision seconds; both per episode, run 1 (all 1,045\ntasks). Success: overall success, 3 runs pooled, November 14-15 window (eval-pre). Writes the adjacent JSON.",
+ "systems": {
+  "adm-1.8b": {
+   "slug": "head5-7bbad4567d44",
+   "system_parameters": 6208279042,
+   "benchmarks": {
+    "online_mind2web": {
+     "cost_tasks": 300,
+     "pflop_per_episode": 0.959,
+     "model_seconds_per_episode": 133.1,
+     "overall": 32.9
+    },
+    "webvoyager": {
+     "cost_tasks": 595,
+     "pflop_per_episode": 0.72,
+     "model_seconds_per_episode": 100.3,
+     "overall": 47.5
+    },
+    "deepshop": {
+     "cost_tasks": 150,
+     "pflop_per_episode": 1.149,
+     "model_seconds_per_episode": 178.8,
+     "overall": 47.3
+    }
+   },
+   "reported_mean_overall": 42.6
+  }
+ }
+}
