@@ -3,7 +3,7 @@
 
 Same input values and role colors as the horizontal figure. Group labels and
 one shared legend replace repeated system labels. Absolute rates above bars;
-gains remain in the source table and the original horizontal figure.
+ADM gains appear inside the purple bars relative to their corresponding base.
 """
 from pathlib import Path
 import json
@@ -37,6 +37,13 @@ for i,(ax,(bench,rows)) in enumerate(zip(axes,D['benchmarks'].items())):
         ax.bar(x,row['success'],width=.72,color=COLORS[row['role']],edgecolor='none',zorder=3)
         ax.text(x,row['success']+ymax*.025,f"{row['success']:.1f}",ha='center',va='bottom',
                 fontsize=6.4,color=C['INK'])
+        if row['role']=='adm':
+            base=next(r for r in rows if r['role']=='base' and r['family']==row['family'])
+            assert abs(row['success']-base['success']-row['gain'])<1e-8
+            ax.text(x,row['success']*.52,f"+{row['gain']:.1f}",
+                    ha='center',va='center',fontsize=6.3,fontweight='bold',
+                    color=C['ACTION_INK'],zorder=4,
+                    bbox=dict(boxstyle='round,pad=.17',fc='white',ec='none',alpha=.94))
     ax.set_title(f'{chr(97+i)}) {bench}',fontsize=8,loc='left',pad=7,color=C['INK'])
     ax.set_ylim(0,ymax);ax.set_yticks(yticks)
     ax.set_xticks(ticks,labels,fontsize=6.4)
@@ -50,7 +57,7 @@ for i,(ax,(bench,rows)) in enumerate(zip(axes,D['benchmarks'].items())):
         ax.spines[side].set_color(C['BORDER'])
 axes[0].set_ylabel('Success (%)',fontsize=7.2,labelpad=5,color=C['INK'])
 legend=fig.legend([Patch(facecolor=COLORS[k],edgecolor='none') for k in ('base','adm','sol')],
-                  ['Base / standalone','+ ADM-4B','+ GPT-6.1 Sol'],ncol=3,frameon=False,
+                  ['Base / standalone','+ ADM-4B (gain vs. base)','+ GPT-6.1 Sol'],ncol=3,frameon=False,
                   loc='lower center',bbox_to_anchor=(.52,-.005),fontsize=7,
                   handlelength=1,handletextpad=.5,columnspacing=1.8)
 fig.subplots_adjust(left=.065,right=.99,bottom=.31,top=.80,wspace=.27)

@@ -22,7 +22,7 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 
 ![Compact vertical bars for OSWorld-Verified, ALFWorld and WebShop, using identical reported success rates](arm_results/generalization_20261116/adm_transfer_success_vertical.png)
 
-*Same input values and role colors as the horizontal figure, arranged in a 7.2 × 1.9-inch full-width layout with a single shared legend. Group labels replace repeated system names, and absolute success rates are printed above the bars. Gain annotations remain in the horizontal version and source tables to keep this version compact. Each benchmark has a separate zero-based y range; there are no confidence intervals because uncertainty was not supplied.* [PDF](arm_results/generalization_20261116/adm_transfer_success_vertical.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success_vertical.svg) · [Renderer](arm_results/generalization_20261116/plot_adm_transfer_success_vertical.py).
+*Same input values and role colors as the horizontal figure, arranged in a 7.2 × 1.9-inch full-width layout with a single shared legend. Group labels replace repeated system names, and absolute success rates are printed above the bars. White badges inside the purple ADM bars show absolute gains over the corresponding base in percentage points. Each benchmark has a separate zero-based y range; there are no confidence intervals because uncertainty was not supplied.* [PDF](arm_results/generalization_20261116/adm_transfer_success_vertical.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success_vertical.svg) · [Renderer](arm_results/generalization_20261116/plot_adm_transfer_success_vertical.py).
 
 <details><summary>Supplied numerical results</summary>
 
