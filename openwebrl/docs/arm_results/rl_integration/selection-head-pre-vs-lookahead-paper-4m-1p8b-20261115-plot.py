@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Variant with sizes 4.4M, 23M and 1.8B (23K left out) of the paper version of selection-head-pre-vs-lookahead-20261115 in the style of selection-label-setups-with-head-sizes-20261115 (column
-width, Albert Sans, gray interval bars, value labels, shared legend). Left: each student ADM's online 3-benchmark mean overall
-success minus SFT 4B alone, lookahead H = 4 vs pre-execution labels (GPT-5.5, full data), at three head sizes (23K, 22.6M, 1.8B;
-the 4.4M head is dropped because its seed-0 lookahead head is a lucky seed). Right: the paired difference lookahead -
-pre-execution per size and pooled over the three sizes (selection-head-pre-vs-lookahead-3sizes-4m-1p8b-20261115.json). One window (November 14-15), 3 runs each; paired bootstrap over tasks.
-Data: selection-head-pre-vs-lookahead-20261115.json."""
+"""Paper comparison at 4.4M, 22.6M and 1.8B: gains over SFT and paired
+lookahead minus pre-execution differences, with task-paired 95% intervals.
+Three runs per condition in the November 14–15 window. The pooled contrast is
+retained in the document caption only; the figure shows per-size estimates.
+"""
 import json
 from pathlib import Path
 import matplotlib
@@ -22,9 +21,8 @@ D = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_tex
 INK, MUTED = C["INK"], C["MUTED"]
 KEYS = ["d128", "d512", "d4096"]
 SIZES = ["4M", "23M", "1.8B"]
-D3 = json.loads((HERE / "selection-head-pre-vs-lookahead-3sizes-4m-1p8b-20261115.json").read_text())
 LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
-PURPLES = ["#C3AFF6", C["ADM_MAIN"], "#6A4BC2", "#4B3191"]   # light -> dark with size; pooled darkest
+PURPLES = ["#C3AFF6", C["ADM_MAIN"], "#6A4BC2"]  # light -> dark with size
 
 
 def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=False):
@@ -35,23 +33,20 @@ def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=F
         ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.2 if bold else 5.6, color=INK, fontweight="bold" if bold else "normal")
 
 
-fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1.1], wspace=0.40))
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.40))
 for x, k in enumerate(KEYS):
     point(a1, x - 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label=False)
     point(a1, x + 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label=False)
-diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS] + [D3["three sizes: pre - lookahead"]["mean_overall_pp"]]
+diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS]
 for x, (pt, lo, hi) in enumerate(diffs):
-    pooled = x == len(KEYS)
-    point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if pooled else "o", ms=4.8 if pooled else 4.1, bold=pooled)
-a2.axvline(len(KEYS) - 0.5, color=C["BORDER"], lw=0.8, ls=":", zorder=1)   # marks the pooled estimate off from the per-size points
-for ax, title, ticks in ((a1, "", SIZES), (a2, "", [*SIZES, "Pooled"])):
+    point(a2, x, (-pt, -hi, -lo), PURPLES[x])
+for ax, title, ticks in ((a1, "", SIZES), (a2, "", SIZES)):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ticks)), ticks, fontsize=5.9)
     ax.set_xlim(-0.5, len(ticks) - 0.5)
     ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
-a2.get_xticklabels()[-1].set_fontweight("bold")
 fig.suptitle("Online: 3-benchmark mean success", fontsize=7, color=INK, y=0.955)   # one title for both panels
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)

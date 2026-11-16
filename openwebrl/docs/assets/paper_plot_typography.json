@@ -417,7 +417,13 @@
     "openwebrl/docs/arm_results/offline_distillation_20261114/offline_distillation_table7_mean_dot_vertical.pdf": "8c1197b67b8dc8ad5efde3313a7f0e033f3f1d2a75ab078651694f0e502dee65",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-kev-linear-20261115.png": "f7d34a8be3daf61f4192e0c29f360ea960ee3df76e640f7511315861a18a08a1",
     "openwebrl/docs/arm_results/methods/selection-arch-overview-kev-linear-20261115.svg": "9b52ec88d8a4b727cd024dd18feabe1c19d3e720b59cf43028c991a371b62da7",
-    "openwebrl/docs/arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf": "ebf9166469724b660f8067778b6e91549476e149012873a6815746e2f6a13ad7"
+    "openwebrl/docs/arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf": "ebf9166469724b660f8067778b6e91549476e149012873a6815746e2f6a13ad7",
+    "openwebrl/docs/arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.png": "d68e0701405dff7eefa2185f647395e94ef5f55ad23233da58a5e5696d066a16",
+    "openwebrl/docs/arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.svg": "e164afbe4e2bb05c096390636648621377b366a7ff4385482b75a1b612329b27",
+    "openwebrl/docs/arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.pdf": "b73da8a02e8e1c25d585394df9ef2ae55bb83691a14fb56b8434f35b97338b94",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.png": "531094117c8dbd78845e6b04d5168d60c199b8d9b9c956a926b0719f13e55c72",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.svg": "a11b7e0e96ecd75df90885355b612af05ff74d741859e9a8ab4867883d3edee9",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.pdf": "6dbb8eaa332a5beb4dc13d4c59529464e6dea1bc8e2e7304d8a65172d1e705e8"
   },
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied.",
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",

@@ -46,9 +46,9 @@ ROWS = [  # tick label, colour, source key, live key
     ("Oracle", C["ORACLE"], "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
-    ("Offline: held-out rollout success",
+    ("Offline: rollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: mean success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
@@ -73,6 +73,10 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             point(ax, x if TEACHER_ONLY_OFFLINE else x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             if not TEACHER_ONLY_OFFLINE:
                 point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
+    # Label the zero-reference line with this panel's absolute actor baseline.
+    ax.text(.98, -.25, f"SFT = {base:.1f}%", transform=ax.get_yaxis_transform(),
+            ha="right", va="top", fontsize=6.2, color=MUTED,
+            bbox=dict(facecolor="white", edgecolor="none", pad=.4))
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
@@ -88,7 +92,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
         ax.spines[side].set_visible(False)
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
-axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7, color=INK)
+axes[0].set_ylabel("Gain over SFT (%)", fontsize=7, color=INK)
 handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor="white"),
