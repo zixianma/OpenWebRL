@@ -48,7 +48,7 @@ P = K["pooled"]
 PANELS = [
     ("Offline: rollout success",
      "offline", P["sft_sample"]),
-    ("Online: mean success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: 3-benchmark\nmean success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
@@ -99,8 +99,8 @@ handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
 ]
-fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
-           loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
+fig.legend(handles, ["Teacher ADM", "Student ADM-23M (subset)"], frameon=False, fontsize=6.4,
+           loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.1)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
 fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.28, wspace=0.10)
 fig.canvas.draw()
