@@ -44,7 +44,7 @@ for x, (pt, lo, hi) in enumerate(diffs):
     pooled = x == len(KEYS)
     point(a2, x, (-pt, -hi, -lo), PURPLES[x], "D" if pooled else "o", ms=4.8 if pooled else 4.1, bold=pooled)
 a2.axvline(len(KEYS) - 0.5, color=C["BORDER"], lw=0.8, ls=":", zorder=1)   # marks the pooled estimate off from the per-size points
-for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "Lookahead − pre-exec", [*SIZES, "Pooled"])):
+for ax, title, ticks in ((a1, "", SIZES), (a2, "", [*SIZES, "Pooled"])):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ticks)), ticks, fontsize=5.9)
@@ -52,6 +52,7 @@ for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "
     ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
 a2.get_xticklabels()[-1].set_fontweight("bold")
+fig.suptitle("Online: 3-benchmark mean success", fontsize=7, color=INK, y=0.955)   # one title for both panels
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
 a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
