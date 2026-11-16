@@ -22,6 +22,10 @@ from paper_plot_palette import COLORS as C, tint  # noqa: E402
 
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
 HEAD, DECODER = C["ADM_22M"], C["ADM_4B"]
+# Same embedded Twemoji assets as the Kev-inclusive architecture figure.
+ICONS = Path(__file__).resolve().parents[2] / "assets/icons"
+FROZEN, TRAINED = (plt.imread(ICONS / f) for f in
+                   ("twemoji-snowflake-2744.png", "twemoji-fire-1f525.png"))
 ALLOWED, MASKED = C["ATTENTION_ALLOWED"], C["ATTENTION_MASKED"]
 K = 5
 W, H = 3.35, 1.95
@@ -43,6 +47,11 @@ def box(x, y, w, h, edge=LINE, fill="white", lw=.55):
                       facecolor=fill, edgecolor=edge, linewidth=lw, zorder=2)
     ax.add_patch(p)
     return p
+
+
+def icon(x, y, img, size=.085):
+    ax.imshow(img, extent=(x-size/2, x+size/2, y-size/2, y+size/2),
+              aspect="auto", zorder=7, interpolation="lanczos")
 
 
 def arrow(x0, y0, x1, y1, color=HEAD, head=4):
@@ -70,7 +79,8 @@ box(.025, 1.735, .53, .19, edge=C["STATE_BORDER"], fill=tint("STATE", .60))
 text(.29, 1.83, "Context", ha="center")
 arrow(.565, 1.83, .665, 1.83, color=MUTED)
 box(.675, 1.735, .80, .19, edge=INK)
-text(1.075, 1.83, r"Frozen actor $\theta$", size=6.0, ha="center")
+text(1.02, 1.83, r"Frozen actor $\theta$", size=5.5, ha="center")
+icon(1.375, 1.83, FROZEN, .075)
 arrow(1.485, 1.83, 1.65, 1.83, color=HEAD)
 box(1.66, 1.735, 1.66, .19, edge=C["ACTION_INK"], fill=tint("ACTION", .65))
 text(2.49, 1.83, r"$K=5$ responses $c_i$: thought + action", size=5.8, color=C["ACTION_INK"], ha="center")
@@ -78,7 +88,8 @@ arrow(1.075, 1.725, 1.075, 1.655, color=HEAD, head=4)
 arrow(2.80, 1.725, 2.80, 1.655, color=DECODER, head=4)
 # Feature head: attention and MLP are alternative scorers, each joint/independent.
 box(.025, .325, 2.10, 1.32, edge=LINE, lw=.5)
-text(1.075, 1.565, "a) ADM-23M", size=6.8, color="black", ha="center")
+text(1.035, 1.565, "a) ADM-23M", size=6.8, color="black", ha="center")
+icon(1.50, 1.565, TRAINED)
 text(1.075, 1.425, r"Actor features $s, c_i$", size=5.8, color=MUTED, ha="center")
 
 CELL, HEAD_TOP, TOP = .074, 1.16, 1.105
@@ -110,11 +121,13 @@ text(1.11, .235, r"$i^*=\arg\max_i z_i$", size=6, color=HEAD, ha="center")
 text(2.80, 1.565, "b) ADM-4B", size=6.8, color="black", ha="center")
 # Matching theta symbols encode shared initialization without a long arrow.
 box(2.44, 1.355, .29, .12, edge=LINE)
-text(2.585, 1.415, r"$\theta$", size=6.4, ha="center")
+text(2.545, 1.415, r"$\theta$", size=6.4, ha="center")
+icon(2.655, 1.415, FROZEN, .075)
 text(2.585, 1.310, "Frozen", size=5.2, color=MUTED, ha="center")
 text(2.81, 1.415, "+", size=7, color=DECODER, ha="center")
 box(2.90, 1.355, .35, .12, edge=DECODER, fill=tint("ADM_4B", .93))
-text(3.075, 1.415, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
+text(3.025, 1.415, r"$\Delta\theta$", size=6.4, color=DECODER, ha="center")
+icon(3.175, 1.415, TRAINED, .075)
 text(3.075, 1.310, "LoRA", size=5.2, color=DECODER, ha="center")
 DX, DCELL = 2.48, .109
 TOKENS = [r"$p$"]+[rf"$c_{{{i}}}$" for i in range(1,K+1)]+[r"$y$"]
