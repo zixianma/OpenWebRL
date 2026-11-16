@@ -32,7 +32,9 @@ from paper_plot_palette import COLORS as C, tint
 
 HERE = Path(__file__).resolve().parent
 COLOR = {k: c for k, _, c in SRC}
-COLOR["post"] = C["LOOKAHEAD_TEACHER"]
+# Match the graded salmon horizons in the label-source plots: H=1 light, H=4 base.
+COLOR["post"] = "#F4B4A4"
+COLOR["k3"] = C["LOOKAHEAD_TEACHER"]
 NAME = {"pre": "Pre-execution", "post": "Lookahead", "k3": "Lookahead"}
 BAND, BANDEDGE = tint("LOOKAHEAD_EVIDENCE", 0.92), C["LOOKAHEAD_EVIDENCE"]
 GOODC, BADC = C["SUCCESS"], C["FAILURE"]
