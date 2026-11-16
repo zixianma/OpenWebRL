@@ -80,7 +80,7 @@ def chip(fig, x, y, w, h, action_id, label, color, fs=6.0):
                                   fc=tint("ACTION", .72), ec=color, lw=.85, transform=fig.transFigure))
     fig.text(x + w / 2, y + h * .76, action_id, fontsize=10, color=color,
              fontweight="bold", ha="center", va="center")
-    fig.text(x + w / 2, y + h * .23, label, fontsize=fs, color=INK, ha="center", va="center",
+    fig.text(x + w / 2, y + h * .27, label, fontsize=fs, color=INK, ha="center", va="center",
              linespacing=1.05)
 
 
@@ -91,12 +91,12 @@ def arrow(fig, x0, x1, y, color=C["BASELINE_DARK"]):
 
 def main():
     plt.rcParams.update({"font.family": "Albert Sans", "savefig.facecolor": "white", "pdf.fonttype": 42})
-    fig = plt.figure(figsize=(7.2, 3.0))
+    fig = plt.figure(figsize=(7.2, 2.7))
     xc, wc = 0.02, 0.185               # current screen
     xa, wa = 0.227, 0.108              # action chip
     xt, wt, gt = 0.365, 0.127, 0.016   # three screens: candidate result and two later states
     xp = 0.815                         # picks / success; generous label column
-    th, rowgap = 0.13, 0.07
+    th, rowgap = 0.13, 0.065
     heads = [(xc + wc / 2, r"$s_t$"), (xa + wa / 2, r"$a_t^i$"),
              (xt + (3 * wt + 2 * gt) / 2, "Lookahead"),
              (xp + 0.07, "Selected by teacher")]
@@ -108,7 +108,7 @@ def main():
                      ec=C["STATE_BORDER"] if is_state else C["ACTION_INK"], lw=.7)
                 if is_math else None)
         fig.text(x, .94 if is_math else .999, t, fontsize=10 if is_math else 7.5,
-                 color=color, bbox=bbox, ha="center", va="top", fontweight="bold", linespacing=1.1)
+                 color=color, bbox=bbox, ha="center", va="top", linespacing=1.1)
     fig.text(xa, .005, r"$K=5$ actions (2 shown)", fontsize=6.2,
              color=MUTED, ha="left", va="bottom")
     fig.add_artist(FancyBboxPatch((xc, .0095), .015, .017,
@@ -120,7 +120,7 @@ def main():
         fig.text(xt + j * (wt + gt) + wt / 2, .94, label,
                  fontsize=10, color=C["STATE_INK"], ha="center", va="top",
                  bbox=dict(boxstyle="round,pad=.22", fc=tint("STATE", .65), ec=C["STATE_BORDER"], lw=.7))
-    y = 0.815
+    y = 0.795
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         source = "post"
@@ -177,7 +177,7 @@ def main():
                         a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.25, ec="none"))
                     if key:
                         fig.text(rx + 0.003, ry - 0.006, caps[j], fontsize=6.0,
-                                 color=INK, va="top", fontweight="bold")
+                                 color=INK, va="top")
                 elif j == 1:
                     fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
@@ -190,10 +190,10 @@ def main():
                 cy = ry + th * position
                 method_label = NAME[kk] if kk == "pre" else f"Lookahead H={1 if kk == 'post' else 4}"
                 fig.text(bx, cy, method_label, fontsize=7.2, color="white" if kk == "pre" else INK,
-                         fontweight="bold", ha="center", va="center",
-                              bbox=dict(boxstyle="round,pad=0.40,rounding_size=0.4", fc=COLOR[kk], ec="none"))
+                         ha="center", va="center",
+                              bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.4", fc=COLOR[kk], ec="none"))
             s, n = held(x["actions"][i])
-            fig.text(bx, ry + th * (.10 if len(selected_by) == 2 else .25), f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
+            fig.text(bx, ry + th * (.10 if len(selected_by) == 2 else .25), f"{100 * s / n:.0f}% success", fontsize=6.6,
                      color=GOOD if s / n > 0.5 else BAD, ha="center", va="center")
         y = y - block_h - 0.09
     fig.canvas.draw()
@@ -208,7 +208,7 @@ def main():
             assert not bounds.overlaps(other_bounds), (label.get_text(), other.get_text())
     for ext in ("png", "pdf"):
         metadata = {"CreationDate": None, "ModDate": None} if ext == "pdf" else {}
-        fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.09, metadata=metadata)
+        fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.06, metadata=metadata)
     plt.close(fig)
 
 
