@@ -59,6 +59,7 @@ def point(ax, x, v, color, marker, filled, outline=None):
                 zorder=3, markeredgewidth=1.0,
                 markerfacecolor=color if filled else "white",
                 markeredgecolor=outline if outline is not None else color)
+    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
 
 fig, axes = plt.subplots(1, 2, figsize=(3.7, 2.25), sharey=True)
