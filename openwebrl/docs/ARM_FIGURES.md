@@ -210,6 +210,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115.svg)
 
+### Head-size label comparison: excluding Wolfram Alpha
+
+![Head-size label comparison: excluding Wolfram Alpha](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-no-wolfram-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-no-wolfram-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-no-wolfram-20261115.svg)
+
 ### Selection head scaling: held-out agreement with the teacher
 
 ![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)
