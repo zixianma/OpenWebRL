@@ -35,8 +35,8 @@ def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=F
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.40))
 for x, k in enumerate(KEYS):
-    point(a1, x - 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label=False)
-    point(a1, x + 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label=False)
+    point(a1, x - 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE)
+    point(a1, x + 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK)
 diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS]
 for x, (pt, lo, hi) in enumerate(diffs):
     point(a2, x, (-pt, -hi, -lo), PURPLES[x])
@@ -50,10 +50,14 @@ for ax, title, ticks in ((a1, "", SIZES), (a2, "", SIZES)):
 fig.suptitle("Online: 3-benchmark mean success", fontsize=7, color=INK, y=0.955)   # one title for both panels
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
+# Absolute baseline from this figure's own contemporaneous evaluation window.
+sft_overall = 100 * D["conditions"]["sft"]["mean_overall"]
+a1.text(.97, .45, f"SFT = {sft_overall:.1f}%", transform=a1.get_yaxis_transform(),
+        fontsize=6.2, color=MUTED, ha="right", va="bottom")
 a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
-handles = [Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1), Line2D([], [], marker="o", ls="", color=PRE, ms=4.1),
+handles = [Line2D([], [], marker="o", ls="", color=PRE, ms=4.1), Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1),
            Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=4.1)]
-fig.legend(handles, ["Lookahead H=4", "Pre-exec", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
+fig.legend(handles, ["Pre-exec", "Lookahead H=4", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
            loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.0), columnspacing=1.2, handletextpad=0.3)
 fig.subplots_adjust(left=0.12, right=0.985, top=0.84, bottom=0.30)
 fig.canvas.draw()
