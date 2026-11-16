@@ -15,14 +15,15 @@ GPT-4o judges). One training run per method; seed variability is not measured.
 Gate B leads on every benchmark (mean overall 42.55% vs 36.63% for outcome-only 48). 40M+16F ties Gate B on
 Online-Mind2Web but trails it on WebVoyager. Each benchmark uses its own judge: Online-Mind2Web shared Terra
 (collected November 9–10), WebVoyager and DeepShop their official GPT-4o judges (collected November 15).
-Three repeats per model; rates are means over repeats; the mean columns weight benchmarks equally.
+Three repeats per model; rates are means over repeats. Overall counts invalid episodes as failures
+(denominators 300 / 595 / 150); valid-only divides by valid episodes. The mean columns weight benchmarks equally.
 
-| Model | OM2W valid-only % | WebVoyager valid-only % | DeepShop valid-only % | Mean overall % | Mean valid-only % | Δ mean overall vs outcome-only 48, pp |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Outcome-only 48 | 35.73 | 43.17 | 38.52 | 36.63 | 39.14 | — |
-| Outcome-only 56 | 34.20 | 43.18 | 31.39 | 33.50 | 36.26 | −3.1 |
-| **Gate B (ours)** | 41.74 | **50.90** | **44.44** | **42.55** | **45.69** | **+5.9** |
-| Gate B 40M+16F | **42.43** | 46.85 | 41.08 | 40.71 | 43.45 | +4.1 |
+| Model | OM2W overall % | OM2W valid-only % | WebVoyager overall % | WebVoyager valid-only % | DeepShop overall % | DeepShop valid-only % | Mean overall % | Mean valid-only % | Δ mean overall vs outcome-only 48, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only 48 | 32.11 | 35.73 | 39.33 | 43.17 | 38.44 | 38.52 | 36.63 | 39.14 | — |
+| Outcome-only 56 | 30.89 | 34.20 | 38.49 | 43.18 | 31.11 | 31.39 | 33.50 | 36.26 | −3.1 |
+| **Gate B (ours)** | 37.33 | 41.74 | **45.88** | **50.90** | **44.44** | **44.44** | **42.55** | **45.69** | **+5.9** |
+| Gate B 40M+16F | **38.33** | **42.43** | 42.91 | 46.85 | 40.89 | 41.08 | 40.71 | 43.45 | +4.1 |
 
 | Paired comparison | WebVoyager Δ, pp | 95% CI, pp | p | DeepShop Δ, pp | 95% CI, pp | p |
 | --- | ---: | --- | ---: | ---: | --- | ---: |
