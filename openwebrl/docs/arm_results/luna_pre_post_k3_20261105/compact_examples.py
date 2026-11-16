@@ -98,7 +98,6 @@ def main():
     xp = 0.815                         # picks / success; generous label column
     th, rowgap = 0.13, 0.065
     heads = [(xc + wc / 2, r"$s_t$"), (xa + wa / 2, r"$a_t^i$"),
-             (xt + (3 * wt + 2 * gt) / 2, "Lookahead"),
              (xp + 0.07, "Selected by teacher")]
     for x, t in heads:
         is_math = t.startswith("$")
@@ -107,7 +106,7 @@ def main():
         bbox = (dict(boxstyle="round,pad=.22", fc=tint("STATE" if is_state else "ACTION", .65),
                      ec=C["STATE_BORDER"] if is_state else C["ACTION_INK"], lw=.7)
                 if is_math else None)
-        fig.text(x, .94 if is_math else .999, t, fontsize=10 if is_math else 7.5,
+        fig.text(x, .94, t, fontsize=10 if is_math else 7.5,
                  color=color, bbox=bbox, ha="center", va="top", linespacing=1.1)
     fig.text(xa, .005, r"$K=5$ actions (2 shown)", fontsize=6.2,
              color=MUTED, ha="left", va="bottom")

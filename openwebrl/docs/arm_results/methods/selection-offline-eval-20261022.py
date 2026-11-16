@@ -28,8 +28,6 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
 PRE, IMMEDIATE, LOOK, OUTCOME, HELD = (C["PRE_EXEC"], C["LOOKAHEAD_EVIDENCE"], C["LOOKAHEAD_TEACHER"], C["TRAIN"], C["EVAL"])
 ORACLE = C["ORACLE"]
-# Match readable lookahead/teacher text in adm_overview/plot_figure1_single_column.py.
-LOOK_INK = "#944735"
 ROLLOUT, ROLLOUT_BG = C["INK"], tint("BASELINE_LIGHT", .88)
 SHARED, SHARED_BG = C["BASELINE_DARK"], tint("BASELINE_LIGHT", .92)
 SUCCESS, FAILURE = C["SUCCESS"], C["FAILURE"]
@@ -196,16 +194,15 @@ lanes = ((method_ys[0], "Pre-execution", "Pre-execution", PRE, "—"),
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     is_lookahead = key.startswith("Lookahead")
-    ink = LOOK_INK if is_lookahead else color
-    text(method_x, y, label, color=ink, weight="bold", linespacing=1.0)
-    text(evidence_x, y, evidence, color=ink,
+    text(method_x, y, label, color=color, weight="bold", linespacing=1.0)
+    text(evidence_x, y, evidence, color=color,
          weight="bold" if is_lookahead else "normal", ha="center", linespacing=0.95)
     rule(5.99, shared_x, y, color=color)
     ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
-    text(teacher_x + teacher_w / 2, y, "Teacher", color=ink, weight="bold", ha="center")
+    text(teacher_x + teacher_w / 2, y, "Teacher", color=color, weight="bold", ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
     box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]
