@@ -619,3 +619,9 @@
 ![OSWorld-Verified, ALFWorld and WebShop success](arm_results/generalization_20261116/adm_transfer_success.png)
 
 [PDF](arm_results/generalization_20261116/adm_transfer_success.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success.svg)
+
+### OSWorld, ALFWorld and WebShop: compact vertical bars
+
+![OSWorld, ALFWorld and WebShop: compact vertical bars](arm_results/generalization_20261116/adm_transfer_success_vertical.png)
+
+[PDF](arm_results/generalization_20261116/adm_transfer_success_vertical.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success_vertical.svg)

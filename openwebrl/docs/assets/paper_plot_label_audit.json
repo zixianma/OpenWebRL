@@ -734,8 +734,16 @@
         "pdf"
       ],
       "mean_success": false
+    },
+    {
+      "stem": "arm_results/generalization_20261116/adm_transfer_success_vertical",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
     }
   ],
-  "figure_count": 92,
+  "figure_count": 93,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

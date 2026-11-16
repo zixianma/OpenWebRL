@@ -18,6 +18,12 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 
 *Grouped horizontal bars show the user-supplied success rates. Gray: base or standalone system; purple: + ADM-4B; green: + GPT-6.1 Sol. Parentheses show supplied percentage-point gains relative to the base in the same group. OSWorld standalone systems are separated from the Qwen3.5-9B SFT group; ALFWorld and WebShop share aligned method rows for Qwen3.5-4B and GiGPO. All axes start at zero; WebShop uses a narrower displayed range than the other panels. No task counts, validity denominators, evaluation settings, protocol alignment or uncertainty estimates were supplied, so no confidence intervals or significance claims are inferred. The numbers are reproduced as provided, without external verification; bibliography identifiers are preserved in the input archive.* [PDF](arm_results/generalization_20261116/adm_transfer_success.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success.svg) · [Input data](arm_results/generalization_20261116/adm_transfer_success.json) · [Renderer](arm_results/generalization_20261116/plot_adm_transfer_success.py).
 
+**Compact vertical-bar version:**
+
+![Compact vertical bars for OSWorld-Verified, ALFWorld and WebShop, using identical reported success rates](arm_results/generalization_20261116/adm_transfer_success_vertical.png)
+
+*Same input values and role colors as the horizontal figure, arranged in a 7.2 × 1.9-inch full-width layout with a single shared legend. Group labels replace repeated system names, and absolute success rates are printed above the bars. Gain annotations remain in the horizontal version and source tables to keep this version compact. Each benchmark has a separate zero-based y range; there are no confidence intervals because uncertainty was not supplied.* [PDF](arm_results/generalization_20261116/adm_transfer_success_vertical.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success_vertical.svg) · [Renderer](arm_results/generalization_20261116/plot_adm_transfer_success_vertical.py).
+
 <details><summary>Supplied numerical results</summary>
 
 **OSWorld-Verified**

@@ -32,6 +32,7 @@ GROUPS = [
     "RL curves: historical and all-run views", "Offline distillation", "Cross-environment transfer",
 ]
 TITLES = {
+    "adm_transfer_success_vertical": "OSWorld, ALFWorld and WebShop: compact vertical bars",
     "adm_transfer_success": "OSWorld-Verified, ALFWorld and WebShop success",
     "selection-head-action-types-avg-20261115": "Selected action distributions: original two-row layout",
     "selection-head-action-types-avg-row-20261116": "Selected action distributions: single-row layout",
@@ -143,7 +144,7 @@ TITLES = {
 
 def figure_group(stem: str) -> str:
     name = Path(stem).name
-    if name == "adm_transfer_success":
+    if name.startswith("adm_transfer_success"):
         return "Cross-environment transfer"
     if name.startswith("offline_distillation_"):
         return "Offline distillation"
