@@ -46,14 +46,12 @@ for x, (pt, lo, hi) in enumerate(diffs):
 a2.axvline(len(KEYS) - 0.5, color=C["BORDER"], lw=0.8, ls=":", zorder=1)   # marks the pooled estimate off from the per-size points
 for ax, title, ticks in ((a1, "Online: 3-benchmark mean success", SIZES), (a2, "Lookahead − pre-exec", [*SIZES, "Pooled"])):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
-    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=12)
+    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ticks)), ticks, fontsize=5.9)
     ax.set_xlim(-0.5, len(ticks) - 0.5)
     ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
 a2.get_xticklabels()[-1].set_fontweight("bold")
-a1.text(0, 1.03, "Student ADMs · full data", transform=a1.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
-a2.text(0, 1.03, "paired, same tasks", transform=a2.transAxes, fontsize=5.6, color=MUTED, ha="left", va="bottom")
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SFT (%)", fontsize=7, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
 a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
@@ -61,7 +59,7 @@ handles = [Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1), Line2D([], [],
            Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=4.1)]
 fig.legend(handles, ["Lookahead H=4", "Pre-exec", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
            loc="lower center", ncol=3, bbox_to_anchor=(0.53, 0.0), columnspacing=1.2, handletextpad=0.3)
-fig.subplots_adjust(left=0.12, right=0.985, top=0.80, bottom=0.30)
+fig.subplots_adjust(left=0.12, right=0.985, top=0.84, bottom=0.30)
 fig.canvas.draw()
 r = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[t for ax in (a1, a2) for t in [ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts, *ax.get_xticklabels(), *ax.get_yticklabels()]]]:
