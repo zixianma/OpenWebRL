@@ -678,8 +678,16 @@
         "pdf"
       ],
       "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-unweighted-20261115",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
     }
   ],
-  "figure_count": 85,
+  "figure_count": 86,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }
