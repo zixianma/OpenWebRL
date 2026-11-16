@@ -4,6 +4,8 @@
 
 [Native actors + N5 selectors: SFT/RL 8B + Luna and Luna high + learned N5, with Terra-judged overall and valid-only success from the completed first repeat](ARM_FINAL_RESULTS.md#openwebrl8b-luna-n5-20261109).
 
+[OSWorld-Verified, ALFWorld and WebShop: supplied ADM transfer results and three-panel bar figure](ARM_FINAL_RESULTS.md#adm-cross-environment-transfer-20261116).
+
 [Figures-only gallery: all final-results figures, including historical and supplementary views](ARM_FIGURES.md).
 
 [Alternative palette gallery: salmon ADM and purple accents](ARM_FIGURES_SALMON_ADM.md).

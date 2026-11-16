@@ -1,0 +1,29 @@
+{
+  "source": "User-supplied tables, 2026-11-16; values reproduced without external verification.",
+  "metric": "Reported success (%); episode counts, validity denominators, evaluation protocol and uncertainty were not supplied.",
+  "benchmarks": {
+    "OSWorld-Verified": [
+      {"system": "Qwen3.8-27B", "role": "standalone", "success": 64.8, "reference": "[37]"},
+      {"system": "GPT-6.1 Sol", "role": "standalone", "success": 72.9, "reference": "[29]"},
+      {"system": "Qwen3.5-9B SFT", "role": "base", "family": "Qwen3.5-9B SFT", "success": 55.7},
+      {"system": "+ ADM-4B", "role": "adm", "family": "Qwen3.5-9B SFT", "success": 60.1, "gain": 4.4},
+      {"system": "+ GPT-6.1 Sol", "role": "sol", "family": "Qwen3.5-9B SFT", "success": 67.3, "gain": 11.6}
+    ],
+    "ALFWorld": [
+      {"system": "Qwen3.5-4B", "role": "base", "family": "Qwen3.5-4B", "success": 39.6, "reference": "[35]"},
+      {"system": "+ ADM-4B", "role": "adm", "family": "Qwen3.5-4B", "success": 64.2, "gain": 24.6},
+      {"system": "+ GPT-6.1 Sol", "role": "sol", "family": "Qwen3.5-4B", "success": 68.7, "gain": 29.1},
+      {"system": "GiGPO", "role": "base", "family": "GiGPO", "success": 88.1, "reference": "[9]"},
+      {"system": "+ ADM-4B", "role": "adm", "family": "GiGPO", "success": 93.3, "gain": 5.2},
+      {"system": "+ GPT-6.1 Sol", "role": "sol", "family": "GiGPO", "success": 93.3, "gain": 5.2}
+    ],
+    "WebShop": [
+      {"system": "Qwen3.5-4B", "role": "base", "family": "Qwen3.5-4B", "success": 16.2, "reference": "[35]"},
+      {"system": "+ ADM-4B", "role": "adm", "family": "Qwen3.5-4B", "success": 24.4, "gain": 8.2},
+      {"system": "+ GPT-6.1 Sol", "role": "sol", "family": "Qwen3.5-4B", "success": 26.8, "gain": 10.6},
+      {"system": "GiGPO", "role": "base", "family": "GiGPO", "success": 40.2, "reference": "[9]"},
+      {"system": "+ ADM-4B", "role": "adm", "family": "GiGPO", "success": 41.8, "gain": 1.6},
+      {"system": "+ GPT-6.1 Sol", "role": "sol", "family": "GiGPO", "success": 44.2, "gain": 4.0}
+    ]
+  }
+}

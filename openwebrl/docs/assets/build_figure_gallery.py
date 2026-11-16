@@ -29,9 +29,10 @@ GROUPS = [
     "BrowserCode on US-residential stealth browsers", "Claude BrowserCode",
     "Shared-Terra comparisons", "API comparisons: earlier cohorts",
     "Selection labels: historical comparisons", "Selection data: earlier sweeps",
-    "RL curves: historical and all-run views", "Offline distillation",
+    "RL curves: historical and all-run views", "Offline distillation", "Cross-environment transfer",
 ]
 TITLES = {
+    "adm_transfer_success": "OSWorld-Verified, ALFWorld and WebShop success",
     "selection-head-action-types-avg-20261115": "Selected action distributions: original two-row layout",
     "selection-head-action-types-avg-row-20261116": "Selected action distributions: single-row layout",
     "offline_distillation_table7_mean_dot_vertical": "Offline distillation Table 7: vertical mean gain with paired 95% CIs",
@@ -142,6 +143,8 @@ TITLES = {
 
 def figure_group(stem: str) -> str:
     name = Path(stem).name
+    if name == "adm_transfer_success":
+        return "Cross-environment transfer"
     if name.startswith("offline_distillation_"):
         return "Offline distillation"
     if "/methods/" in stem or Path(stem).name == "examples-compact":

@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="547.2pt" height="205.2pt" viewBox="0 0 547.2 205.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.9.4, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 205.2
+L 547.2 205.2
+L 547.2 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 87.552 160.056
+L 207.936 160.056
+L 207.936 30.78
+L 87.552 30.78
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="mc89e0ce6ad" d="M 0 0
+L 0 2.5
+" style="stroke: #211a33; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="87.552" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="87.552" y="170.452" transform="rotate(-0 87.552 170.452)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="117.648" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="117.648" y="170.452" transform="rotate(-0 117.648 170.452)">25</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="147.744" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="147.744" y="170.452" transform="rotate(-0 147.744 170.452)">50</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="177.84" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="177.84" y="170.452" transform="rotate(-0 177.84 170.452)">75</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="207.936" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="207.936" y="170.452" transform="rotate(-0 207.936 170.452)">100</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="fill: #211a33; font: 7.4px 'Albert Sans'; text-anchor: middle" x="147.744" y="181.14" transform="rotate(-0 147.744 181.14)">Success (%)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6"/>
+     <g id="text_7">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="82.552" y="52.516703" transform="rotate(-0 82.552 52.516703)">Qwen3.8-27B</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7"/>
+     <g id="text_8">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="82.552" y="69.112946" transform="rotate(-0 82.552 69.112946)">GPT-6.1 Sol</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_8"/>
+     <g id="text_9">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="82.552" y="104.925892" transform="rotate(-0 82.552 104.925892)">Base actor</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9"/>
+     <g id="text_10">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="82.552" y="121.522135" transform="rotate(-0 82.552 121.522135)">+ ADM-4B</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_10"/>
+     <g id="text_11">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="82.552" y="138.118378" transform="rotate(-0 82.552 138.118378)">+ GPT-6.1 Sol</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 87.552 160.056
+L 207.936 160.056
+" style="fill: none; stroke: #cbc9cf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 87.552 55.062924
+L 165.560832 55.062924
+L 165.560832 44.930481
+L 87.552 44.930481
+z
+" clip-path="url(#p1bffd4113a)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_12">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="167.727744" y="51.816703" transform="rotate(-0 167.727744 51.816703)">64.8</text>
+   </g>
+   <g id="patch_5">
+    <path d="M 87.552 71.659168
+L 175.311936 71.659168
+L 175.311936 61.526724
+L 87.552 61.526724
+z
+" clip-path="url(#p1bffd4113a)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_13">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="177.478848" y="68.412946" transform="rotate(-0 177.478848 68.412946)">72.9</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 87.552 107.472114
+L 154.605888 107.472114
+L 154.605888 97.33967
+L 87.552 97.33967
+z
+" clip-path="url(#p1bffd4113a)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_14">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="156.7728" y="104.225892" transform="rotate(-0 156.7728 104.225892)">55.7</text>
+   </g>
+   <g id="patch_7">
+    <path d="M 87.552 124.068357
+L 159.902784 124.068357
+L 159.902784 113.935914
+L 87.552 113.935914
+z
+" clip-path="url(#p1bffd4113a)" style="fill: #9575ee"/>
+   </g>
+   <g id="text_15">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="162.069696" y="120.822135" transform="rotate(-0 162.069696 120.822135)">60.1 (+4.4)</text>
+   </g>
+   <g id="patch_8">
+    <path d="M 87.552 140.6646
+L 168.570432 140.6646
+L 168.570432 130.532157
+L 87.552 130.532157
+z
+" clip-path="url(#p1bffd4113a)" style="fill: #489379"/>
+   </g>
+   <g id="text_16">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="170.737344" y="137.418378" transform="rotate(-0 170.737344 137.418378)">67.3 (+11.6)</text>
+   </g>
+   <g id="text_17">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="87.552" y="39.587892" transform="rotate(-0 87.552 39.587892)">Standalone systems</text>
+   </g>
+   <g id="text_18">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="87.552" y="91.997081" transform="rotate(-0 87.552 91.997081)">Qwen3.5-9B SFT</text>
+   </g>
+   <g id="text_19">
+    <text style="fill: #211a33; font: 8.2px 'Albert Sans'; text-anchor: start" x="87.552" y="19.78" transform="rotate(-0 87.552 19.78)">a) OSWorld-Verified</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_9">
+    <path d="M 281.808 160.056
+L 383.04 160.056
+L 383.04 30.78
+L 281.808 30.78
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="281.808" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_20">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="281.808" y="170.452" transform="rotate(-0 281.808 170.452)">0</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="332.424" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_21">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="332.424" y="170.452" transform="rotate(-0 332.424 170.452)">50</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="383.04" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_22">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="383.04" y="170.452" transform="rotate(-0 383.04 170.452)">100</text>
+     </g>
+    </g>
+    <g id="text_23">
+     <text style="fill: #211a33; font: 7.4px 'Albert Sans'; text-anchor: middle" x="332.424" y="181.14" transform="rotate(-0 332.424 181.14)">Success (%)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_6">
+     <g id="line2d_14"/>
+     <g id="text_24">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="52.516703" transform="rotate(-0 276.808 52.516703)">Base actor</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_15"/>
+     <g id="text_25">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="69.112946" transform="rotate(-0 276.808 69.112946)">+ ADM-4B</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_16"/>
+     <g id="text_26">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="85.709189" transform="rotate(-0 276.808 85.709189)">+ GPT-6.1 Sol</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_17"/>
+     <g id="text_27">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="118.028189" transform="rotate(-0 276.808 118.028189)">Base actor</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_18"/>
+     <g id="text_28">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="134.624432" transform="rotate(-0 276.808 134.624432)">+ ADM-4B</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_19"/>
+     <g id="text_29">
+      <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: end" x="276.808" y="151.220676" transform="rotate(-0 276.808 151.220676)">+ GPT-6.1 Sol</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_10">
+    <path d="M 281.808 160.056
+L 383.04 160.056
+" style="fill: none; stroke: #cbc9cf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 281.808 55.062924
+L 321.895872 55.062924
+L 321.895872 44.930481
+L 281.808 44.930481
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_30">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="323.718048" y="51.816703" transform="rotate(-0 323.718048 51.816703)">39.6</text>
+   </g>
+   <g id="patch_12">
+    <path d="M 281.808 71.659168
+L 346.798944 71.659168
+L 346.798944 61.526724
+L 281.808 61.526724
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #9575ee"/>
+   </g>
+   <g id="text_31">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="348.62112" y="68.412946" transform="rotate(-0 348.62112 68.412946)">64.2 (+24.6)</text>
+   </g>
+   <g id="patch_13">
+    <path d="M 281.808 88.255411
+L 351.354384 88.255411
+L 351.354384 78.122968
+L 281.808 78.122968
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #489379"/>
+   </g>
+   <g id="text_32">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="353.17656" y="85.009189" transform="rotate(-0 353.17656 85.009189)">68.7 (+29.1)</text>
+   </g>
+   <g id="patch_14">
+    <path d="M 281.808 120.574411
+L 370.993392 120.574411
+L 370.993392 110.441968
+L 281.808 110.441968
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_33">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="372.815568" y="117.328189" transform="rotate(-0 372.815568 117.328189)">88.1</text>
+   </g>
+   <g id="patch_15">
+    <path d="M 281.808 137.170654
+L 376.257456 137.170654
+L 376.257456 127.038211
+L 281.808 127.038211
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #9575ee"/>
+   </g>
+   <g id="text_34">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="378.079632" y="133.924432" transform="rotate(-0 378.079632 133.924432)">93.3 (+5.2)</text>
+   </g>
+   <g id="patch_16">
+    <path d="M 281.808 153.766897
+L 376.257456 153.766897
+L 376.257456 143.634454
+L 281.808 143.634454
+z
+" clip-path="url(#p1abb9d141c)" style="fill: #489379"/>
+   </g>
+   <g id="text_35">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="378.079632" y="150.520676" transform="rotate(-0 378.079632 150.520676)">93.3 (+5.2)</text>
+   </g>
+   <g id="text_36">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="281.808" y="39.587892" transform="rotate(-0 281.808 39.587892)">Qwen3.5-4B</text>
+   </g>
+   <g id="text_37">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="281.808" y="105.099378" transform="rotate(-0 281.808 105.099378)">GiGPO</text>
+   </g>
+   <g id="text_38">
+    <text style="fill: #211a33; font: 8.2px 'Albert Sans'; text-anchor: start" x="281.808" y="19.78" transform="rotate(-0 281.808 19.78)">b) ALFWorld</text>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_17">
+    <path d="M 432.288 160.056
+L 536.256 160.056
+L 536.256 30.78
+L 432.288 30.78
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_5">
+    <g id="xtick_9">
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="432.288" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_39">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="432.288" y="170.452" transform="rotate(-0 432.288 170.452)">0</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_21">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="463.793455" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_40">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="463.793455" y="170.452" transform="rotate(-0 463.793455 170.452)">20</text>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="495.298909" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_41">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="495.298909" y="170.452" transform="rotate(-0 495.298909 170.452)">40</text>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_23">
+      <g>
+       <use xlink:href="#mc89e0ce6ad" x="526.804364" y="160.056" style="fill: #211a33; stroke: #211a33; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_42">
+      <text style="fill: #211a33; font: 6.8px 'Albert Sans'; text-anchor: middle" x="526.804364" y="170.452" transform="rotate(-0 526.804364 170.452)">60</text>
+     </g>
+    </g>
+    <g id="text_43">
+     <text style="fill: #211a33; font: 7.4px 'Albert Sans'; text-anchor: middle" x="484.272" y="181.14" transform="rotate(-0 484.272 181.14)">Success (%)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_6">
+    <g id="ytick_12">
+     <g id="line2d_24"/>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_25"/>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_26"/>
+    </g>
+    <g id="ytick_15">
+     <g id="line2d_27"/>
+    </g>
+    <g id="ytick_16">
+     <g id="line2d_28"/>
+    </g>
+    <g id="ytick_17">
+     <g id="line2d_29"/>
+    </g>
+   </g>
+   <g id="patch_18">
+    <path d="M 432.288 160.056
+L 536.256 160.056
+" style="fill: none; stroke: #cbc9cf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 432.288 55.062924
+L 457.807418 55.062924
+L 457.807418 44.930481
+L 432.288 44.930481
+z
+" clip-path="url(#pce94708fe2)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_44">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="459.678842" y="51.816703" transform="rotate(-0 459.678842 51.816703)">16.2</text>
+   </g>
+   <g id="patch_20">
+    <path d="M 432.288 71.659168
+L 470.724655 71.659168
+L 470.724655 61.526724
+L 432.288 61.526724
+z
+" clip-path="url(#pce94708fe2)" style="fill: #9575ee"/>
+   </g>
+   <g id="text_45">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="472.596079" y="68.412946" transform="rotate(-0 472.596079 68.412946)">24.4 (+8.2)</text>
+   </g>
+   <g id="patch_21">
+    <path d="M 432.288 88.255411
+L 474.505309 88.255411
+L 474.505309 78.122968
+L 432.288 78.122968
+z
+" clip-path="url(#pce94708fe2)" style="fill: #489379"/>
+   </g>
+   <g id="text_46">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="476.376733" y="85.009189" transform="rotate(-0 476.376733 85.009189)">26.8 (+10.6)</text>
+   </g>
+   <g id="patch_22">
+    <path d="M 432.288 120.574411
+L 495.613964 120.574411
+L 495.613964 110.441968
+L 432.288 110.441968
+z
+" clip-path="url(#pce94708fe2)" style="fill: #7c7887"/>
+   </g>
+   <g id="text_47">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="497.485388" y="117.328189" transform="rotate(-0 497.485388 117.328189)">40.2</text>
+   </g>
+   <g id="patch_23">
+    <path d="M 432.288 137.170654
+L 498.1344 137.170654
+L 498.1344 127.038211
+L 432.288 127.038211
+z
+" clip-path="url(#pce94708fe2)" style="fill: #9575ee"/>
+   </g>
+   <g id="text_48">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="500.005824" y="133.924432" transform="rotate(-0 500.005824 133.924432)">41.8 (+1.6)</text>
+   </g>
+   <g id="patch_24">
+    <path d="M 432.288 153.766897
+L 501.915055 153.766897
+L 501.915055 143.634454
+L 432.288 143.634454
+z
+" clip-path="url(#pce94708fe2)" style="fill: #489379"/>
+   </g>
+   <g id="text_49">
+    <text style="fill: #211a33; font: 7px 'Albert Sans'; text-anchor: start" x="503.786479" y="150.520676" transform="rotate(-0 503.786479 150.520676)">44.2 (+4.0)</text>
+   </g>
+   <g id="text_50">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="432.288" y="39.587892" transform="rotate(-0 432.288 39.587892)">Qwen3.5-4B</text>
+   </g>
+   <g id="text_51">
+    <text style="fill: #423c54; font: 7px 'Albert Sans'; text-anchor: start" x="432.288" y="105.099378" transform="rotate(-0 432.288 105.099378)">GiGPO</text>
+   </g>
+   <g id="text_52">
+    <text style="fill: #211a33; font: 8.2px 'Albert Sans'; text-anchor: start" x="432.288" y="19.78" transform="rotate(-0 432.288 19.78)">c) WebShop</text>
+   </g>
+  </g>
+  <g id="legend_1">
+   <g id="patch_25">
+    <path d="M 196.481484 194.898
+L 203.981484 194.898
+L 203.981484 189.648
+L 196.481484 189.648
+z
+" style="fill: #7c7887"/>
+   </g>
+   <g id="text_53">
+    <text style="fill: #211a33; font: 7.5px 'Albert Sans'; text-anchor: start" x="207.731484" y="194.898" transform="rotate(-0 207.731484 194.898)">Base / standalone</text>
+   </g>
+   <g id="patch_26">
+    <path d="M 283.50375 194.898
+L 291.00375 194.898
+L 291.00375 189.648
+L 283.50375 189.648
+z
+" style="fill: #9575ee"/>
+   </g>
+   <g id="text_54">
+    <text style="fill: #211a33; font: 7.5px 'Albert Sans'; text-anchor: start" x="294.75375" y="194.898" transform="rotate(-0 294.75375 194.898)">+ ADM-4B</text>
+   </g>
+   <g id="patch_27">
+    <path d="M 347.381484 194.898
+L 354.881484 194.898
+L 354.881484 189.648
+L 347.381484 189.648
+z
+" style="fill: #489379"/>
+   </g>
+   <g id="text_55">
+    <text style="fill: #211a33; font: 7.5px 'Albert Sans'; text-anchor: start" x="358.631484" y="194.898" transform="rotate(-0 358.631484 194.898)">+ GPT-6.1 Sol</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p1bffd4113a">
+   <rect x="87.552" y="30.78" width="120.384" height="129.276"/>
+  </clipPath>
+  <clipPath id="p1abb9d141c">
+   <rect x="281.808" y="30.78" width="101.232" height="129.276"/>
+  </clipPath>
+  <clipPath id="pce94708fe2">
+   <rect x="432.288" y="30.78" width="103.968" height="129.276"/>
+  </clipPath>
+ </defs>
+</svg>

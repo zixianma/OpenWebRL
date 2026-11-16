@@ -9,6 +9,40 @@ Figure labels use **Mean success (%)** for benchmark aggregates and **Success (%
 
 *New version of the Kev-inclusive architecture figure. Panels a–b group the feature-based heads under a shared frozen-actor feature input. Panel b is ADM-Linear-23K: frozen actor candidate features are standardized using training-set statistics, then scored by one shared linear layer, $z_i=w^\top\widetilde{c}_i+b$. It has no hidden layer, candidate interaction or separate state input. All selectors choose an original actor action. The original three-panel figure is preserved. Implementation (`openwebrl/linear_probe.py`) is recorded in the frozen `recipe3-ablations-20261104/source-probe` snapshot; see [head definitions](ARM_HEAD_SIZE_ABLATIONS.md).* [PDF](arm_results/methods/selection-arch-overview-kev-linear-20261115.pdf) · [SVG](arm_results/methods/selection-arch-overview-kev-linear-20261115.svg) · [Renderer](arm_results/methods/selection-arch-overview-kev-linear-20261115.py).
 
+<a id="adm-cross-environment-transfer-20261116"></a>
+## OSWorld-Verified, ALFWorld and WebShop
+
+**ADM-4B improves the supplied success point estimate in all five base-system/benchmark combinations, by 1.6–24.6 percentage points.** GPT-6.1 Sol additions improve by 4.0–29.1 points. The largest reported improvements are on ALFWorld with Qwen3.5-4B.
+
+![Reported success on OSWorld-Verified, ALFWorld and WebShop for standalone systems and base systems with ADM-4B or GPT-6.1 Sol](arm_results/generalization_20261116/adm_transfer_success.png)
+
+*Grouped horizontal bars show the user-supplied success rates. Gray: base or standalone system; purple: + ADM-4B; green: + GPT-6.1 Sol. Parentheses show supplied percentage-point gains relative to the base in the same group. OSWorld standalone systems are separated from the Qwen3.5-9B SFT group; ALFWorld and WebShop share aligned method rows for Qwen3.5-4B and GiGPO. All axes start at zero; WebShop uses a narrower displayed range than the other panels. No task counts, validity denominators, evaluation settings, protocol alignment or uncertainty estimates were supplied, so no confidence intervals or significance claims are inferred. The numbers are reproduced as provided, without external verification; bibliography identifiers are preserved in the input archive.* [PDF](arm_results/generalization_20261116/adm_transfer_success.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success.svg) · [Input data](arm_results/generalization_20261116/adm_transfer_success.json) · [Renderer](arm_results/generalization_20261116/plot_adm_transfer_success.py).
+
+<details><summary>Supplied numerical results</summary>
+
+**OSWorld-Verified**
+
+| System | Success (%) | Gain over base (pp) | Supplied reference |
+| --- | ---: | ---: | --- |
+| Qwen3.8-27B | 64.8 | — | [37] |
+| GPT-6.1 Sol | 72.9 | — | [29] |
+| Qwen3.5-9B SFT | 55.7 | — | — |
+| + ADM-4B | 60.1 | +4.4 | — |
+| + GPT-6.1 Sol | 67.3 | +11.6 | — |
+
+**ALFWorld and WebShop**
+
+| System | ALFWorld success (%) | Gain (pp) | WebShop success (%) | Gain (pp) | Supplied reference |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Qwen3.5-4B | 39.6 | — | 16.2 | — | [35] |
+| + ADM-4B | 64.2 | +24.6 | 24.4 | +8.2 | — |
+| + GPT-6.1 Sol | 68.7 | +29.1 | 26.8 | +10.6 | — |
+| GiGPO | 88.1 | — | 40.2 | — | [9] |
+| + ADM-4B | 93.3 | +5.2 | 41.8 | +1.6 | — |
+| + GPT-6.1 Sol | 93.3 | +5.2 | 44.2 | +4.0 | — |
+
+</details>
+
 <a id="offline-policy-distillation-20261114"></a>
 ## Offline policy distillation: Table 7
 

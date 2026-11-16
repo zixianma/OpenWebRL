@@ -611,3 +611,11 @@
 ![Offline distillation Table 7: benchmark gains and CIs](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.png)
 
 [PDF](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.pdf) · [SVG](arm_results/offline_distillation_20261114/offline_distillation_table7_by_benchmark.svg)
+
+## Cross-environment transfer
+
+### OSWorld-Verified, ALFWorld and WebShop success
+
+![OSWorld-Verified, ALFWorld and WebShop success](arm_results/generalization_20261116/adm_transfer_success.png)
+
+[PDF](arm_results/generalization_20261116/adm_transfer_success.pdf) · [SVG](arm_results/generalization_20261116/adm_transfer_success.svg)
