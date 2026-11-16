@@ -1,0 +1,453 @@
+{
+ "note": "Heads (joint transformer, soft CE) on frozen OpenWebRL-4B-SFT features, trained once (seed 0) on WebArbiter SFT pairs (8,701 train pairs) + Recipe 3 GPT-5.5 H = 4 panels (18,781, whole sets); 20 epochs, batch 64, lr 3e-4, epoch chosen on held-out WebArbiter tasks. Jobs 481867 (d128-L2, 4.4M) and 481868 (d512-L2, 22.6M), CPU only; results read from the compute nodes because /gpfs/scrubbed was over quota.",
+ "heads": {
+  "4M": {
+   "job": "481867",
+   "train": {
+    "seed0": {
+     "variant": "R3",
+     "seed": 0,
+     "objective": "soft_ce",
+     "loss": "softce",
+     "source": "webarbiter_sft+recipe3_gpt55_h4",
+     "train_items": 27482,
+     "sft_train_pairs": 8701,
+     "sft_val_pairs": 941,
+     "ours_states": 18781,
+     "val_curve": [
+      0.9915,
+      0.9915,
+      0.9947,
+      0.9947,
+      0.9915,
+      0.9968,
+      0.9968,
+      0.9957,
+      0.9926,
+      0.9904,
+      0.9957,
+      0.9957,
+      0.9947,
+      0.9968,
+      0.9968,
+      0.9979,
+      0.9968,
+      0.9979,
+      0.9979,
+      0.9968
+     ],
+     "best_epoch": 16,
+     "best_val_pair_acc": 0.997874601487779,
+     "params": 4362754,
+     "seconds": 228
+    }
+   },
+   "bench": {
+    "R3-seed0/WebPRMBench": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 4062,
+      "pair_acc": 0.8830434782608696,
+      "states_total": 1150,
+      "states_ok": 901,
+      "state_acc": 0.719007662312662
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 77,
+       "pair_acc": 0.6416666666666667,
+       "states_total": 30,
+       "states_ok": 13,
+       "state_acc": 0.43333333333333335
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 1661,
+       "pair_acc": 0.9958033573141487,
+       "states_total": 417,
+       "states_ok": 410,
+       "state_acc": 0.9832134292565947
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 566,
+       "pair_acc": 0.9964788732394366,
+       "states_total": 142,
+       "states_ok": 140,
+       "state_acc": 0.9859154929577465
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 587,
+       "pair_acc": 0.9915540540540541,
+       "states_total": 148,
+       "states_ok": 143,
+       "state_acc": 0.9662162162162162
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 590,
+       "pair_acc": 0.7338308457711443,
+       "states_total": 201,
+       "states_ok": 99,
+       "state_acc": 0.4925373134328358
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 581,
+       "pair_acc": 0.6851415094339622,
+       "states_total": 212,
+       "states_ok": 96,
+       "state_acc": 0.4528301886792453
+      }
+     }
+    },
+    "R3-seed0/WebPRMBench-swapped": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 4062,
+      "pair_acc": 0.8830434782608696,
+      "states_total": 1150,
+      "states_ok": 901,
+      "state_acc": 0.719007662312662
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 77,
+       "pair_acc": 0.6416666666666667,
+       "states_total": 30,
+       "states_ok": 13,
+       "state_acc": 0.43333333333333335
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 1661,
+       "pair_acc": 0.9958033573141487,
+       "states_total": 417,
+       "states_ok": 410,
+       "state_acc": 0.9832134292565947
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 566,
+       "pair_acc": 0.9964788732394366,
+       "states_total": 142,
+       "states_ok": 140,
+       "state_acc": 0.9859154929577465
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 587,
+       "pair_acc": 0.9915540540540541,
+       "states_total": 148,
+       "states_ok": 143,
+       "state_acc": 0.9662162162162162
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 590,
+       "pair_acc": 0.7338308457711443,
+       "states_total": 201,
+       "states_ok": 99,
+       "state_acc": 0.4925373134328358
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 581,
+       "pair_acc": 0.6851415094339622,
+       "states_total": 212,
+       "states_ok": 96,
+       "state_acc": 0.4528301886792453
+      }
+     }
+    },
+    "R3-seed0-actiononly/WebPRMBench": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 2986,
+      "pair_acc": 0.6491304347826087,
+      "states_total": 1150,
+      "states_ok": 414,
+      "state_acc": 0.3837095898305017
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 81,
+       "pair_acc": 0.675,
+       "states_total": 30,
+       "states_ok": 14,
+       "state_acc": 0.4666666666666667
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 1008,
+       "pair_acc": 0.60431654676259,
+       "states_total": 417,
+       "states_ok": 128,
+       "state_acc": 0.3069544364508393
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 396,
+       "pair_acc": 0.6971830985915493,
+       "states_total": 142,
+       "states_ok": 51,
+       "state_acc": 0.3591549295774648
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 372,
+       "pair_acc": 0.6283783783783784,
+       "states_total": 148,
+       "states_ok": 50,
+       "state_acc": 0.33783783783783783
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 589,
+       "pair_acc": 0.7325870646766169,
+       "states_total": 201,
+       "states_ok": 97,
+       "state_acc": 0.48258706467661694
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 540,
+       "pair_acc": 0.6367924528301887,
+       "states_total": 212,
+       "states_ok": 74,
+       "state_acc": 0.3490566037735849
+      }
+     }
+    }
+   }
+  },
+  "23M": {
+   "job": "481868",
+   "train": {
+    "seed0": {
+     "variant": "R3",
+     "seed": 0,
+     "objective": "soft_ce",
+     "loss": "softce",
+     "source": "webarbiter_sft+recipe3_gpt55_h4",
+     "train_items": 27482,
+     "sft_train_pairs": 8701,
+     "sft_val_pairs": 941,
+     "ours_states": 18781,
+     "val_curve": [
+      0.9915,
+      0.9936,
+      0.9936,
+      0.9936,
+      0.9957,
+      0.9957,
+      0.9904,
+      0.9957,
+      0.9936,
+      0.9957,
+      0.9968,
+      0.9957,
+      0.9957,
+      0.9947,
+      0.9947,
+      0.9957,
+      0.9947,
+      0.9947,
+      0.9947,
+      0.9947
+     ],
+     "best_epoch": 11,
+     "best_val_pair_acc": 0.9968119022316685,
+     "params": 22562818,
+     "seconds": 832
+    }
+   },
+   "bench": {
+    "R3-seed0/WebPRMBench": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 4023,
+      "pair_acc": 0.8745652173913043,
+      "states_total": 1150,
+      "states_ok": 866,
+      "state_acc": 0.6878770368138983
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 82,
+       "pair_acc": 0.6833333333333333,
+       "states_total": 30,
+       "states_ok": 12,
+       "state_acc": 0.4
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 1656,
+       "pair_acc": 0.9928057553956835,
+       "states_total": 417,
+       "states_ok": 406,
+       "state_acc": 0.973621103117506
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 566,
+       "pair_acc": 0.9964788732394366,
+       "states_total": 142,
+       "states_ok": 140,
+       "state_acc": 0.9859154929577465
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 588,
+       "pair_acc": 0.9932432432432432,
+       "states_total": 148,
+       "states_ok": 144,
+       "state_acc": 0.972972972972973
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 558,
+       "pair_acc": 0.6940298507462687,
+       "states_total": 201,
+       "states_ok": 82,
+       "state_acc": 0.4079601990049751
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 573,
+       "pair_acc": 0.6757075471698113,
+       "states_total": 212,
+       "states_ok": 82,
+       "state_acc": 0.3867924528301887
+      }
+     }
+    },
+    "R3-seed0/WebPRMBench-swapped": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 4023,
+      "pair_acc": 0.8745652173913043,
+      "states_total": 1150,
+      "states_ok": 866,
+      "state_acc": 0.6878770368138983
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 82,
+       "pair_acc": 0.6833333333333333,
+       "states_total": 30,
+       "states_ok": 12,
+       "state_acc": 0.4
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 1656,
+       "pair_acc": 0.9928057553956835,
+       "states_total": 417,
+       "states_ok": 406,
+       "state_acc": 0.973621103117506
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 566,
+       "pair_acc": 0.9964788732394366,
+       "states_total": 142,
+       "states_ok": 140,
+       "state_acc": 0.9859154929577465
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 588,
+       "pair_acc": 0.9932432432432432,
+       "states_total": 148,
+       "states_ok": 144,
+       "state_acc": 0.972972972972973
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 558,
+       "pair_acc": 0.6940298507462687,
+       "states_total": 201,
+       "states_ok": 82,
+       "state_acc": 0.4079601990049751
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 573,
+       "pair_acc": 0.6757075471698113,
+       "states_total": 212,
+       "states_ok": 82,
+       "state_acc": 0.3867924528301887
+      }
+     }
+    },
+    "R3-seed0-actiononly/WebPRMBench": {
+     "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 3008,
+      "pair_acc": 0.6539130434782608,
+      "states_total": 1150,
+      "states_ok": 413,
+      "state_acc": 0.37031796509161835
+     },
+     "per_source": {
+      "assistantbench": {
+       "pairs_total": 120,
+       "pairs_ok": 74,
+       "pair_acc": 0.6166666666666667,
+       "states_total": 30,
+       "states_ok": 12,
+       "state_acc": 0.4
+      },
+      "mind2web_test_domain": {
+       "pairs_total": 1668,
+       "pairs_ok": 989,
+       "pair_acc": 0.592925659472422,
+       "states_total": 417,
+       "states_ok": 126,
+       "state_acc": 0.302158273381295
+      },
+      "mind2web_test_task": {
+       "pairs_total": 568,
+       "pairs_ok": 382,
+       "pair_acc": 0.6725352112676056,
+       "states_total": 142,
+       "states_ok": 47,
+       "state_acc": 0.33098591549295775
+      },
+      "mind2web_test_website": {
+       "pairs_total": 592,
+       "pairs_ok": 357,
+       "pair_acc": 0.6030405405405406,
+       "states_total": 148,
+       "states_ok": 42,
+       "state_acc": 0.28378378378378377
+      },
+      "webarena": {
+       "pairs_total": 804,
+       "pairs_ok": 621,
+       "pair_acc": 0.7723880597014925,
+       "states_total": 201,
+       "states_ok": 107,
+       "state_acc": 0.5323383084577115
+      },
+      "workarena": {
+       "pairs_total": 848,
+       "pairs_ok": 585,
+       "pair_acc": 0.6898584905660378,
+       "states_total": 212,
+       "states_ok": 79,
+       "state_acc": 0.37264150943396224
+      }
+     }
+    }
+   }
+  }
+ }
+}

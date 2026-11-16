@@ -29,6 +29,8 @@
 | Our 4B LoRA | WebArbiter SFT pairs + Recipe 1 | 75.1 | <ins>54.4</ins> | 89.2 | **74.8** | −14.1 |
 | Our 4B LoRA | WebArbiter SFT pairs + Recipe 3 GPT-5.5 H = 4 | 74.8 | 51.3 | <ins>89.9</ins> | <ins>74.4</ins> | −15.1 |
 | ***Ours: 22.6M heads on frozen OpenWebRL-4B-SFT features*** | | | | | | |
+| Our 4M head | WebArbiter SFT pairs + Recipe 3 GPT-5.5 H = 4 ([Nov 15](#webprmbench-heads-r3wa-20261115)) | 66.8 | 40.6 | 76.4 | 59.0 | −9.6 |
+| Our 23M head | WebArbiter SFT pairs + Recipe 3 GPT-5.5 H = 4 ([Nov 15](#webprmbench-heads-r3wa-20261115)) | 67.2 | 40.2 | 76.2 | 54.3 | −8.9 |
 | Our head | Recipe 1: Piotr's 2,692 states | 67.6 | 43.7 | 74.2 | 46.4 | −6.6 |
 | Our head | Recipe 2: 1.3K states, Luna labels before execution | 64.0 | 40.8 | 70.8 | 42.3 | −6.8 |
 | Our head | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 59.0 | 31.9 | 67.0 | 37.5 | −8.0 |
@@ -260,6 +262,28 @@ Cells: pairwise / Best-of-N (%), one seed each. Compare with the Recipe 1 + WebA
 - **Adding our data does not help on this benchmark.** Actions only, the WebArbiter-only LoRA (76.9% / 54.0%) is level with or ahead of all three mixtures (Recipe 1 75.1%, Recipe 2 C1 75.0%, Recipe 3 74.8% pairwise) and 0.4 / 1.3 pp behind Piotr SelectionARM, which never saw WebArbiter data. Recipe 3 is ahead of the baseline only on Mind2Web (+1.8 pairwise) and behind on WebArena (−2.4), WorkArena (−5.6) and AssistantBench (−2.5, 30 states). One seed each, so differences of 1–2 pp are not established.
 - **Every WebArbiter-trained LoRA loses 13.6–15.1 pp pairwise without thoughts**, almost all on Mind2Web (98.8 → 63.8% for the baseline). The benchmark is close to WebArbiter's own training distribution, so it cannot show whether our screenshot data improves live selection; only the live evaluation can.
 - **Live test:** the merged models (`webprm-lora-wa-20261104/lora/merged`, `webprm-lora-r3wa-20261104/lora/merged`) run in the live harness unchanged. The Recipe 3 + WebArbiter LoRA was evaluated live on November 5–6 ([results](ARM_FINAL_RESULTS.md#final-selection-headline-20261103), cross-day).
+
+<a id="webprmbench-heads-r3wa-20261115"></a>
+**Heads on WebArbiter SFT pairs + Recipe 3, the ADM-4B mix (November 15).** Question: with the same training data as the default ADM-4B LoRA, does head size matter, and how far are the heads from the 4B LoRA? The 4M (d128-L2) and 23M (d512-L2) joint-transformer heads read the frozen OpenWebRL-4B-SFT actor's features; each is trained once (seed 0, as the LoRA) on WebArbiter's SFT pairs (8,701 training pairs; 941 held out for epoch choice) plus the 18,781 Recipe 3 GPT-5.5 H = 4 training panels as whole candidate sets (soft cross-entropy), 20 epochs, batch 64, lr 3e-4; epoch chosen on held-out WebArbiter tasks (4M epoch 16, 23M epoch 11; 99.7–99.8% held-out pair accuracy). Scored from the cached benchmark features, released and swapped order and actions only.
+
+| Selector | Scoring view | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 4M head (d128-L2, 4.4M) | Released order | 99.5 / 98.0 | 73.4 / 49.3 | 64.2 / 43.3 | 68.5 / 45.3 | 76.4 / 59.0 |
+| 4M head (d128-L2, 4.4M) | Swapped order | 99.5 / 98.0 | 73.4 / 49.3 | 64.2 / 43.3 | 68.5 / 45.3 | 76.4 / 59.0 |
+| 4M head (d128-L2, 4.4M) | Actions only | 62.8 / 32.4 | 73.3 / 48.3 | 67.5 / 46.7 | 63.7 / 34.9 | 66.8 / 40.6 |
+| 23M head (d512-L2, 22.6M) | Released order | 99.4 / 97.6 | 69.4 / 40.8 | 68.3 / 40.0 | 67.6 / 38.7 | 76.2 / 54.3 |
+| 23M head (d512-L2, 22.6M) | Swapped order | 99.4 / 97.6 | 69.4 / 40.8 | 68.3 / 40.0 | 67.6 / 38.7 | 76.2 / 54.3 |
+| 23M head (d512-L2, 22.6M) | Actions only | 61.1 / 30.4 | 77.2 / 53.2 | 61.7 / 40.0 | 69.0 / 37.3 | 67.2 / 40.2 |
+| *4B LoRA, same data (above)* | Released order | 97.1 / 90.5 | 88.4 / 74.1 | 93.3 / 76.7 | 80.8 / 56.1 | 89.9 / 74.4 |
+| *4B LoRA, same data (above)* | Actions only | 65.6 / 37.3 | 80.1 / 64.7 | 81.7 / 56.7 | 71.8 / 46.7 | 74.8 / 51.3 |
+
+Cells: pairwise / Best-of-N (%), one seed each.
+
+- **4M and 23M are level:** 76.4 vs 76.2% pairwise released, 66.8 vs 67.2% actions only. The 4M head's Best-of-N lead (59.0 vs 54.3%, mostly WebArena) is within the ±5.6 pp seed spread of the 22.6M WebArbiter-only heads above.
+- **Both are well below the 4B LoRA on the same data:** about 13.5 pp pairwise released and 8 pp actions only. Training length is not the reason: the heads take about 430 optimizer steps per epoch, about 6,900 (4M) and 4,700 (23M) steps to their chosen epoch, against about 6,300 for the LoRA (50,330 examples, 2 epochs, batch 16), and they fit WebArbiter's held-out pairs as well as the LoRA (99.7–99.8% vs 99.9%). The remaining differences are the representation and the comparison: the heads score candidates from pooled hidden states of a frozen actor (each candidate encoded separately), while the LoRA fine-tunes the 4B and reads all candidates together as text.
+- **No order bias:** swapped order gives the same scores.
+
+Evidence: [results JSON](webprm_results/webprmbench_r3wa_heads_20261115.json). Package `RT/webprm-webarena-20261011/next-stage-preparation/webprm-sft-heads-4m-20261115/` (`sft_heads.py` = the November 1 script with the head size from `SFT_HEADS_DMODEL` / `SFT_HEADS_NHEADS`, an `R3` variant loading `data-all2/k3/panels.jsonl`, and an `eval-action` subcommand; `cpu_r3.sbatch`; features symlinked from `webprm-sft-heads-20261101/out/features`).
 - **Recipe 3 alone (November 6).** The GPT-5.5 H = 4 LoRA without WebArbiter data (`decoder-4b-lora-gpt55-k3-p16`, the live Recipe 3 row) scores 74.7% / 46.9% released, 77.3% / 51.5% swapped and 72.5% / 50.4% actions only; on held-out WebArbiter pairs it is right 68.8% of the time (61.3% of pairs right in both orders). That is 4.8 / 4.9 pp below Piotr SelectionARM actions only and 4.3 pp below the Recipe 2 LoRAs' 76.9–77.4% released, while live it is level with SelectionARM (−0.5 [−2.4, +1.4] pp, November 4). Its released − swapped gap (−2.6 pp) is the largest of our LoRAs, a sign of order sensitivity. Adding WebArbiter pairs lifts its actions-only score by 2.3 pp (72.5 → 74.8%) and its released score by 15.2 pp.
 
 <a id="webprmbench-actiononly-20261102"></a>
