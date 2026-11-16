@@ -344,6 +344,12 @@
 
 [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.svg)
 
+### Sixteen settings: unweighted valid-only mean, right-side legend
+
+![Sixteen settings: unweighted valid-only mean, right-side legend](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_unweighted_pareto_highlight_right_legend_preview.png)
+
+[PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_unweighted_pareto_highlight_right_legend_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_unweighted_pareto_highlight_right_legend_preview.svg)
+
 ### Sixteen settings: bottom legend
 
 ![Sixteen settings: bottom legend](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.png)

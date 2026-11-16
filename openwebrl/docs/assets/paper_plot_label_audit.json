@@ -702,8 +702,16 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_unweighted_pareto_highlight_right_legend_preview",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
     }
   ],
-  "figure_count": 88,
+  "figure_count": 89,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

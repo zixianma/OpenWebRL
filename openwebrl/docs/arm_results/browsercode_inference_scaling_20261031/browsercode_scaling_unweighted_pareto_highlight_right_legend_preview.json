@@ -1,0 +1,1049 @@
+{
+  "schema": "browsercode-equal-benchmark-own-valid-pareto-v1",
+  "benchmark_weights": {
+    "online_mind2web": "1/3",
+    "webvoyager": "1/3",
+    "deepshop": "1/3"
+  },
+  "success_definition": "Arithmetic mean of each benchmark successes / own native-valid tasks; not pooled task success.",
+  "x_definition": "Arithmetic mean of the three within-benchmark own-valid actor means, including valid failures. Cost excludes judge, browser hosting and invalid-attempt spending; latency is elapsed actor-loop time.",
+  "comparison_caveats": [
+    "Own-valid tasks and live collection windows differ; no paired or causal cache effect is inferred.",
+    "Cached selection uses full native context; cached N5/60 advertises 60 while historical N5/60 advertised 30 and enforced 60.",
+    "All four Sol settings use GPT-6 Sol; high/30, high/60, high/120 and xhigh/30 retain their stated effort and advertised/enforced decision limits.",
+    "Actor means exclude Terra, hosting and invalid-outcome spending. Latency is elapsed per task, not summed parallel call time.",
+    "Selected browser-code batches may contain multiple browser operations and are not browser resource or fee measurements."
+  ],
+  "points": [
+    {
+      "method": "serial_high",
+      "benchmark_count": 3,
+      "success_rate": 0.763672275406981,
+      "metrics": {
+        "actor_usd": 0.2632402285804647,
+        "browser_commands": 16.462042601046484,
+        "actor_seconds": 112.47354167362785
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 266,
+          "invalid": 34,
+          "successes": 177,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 553,
+          "invalid": 42,
+          "successes": 468,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 145,
+          "invalid": 5,
+          "successes": 113,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.20770943759398497,
+          "browser_commands": 14.988721804511279,
+          "actor_seconds": 92.65773511359622
+        },
+        "webvoyager": {
+          "actor_usd": 0.19769814538878844,
+          "browser_commands": 13.314647377938517,
+          "actor_seconds": 94.14691202024558
+        },
+        "deepshop": {
+          "actor_usd": 0.3843131027586207,
+          "browser_commands": 21.082758620689656,
+          "actor_seconds": 150.61597788704174
+        }
+      }
+    },
+    {
+      "method": "luna_single_high",
+      "benchmark_count": 3,
+      "success_rate": 0.771393270883226,
+      "metrics": {
+        "actor_usd": 0.010442353502663869,
+        "browser_commands": 16.90081219382219,
+        "actor_seconds": 116.59603599965715
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 579,
+          "invalid": 16,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 123,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.009513999349442378,
+          "browser_commands": 16.63197026022305,
+          "actor_seconds": 94.92736618077343
+        },
+        "webvoyager": {
+          "actor_usd": 0.00778212762521589,
+          "browser_commands": 13.53713298791019,
+          "actor_seconds": 100.09790529011984
+        },
+        "deepshop": {
+          "actor_usd": 0.014030933533333335,
+          "browser_commands": 20.533333333333335,
+          "actor_seconds": 154.7628365280782
+        }
+      }
+    },
+    {
+      "method": "parallel3_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7903681339856008,
+      "metrics": {
+        "actor_usd": 0.06233137210679307,
+        "browser_commands": 14.822023251064039,
+        "actor_seconds": 199.89084631290316
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 183,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 568,
+          "invalid": 27,
+          "successes": 496,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 148,
+          "invalid": 2,
+          "successes": 121,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.054963019237918215,
+          "browser_commands": 14.79182156133829,
+          "actor_seconds": 178.0883317464566
+        },
+        "webvoyager": {
+          "actor_usd": 0.04319473032570423,
+          "browser_commands": 11.714788732394366,
+          "actor_seconds": 163.37307838709927
+        },
+        "deepshop": {
+          "actor_usd": 0.08883636675675675,
+          "browser_commands": 17.95945945945946,
+          "actor_seconds": 258.21112880515363
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8093899448634602,
+      "metrics": {
+        "actor_usd": 0.07500549123763525,
+        "browser_commands": 14.331878588058364,
+        "actor_seconds": 220.25937281766014
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 198,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 555,
+          "invalid": 40,
+          "successes": 483,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 120,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.0696033554494382,
+          "browser_commands": 14.632958801498127,
+          "actor_seconds": 207.8937416237685
+        },
+        "webvoyager": {
+          "actor_usd": 0.045877126936936935,
+          "browser_commands": 10.886486486486486,
+          "actor_seconds": 171.0284289410102
+        },
+        "deepshop": {
+          "actor_usd": 0.10953599132653062,
+          "browser_commands": 17.476190476190474,
+          "actor_seconds": 281.8559478882017
+        }
+      }
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "benchmark_count": 3,
+      "success_rate": 0.7647244730661544,
+      "metrics": {
+        "actor_usd": 0.012386668638359322,
+        "browser_commands": 17.2798522930674,
+        "actor_seconds": 138.85139833654492
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 181,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 118,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.010868598370786516,
+          "browser_commands": 16.651685393258425,
+          "actor_seconds": 137.84269526885336
+        },
+        "webvoyager": {
+          "actor_usd": 0.008963617977624785,
+          "browser_commands": 14.301204819277109,
+          "actor_seconds": 109.45388189253053
+        },
+        "deepshop": {
+          "actor_usd": 0.017327789566666668,
+          "browser_commands": 20.886666666666667,
+          "actor_seconds": 169.25761784825087
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_24576",
+      "benchmark_count": 3,
+      "success_rate": 0.7909401709401709,
+      "metrics": {
+        "actor_usd": 0.01019506479382716,
+        "browser_commands": 16.89141500474834,
+        "actor_seconds": 123.18724273499485
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 270,
+          "invalid": 30,
+          "successes": 186,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 585,
+          "invalid": 10,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 129,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.009976814481481482,
+          "browser_commands": 17.20740740740741,
+          "actor_seconds": 126.49424441821002
+        },
+        "webvoyager": {
+          "actor_usd": 0.007523119666666667,
+          "browser_commands": 13.873504273504274,
+          "actor_seconds": 102.83443838532708
+        },
+        "deepshop": {
+          "actor_usd": 0.013085260233333333,
+          "browser_commands": 19.593333333333334,
+          "actor_seconds": 140.23304540144744
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_6144",
+      "benchmark_count": 3,
+      "success_rate": 0.7742145593869733,
+      "metrics": {
+        "actor_usd": 0.010211330750490766,
+        "browser_commands": 16.994199492014292,
+        "actor_seconds": 122.05477320088768
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 124,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.009437041235955056,
+          "browser_commands": 16.760299625468164,
+          "actor_seconds": 119.78165618833486
+        },
+        "webvoyager": {
+          "actor_usd": 0.007724689715517242,
+          "browser_commands": 14.168965517241379,
+          "actor_seconds": 102.41595744576972
+        },
+        "deepshop": {
+          "actor_usd": 0.013472261300000002,
+          "browser_commands": 20.053333333333335,
+          "actor_seconds": 143.96670596855847
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.839135358450427,
+      "metrics": {
+        "actor_usd": 0.012005425948623819,
+        "browser_commands": 18.217828111869206,
+        "actor_seconds": 148.4533384128454
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 584,
+          "invalid": 11,
+          "successes": 510,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 136,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.011115183764478764,
+          "browser_commands": 18.26254826254826,
+          "actor_seconds": 152.91254360315708
+        },
+        "webvoyager": {
+          "actor_usd": 0.009042802114726026,
+          "browser_commands": 15.097602739726028,
+          "actor_seconds": 128.3980249886962
+        },
+        "deepshop": {
+          "actor_usd": 0.015858291966666667,
+          "browser_commands": 21.293333333333333,
+          "actor_seconds": 164.04944664668292
+        }
+      }
+    },
+    {
+      "method": "parallel2_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7958875803703389,
+      "metrics": {
+        "actor_usd": 0.0590584607391047,
+        "browser_commands": 15.135538045882873,
+        "actor_seconds": 205.75791602393335
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 264,
+          "invalid": 36,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 500,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 149,
+          "valid": 148,
+          "invalid": 1,
+          "successes": 126,
+          "missing_native": 1
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.053891008731060605,
+          "browser_commands": 14.893939393939394,
+          "actor_seconds": 193.19435385174813
+        },
+        "webvoyager": {
+          "actor_usd": 0.040946512405172414,
+          "browser_commands": 12.208620689655172,
+          "actor_seconds": 152.1680228368636
+        },
+        "deepshop": {
+          "actor_usd": 0.08233786108108108,
+          "browser_commands": 18.304054054054053,
+          "actor_seconds": 271.9113713831883
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8603421155148241,
+      "metrics": {
+        "actor_usd": 0.07619184809733479,
+        "browser_commands": 14.008899601880108,
+        "actor_seconds": 212.4983663927218
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 299,
+          "valid": 258,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 1
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 544,
+          "invalid": 51,
+          "successes": 503,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 131,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.07302958372093023,
+          "browser_commands": 14.290697674418604,
+          "actor_seconds": 205.53671252061866
+        },
+        "webvoyager": {
+          "actor_usd": 0.0444186061305147,
+          "browser_commands": 10.428308823529411,
+          "actor_seconds": 146.65524366876429
+        },
+        "deepshop": {
+          "actor_usd": 0.11112735444055943,
+          "browser_commands": 17.307692307692307,
+          "actor_seconds": 285.30314298878244
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8409783933593458,
+      "metrics": {
+        "actor_usd": 0.013596033485929809,
+        "browser_commands": 18.607404343118628,
+        "actor_seconds": 153.90063453317387
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 540,
+          "invalid": 55,
+          "successes": 488,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 137,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.011865051621621622,
+          "browser_commands": 18.065637065637066,
+          "actor_seconds": 148.48284494264848
+        },
+        "webvoyager": {
+          "actor_usd": 0.00973446563888889,
+          "browser_commands": 14.872222222222222,
+          "actor_seconds": 117.18111078926897
+        },
+        "deepshop": {
+          "actor_usd": 0.01918858319727891,
+          "browser_commands": 22.8843537414966,
+          "actor_seconds": 196.03794786760417
+        }
+      }
+    },
+    {
+      "method": "sol_single_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.843101037809523,
+      "metrics": {
+        "actor_usd": 0.3376988193882903,
+        "browser_commands": 19.220792291029316,
+        "actor_seconds": 151.3574410687999
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 185,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 569,
+          "invalid": 26,
+          "successes": 520,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 142,
+          "invalid": 8,
+          "successes": 131,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.2450870329588015,
+          "browser_commands": 16.138576779026216,
+          "actor_seconds": 123.01087464424712
+        },
+        "webvoyager": {
+          "actor_usd": 0.21637658295254833,
+          "browser_commands": 14.481546572934974,
+          "actor_seconds": 107.83682335206832
+        },
+        "deepshop": {
+          "actor_usd": 0.5516328422535212,
+          "browser_commands": 27.04225352112676,
+          "actor_seconds": 223.22462521008427
+        }
+      }
+    },
+    {
+      "method": "luna_n3_cached_high30",
+      "benchmark_count": 3,
+      "success_rate": 0.8157038399841673,
+      "metrics": {
+        "actor_usd": 0.03176556193214714,
+        "browser_commands": 13.976770432118542,
+        "actor_seconds": 202.59410370928074
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 262,
+          "invalid": 38,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 514,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 123,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.029849173301526716,
+          "browser_commands": 14.51908396946565,
+          "actor_seconds": 207.45677877011448
+        },
+        "webvoyager": {
+          "actor_usd": 0.023973264767641996,
+          "browser_commands": 11.641996557659208,
+          "actor_seconds": 165.8390309609899
+        },
+        "deepshop": {
+          "actor_usd": 0.04147424772727273,
+          "browser_commands": 15.76923076923077,
+          "actor_seconds": 234.48650139673788
+        }
+      }
+    },
+    {
+      "method": "luna_n5_cached_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.8495247996562073,
+      "metrics": {
+        "actor_usd": 0.04432135423991579,
+        "browser_commands": 12.883899579391894,
+        "actor_seconds": 221.1686027247312
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 542,
+          "invalid": 53,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 139,
+          "invalid": 11,
+          "successes": 130,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.0416919666023166,
+          "browser_commands": 13.494208494208495,
+          "actor_seconds": 230.11691204845476
+        },
+        "webvoyager": {
+          "actor_usd": 0.027700927592250922,
+          "browser_commands": 9.754612546125461,
+          "actor_seconds": 153.56319592875684
+        },
+        "deepshop": {
+          "actor_usd": 0.06357116852517986,
+          "browser_commands": 15.402877697841726,
+          "actor_seconds": 279.8257001969819
+        }
+      }
+    },
+    {
+      "method": "sol_single_high120",
+      "benchmark_count": 3,
+      "success_rate": 0.855783228940321,
+      "metrics": {
+        "actor_usd": 0.3585933326430723,
+        "browser_commands": 20.551847875182904,
+        "actor_seconds": 146.032498244631
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 562,
+          "invalid": 33,
+          "successes": 516,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 138,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.23035836795366796,
+          "browser_commands": 15.702702702702704,
+          "actor_seconds": 106.07923949024826
+        },
+        "webvoyager": {
+          "actor_usd": 0.23011711637010676,
+          "browser_commands": 15.395017793594306,
+          "actor_seconds": 103.26535386188891
+        },
+        "deepshop": {
+          "actor_usd": 0.6153045136054422,
+          "browser_commands": 30.5578231292517,
+          "actor_seconds": 228.75290138175578
+        }
+      }
+    },
+    {
+      "method": "sol_single_xhigh30",
+      "benchmark_count": 3,
+      "success_rate": 0.7836062805466675,
+      "metrics": {
+        "actor_usd": 0.30372522044058636,
+        "browser_commands": 17.18759731681662,
+        "actor_seconds": 126.64185988147658
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 272,
+          "invalid": 28,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 572,
+          "invalid": 23,
+          "successes": 504,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 149,
+          "invalid": 1,
+          "successes": 116,
+          "missing_native": 0
+        }
+      },
+      "benchmark_metric_means": {
+        "online_mind2web": {
+          "actor_usd": 0.2367445731617647,
+          "browser_commands": 15.224264705882353,
+          "actor_seconds": 108.24378754536455
+        },
+        "webvoyager": {
+          "actor_usd": 0.20851823513986015,
+          "browser_commands": 13.573426573426573,
+          "actor_seconds": 94.31077387071906
+        },
+        "deepshop": {
+          "actor_usd": 0.46591285302013424,
+          "browser_commands": 22.76510067114094,
+          "actor_seconds": 177.37101822834612
+        }
+      }
+    }
+  ],
+  "frontier": [
+    {
+      "metric": "actor_usd",
+      "frontier": [
+        {
+          "method": "luna_single_high_24576",
+          "x": 0.01019506479382716,
+          "success_rate": 0.7909401709401709
+        },
+        {
+          "method": "luna_single_high_60steps",
+          "x": 0.012005425948623819,
+          "success_rate": 0.839135358450427
+        },
+        {
+          "method": "luna_single_high_120steps",
+          "x": 0.013596033485929809,
+          "success_rate": 0.8409783933593458
+        },
+        {
+          "method": "luna_n5_cached_high60",
+          "x": 0.04432135423991579,
+          "success_rate": 0.8495247996562073
+        },
+        {
+          "method": "parallel5_select_high_60steps",
+          "x": 0.07619184809733479,
+          "success_rate": 0.8603421155148241
+        }
+      ]
+    },
+    {
+      "metric": "browser_commands",
+      "frontier": [
+        {
+          "method": "luna_n5_cached_high60",
+          "x": 12.883899579391894,
+          "success_rate": 0.8495247996562073
+        },
+        {
+          "method": "parallel5_select_high_60steps",
+          "x": 14.008899601880108,
+          "success_rate": 0.8603421155148241
+        }
+      ]
+    },
+    {
+      "metric": "actor_seconds",
+      "frontier": [
+        {
+          "method": "serial_high",
+          "x": 112.47354167362785,
+          "success_rate": 0.763672275406981
+        },
+        {
+          "method": "luna_single_high",
+          "x": 116.59603599965715,
+          "success_rate": 0.771393270883226
+        },
+        {
+          "method": "luna_single_high_6144",
+          "x": 122.05477320088768,
+          "success_rate": 0.7742145593869733
+        },
+        {
+          "method": "luna_single_high_24576",
+          "x": 123.18724273499485,
+          "success_rate": 0.7909401709401709
+        },
+        {
+          "method": "sol_single_high120",
+          "x": 146.032498244631,
+          "success_rate": 0.855783228940321
+        },
+        {
+          "method": "parallel5_select_high_60steps",
+          "x": 212.4983663927218,
+          "success_rate": 0.8603421155148241
+        }
+      ]
+    }
+  ],
+  "styles": {
+    "layout": "8.8 x 2.445 inches; square panels; legends and footer on the right; no gridlines",
+    "axes_box_aspect": 1,
+    "axis_labels": [
+      "API cost / task ($, log)",
+      "Browser steps / task",
+      "Latency / task (s)"
+    ],
+    "encoding_key": "Single key for fill (30 vs 60/120 step caps), hatch (cached context), and observed frontier; cached method labels omit redundant cache text.",
+    "selection": "Saturated purple action decision scaling; gray Luna controls and green Sol controls; slightly lighter purple for smaller candidate sets",
+    "single_call_encoding": "Baseline: diamond; xhigh: star; 0.5x/2x tokens: left/right triangle; 60/120 steps: hexagon/pentagon. Luna gray, Sol green. Shapes reserved separately from candidate-count shapes.",
+    "single_call_markers": {
+      "luna_single_high": {
+        "marker": "D",
+        "filled": false
+      },
+      "luna_single_xhigh_12288": {
+        "marker": "*",
+        "filled": false
+      },
+      "luna_single_high_6144": {
+        "marker": "<",
+        "filled": false
+      },
+      "luna_single_high_24576": {
+        "marker": ">",
+        "filled": false
+      },
+      "luna_single_high_60steps": {
+        "marker": "h",
+        "filled": true
+      },
+      "luna_single_high_120steps": {
+        "marker": "p",
+        "filled": true
+      },
+      "serial_high": {
+        "marker": "D",
+        "filled": false
+      },
+      "sol_single_high60": {
+        "marker": "h",
+        "filled": true
+      },
+      "sol_single_high120": {
+        "marker": "p",
+        "filled": true
+      },
+      "sol_single_xhigh30": {
+        "marker": "*",
+        "filled": false
+      }
+    },
+    "sol_color": "#489379",
+    "single_call_size_pt2": 32,
+    "single_call_color": "#687580",
+    "selection_color": "#8246E5",
+    "selection_size_pt2": 42,
+    "focus_size_pt2": 49,
+    "selection_markers": {
+      "parallel2_select_high": "^",
+      "parallel3_select_high": "s",
+      "parallel5_select_high": "o",
+      "parallel5_select_high_60steps": "o",
+      "luna_n3_cached_high30": "s",
+      "luna_n5_cached_high60": "o"
+    },
+    "selection_encoding": "N=2 triangle; N=3 square; N=5 circle. White background means 30-step maximum, colored background means 60-step maximum, also for cached runs. Hatching independently means cache. Step labels show maxima with \u2264.",
+    "cached": "N3/30: white square with purple stripes; N5/60: purple circle with white stripes. Thin purple boundary for white N3/30; no outline for colored N5/60. Fill denotes step cap and stripes denote caching independently.",
+    "cached_marker": {
+      "markers": {
+        "luna_n3_cached_high30": "s",
+        "luna_n5_cached_high60": "o"
+      },
+      "size_pt2": 46,
+      "hatch": "////////",
+      "hatch_color": "purple for 30 steps, white for 60 steps",
+      "hatch_linewidth": 0.5,
+      "linewidth": {
+        "30_steps": 0.65,
+        "60_steps": 0
+      }
+    },
+    "frontier": "Recomputed with equal weights for all x and y coordinates; dashed links only, no rings",
+    "typography": "Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"
+  },
+  "source_sha256": {
+    "browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_right_legend_preview.py": "5cbb6527a51f0866b8f396c9d49bb47663b060cbe5984939773c9755c3f0e501",
+    "browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_right_legend_unweighted_preview.py": "719a7084ec7575ff338759de5c3d87d67e773f5e4e995db9482a34d05ec2347a",
+    "browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "ef2d3603c42ec23bd5488634d3b366103174c0d5b0723e64dbf6be119d6b488c",
+    "browsercode_inference_scaling_20261031/aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
+    "browsercode_cached_selection_20261105/aggregate.json": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
+    "browsercode_inference_scaling_20261031/sol_high120_xhigh30_aggregate.json": "ff09a48d8aea21d182bb7be8efe7a7313923b6af757e2f6e78fa5c72f6cc5629",
+    "browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
+  },
+  "output_sha256": {
+    "png": "78d5a1f1d6cc7f1d6f261ef2109d273d3bfc804fa993409e1f896ab8a8f31837",
+    "pdf": "c0e09778086c5649bbe86552ab564a70fd484442454616f296247a7552f54626",
+    "svg": "bfaaad1c97f673a8592220cdb2ba91469cfbd4082e83cd1d4ca944d41b756d3b"
+  }
+}

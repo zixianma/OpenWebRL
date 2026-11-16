@@ -95,6 +95,7 @@ TITLES = {
     "browsercode_scaling_pareto_preview": "Per-benchmark Pareto frontiers",
     "browsercode_scaling_weighted_pareto_preview": "Weighted-average Pareto frontier",
     "browsercode_scaling_common_valid_pareto_preview": "Common-valid weighted Pareto frontier",
+    "browsercode_scaling_unweighted_pareto_highlight_right_legend_preview": "Sixteen settings: unweighted valid-only mean, right-side legend",
     "browsercode_scaling_weighted_pareto_highlight_right_legend_preview": "Sixteen settings: right-side legend",
     "browsercode_scaling_weighted_pareto_highlight_preview": "Sixteen settings: bottom legend",
     "browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview": "Sixteen settings: overall success",
