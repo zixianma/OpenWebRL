@@ -84,6 +84,12 @@
 
 ## Actor + ADM trade-offs
 
+### Lookahead and pre-execution labels: 4M, 23M and 1.8B heads (paper version)
+
+![Lookahead and pre-execution labels: 4M, 23M and 1.8B heads (paper version)](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.svg)
+
 ### All actors: benchmark mean
 
 ![All actors: benchmark mean](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.png)
@@ -197,12 +203,6 @@
 ![Lookahead and pre-execution labels: 23K, 4M and 23M heads (paper version)](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.png)
 
 [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-20261115.svg)
-
-### Lookahead and pre-execution labels: 4M, 23M and 1.8B heads (paper version)
-
-![Lookahead and pre-execution labels: 4M, 23M and 1.8B heads (paper version)](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.png)
-
-[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.svg)
 
 ### Label effect across head sizes: absolute success and paired differences
 
