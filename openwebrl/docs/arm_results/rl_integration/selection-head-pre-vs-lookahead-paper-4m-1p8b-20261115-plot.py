@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Paper comparison at 4.4M, 22.6M and 1.8B: gains over SFT and paired
-lookahead minus pre-execution differences, with task-paired 95% intervals.
-Three runs per condition in the November 14–15 window. The pooled contrast is
-retained in the document caption only; the figure shows per-size estimates.
+"""Delta view with the earliest Recipe 3 GPT-5.5 pre/lookahead 23M runs.
+23M uses the original p16-heads-all-20261102 evaluation and its source paired
+intervals against the original SFT control; 4M and 1.8B retain November 14–15
+results. All means weight the three benchmarks equally, three runs per method.
+Cross-window differences between sizes must not be interpreted as size effects.
 """
 import json
 from pathlib import Path
@@ -18,6 +19,23 @@ from matplotlib.lines import Line2D
 plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none"})
 HERE = Path(__file__).resolve().parent
 D = json.loads((HERE / "selection-head-pre-vs-lookahead-20261115.json").read_text())
+EARLY = json.loads((HERE.parent / "luna_pre_vs_k3p_20261103/live_3run_20261103.json").read_text())
+
+
+def actor_gain(k, label):
+    if k == "d512":
+        arm = "GPT-5.5 pre head" if label == "pre" else "GPT-5.5 K=3 head"
+        return EARLY["paired"][f"{arm} - SFT (1 sample)"]["avg"]
+    return D["conditions"][f"{k}-{label}"]["minus_sft"]["mean_overall_pp"]
+
+
+def label_gain(k):
+    if k == "d512":
+        return EARLY["paired"]["GPT-5.5 K=3 head - GPT-5.5 pre head"]["avg"]
+    pt, lo, hi = D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"]
+    return -pt, -hi, -lo
+
+
 INK, MUTED = C["INK"], C["MUTED"]
 KEYS = ["d128", "d512", "d4096"]
 SIZES = ["4M", "23M", "1.8B"]
@@ -35,11 +53,10 @@ def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=F
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.3), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.40))
 for x, k in enumerate(KEYS):
-    point(a1, x - 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE)
-    point(a1, x + 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK)
-diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS]
-for x, (pt, lo, hi) in enumerate(diffs):
-    point(a2, x, (-pt, -hi, -lo), PURPLES[x])
+    point(a1, x - 0.15, actor_gain(k, "pre"), PRE)
+    point(a1, x + 0.15, actor_gain(k, "lookahead"), LOOK)
+for x, k in enumerate(KEYS):
+    point(a2, x, label_gain(k), PURPLES[x])
 for ax, title, ticks in ((a1, "", SIZES), (a2, "", SIZES)):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
