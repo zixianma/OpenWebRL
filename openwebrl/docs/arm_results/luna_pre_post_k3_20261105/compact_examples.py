@@ -91,12 +91,12 @@ def arrow(fig, x0, x1, y, color=C["BASELINE_DARK"]):
 
 def main():
     plt.rcParams.update({"font.family": "Albert Sans", "savefig.facecolor": "white", "pdf.fonttype": 42})
-    fig = plt.figure(figsize=(7.2, 3.6))
+    fig = plt.figure(figsize=(7.2, 3.0))
     xc, wc = 0.02, 0.185               # current screen
     xa, wa = 0.227, 0.108              # action chip
     xt, wt, gt = 0.365, 0.127, 0.016   # three screens: candidate result and two later states
     xp = 0.815                         # picks / success; generous label column
-    th, rowgap = 0.115, 0.07
+    th, rowgap = 0.13, 0.07
     heads = [(xc + wc / 2, r"$s_t$"), (xa + wa / 2, r"$a_t^i$"),
              (xt + (3 * wt + 2 * gt) / 2, "Lookahead"),
              (xp + 0.07, "Selected by teacher")]
@@ -107,7 +107,7 @@ def main():
         bbox = (dict(boxstyle="round,pad=.22", fc=tint("STATE" if is_state else "ACTION", .65),
                      ec=C["STATE_BORDER"] if is_state else C["ACTION_INK"], lw=.7)
                 if is_math else None)
-        fig.text(x, .945 if is_math else .993, t, fontsize=10 if is_math else 7.5,
+        fig.text(x, .94 if is_math else .999, t, fontsize=10 if is_math else 7.5,
                  color=color, bbox=bbox, ha="center", va="top", fontweight="bold", linespacing=1.1)
     fig.text(xa, .005, r"$K=5$ actions (2 shown)", fontsize=6.2,
              color=MUTED, ha="left", va="bottom")
@@ -117,10 +117,10 @@ def main():
     fig.text(xc + .023, .005, "Decisive states", fontsize=6.5, color=INK, va="bottom")
     for j in range(3):
         label = rf"$s_{{t+{j + 1}}}^i$"
-        fig.text(xt + j * (wt + gt) + wt / 2, .945, label,
+        fig.text(xt + j * (wt + gt) + wt / 2, .94, label,
                  fontsize=10, color=C["STATE_INK"], ha="center", va="top",
                  bbox=dict(boxstyle="round,pad=.22", fc=tint("STATE", .65), ec=C["STATE_BORDER"], lw=.7))
-    y = 0.828
+    y = 0.815
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         source = "post"
@@ -195,7 +195,7 @@ def main():
             s, n = held(x["actions"][i])
             fig.text(bx, ry + th * (.10 if len(selected_by) == 2 else .25), f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
                      color=GOOD if s / n > 0.5 else BAD, ha="center", va="center")
-        y = y - block_h - 0.15
+        y = y - block_h - 0.09
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for i, label in enumerate(fig.texts):

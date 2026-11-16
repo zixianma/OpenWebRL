@@ -50,6 +50,16 @@
 
 [PDF](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-20261101.svg)
 
+### Selected action distributions: single-row layout
+
+![Selected action distributions: single-row layout](arm_results/rl_integration/selection-head-action-types-avg-row-20261116.png)
+
+[PDF](arm_results/rl_integration/selection-head-action-types-avg-row-20261116.pdf) · [SVG](arm_results/rl_integration/selection-head-action-types-avg-row-20261116.svg)
+
+### Selected action distributions: original two-row layout
+
+![Selected action distributions: original two-row layout](arm_results/rl_integration/selection-head-action-types-avg-20261115.png)
+
 ### Label sources across three stages: 5-fold
 
 ![Label sources across three stages: 5-fold](arm_results/rl_integration/selection-label-stages-kfold-20261101.png)

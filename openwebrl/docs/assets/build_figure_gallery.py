@@ -32,6 +32,8 @@ GROUPS = [
     "RL curves: historical and all-run views", "Offline distillation",
 ]
 TITLES = {
+    "selection-head-action-types-avg-20261115": "Selected action distributions: original two-row layout",
+    "selection-head-action-types-avg-row-20261116": "Selected action distributions: single-row layout",
     "offline_distillation_table7_mean_dot_vertical": "Offline distillation Table 7: vertical mean gain with paired 95% CIs",
     "offline_distillation_table7_mean_dot": "Offline distillation Table 7: standalone mean gain with paired 95% CIs",
     "offline_distillation_table7_dot": "Offline distillation Table 7: dot plot with 95% CIs",
@@ -144,6 +146,8 @@ def figure_group(stem: str) -> str:
         return "Offline distillation"
     if "/methods/" in stem or Path(stem).name == "examples-compact":
         return GROUPS[0]
+    if name.startswith("selection-head-action-types"):
+        return GROUPS[1]
     if name.startswith("selection-label-") and ("kfold" in name or "with-head-sizes" in name):
         return GROUPS[1]
     if name.startswith(("selection-recipe3-vs-cost", "selection-head-scale", "selection-head-lookahead", "selection-head-pre-vs-lookahead")):

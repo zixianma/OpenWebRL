@@ -710,8 +710,24 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-action-types-avg-row-20261116",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-action-types-avg-20261115",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": false
     }
   ],
-  "figure_count": 89,
+  "figure_count": 91,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

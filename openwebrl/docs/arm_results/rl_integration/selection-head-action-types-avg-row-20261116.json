@@ -1,0 +1,59 @@
+{
+  "source": "selection-head-action-types-20261115.json",
+  "groups": [
+    "Offered actions",
+    "SFT actor",
+    "Lookahead H=4",
+    "Pre-execution"
+  ],
+  "group_event_counts": [
+    1695400,
+    39637,
+    170305,
+    168775
+  ],
+  "action_shares_percent": {
+    "click": [
+      59.53480004718651,
+      61.89923556273179,
+      62.55130501159684,
+      56.721078358761666
+    ],
+    "scroll": [
+      16.865459478589123,
+      13.108963846910715,
+      13.88273979037609,
+      22.781217597392978
+    ],
+    "go_back": [
+      4.333549604813023,
+      5.260236647576759,
+      5.227092569214057,
+      3.519478595763591
+    ],
+    "done": [
+      8.338799103456411,
+      5.742109645028635,
+      5.203018114559173,
+      5.028588357280403
+    ],
+    "new_tab": [
+      2.123569659077504,
+      2.1797815172692183,
+      3.406241742755644,
+      2.9281587912901794
+    ],
+    "goto_url": [
+      1.6157838858086586,
+      2.0359764866160406,
+      2.7668007398490944,
+      3.0644348985335506
+    ]
+  },
+  "definition": "Same pooled event counts and percentages as the original two-row average figure; unshown action categories remain in each denominator.",
+  "note": "Each tool panel retains its own y-axis range. Counts pool decision steps across tasks, runs and heads; benchmarks and head sizes are not equally weighted.",
+  "dimensions_inches": [
+    7.2,
+    1.75
+  ]
+}
