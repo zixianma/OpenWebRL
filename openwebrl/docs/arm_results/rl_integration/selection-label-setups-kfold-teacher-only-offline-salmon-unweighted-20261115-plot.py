@@ -50,7 +50,7 @@ P = K["pooled"]
 PANELS = [
     ("Offline: rollout success",
      "offline", P["sft_sample"]),
-    ("Online: 3-benchmark\nmean success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
+    ("Online: 3-benchmark mean success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
@@ -62,7 +62,7 @@ def point(ax, x, v, color, marker, filled, outline=None):
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(3.7, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -76,10 +76,10 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if not TEACHER_ONLY_OFFLINE:
                 point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
     # Label the zero-reference line with this panel's absolute actor baseline.
-    ax.text(.98, -2.7 if kind == "live" else -.25, f"SFT = {base:.1f}%", transform=ax.get_yaxis_transform(),
+    ax.text(.98, -2.7, f"SFT = {base:.1f}%", transform=ax.get_yaxis_transform(),
             ha="right", va="top", fontsize=6.2, color=MUTED,
             bbox=dict(facecolor="white", edgecolor="none", pad=.4))
-    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
+    ax.set_title(title, fontsize=6.3, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
     horizon_ticks = [i for i, row in enumerate(ROWS) if row[0].startswith("H=")]
@@ -101,14 +101,14 @@ handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
 ]
-fig.legend(handles, ["Teacher ADM", "Student ADM-23M (subset)"], frameon=False, fontsize=6.4,
+fig.legend(handles, ["Teacher ADM", "Student ADM-23M\n(trained on subset data)"], frameon=False, fontsize=6.4,
            loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.1)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.28, wspace=0.10)
+fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.33, wspace=0.10)
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[text for ax in axes for text in
-                [ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts,
+                [ax.title, ax._left_title, ax.xaxis.label, ax.yaxis.label, *ax.texts,
                  *ax.get_xticklabels(), *ax.get_yticklabels()]]]:
     if artist.get_visible() and (not hasattr(artist, "get_text") or artist.get_text()):
         bounds = artist.get_window_extent(renderer)

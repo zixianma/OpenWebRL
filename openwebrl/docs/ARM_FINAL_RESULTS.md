@@ -2003,7 +2003,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
   [PDF](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115.svg) · [plot script](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-20261115-plot.py). Values identical to the figure above. Each zero line is labeled with its absolute SFT baseline (offline 38.8%, online 41.4%). Online Student ADM-23M (22.6M parameters) is trained on the 1,380-state training subset. Online SFT is task-weighted overall success: 1,298 successes / 3,135 scheduled episodes (three runs); task-weighted valid-only is 43.5%, while the equal-benchmark overall mean is 39.9%. Offline SFT is the 38.76% mean success on valid held-out continuation draws, a different population and denominator. The axis uses `%` for differences between percent-valued success rates (percentage-point gains); values and confidence intervals are unchanged.
 
-  **Equal-benchmark overall-success version (November 15):**
+  **Preferred paper version: equal-benchmark overall success (November 15):**
 
   ![Teacher ADM offline gains and subset-trained Student ADM-23M online gains, with equal benchmark weights](arm_results/rl_integration/selection-label-setups-kfold-teacher-only-offline-salmon-unweighted-20261115.png)
 
