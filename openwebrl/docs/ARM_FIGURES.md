@@ -6,7 +6,19 @@
 
 ## Methods
 
-### Action Decision Models: overview
+### Action Decision Models: full-width overview
+
+![Action Decision Models: full-width overview](arm_results/methods/adm_overview/figure1_full_width.png)
+
+[PDF](arm_results/methods/adm_overview/figure1_full_width.pdf) · [SVG](arm_results/methods/adm_overview/figure1_full_width.svg) · [Plot script](arm_results/methods/adm_overview/plot_figure1_applications.py) · [Source bundle](arm_results/methods/adm_overview/figure1_sources.zip) · [Reproduce](arm_results/methods/adm_overview/README.md)
+
+### Action Decision Models: single-column overview
+
+![Action Decision Models: single-column overview](arm_results/methods/adm_overview/figure1_single_column.png)
+
+[PDF](arm_results/methods/adm_overview/figure1_single_column.pdf) · [SVG](arm_results/methods/adm_overview/figure1_single_column.svg) · [Plot script](arm_results/methods/adm_overview/plot_figure1_single_column.py) · [Source bundle](arm_results/methods/adm_overview/figure1_sources.zip) · [Reproduce](arm_results/methods/adm_overview/README.md)
+
+### Action Decision Models: overview (earlier version)
 
 ![Action Decision Models: overview](arm_results/methods/adm_overview/figure1.png)
 

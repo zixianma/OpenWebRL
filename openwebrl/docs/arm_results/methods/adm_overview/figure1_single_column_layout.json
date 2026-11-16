@@ -1,0 +1,349 @@
+{
+  "reproduction_command": "python fig/plot_figure1_single_column.py",
+  "physical_size_points": [
+    236.25,
+    206
+  ],
+  "physical_size_inches": [
+    3.28125,
+    2.861111111111111
+  ],
+  "column_width_source": "cvpr.sty: textwidth 6.875in, columnsep 0.3125in",
+  "fonts": {
+    "prose": "Albert Sans",
+    "math": "STIX",
+    "application_titles": 7.5
+  },
+  "symbols": {
+    "state": "Green symbolic browser icons, with s_t at the current state and s_(t+1) inside each future state",
+    "actions": "Individually boxed a_1 Scroll and a_2 Click examples followed by an ellipsis for additional actions, A_t; a_1 is purple and a_2 is dark purple",
+    "lookahead": "Green future browsers beneath the candidates inside a pale salmon lookahead box; vertical arrows show action-to-future transitions and dots extend the time/action dimensions, E_t",
+    "adm": "Dark-purple model boxes matching the title, with white f_phi text",
+    "policy": "Gray pi_theta; snowflake means frozen and flame means trained"
+  },
+  "teacher_inputs": [
+    "s_t",
+    "A_t",
+    "E_t"
+  ],
+  "student_inputs": [
+    "s_t",
+    "A_t"
+  ],
+  "model_notation": "f_phi(s_t,A_t)",
+  "teacher_notation": "T(s_t,A_t,E_t)",
+  "example": {
+    "task_displayed": false,
+    "state": "Symbolic browser",
+    "candidate_actions": [
+      "a_1: Scroll",
+      "a_2: Click"
+    ],
+    "teacher_choice": "a_2: Click",
+    "state_icons": true,
+    "action_icons": false,
+    "actual_screenshots": false
+  },
+  "top_panel_style": "The state and individually boxed action examples feed the ADM; a pale salmon lookahead box feeds the teacher. Distinct model input formulas and straight gray arrows are retained without nested input frames or extra group captions.",
+  "row_gap_points": 8,
+  "top_arrow_color": "#7C7887",
+  "input_notation_color": "#7C7887",
+  "candidate_action_colors": {
+    "a_1": "#9575EE",
+    "a_2": "#654FA1"
+  },
+  "privileged_notation_color": "#944735",
+  "output_notation_colors": {
+    "selected_action": "#654FA1",
+    "teacher_action": "#944735",
+    "model_on_dark_fill": "white"
+  },
+  "title_color": "#654FA1",
+  "top_nodes": {
+    "shared_context_area": [
+      8,
+      22,
+      97,
+      38
+    ],
+    "adm": [
+      119,
+      32,
+      50,
+      26
+    ],
+    "student_probabilities": [
+      177,
+      33,
+      25,
+      27
+    ],
+    "lookahead": [
+      39,
+      66,
+      66,
+      24
+    ],
+    "chosen_action": [
+      215,
+      37,
+      17,
+      16
+    ],
+    "teacher": [
+      119,
+      66,
+      50,
+      24
+    ],
+    "teacher_label": [
+      178,
+      72,
+      38,
+      12
+    ],
+    "loss_center": [
+      197,
+      65
+    ]
+  },
+  "input_style": {
+    "group_boxes": false,
+    "extra_group_captions": false,
+    "lookahead_box": true,
+    "lookahead_outline": "#ED8B74"
+  },
+  "box_simplification": {
+    "action_example_boxes": true,
+    "application_action_symbol_boxes": true,
+    "input_group_boxes": false,
+    "lookahead_box": true,
+    "model_boxes_preserved": true
+  },
+  "input_connectors": {
+    "context_to_adm": [
+      [
+        105,
+        45
+      ],
+      [
+        119,
+        45
+      ]
+    ],
+    "lookahead_to_teacher": [
+      [
+        105,
+        78
+      ],
+      [
+        119,
+        78
+      ]
+    ],
+    "branch_connector_lines": 0
+  },
+  "output_connectors": {
+    "adm_to_probabilities": [
+      [
+        169,
+        45
+      ],
+      [
+        177,
+        45
+      ]
+    ],
+    "teacher_to_target": [
+      [
+        169,
+        78
+      ],
+      [
+        178,
+        78
+      ]
+    ]
+  },
+  "action_set_ellipsis": [
+    100,
+    45.5
+  ],
+  "lookahead_branch_ellipsis": [
+    100,
+    77.5
+  ],
+  "action_branches": [
+    {
+      "action": "a_1: Scroll",
+      "action_bounds": [
+        39,
+        36,
+        26,
+        19
+      ],
+      "future_bounds": [
+        40.5,
+        71,
+        23,
+        13
+      ],
+      "future_label": "s_(t+1)",
+      "future_color": "#489379",
+      "connector": [
+        [
+          52,
+          55
+        ],
+        [
+          52,
+          70
+        ]
+      ]
+    },
+    {
+      "action": "a_2: Click",
+      "action_bounds": [
+        68,
+        36,
+        26,
+        19
+      ],
+      "future_bounds": [
+        69.5,
+        71,
+        23,
+        13
+      ],
+      "future_label": "s_(t+1)",
+      "future_color": "#489379",
+      "connector": [
+        [
+          81,
+          55
+        ],
+        [
+          81,
+          70
+        ]
+      ]
+    }
+  ],
+  "student_output": {
+    "kind": "K-class probabilities",
+    "classes": [
+      "a_1",
+      "a_2",
+      "...",
+      "a_K"
+    ],
+    "ellipsis_position": [
+      194,
+      43
+    ],
+    "bar_heights": [
+      7,
+      16,
+      null,
+      4
+    ],
+    "values": "Illustrative, not measured probabilities",
+    "highest_probability_action": "a_2: Click",
+    "argmax": {
+      "notation": "a_hat_t",
+      "connector": [
+        [
+          207,
+          45
+        ],
+        [
+          215,
+          45
+        ]
+      ],
+      "clearance_from_probability_chart": 5,
+      "path": "Probability chart -> argmax -> chosen action"
+    }
+  },
+  "supervision": {
+    "target": "a_2: Click",
+    "kind": "Hard candidate label",
+    "label_bounds": [
+      178,
+      72,
+      38,
+      12
+    ],
+    "path": "Student probabilities -> CE loss <- teacher label",
+    "loss_inputs": [
+      "K-class student probabilities",
+      "Hard teacher action label"
+    ],
+    "caption_displayed": false
+  },
+  "application_rows": {
+    "test_time_scaling": 120,
+    "offline_improvement": 155,
+    "online_RL": 190
+  },
+  "application_grid": {
+    "column_left_edges": [
+      8,
+      51,
+      120,
+      202
+    ],
+    "column_widths": [
+      28,
+      54,
+      64,
+      26
+    ],
+    "column_heights": [
+      18,
+      18,
+      22,
+      18
+    ],
+    "arrow_spans": [
+      [
+        40,
+        48
+      ],
+      [
+        109,
+        117
+      ],
+      [
+        188,
+        199
+      ]
+    ],
+    "boxed_action_outputs": true,
+    "candidate_action_color": "#654FA1",
+    "row_roles": {
+      "test_time_scaling": [
+        "frozen_policy",
+        "candidate_actions",
+        "ADM",
+        "selected_action"
+      ],
+      "offline_improvement": [
+        "ADM",
+        "preference_pair",
+        "RPO",
+        "updated_policy"
+      ],
+      "online_RL": [
+        "ADM",
+        "selected_action",
+        "ADM_reward",
+        "updated_policy"
+      ]
+    }
+  },
+  "offline_mechanism": "RPO = DPO + SFT",
+  "online_mechanism": "Actor update with ADM-guided reward",
+  "quantitative_results_displayed": false,
+  "notes": "Separate single-column symbolic alternative; all previous figures are preserved."
+}

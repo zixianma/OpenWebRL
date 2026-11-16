@@ -1,0 +1,1200 @@
+{
+  "source": "figure1_results.json",
+  "source_sha256": "a6bd1867468a17d982e4a637e7c221142c5bb67ea1689054ff26dc42892a5ee5",
+  "inference": {
+    "metric": "Equal-weight three-benchmark mean overall success (%)",
+    "source_ref": "35a1cbe60c5674ff05fa0f2ca50048bc99c503e4",
+    "figure7_url": "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-overall-baselines-adm4m-20261115.png",
+    "sources": [
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json",
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-updated-baselines-20261113.json",
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-external-selector-costs-20261113.json",
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-kev-costs-20261113.json",
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/selection-adm4m-cost-20261115.json",
+      "https://github.com/zixianma/OpenWebRL/blob/35a1cbe60c5674ff05fa0f2ca50048bc99c503e4/openwebrl/docs/arm_results/rl_integration/plot_selection_updated_baselines_adm4m_20261115.py"
+    ],
+    "omitted": [
+      "adm-distilled",
+      "head-gpt55-k3"
+    ],
+    "accounting": "Existing system parameters, PFLOP/task and model seconds/task retained. No new cost measurement; costs and success may come from different cohorts. Reported mean is used exactly, not reconstructed from rounded benchmark rates.",
+    "points": [
+      {
+        "key": "sft1",
+        "label": "4B",
+        "system_parameters_billions": 4.44,
+        "pflop_per_episode": 0.2703333333333333,
+        "percent": 39.9
+      },
+      {
+        "key": "sft8b",
+        "label": "8B",
+        "system_parameters_billions": 8.77,
+        "pflop_per_episode": 0.5523333333333333,
+        "percent": 41.086666666666666
+      },
+      {
+        "key": "head-4m-gpt55",
+        "label": "ADM-4M",
+        "system_parameters_billions": 4.44436,
+        "pflop_per_episode": 0.8543333333333334,
+        "percent": 45.7
+      },
+      {
+        "key": "lora-gpt55-k3",
+        "label": "ADM-4B",
+        "system_parameters_billions": 8.88,
+        "pflop_per_episode": 1.421,
+        "percent": 45.7
+      },
+      {
+        "key": "best-of-q",
+        "label": "Best-of-Q",
+        "system_parameters_billions": 8.19,
+        "pflop_per_episode": 0.8166666666666668,
+        "percent": 38
+      },
+      {
+        "key": "pro-cua-prm",
+        "label": "PRO-CUA",
+        "system_parameters_billions": 8.88,
+        "pflop_per_episode": 1.78,
+        "percent": 36.4
+      },
+      {
+        "key": "webdreamer",
+        "label": "WebDreamer",
+        "system_parameters_billions": 17.17,
+        "pflop_per_episode": 2.6366666666666667,
+        "percent": 39.9
+      },
+      {
+        "key": "kev-4b",
+        "label": "Kev-4B",
+        "system_parameters_billions": 8.643567104,
+        "pflop_per_episode": 1.8277532881660257,
+        "percent": 39.1
+      }
+    ],
+    "point_provenance": {
+      "head-4m-gpt55": {
+        "cost_data_blob": "a688fd709f21df309af50af23ef7c705cb0b79bd",
+        "figure7_renderer_blob": "8beff1abf35009a8063a61b69a4f3028c9704dc1",
+        "system_parameters_accounting": "Uses Figure 7 renderer method specification: 4.44B actor + 4.36M head. The cost JSON system_parameters field is not used by that renderer.",
+        "benchmark_pflop_per_episode": {
+          "online_mind2web": 0.844,
+          "webvoyager": 0.687,
+          "deepshop": 1.032
+        },
+        "success_accounting": "Reported mean overall success, three runs, November 14-15 eval-pre window. Costs are measured on run 1; benchmarks are equally weighted."
+      }
+    },
+    "frontier": [
+      {
+        "key": "sft1",
+        "label": "4B",
+        "system_parameters_billions": 4.44,
+        "pflop_per_episode": 0.2703333333333333,
+        "percent": 39.9
+      },
+      {
+        "key": "sft8b",
+        "label": "8B",
+        "system_parameters_billions": 8.77,
+        "pflop_per_episode": 0.5523333333333333,
+        "percent": 41.086666666666666
+      },
+      {
+        "key": "head-4m-gpt55",
+        "label": "ADM-4M",
+        "system_parameters_billions": 4.44436,
+        "pflop_per_episode": 0.8543333333333334,
+        "percent": 45.7
+      }
+    ]
+  },
+  "offline": {
+    "metric": "Equal-weight three-benchmark mean overall success (%)",
+    "source": {
+      "path": "tables/offline-transfer-main.tex",
+      "sha256": "056fa0d4cb9ef33939be59adcd11009ba412cd289ff2837999795d6a1af4c52d",
+      "table": "tab:offline-transfer-main",
+      "column": "Avg"
+    },
+    "rates": {
+      "actor": {
+        "label": "Actor",
+        "overall": 39.4,
+        "benchmarks": {
+          "webvoyager": 41.5,
+          "online_mind2web": 30.7,
+          "deepshop": 46.0
+        }
+      },
+      "teacher_sft": {
+        "label": "Teacher SFT",
+        "overall": 39.4,
+        "benchmarks": {
+          "webvoyager": 43.7,
+          "online_mind2web": 33.3,
+          "deepshop": 41.3
+        }
+      },
+      "dpo": {
+        "label": "ADM-guided DPO",
+        "overall": 42.1,
+        "benchmarks": {
+          "webvoyager": 44.2,
+          "online_mind2web": 36.0,
+          "deepshop": 46.0
+        }
+      },
+      "rpo": {
+        "label": "ADM-guided RPO",
+        "overall": 45.1,
+        "benchmarks": {
+          "webvoyager": 46.1,
+          "online_mind2web": 39.3,
+          "deepshop": 50.0
+        }
+      }
+    }
+  },
+  "online": {
+    "protocol": "Local browser \u00b7 GPT-4.1 / action_history \u00b7 actor temperature 0",
+    "smoothing": {
+      "method": "Trailing ratio of pooled success and valid counts",
+      "evaluations": 3,
+      "minimum_evaluations": 1,
+      "location": "Latest checkpoint in each window",
+      "missing": "Never imputed; no extrapolation before first or after last recorded evaluation",
+      "interpretation": "A descriptive trend, not another evaluation or a confidence interval"
+    },
+    "display": {
+      "first_iteration": 20,
+      "last_iteration": 60,
+      "smoothing_population": "Only evaluations in the displayed 20--60 interval; no pre-20 warmup"
+    },
+    "methods": [
+      {
+        "id": "outcome48",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 95,
+            "valid": 232,
+            "planned": 300,
+            "percent": 40.94827586206897,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 96,
+            "valid": 248,
+            "planned": 300,
+            "percent": 38.70967741935484,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 100,
+            "valid": 231,
+            "planned": 300,
+            "percent": 43.29004329004329,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 105,
+            "valid": 234,
+            "planned": 300,
+            "percent": 44.87179487179487,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 105,
+            "valid": 230,
+            "planned": 300,
+            "percent": 45.65217391304348,
+            "source": "rl_results/baseline_vs_arm_full300.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 40.94827586206897,
+            "successes": 95,
+            "valid": 232,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 39.791666666666664,
+            "successes": 191,
+            "valid": 480,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 40.92827004219409,
+            "successes": 291,
+            "valid": 711,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 42.215988779803645,
+            "successes": 301,
+            "valid": 713,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 44.60431654676259,
+            "successes": 310,
+            "valid": 695,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome56",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 93,
+            "valid": 243,
+            "planned": 300,
+            "percent": 38.27160493827161,
+            "source": "arm_results/rl_integration/outcome56-iteration20-audit.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 97,
+            "valid": 250,
+            "planned": 300,
+            "percent": 38.8,
+            "source": "arm_results/rl_integration/outcome56-iteration30-audit.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 103,
+            "valid": 240,
+            "planned": 300,
+            "percent": 42.916666666666664,
+            "source": "arm_results/rl_integration/outcome56-iteration40-audit.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 102,
+            "valid": 239,
+            "planned": 300,
+            "percent": 42.67782426778243,
+            "source": "arm_results/rl_integration/outcome56-iteration50-audit.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 117,
+            "valid": 245,
+            "planned": 300,
+            "percent": 47.755102040816325,
+            "source": "arm_results/rl_integration/outcome56-iteration60-audit.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 38.27160493827161,
+            "successes": 93,
+            "valid": 243,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 38.5395537525355,
+            "successes": 190,
+            "valid": 493,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 39.972714870395635,
+            "successes": 293,
+            "valid": 733,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 41.426611796982165,
+            "successes": 302,
+            "valid": 729,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 44.47513812154696,
+            "successes": 322,
+            "valid": 724,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gate-b",
+        "points": [
+          {
+            "iteration": 20,
+            "successes": 101,
+            "valid": 228,
+            "planned": 300,
+            "percent": 44.29824561403509,
+            "source": "arm_results/rl_integration/gate-b-iteration20-audit.json"
+          },
+          {
+            "iteration": 30,
+            "successes": 102,
+            "valid": 234,
+            "planned": 300,
+            "percent": 43.58974358974359,
+            "source": "arm_results/rl_integration/gate-b-iteration30-audit.json"
+          },
+          {
+            "iteration": 40,
+            "successes": 108,
+            "valid": 228,
+            "planned": 300,
+            "percent": 47.36842105263158,
+            "source": "arm_results/rl_integration/gate-b-iteration40-audit.json"
+          },
+          {
+            "iteration": 50,
+            "successes": 113,
+            "valid": 232,
+            "planned": 300,
+            "percent": 48.706896551724135,
+            "source": "arm_results/rl_integration/gate-b-iteration50-audit.json"
+          },
+          {
+            "iteration": 60,
+            "successes": 112,
+            "valid": 228,
+            "planned": 300,
+            "percent": 49.12280701754386,
+            "source": "arm_results/rl_integration/gate-b-iteration60-audit.json"
+          }
+        ],
+        "smoothed": [
+          {
+            "iteration": 20,
+            "percent": 44.29824561403509,
+            "successes": 101,
+            "valid": 228,
+            "window_iterations": [
+              20
+            ]
+          },
+          {
+            "iteration": 30,
+            "percent": 43.93939393939394,
+            "successes": 203,
+            "valid": 462,
+            "window_iterations": [
+              20,
+              30
+            ]
+          },
+          {
+            "iteration": 40,
+            "percent": 45.072463768115945,
+            "successes": 311,
+            "valid": 690,
+            "window_iterations": [
+              20,
+              30,
+              40
+            ]
+          },
+          {
+            "iteration": 50,
+            "percent": 46.54178674351585,
+            "successes": 323,
+            "valid": 694,
+            "window_iterations": [
+              30,
+              40,
+              50
+            ]
+          },
+          {
+            "iteration": 60,
+            "percent": 48.401162790697676,
+            "successes": 333,
+            "valid": 688,
+            "window_iterations": [
+              40,
+              50,
+              60
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "additional_source": "figure1_applications_sources.json",
+  "additional_source_sha256": "10abdfb07a33e999ef91c274e65b67a1d3a81ac9278c39794aff04c520fdccff",
+  "inference_system_size": {
+    "points": [
+      {
+        "key": "sft1",
+        "label": "4B",
+        "system_parameters_billions": 4.44,
+        "pflop_per_episode": 0.2703333333333333,
+        "percent": 39.9
+      },
+      {
+        "key": "sft8b",
+        "label": "8B",
+        "system_parameters_billions": 8.77,
+        "pflop_per_episode": 0.5523333333333333,
+        "percent": 41.086666666666666
+      },
+      {
+        "key": "head-4m-gpt55",
+        "label": "ADM-4M",
+        "system_parameters_billions": 4.44436,
+        "pflop_per_episode": 0.8543333333333334,
+        "percent": 45.7
+      },
+      {
+        "key": "lora-gpt55-k3",
+        "label": "ADM-4B",
+        "system_parameters_billions": 8.88,
+        "pflop_per_episode": 1.421,
+        "percent": 45.7
+      },
+      {
+        "key": "best-of-q",
+        "label": "Best-of-Q",
+        "system_parameters_billions": 8.19,
+        "pflop_per_episode": 0.8166666666666668,
+        "percent": 38
+      },
+      {
+        "key": "pro-cua-prm",
+        "label": "PRO-CUA",
+        "system_parameters_billions": 8.88,
+        "pflop_per_episode": 1.78,
+        "percent": 36.4
+      },
+      {
+        "key": "webdreamer",
+        "label": "WebDreamer",
+        "system_parameters_billions": 17.17,
+        "pflop_per_episode": 2.6366666666666667,
+        "percent": 39.9
+      },
+      {
+        "key": "kev-4b",
+        "label": "Kev-4B",
+        "system_parameters_billions": 8.643567104,
+        "pflop_per_episode": 1.8277532881660257,
+        "percent": 39.1
+      }
+    ],
+    "frontier": [
+      {
+        "key": "sft1",
+        "label": "4B",
+        "system_parameters_billions": 4.44,
+        "pflop_per_episode": 0.2703333333333333,
+        "percent": 39.9
+      },
+      {
+        "key": "head-4m-gpt55",
+        "label": "ADM-4M",
+        "system_parameters_billions": 4.44436,
+        "pflop_per_episode": 0.8543333333333334,
+        "percent": 45.7
+      }
+    ]
+  },
+  "repetition": {
+    "iteration": 90,
+    "threshold": 3,
+    "methods": {
+      "outcome48": {
+        "repetition_incidence": {
+          "episodes": 278,
+          "valid_episodes": 713,
+          "percent": 38.99018232819074,
+          "ci95_percent": [
+            34.419263456090654,
+            43.58974358974359
+          ]
+        },
+        "valid_success": {
+          "successes": 307,
+          "valid_episodes": 713,
+          "percent": 43.05750350631136,
+          "ci95_percent": [
+            38.32161357161357,
+            47.94908062234795
+          ]
+        },
+        "overall_success": {
+          "successes": 307,
+          "planned_episodes": 900,
+          "repeat_successes": [
+            103,
+            95,
+            109
+          ],
+          "percent": 34.111111111111114,
+          "ci95_percent": [
+            30,
+            38.333333333333336
+          ]
+        }
+      },
+      "outcome56": {
+        "repetition_incidence": {
+          "episodes": 196,
+          "valid_episodes": 708,
+          "percent": 27.683615819209038,
+          "ci95_percent": [
+            23.479460057807024,
+            32.01147128981088
+          ]
+        },
+        "valid_success": {
+          "successes": 318,
+          "valid_episodes": 708,
+          "percent": 44.91525423728814,
+          "ci95_percent": [
+            40.17090994813767,
+            49.71592921066186
+          ]
+        },
+        "overall_success": {
+          "successes": 318,
+          "planned_episodes": 900,
+          "repeat_successes": [
+            114,
+            102,
+            102
+          ],
+          "percent": 35.333333333333336,
+          "ci95_percent": [
+            31.22222222222222,
+            39.55555555555556
+          ]
+        }
+      },
+      "gate-b": {
+        "repetition_incidence": {
+          "episodes": 145,
+          "valid_episodes": 715,
+          "percent": 20.27972027972028,
+          "ci95_percent": [
+            16.78319253561972,
+            23.935446331631947
+          ]
+        },
+        "valid_success": {
+          "successes": 365,
+          "valid_episodes": 715,
+          "percent": 51.04895104895105,
+          "ci95_percent": [
+            46.244354100943134,
+            55.7909604519774
+          ]
+        },
+        "overall_success": {
+          "successes": 365,
+          "planned_episodes": 900,
+          "repeat_successes": [
+            123,
+            117,
+            125
+          ],
+          "percent": 40.55555555555556,
+          "ci95_percent": [
+            36.22222222222222,
+            44.888888888888886
+          ]
+        }
+      }
+    },
+    "uncertainty": {
+      "method": "Marginal pointwise percentile intervals from shared task-cluster resamples, retaining all repeats and methods; valid-only ratios recomputed in each resample",
+      "tasks": 300,
+      "repeats": 3,
+      "draws": 20000,
+      "seed": 20261104,
+      "scope": "Conditional on fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty; horizontal/vertical intervals are not a joint 95% confidence region"
+    }
+  },
+  "inference_illustration": {
+    "flow": "Frozen actor -> candidate set -> ADM -> selected action",
+    "candidate_examples": [
+      "a_t^(1)",
+      "a_t^(2)",
+      "...",
+      "a_t^(K)"
+    ],
+    "arrows": 3,
+    "branch_connector_lines": 0
+  },
+  "offline_illustration": {
+    "flow": "ADM-selected preference pair -> RPO (DPO + SFT) -> actor policy",
+    "rpo_reference": "https://arxiv.org/abs/2405.16436v3",
+    "reference_title": "Provably Mitigating Overoptimization in RLHF: Your SFT Loss is Implicitly an Adversarial Regularizer",
+    "interpretation": "A joint weighted combination of DPO and chosen-response SFT, not sequential training; the diagram shows components without specifying a coefficient.",
+    "teacher_sft_baseline": "Separate gray comparison bar; not the SFT regularizer inside RPO.",
+    "rpo_layout": "RPO and its DPO + SFT components share one two-line module, avoiding a floating label"
+  },
+  "example": {
+    "source": "figures/lookahead-examples.tex",
+    "task": "Task: Find Netflix's accepted payment methods.",
+    "state_id": "13d42f1f406049a59cfd502f38a90b09",
+    "screenshot_source": "luna-pre-post-k3-examples-compact.png",
+    "screenshot_sha256": "f8c224365552f6cf85d59c6f9eb298dc498f7a09c409942df072043878c9bb74",
+    "screenshot_viewport_pixels": [
+      32,
+      340,
+      420,
+      510
+    ],
+    "action2_future_viewports_pixels": [
+      [
+        774,
+        209,
+        1044,
+        325
+      ]
+    ],
+    "actions": {
+      "1": "Scroll down",
+      "2": "Click Netflix payment options"
+    },
+    "action_numbering": "Overview displays actions 1 and 2 followed by an ellipsis. Figure 5's displayed click/scroll rows 1/2 are relabeled 2/1; these are not saved candidate indices.",
+    "screenshot_annotation_relabel": {
+      "1": "2",
+      "2": "1"
+    },
+    "future_states": "Only s_{t+1} is illustrated for candidates 1, 2, ..., K. Horizontal ellipses extend the candidate dimension and vertical ellipses replace all later future steps. Action 2 uses a real screenshot; the other pages are schematic.",
+    "future_summaries": {
+      "1": "Billing",
+      "2": "Payment methods"
+    },
+    "state_descriptions": {
+      "1": [
+        "Billing"
+      ],
+      "2": [
+        "Payment methods"
+      ]
+    },
+    "current_state_display_size": [
+      176,
+      78
+    ],
+    "future_state_display_size": [
+      68,
+      25
+    ],
+    "future_screenshot_display_width": 66.4,
+    "future_screenshot_layout": "The original screenshot border is cropped away; the page fills and clips to the browser body, preserving its aspect ratio with no inset border.",
+    "future_state_notation": "Future states E_t form the privileged evidence for decision t.",
+    "evidence_collection": "Candidates connect downward to future states s_{t+1}; the teacher receives this evidence.",
+    "training_flow": "The teacher T(s_t,A_t,E_t) outputs action 2 as a hard label. The student f_phi(s_t,A_t) outputs a miniature K-class probability chart with action labels 1, 2, ..., K and no p notation. A thin neutral comparison line links the chart and hard label, with CE loss annotated beside it; argmax branches upward to a_hat_t. Chart heights are illustrative, not measured probabilities.",
+    "teacher_choice": "The teacher's hard target is shown directly as action a_t^(2), without repeating a_t^+=a_t^(2).",
+    "screenshot_annotation_style": "Plain 1 and 2 badges are retained in the current-state screenshot: 1 corresponds to Scroll down and 2 to Click payment options.",
+    "screenshot_action_colors": {
+      "1": "#9575EE",
+      "2": "#654FA1",
+      "K": "#654FA1"
+    }
+  },
+  "visual_semantics": {
+    "selection_connectors": "#7C7887",
+    "evidence_and_supervision_connectors": "#7C7887",
+    "box_outlines": true,
+    "box_outline_exceptions": [],
+    "notation_font": "STIX math; Albert Sans for prose and plot labels",
+    "task_style": "Full three-line task instruction with the mint accent below the current state; task context is shared by the ADM and teacher.",
+    "header_style": "Student-first preview with a single-line vivid-violet title above the student; teacher and future evidence are below.",
+    "state_action_set_label_size": {
+      "state": 8.6,
+      "actions": 8.6
+    },
+    "application_model_fill": "#654FA1",
+    "application_model_text": "white",
+    "actor_policy_badges": {
+      "test_time_scaling": "Snowflake: frozen policy",
+      "offline_actor_improvement": "Fire: trained policy",
+      "online_actor_improvement_via_rl": "Fire: trained policy",
+      "rendering": "Emoji-style vector badges at the policy boxes' upper-right corners"
+    },
+    "state_fill": "#74EDC3",
+    "state_borders": "#489379",
+    "state_icon_style": "Browser frames and symbolic page contents stay green. State/candidate-action notation and continuation dots use policy gray; lookahead and teacher notation use dark salmon; action outputs keep their purple or salmon colors.",
+    "salmon_base": "#ED8B74",
+    "lookahead_state_fill": "#cef9ea",
+    "teacher_fill": "#fdf1ee",
+    "teacher_text": "#944735",
+    "teacher_output_fill": "#fdf3f1",
+    "action_style": "Candidate notation is policy gray; card outlines retain their purple screenshot-marker colors, with pale-lavender fills.",
+    "actor_style": "White policy boxes with gray symbols and outlines",
+    "model_style": "Dark-purple ADM fill and outline with white model notation",
+    "teacher_output_style": "The hard teacher action sits in a light salmon rounded box, matching the single-column conceptual figure.",
+    "spacing": "Training and Applications phase headings and their decorations are omitted; the (a), (b), (c) application titles are retained in regular weight, as is the task instruction. Applications move upward by 28 scene units and 16 units of unused top margin are trimmed. In the right-legend version, the two inference plots narrow from 112 to 94 units and their legend moves left, widening the middle offline plot from 168 to 208 units. Heights, font sizes, other diagram dimensions and numerical results are unchanged.",
+    "top_connectors": "Gray horizontal arrows align current state/actions with the ADM and the salmon lookahead box with the teacher. Their f_phi(s_t,A_t) and T(s_t,A_t,E_t) formulas retain the distinct conditioning. No shared-input frames or branching connectors are displayed; the purple screenshot scroll arrow is preserved.",
+    "gallery_reference": "https://github.com/zixianma/OpenWebRL/blob/arm/openwebrl/docs/ARM_FIGURES.md",
+    "gallery_palette_blob_sha": "745611bc855a33fa5d99dc558b358b0fe3d0deba",
+    "gallery_typography_blob_sha": "0230bbc22b372c068223e4dd67e58ac8f41449aa",
+    "top_arrow_colors_verified": [
+      "#7c7887"
+    ],
+    "top_story": "The upper section shows training inputs, prediction, and teacher supervision; the lower section shows uses of the trained ADM.",
+    "section_labels": [],
+    "section_divider": {
+      "y": 271,
+      "segments": [
+        [
+          24,
+          366
+        ],
+        [
+          534,
+          884
+        ]
+      ],
+      "color": "#CBC9CF",
+      "line_width": 0.75,
+      "visible": false
+    },
+    "section_label_style": {
+      "font_size": 11,
+      "weight": "bold",
+      "color": "#211A33",
+      "center_x": 450,
+      "training_y": 54,
+      "applications_y": 271,
+      "flanking_rules": true,
+      "visible": false
+    },
+    "training_rows": {
+      "teacher_centerline": 221,
+      "student_centerline": 143,
+      "teacher_center_x": 608,
+      "student_center_x": 608,
+      "action_future_centers": [
+        263,
+        350,
+        438
+      ]
+    },
+    "privileged_evidence_group": {
+      "bounds": [
+        218,
+        192,
+        260,
+        56
+      ],
+      "fill": "#fefaf9",
+      "outline": "#ED8B74",
+      "columns": [
+        "a_t^(1)",
+        "a_t^(2)",
+        "...",
+        "a_t^(K)"
+      ],
+      "rows": [
+        "s_{t+1}",
+        "..."
+      ],
+      "ellipsis_dimensions": [
+        "candidate action",
+        "future time"
+      ],
+      "label": "Privileged lookahead E_t",
+      "visible_column_headers": false,
+      "column_identity": "Reused from the aligned action labels and their downward arrows",
+      "line_width": 0.5,
+      "frame_displayed": true,
+      "heading_inside": false
+    },
+    "model_emphasis": {
+      "student_bounds": [
+        492,
+        109,
+        232,
+        68
+      ],
+      "teacher_bounds": [
+        527,
+        196,
+        162,
+        50
+      ],
+      "student_name": "ADM",
+      "title_font_size": 15,
+      "student_name_font_size": 11.5,
+      "student_formula_font_size": 14.3,
+      "teacher_formula_font_size": 9.5,
+      "title_y": 84,
+      "student_center_x": 608,
+      "title_center_x": 608,
+      "title_color": "#654FA1"
+    },
+    "student_distribution": {
+      "notation": null,
+      "bounds": [
+        778,
+        121,
+        88,
+        39
+      ],
+      "classes": [
+        "a_t^(1)",
+        "a_t^(2)",
+        "...",
+        "a_t^(K)"
+      ],
+      "visualization": "Miniature probability bars labeled 1, 2, ..., K, without a p symbol or enclosing box",
+      "values": "Schematic bar heights, not measured probabilities",
+      "output": "Vertical argmax branch -> a_hat_t",
+      "label_center": null,
+      "schematic_bars": {
+        "classes": [
+          "1",
+          "2",
+          "...",
+          "K"
+        ],
+        "heights": [
+          8,
+          24,
+          null,
+          6
+        ],
+        "interpretation": "Schematic probabilities, not measured values"
+      }
+    },
+    "rightmost_stack": {
+      "center_x": 817,
+      "right_edge": 884,
+      "teacher_label_bounds": [
+        789,
+        205,
+        56,
+        32
+      ],
+      "loss_bounds": null,
+      "probability_bounds": [
+        778,
+        121,
+        88,
+        39
+      ],
+      "selected_action_bounds": [
+        798,
+        72,
+        38,
+        28
+      ],
+      "teacher_label_center": [
+        817,
+        221
+      ],
+      "selected_action_font_size": 10.5,
+      "loss_label_position": [
+        830,
+        181
+      ]
+    },
+    "supervision": {
+      "teacher_target": "a_t^+=a_t^(2)",
+      "student_input": "p_phi",
+      "loss": "L_ADM=-log p_phi(a_t^+)",
+      "interpretation": "Categorical cross-entropy with a hard teacher label; conditioning on s_t,A_t is implicit in this compact notation",
+      "displayed_target": "a_t^(2)",
+      "displayed_student_output": "Miniature K-class probability chart",
+      "displayed_loss": "CE loss",
+      "loss_style": "Unboxed neutral annotation beside one thin comparison line; no arrowheads",
+      "comparison_line": [
+        [
+          817,
+          163
+        ],
+        [
+          817,
+          205
+        ]
+      ],
+      "formal_loss": "Unchanged categorical cross-entropy objective"
+    },
+    "application_structure": {
+      "diagram_bands": null,
+      "fill": null,
+      "vertical_separators": false
+    },
+    "viewport": {
+      "top_crop": 54,
+      "visible_height": 444,
+      "scene_height": 498
+    },
+    "row_order": "Student above teacher",
+    "swapped_layout": {
+      "student_centerline": 143,
+      "teacher_centerline": 221,
+      "model_name": "ADM",
+      "teacher_bounds": [
+        527,
+        196,
+        162,
+        50
+      ],
+      "teacher_label_bounds": [
+        789,
+        205,
+        56,
+        32
+      ],
+      "loss_bounds": null,
+      "loss_label_position": [
+        830,
+        181
+      ],
+      "loss_comparison_line": [
+        [
+          817,
+          163
+        ],
+        [
+          817,
+          205
+        ]
+      ],
+      "teacher_formula_font_size": 9.5,
+      "screenshot_markers": {
+        "1": "Scroll down",
+        "2": "Click payment options"
+      },
+      "action_colors": {
+        "1": "#9575EE",
+        "2": "#654FA1",
+        "K": "#654FA1"
+      },
+      "state_action_header_baseline": 81,
+      "action_label_y": 100,
+      "action_card_bounds": [
+        [
+          223,
+          118,
+          80,
+          38
+        ],
+        [
+          310,
+          118,
+          80,
+          38
+        ]
+      ],
+      "action_card_line_width": 1.2,
+      "component_label_font_size": 8.6,
+      "distribution_bounds": [
+        778,
+        121,
+        88,
+        39
+      ],
+      "distribution_bars": {
+        "classes": [
+          "1",
+          "2",
+          "...",
+          "K"
+        ],
+        "heights": [
+          8,
+          24,
+          null,
+          6
+        ],
+        "interpretation": "Schematic probabilities, not measured values"
+      },
+      "selected_action_bounds": [
+        798,
+        72,
+        38,
+        28
+      ],
+      "selected_action_font_size": 10.5,
+      "future_states": "s_{t+1}; vertical dots indicate later states; action headers reused",
+      "flow": "A fine neutral line compares the miniature probability chart with the hard teacher label, with an unboxed CE loss annotation beside it. Argmax branches upward separately. No p symbol is displayed."
+    },
+    "action_card_fill": "#f4f1fd",
+    "phase_bands": {
+      "enabled": false,
+      "fill": null,
+      "scope": "Phase headings and their decorations omitted"
+    },
+    "phase_heading_font_size": 9,
+    "phase_heading_font_family": "Albert Sans",
+    "selected_action_font_size": 10.5,
+    "phase_band_height": 26,
+    "training_policy_and_future_state_font_size": 10.5,
+    "application_policy_font_size": 9,
+    "argmax_font_size": 7,
+    "application_arrow_color": "#7C7887",
+    "application_labels": [
+      "(a) Test-time scaling",
+      "(b) Offline actor improvement",
+      "(c) Online actor improvement via RL"
+    ],
+    "top_alignment": {
+      "teacher_centerline": 221,
+      "student_centerline": 143,
+      "teacher_center_x": 608,
+      "student_center_x": 608,
+      "action_future_centers": [
+        263,
+        350,
+        438
+      ]
+    },
+    "state_action_header_baseline": 81,
+    "component_label_font_size": {
+      "state": 8.6,
+      "actions": 8.6,
+      "privileged_lookahead": 8.6,
+      "teacher": 8.6,
+      "loss": 8.6
+    },
+    "right_legend": {
+      "inference_method_labels": "Immediately right of the inference plots",
+      "groups": [
+        "Single actors",
+        "SFT 4B + ADM"
+      ],
+      "legend_x": 262,
+      "inference_plot_width": 94,
+      "offline_panel_x": 370,
+      "offline_panel_width": 208,
+      "online_panel_width": 100,
+      "rl_legend": "Below online plots"
+    },
+    "panel_headers": {
+      "visible": false,
+      "scope": "Training and Applications phase headings and their bands or flanking rules",
+      "application_headers_visible": true,
+      "retained": "The (a), (b), (c) application titles, Action Decision Models title, component labels, plot titles and legends"
+    },
+    "text_weights": {
+      "task_instruction": "normal",
+      "application_titles": "normal"
+    },
+    "input_notation_color": "#7C7887",
+    "privileged_notation_color": "#944735",
+    "output_notation_colors": {
+      "selected_action": "#654FA1",
+      "teacher_action": "#944735",
+      "model_on_dark_fill": "white"
+    },
+    "future_state_color": "#489379",
+    "screenshot_scroll_arrow": {
+      "marker": "1",
+      "color": "#9575EE",
+      "preserved": true
+    },
+    "input_layout": {
+      "shared_input_boxes_displayed": false,
+      "lookahead_box_displayed": true,
+      "extra_group_captions_displayed": false,
+      "labels": [
+        "State s_t",
+        "Actions A_t",
+        "Privileged lookahead E_t"
+      ],
+      "student_inputs": [
+        "s_t",
+        "A_t"
+      ],
+      "teacher_inputs": [
+        "s_t",
+        "A_t",
+        "E_t"
+      ],
+      "to_student": [
+        [
+          460,
+          143
+        ],
+        [
+          492,
+          143
+        ]
+      ],
+      "to_teacher": [
+        [
+          478,
+          221
+        ],
+        [
+          527,
+          221
+        ]
+      ],
+      "branch_connector_lines": 0
+    },
+    "task_caption": {
+      "position": [
+        36,
+        219
+      ],
+      "font_size": 8.5,
+      "lines": 3,
+      "weight": "normal",
+      "shared_context": true
+    }
+  },
+  "notes": "Separate comparison without phase headers, retaining all three application titles; the selected paper figure and fully headed variants are preserved. Numerical results are unchanged."
+}
