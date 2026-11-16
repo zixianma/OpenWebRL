@@ -23,7 +23,7 @@ TOOLS = [("click", "click"), ("scroll", "scroll"), ("go_back", "go back"), ("don
 pool = lambda keys, f: sum((collections.Counter(d[k][f]) for k in keys), collections.Counter())
 share = lambda c, t: 100 * c.get(t, 0) / sum(c.values())
 L = [k for k in d if k.endswith("-lookahead")]; P = [k for k in d if k.endswith("-pre")]
-BARS = [("offered", pool(L + P, "offered"), tint("STATE", .70), C["STATE_BORDER"]), ("SFT alone", collections.Counter(d["sft"]["picked"]), C["STATE_BORDER"], C["STATE_BORDER"]),
+BARS = [("offered", pool(L + P, "offered"), "white", "black"), ("SFT alone", collections.Counter(d["sft"]["picked"]), "black", "black"),
         ("lookahead", pool(L, "picked"), C["LOOKAHEAD_TEACHER"], C["LOOKAHEAD_TEACHER"]), ("pre-exec.", pool(P, "picked"), C["PRE_EXEC"], C["PRE_EXEC"])]
 from matplotlib.patches import Patch
 from matplotlib.ticker import MaxNLocator, StrMethodFormatter
