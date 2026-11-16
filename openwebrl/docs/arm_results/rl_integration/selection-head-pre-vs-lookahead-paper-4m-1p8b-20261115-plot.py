@@ -52,7 +52,7 @@ a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Success − SF
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Lookahead − pre-exec (%)", fontsize=7, color=INK)
 a1.text(.97, .45, "SFT = 35%", transform=a1.get_yaxis_transform(),
         fontsize=6.2, color=MUTED, ha="right", va="bottom")
-a1.set_xlabel("Student ADM size", fontsize=6.5, color=INK); a2.set_xlabel("Student ADM size", fontsize=6.5, color=INK)
+a1.set_xlabel("ADM-Head size", fontsize=6.5, color=INK); a2.set_xlabel("ADM-Head size", fontsize=6.5, color=INK)
 handles = [Line2D([], [], marker="o", ls="", color=PRE, ms=4.1), Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1),
            Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=4.1)]
 fig.legend(handles, ["Pre-exec", "Lookahead H=4", "Lookahead − pre-exec"], frameon=False, fontsize=6.4,
