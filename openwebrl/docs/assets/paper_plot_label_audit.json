@@ -686,8 +686,16 @@
         "pdf"
       ],
       "mean_success": true
+    },
+    {
+      "stem": "arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115",
+      "formats": [
+        "svg",
+        "pdf"
+      ],
+      "mean_success": true
     }
   ],
-  "figure_count": 86,
+  "figure_count": 87,
   "scientific_values": "Frozen input data, reported points, frontiers, populations, benchmark weights and coordinate tables unchanged."
 }

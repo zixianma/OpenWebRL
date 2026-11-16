@@ -204,6 +204,12 @@
 
 [PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-20261115.svg)
 
+### Label effect across head sizes: absolute success and paired differences
+
+![Label effect across head sizes: absolute success and paired differences](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115.png)
+
+[PDF](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115.pdf) · [SVG](arm_results/rl_integration/selection-head-pre-vs-lookahead-paper-4m-1p8b-absolute-20261115.svg)
+
 ### Selection head scaling: held-out agreement with the teacher
 
 ![Selection head scaling: held-out agreement with the teacher](arm_results/rl_integration/selection-head-scale-agreement-20261112.png)
