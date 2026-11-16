@@ -101,10 +101,10 @@ handles = [
     Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
 ]
-fig.legend(handles, ["Teacher ADM", "Student ADM-23M\n(trained on subset data)"], frameon=False, fontsize=6.4,
-           loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.1)
+fig.legend(handles, ["Teacher ADM", "Student ADM-23M (trained on subset data)"], frameon=False, fontsize=6.2,
+           loc="lower center", ncol=2, bbox_to_anchor=(0.52, 0.005), columnspacing=1.0, handletextpad=0.35)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.33, wspace=0.10)
+fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.29, wspace=0.10)
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[text for ax in axes for text in
