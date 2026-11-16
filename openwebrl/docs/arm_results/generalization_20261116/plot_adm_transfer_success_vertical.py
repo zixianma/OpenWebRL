@@ -3,7 +3,7 @@
 
 Same input values and role colors as the horizontal figure. Group labels and
 one shared legend replace repeated system labels. Absolute rates above bars;
-ADM gains appear inside the purple bars relative to their corresponding base.
+ADM gains appear above the absolute rates relative to their corresponding base.
 """
 from pathlib import Path
 import json
@@ -40,10 +40,10 @@ for i,(ax,(bench,rows)) in enumerate(zip(axes,D['benchmarks'].items())):
         if row['role']=='adm':
             base=next(r for r in rows if r['role']=='base' and r['family']==row['family'])
             assert abs(row['success']-base['success']-row['gain'])<1e-8
-            ax.text(x,row['success']*.52,f"+{row['gain']:.1f}",
-                    ha='center',va='center',fontsize=6.3,fontweight='bold',
-                    color=C['ACTION_INK'],zorder=4,
-                    bbox=dict(boxstyle='round,pad=.17',fc='white',ec='none',alpha=.94))
+            ax.annotate(f"+{row['gain']:.1f}",(x,row['success']+ymax*.025),
+                        xytext=(0,11),textcoords='offset points',
+                        ha='center',va='bottom',fontsize=6.3,fontweight='bold',
+                        color=C['ACTION_INK'],zorder=4,annotation_clip=False)
     ax.set_title(f'{chr(97+i)}) {bench}',fontsize=8,loc='left',pad=7,color=C['INK'])
     ax.set_ylim(0,ymax);ax.set_yticks(yticks)
     ax.set_xticks(ticks,labels,fontsize=6.4)
