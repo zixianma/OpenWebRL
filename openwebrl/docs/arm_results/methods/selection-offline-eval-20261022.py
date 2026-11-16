@@ -28,6 +28,8 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 INK, MUTED, LINE = C["INK"], C["MUTED"], C["BORDER"]
 PRE, IMMEDIATE, LOOK, OUTCOME, HELD = (C["PRE_EXEC"], C["LOOKAHEAD_EVIDENCE"], C["LOOKAHEAD_TEACHER"], C["TRAIN"], C["EVAL"])
 ORACLE = C["ORACLE"]
+# Match readable lookahead/teacher text in adm_overview/plot_figure1_single_column.py.
+LOOK_INK = "#944735"
 ROLLOUT, ROLLOUT_BG = C["INK"], tint("BASELINE_LIGHT", .88)
 SHARED, SHARED_BG = C["BASELINE_DARK"], tint("BASELINE_LIGHT", .92)
 SUCCESS, FAILURE = C["SUCCESS"], C["FAILURE"]
@@ -111,8 +113,8 @@ text(0.06, 1.98, "a)  Rollout Collection", size=8.5, weight="bold", color=C["ACT
 outcome_header = text(4.01, 1.98, "Success rate (%)",
                       size=6.5, color=MUTED, ha="center")
 # Outcome status key only; selected-action check marks remain omitted.
-for x, success, label in ((2.80, True, r"Success ($R=1$)"),
-                          (3.62, False, r"Failure ($R=0$)")):
+for x, success, label in ((2.80, True, "Success"),
+                          (3.62, False, "Failure")):
     outcome_marker(x, 0.245, success, radius=0.020)
     text(x + 0.055, 0.245, label, color=MUTED, size=6.0)
 rollout_pitch = 0.11
@@ -129,7 +131,7 @@ for first, last, title, color, fill in (
     for j in range(first, last + 1):
         text(xs[j], 1.60, str(j + 1), size=6.5, color=ROLLOUT if j == 0 else MUTED,
              weight="bold" if j == 0 else "normal", ha="center")
-text(xs[0] - 0.095, 1.60, r"$j=$", size=6.5, color=MUTED, ha="right")
+text(sum(xs) / len(xs), 1.98, "Rollouts", size=6.5, color=MUTED, ha="center")
 text(0.64, 1.60, r"$K=5$ actions", size=6.5, color=MUTED, ha="center")
 text(1.73, 1.79, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
 # Dotted neutral boundary groups the Rollout 1 outcomes with their example path.
@@ -194,15 +196,16 @@ lanes = ((method_ys[0], "Pre-execution", "Pre-execution", PRE, "—"),
           r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
 for y, key, label, color, evidence in lanes:
     is_lookahead = key.startswith("Lookahead")
-    text(method_x, y, label, color=color, weight="bold", linespacing=1.0)
-    text(evidence_x, y, evidence, color=color,
+    ink = LOOK_INK if is_lookahead else color
+    text(method_x, y, label, color=ink, weight="bold", linespacing=1.0)
+    text(evidence_x, y, evidence, color=ink,
          weight="bold" if is_lookahead else "normal", ha="center", linespacing=0.95)
     rule(5.99, shared_x, y, color=color)
     ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
     box(teacher_x, y - 0.115, teacher_w, 0.23, edge=color)
-    text(teacher_x + teacher_w / 2, y, "Teacher", color=color, weight="bold", ha="center")
+    text(teacher_x + teacher_w / 2, y, "Teacher", color=ink, weight="bold", ha="center")
     arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=color)
     box(pick_x, y - 0.115, pick_w, 0.23, edge=C["ACTION_INK"], fill=tint("ACTION", .65), lw=.85)
     pick = PICKS[key]
