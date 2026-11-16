@@ -22,7 +22,7 @@ INK, MUTED = C["INK"], C["MUTED"]
 KEYS = ["d128", "d512", "d4096"]
 SIZES = ["4M", "23M", "1.8B"]
 LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
-PURPLES = ["#C3AFF6", C["ADM_MAIN"], "#6A4BC2"]  # light -> dark with size
+PURPLES = [C["ADM_MAIN"]] * len(KEYS)  # one purple for the paired label effect
 
 
 def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=False):
