@@ -50,7 +50,7 @@ P = K["pooled"]
 PANELS = [
     ("Offline: rollout success",
      "offline", P["sft_sample"]),
-    ("Online: 3-benchmark mean success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
+    ("Online: 3-benchmark mean", "live", LIVE3["rates"]["sft"]["mean_overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
@@ -76,8 +76,8 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if not TEACHER_ONLY_OFFLINE:
                 point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
     # Label the zero-reference line with this panel's absolute actor baseline.
-    ax.text(.98, -2.7, f"SFT = {base:.1f}%", transform=ax.get_yaxis_transform(),
-            ha="right", va="top", fontsize=6.2, color=MUTED,
+    ax.text(.98, .07, f"SFT = {base:.1f}%", transform=ax.transAxes,
+            ha="right", va="bottom", fontsize=6.2, color=MUTED,
             bbox=dict(facecolor="white", edgecolor="none", pad=.4))
     ax.set_title(title, fontsize=6.3, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
@@ -104,7 +104,7 @@ handles = [
 fig.legend(handles, ["Teacher ADM", "Student ADM-23M (trained on subset data)"], frameon=False, fontsize=6.2,
            loc="lower center", ncol=2, bbox_to_anchor=(0.52, 0.005), columnspacing=1.0, handletextpad=0.35)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.29, wspace=0.10)
+fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.29, wspace=0.38)
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[text for ax in axes for text in
