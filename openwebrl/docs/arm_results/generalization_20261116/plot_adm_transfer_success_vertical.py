@@ -3,7 +3,7 @@
 
 Same input values and role colors as the horizontal figure. Group labels and
 one shared legend replace repeated system labels. Absolute rates above bars;
-Black arrow brackets connect each base to its ADM result, with the gain above.
+Gray horizontal arrows connect each base to its ADM result, with the gain above.
 """
 from pathlib import Path
 import json
@@ -12,7 +12,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch, FancyArrowPatch
-from matplotlib.path import Path as ArrowPath
 from matplotlib.ticker import StrMethodFormatter
 HERE=Path(__file__).resolve().parent
 DOCS=next(p for p in HERE.parents if (p/'paper_plot_style.py').exists())
@@ -43,16 +42,13 @@ for i,(ax,(bench,rows)) in enumerate(zip(axes,D['benchmarks'].items())):
             assert abs(row['success']-base['success']-row['gain'])<1e-8
             base_x=xs[rows.index(base)]
             bracket_y=row['success']+ymax*.23
-            vertices=[(base_x,base['success']+ymax*.14),
-                      (base_x,bracket_y),(x,bracket_y),
-                      (x,row['success']+ymax*.14)]
-            ax.add_patch(FancyArrowPatch(path=ArrowPath(vertices),arrowstyle='-|>',
-                                        mutation_scale=5,linewidth=.65,color='black',
-                                        clip_on=False,zorder=4))
+            ax.add_patch(FancyArrowPatch((base_x,bracket_y),(x,bracket_y),arrowstyle='->',
+                                        mutation_scale=5,linewidth=.7,color=C['PRE_EXEC'],
+                                        shrinkA=0,shrinkB=0,clip_on=False,zorder=4))
             ax.annotate(f"+{row['gain']:.1f}",((base_x+x)/2,bracket_y),
                         xytext=(0,2),textcoords='offset points',
                         ha='center',va='bottom',fontsize=6.3,
-                        color='black',zorder=4,annotation_clip=False)
+                        color=C['PRE_EXEC'],zorder=4,annotation_clip=False)
     ax.set_title(f'{chr(97+i)}) {bench}',fontsize=8,loc='left',pad=7,color=C['INK'])
     ax.set_ylim(0,ymax);ax.set_yticks(yticks)
     ax.set_xticks(ticks,labels,fontsize=6.4)
