@@ -45,50 +45,56 @@ def main():
     repetition = json.loads(behavior.REPETITION.read_text())
     assert success["repetition_aggregate_sha256"] == sha(behavior.REPETITION)
     assert repetition["thresholds"] == list(behavior.THRESHOLDS) == [2, 3, 4, 5]
-    fig, axes = plt.subplots(1, 4, figsize=(8.8, 2.10))
-    fig.subplots_adjust(left=.05, right=.80, top=.84, bottom=.22, wspace=.35)
+    fig, axes = plt.subplots(1, 4, figsize=(7.2, 2.05))
+    fig.subplots_adjust(left=.065, right=.99, top=.91, bottom=.31, wspace=.42)
     for ax in axes:
         ax.set_box_aspect(1)
     for key, (_, color, ls) in learning.METHODS.items():
         tr, va = points[key]["training"], points[key]["validation"]
-        width, z = (1.8, 4) if key == "gate_b" else (1.2, 3)
+        width, z = (2.1, 4) if key == "gate_b" else (1.55, 3)
         dots = [i for i, iteration in enumerate(tr["iteration"]) if iteration % 10 == 0]
         axes[0].plot(tr["iteration"], tr["smoothed_percent"], color=color, linestyle=ls,
-                     linewidth=width, marker="o", markevery=dots, markersize=2.4,
+                     linewidth=width, marker="o", markevery=dots, markersize=3.0,
                      markeredgewidth=0, zorder=z)
         axes[1].scatter(va["iteration"], va["raw_percent"], color=color,
-                        s=8, alpha=.25, edgecolors="none", zorder=2)
+                        s=12, alpha=.28, edgecolors="none", zorder=2)
         axes[1].plot(va["iteration"], va["smoothed_percent"], color=color, linestyle=ls,
-                     linewidth=width, marker="o", markersize=3, markeredgecolor="white",
+                     linewidth=width, marker="o", markersize=3.8, markeredgecolor="white",
                      markeredgewidth=.4, zorder=z)
         source_key = "gate-b" if key == "gate_b" else key
         x, y = (success["methods"][source_key][field] for field in ("repetition_incidence", "valid_success"))
         assert x["percent"] == repetition["methods"][source_key]["thresholds"]["3"]["percent"]
         axes[2].errorbar(x["percent"], y["percent"],
                          yerr=[[y["percent"] - y["ci95_percent"][0]], [y["ci95_percent"][1] - y["percent"]]],
-                         fmt="o", color=color, markersize=4, capsize=2, elinewidth=1, zorder=z)
+                         fmt="o", color=color, markersize=4.8, capsize=2.5, elinewidth=1.2, zorder=z)
         rows = [repetition["methods"][source_key]["thresholds"][str(k)] for k in behavior.THRESHOLDS]
         values, ci = np.array([r["percent"] for r in rows]), np.array([r["ci95_percent"] for r in rows])
         assert np.all(np.diff(values) <= 0)
         axes[3].errorbar(behavior.THRESHOLDS, values,
                          yerr=np.vstack((values - ci[:, 0], ci[:, 1] - values)),
-                         color=color, marker="o", markersize=4, linewidth=1.2,
-                         linestyle=ls, capsize=2, elinewidth=.9, zorder=z)
+                         color=color, marker="o", markersize=4.5, linewidth=width,
+                         linestyle=ls, capsize=2.5, elinewidth=1.15, zorder=z)
     axes[0].set(xlim=(0, 94), xticks=[0, 30, 60, 90], ylim=(39, 61), yticks=[40, 50, 60],
                 xlabel="Iteration", ylabel="Reward")
-    axes[1].set(xlim=(17, 93), xticks=[20, 40, 60, 80, 90], ylim=(25, 60), yticks=[30, 40, 50, 60],
+    axes[1].set(xlim=(17, 93), xticks=[20, 40, 60, 90], ylim=(25, 60), yticks=[30, 40, 50, 60],
                 xlabel="Iteration", ylabel="Success %")
     axes[2].set(xlim=(13, 47), xticks=[20, 30, 40], ylim=(35, 60), yticks=[40, 45, 50, 55],
                 xlabel="Repetition % (K=3)", ylabel="Success %")
     axes[3].set(xlim=(1.82, 5.18), xticks=behavior.THRESHOLDS, ylim=(0, 70), yticks=[0, 20, 40, 60],
                 xlabel="Repetition threshold, K", ylabel="Repetition (%)")
-    for ax, title in zip(axes, ("a) Training Rewards", "b) OM2W across Iterations", "c) Iter 90 on OM2W", "d) Iter 90’s Repetition")):
+    for ax, title in zip(axes, ("a) Training Rewards", "b) OM2W learning", "c) Iter 90 on OM2W", "d) Iter 90 repetition")):
         style_axis(ax, title)
-    handles = [Line2D([], [], color=color, linestyle=ls, marker="o", linewidth=1.2, markersize=3.5)
+        ax.set_title(title,fontsize=7.8,loc="left",pad=6,color=C["INK"])
+        ax.tick_params(labelsize=7.5,colors=C["INK"],width=.8,length=3,pad=2)
+        for label in (ax.xaxis.label,ax.yaxis.label):
+            label.set_fontsize(8)
+            label.set_color(C["INK"])
+    handles = [Line2D([], [], color=color, linestyle=ls, marker="o", linewidth=1.7, markersize=4.2)
                for _, color, ls in learning.METHODS.values()]
-    legend = fig.legend(handles, LEGEND_LABELS, loc="center left", bbox_to_anchor=(.83, .53),
-                        ncol=1, frameon=False, fontsize=LEGEND_SIZE, labelcolor=C["INK"],
-                        handlelength=1.4, handletextpad=.5, labelspacing=1.0, borderaxespad=0)
+    legend = fig.legend(handles, ["Outcome only (48 groups)","Outcome only (56 groups)","Outcome + ADM (ours)"],
+                        loc="lower center",bbox_to_anchor=(.53,.005),
+                        ncol=3, frameon=False, fontsize=7.5,labelcolor=C["INK"],
+                        handlelength=1.8,handletextpad=.5,columnspacing=2,borderaxespad=0)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_box = legend.get_window_extent(renderer)
@@ -108,7 +114,7 @@ def main():
         fig.savefig(path, dpi=300, facecolor="white", metadata=metadata)
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-    report = dict(schema="rl-learning-repetition-merged-v1", layout="8.8 x 2.10 inches; four square panels; one vertical right legend",
+    report = dict(schema="rl-learning-repetition-merged-v1", layout="7.2 x 2.05 inches; four square panels spanning two-column width; one horizontal bottom legend",
                   learning_points=points, repetition_points={k: success["methods"][k] for k in ("outcome48", "outcome56", "gate-b")},
                   thresholds=behavior.THRESHOLDS, threshold_points=repetition["methods"],
                   learning_protocols={k: published[k] for k in ("training", "validation", "caveats")},

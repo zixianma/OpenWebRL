@@ -1,6 +1,6 @@
 {
   "schema": "rl-learning-repetition-merged-v1",
-  "layout": "8.8 x 2.10 inches; four square panels; one vertical right legend",
+  "layout": "7.2 x 2.05 inches; four square panels spanning two-column width; one horizontal bottom legend",
   "learning_points": {
     "outcome48": {
       "training": {
@@ -1986,12 +1986,11 @@
     "arm_results/rl_final_20261108/plot_rl_learning_compact.py": "fc36d7df055ff2e45d7f3b3838a37b2aefbfaa7aa33b5b80519b41c6b8d3f183",
     "arm_results/rl_integration/behavior/plot_rl_repetition_success_robustness.py": "c00c3d874bd47ac9a27d511356ed566c8a5754d1fbb7446edd4761f24e824d52",
     "rl_plot_layout.py": "6c3bb9bb48694bbf4afdade2499a03093e530968c2dedc8ff525499fb2b8a047",
-    "arm_results/rl_final_20261108/plot_rl_learning_repetition_merged.py": "b76be3f05e1ba29cc10ad413e729a8096d8f7f911fb8ce801f85d370e4201c80"
+    "arm_results/rl_final_20261108/plot_rl_learning_repetition_merged.py": "d244309b42222aeb238e1f911636ca5e535fda161e1c881199c3f1a37ad9704d"
   },
   "output_sha256": {
-    "png": "e2458c9e3abb9315e8aac08b651ed8a6f8bbb5a0701e19e64addd67b729a8e54",
-    "pdf": "89b08b6f58c23665b65a83fd3674657befb1b6db736b978535247491e73af775",
-    "svg": "bcba2a0b9f25901f1501dc8c126e8cfa22c11a027f4f71ab5e90409efd9b9041"
-  },
-  "display_label_policy_sha256": "a06f464a2585e83053901bbccfb47862bd9e969d4e3b0a140c3096f5551e30c9"
+    "png": "677e28075acde90336a275e4505dafedfedba585c1f51bba81c3b9460d61756a",
+    "pdf": "292c0f59e5056816245013c20592ee686b2a041c3aa5d5ae4ed416d265d90f4d",
+    "svg": "5f333e86b053d8c081825336651a98b53ac8e8f1907965708adcceb8ad5a8b77"
+  }
 }

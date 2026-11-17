@@ -49,7 +49,7 @@ for ax, title, ticks in ((a1, "Online: 3-benchmark mean", SIZES), (a2, "Lookahea
     for side in ("top", "right"): ax.spines[side].set_visible(False)
 a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Gain over SFT (%)", fontsize=7, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Gain over pre-exec (%)", fontsize=7, color=INK)
-a1.text(.98, .07, "SFT = 35.0%", transform=a1.transAxes,
+a1.text(.98, .12, "SFT = 35.0%", transform=a1.transAxes,
         fontsize=6.2, color=MUTED, ha="right", va="bottom",
         bbox=dict(facecolor="white", edgecolor="none", pad=.4))
 a1.set_xlabel("ADM-Head size", fontsize=6.5, color=INK); a2.set_xlabel("ADM-Head size", fontsize=6.5, color=INK)
