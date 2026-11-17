@@ -25,39 +25,39 @@ LOOK, PRE = C["LOOKAHEAD_TEACHER"], C["PRE_EXEC"]
 PURPLES = [C["ADM_MAIN"]] * len(KEYS)  # one purple for the paired label effect
 
 
-def point(ax, x, v, color, marker="o", label_dy=0.15, label=True, ms=4.1, bold=False):
+def point(ax, x, v, color, marker="o", label_dy=0.15, label_dx=0, label=True, ms=5.0, bold=False):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=ms, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=ms, color=color, ecolor=C["BASELINE_DARK"], capsize=2, lw=1.05,
                 zorder=3, markeredgewidth=1.0)
     if label:
-        ax.text(x, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.2 if bold else 5.8, color=INK, fontweight="bold" if bold else "normal")
+        ax.text(x + label_dx, hi + label_dy, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5 if bold else 6.3, color=INK, fontweight="bold" if bold else "normal")
 
 
-fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.7, 2.25), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.38))
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.5, 2.25), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.38))
 for x, k in enumerate(KEYS):
-    point(a1, x - 0.15, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE)
-    point(a1, x + 0.15, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK)
+    point(a1, x - 0.21, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label_dx=-.05)
+    point(a1, x + 0.21, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label_dx=.05)
 diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS]
 for x, (pt, lo, hi) in enumerate(diffs):
     point(a2, x, (-pt, -hi, -lo), PURPLES[x])
-for ax, title, ticks in ((a1, "Online: 3-benchmark mean", SIZES), (a2, "Lookahead benefit", SIZES)):
+for ax, title, ticks in ((a1, "Online: mean success", SIZES), (a2, "Lookahead benefit", SIZES)):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
-    ax.set_title(title, fontsize=6.3, loc="left", color=INK, pad=6)
-    ax.set_xticks(range(len(ticks)), ticks, fontsize=6.2)
+    ax.set_title(title, fontsize=7.0, loc="left", color=INK, pad=6)
+    ax.set_xticks(range(len(ticks)), ticks, fontsize=6.7)
     ax.set_xlim(-0.5, len(ticks) - 0.5)
-    ax.tick_params(axis="y", labelsize=6.5); ax.tick_params(colors=INK); ax.grid(False)
+    ax.tick_params(axis="y", labelsize=7); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
-a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Gain over SFT (%)", fontsize=7, color=INK)
-a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Gain over pre-exec (%)", fontsize=7, color=INK)
+a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Gain over SFT (%)", fontsize=8, color=INK)
+a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Gain over pre-exec (%)", fontsize=8, color=INK)
 a1.text(.98, .12, "SFT = 35.0%", transform=a1.transAxes,
         fontsize=6.2, color=MUTED, ha="right", va="bottom",
         bbox=dict(facecolor="white", edgecolor="none", pad=.4))
-a1.set_xlabel("ADM-Head size", fontsize=6.5, color=INK); a2.set_xlabel("ADM-Head size", fontsize=6.5, color=INK)
-handles = [Line2D([], [], marker="o", ls="", color=PRE, ms=4.1), Line2D([], [], marker="o", ls="", color=LOOK, ms=4.1),
-           Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=4.1)]
-fig.legend(handles, ["Pre-exec", "Lookahead H=4", "Lookahead − pre-exec"], frameon=False, fontsize=6.2,
+a1.set_xlabel("ADM-Head size", fontsize=7.2, color=INK); a2.set_xlabel("ADM-Head size", fontsize=7.2, color=INK)
+handles = [Line2D([], [], marker="o", ls="", color=PRE, ms=5.0), Line2D([], [], marker="o", ls="", color=LOOK, ms=5.0),
+           Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=5.0)]
+fig.legend(handles, ["Pre-exec", "Lookahead H=4", "Lookahead − pre-exec"], frameon=False, fontsize=6.5,
            loc="lower center", ncol=3, bbox_to_anchor=(0.52, 0.005), columnspacing=1.2, handletextpad=0.3)
-fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.29)
+fig.subplots_adjust(left=0.15, right=0.985, top=0.81, bottom=0.29)
 fig.canvas.draw()
 r = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[t for ax in (a1, a2) for t in [ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts, *ax.get_xticklabels(), *ax.get_yticklabels()]]]:

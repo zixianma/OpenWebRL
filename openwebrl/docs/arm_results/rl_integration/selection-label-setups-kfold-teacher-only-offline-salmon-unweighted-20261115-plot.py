@@ -50,19 +50,19 @@ P = K["pooled"]
 PANELS = [
     ("Offline: rollout success",
      "offline", P["sft_sample"]),
-    ("Online: 3-benchmark mean", "live", LIVE3["rates"]["sft"]["mean_overall"])]
+    ("Online: mean success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
 
 
 def point(ax, x, v, color, marker, filled, outline=None):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor=C["BASELINE_DARK"], capsize=1.5, lw=0.75,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=5.0, color=color, ecolor=C["BASELINE_DARK"], capsize=2, lw=1.05,
                 zorder=3, markeredgewidth=1.0,
                 markerfacecolor=color if filled else "white",
                 markeredgecolor=outline if outline is not None else color)
-    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
+    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.3, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(3.7, 2.25), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(3.5, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -79,32 +79,32 @@ for ax, (title, kind, base) in zip(axes, PANELS):
     ax.text(.98, .07, f"SFT = {base:.1f}%", transform=ax.transAxes,
             ha="right", va="bottom", fontsize=6.2, color=MUTED,
             bbox=dict(facecolor="white", edgecolor="none", pad=.4))
-    ax.set_title(title, fontsize=6.3, loc="left", color=INK, pad=6)
-    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
+    ax.set_title(title, fontsize=7.0, loc="left", color=INK, pad=6)
+    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.7); ax.set_xlim(-0.35, len(ROWS) - 0.65)
     # The shared label spans whichever horizons are displayed.
     horizon_ticks = [i for i, row in enumerate(ROWS) if row[0].startswith("H=")]
     ax.plot([horizon_ticks[0] - .35, horizon_ticks[-1] + .35], [-.19, -.19], transform=ax.get_xaxis_transform(),
             color=MUTED, lw=.5, clip_on=False)
     ax.text((horizon_ticks[0] + horizon_ticks[-1]) / 2, -.24, "Lookahead", transform=ax.get_xaxis_transform(),
             ha="center", va="top", fontsize=6, color=INK)
-    ax.tick_params(axis="y", labelsize=6.5)
+    ax.tick_params(axis="y", labelsize=7)
     ax.tick_params(colors=INK)
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
 axes[0].set_ylim(-3.9, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
-axes[0].set_ylabel("Gain over SFT (%)", fontsize=7, color=INK)
+axes[0].set_ylabel("Gain over SFT (%)", fontsize=8, color=INK)
 handles = [
-    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
+    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=5.0,
            markeredgewidth=1.0, markerfacecolor="white"),
-    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=4.1,
+    Line2D([], [], marker="o", ls="", color=C["LOOKAHEAD_TEACHER"], ms=5.0,
            markeredgewidth=1.0, markerfacecolor=C["LOOKAHEAD_TEACHER"]),
 ]
-fig.legend(handles, ["Teacher ADM", "Student ADM-23M (trained on subset data)"], frameon=False, fontsize=6.2,
+fig.legend(handles, ["Teacher ADM", "Student ADM-23M (trained on subset data)"], frameon=False, fontsize=6.5,
            loc="lower center", ncol=2, bbox_to_anchor=(0.52, 0.005), columnspacing=1.0, handletextpad=0.35)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.29, wspace=0.38)
+fig.subplots_adjust(left=0.15, right=0.985, top=0.81, bottom=0.29, wspace=0.38)
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 for artist in [*fig.legends, *[text for ax in axes for text in

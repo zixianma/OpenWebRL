@@ -82,7 +82,7 @@ def main():
                 xlabel="Repetition % (K=3)", ylabel="Success %")
     axes[3].set(xlim=(1.82, 5.18), xticks=behavior.THRESHOLDS, ylim=(0, 70), yticks=[0, 20, 40, 60],
                 xlabel="Repetition threshold, K", ylabel="Repetition (%)")
-    for ax, title in zip(axes, ("a) Training Rewards", "b) OM2W learning", "c) Iter 90 on OM2W", "d) Iter 90 repetition")):
+    for ax, title in zip(axes, ("a) Training Rewards", "b) OM2W across iterations", "c) Iter 90 on OM2W", "d) Iter 90 repetition")):
         style_axis(ax, title)
         ax.set_title(title,fontsize=7.8,loc="left",pad=6,color=C["INK"])
         ax.tick_params(labelsize=7.5,colors=C["INK"],width=.8,length=3,pad=2)
