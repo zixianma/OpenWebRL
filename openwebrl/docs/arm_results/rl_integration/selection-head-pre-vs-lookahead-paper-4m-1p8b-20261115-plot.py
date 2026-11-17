@@ -2,8 +2,8 @@
 """Paper comparison at 4.4M, 22.6M and 1.8B: gains over SFT and paired
 lookahead minus pre-execution differences, with task-paired 95% intervals.
 Three runs per condition in the November 14–15 window, with contemporaneous
-SFT controls. The figure shows per-size estimates only. Valid-only success (successes / valid episodes,
-equal-weight 3-benchmark mean; 2026-11-16 user request), so episodes whose site failed to load (e.g. Wolfram Alpha) do not count.
+SFT controls. The figure shows per-size estimates only. Overall success counts invalid episodes as failures;
+benchmarks receive equal weight.
 """
 import json
 from pathlib import Path
@@ -36,9 +36,9 @@ def point(ax, x, v, color, marker="o", label_dy=0.15, label_dx=0, label=True, ms
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.5, 2.25), gridspec_kw=dict(width_ratios=[1, 1], wspace=0.38))
 for x, k in enumerate(KEYS):
-    point(a1, x - 0.21, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_valid_only_pp"], PRE, label_dx=-.05)
-    point(a1, x + 0.21, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_valid_only_pp"], LOOK, label_dx=.05)
-diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_valid_only_pp"] for k in KEYS]
+    point(a1, x - 0.21, D["conditions"][f"{k}-pre"]["minus_sft"]["mean_overall_pp"], PRE, label_dx=-.05)
+    point(a1, x + 0.21, D["conditions"][f"{k}-lookahead"]["minus_sft"]["mean_overall_pp"], LOOK, label_dx=.05)
+diffs = [D["contrasts"][f"{k}: pre - lookahead"]["mean_overall_pp"] for k in KEYS]
 for x, (pt, lo, hi) in enumerate(diffs):
     point(a2, x, (-pt, -hi, -lo), PURPLES[x])
 for ax, title, ticks in ((a1, "Online: mean success", SIZES), (a2, "Lookahead benefit", SIZES)):
@@ -48,11 +48,8 @@ for ax, title, ticks in ((a1, "Online: mean success", SIZES), (a2, "Lookahead be
     ax.set_xlim(-0.5, len(ticks) - 0.5)
     ax.tick_params(axis="y", labelsize=7); ax.tick_params(colors=INK); ax.grid(False)
     for side in ("top", "right"): ax.spines[side].set_visible(False)
-a1.set_ylim(-1, 16); a1.set_yticks([0, 4, 8, 12, 16]); a1.set_ylabel("Gain over SFT (%)", fontsize=8, color=INK)
+a1.set_ylim(-1, 14); a1.set_yticks([0, 4, 8, 12]); a1.set_ylabel("Gain over SFT (%)", fontsize=8, color=INK)
 a2.set_ylim(-1, 9.5); a2.set_yticks([0, 2, 4, 6, 8]); a2.set_ylabel("Gain over pre-exec (%)", fontsize=8, color=INK)
-a1.text(.98, .12, "SFT = 37.6%", transform=a1.transAxes,
-        fontsize=6.2, color=MUTED, ha="right", va="bottom",
-        bbox=dict(facecolor="white", edgecolor="none", pad=.4))
 a1.set_xlabel("ADM-Head size", fontsize=7.2, color=INK); a2.set_xlabel("ADM-Head size", fontsize=7.2, color=INK)
 handles = [Line2D([], [], marker="o", ls="", color=PRE, ms=5.0), Line2D([], [], marker="o", ls="", color=LOOK, ms=5.0),
            Line2D([], [], marker="o", ls="", color=PURPLES[1], ms=5.0)]
