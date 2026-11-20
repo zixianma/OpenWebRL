@@ -1326,6 +1326,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 - **Head size does not matter (23K linear probe to 1.8B).** A linear probe on the actor's hidden states is level with the 22.6M head (+0.2 [−2.5, +2.8] pp). 1.0M and 0.25M heads are no worse than the 22.6M default (+4.0 / +3.1 pp, one seed, one window). Over three training seeds in one window the 4.4M and 22.6M heads are level (−0.2 [−1.8, +1.4] pp), and the 1.8B head is level with the 22.6M default (−1.1 [−4.3, +2.2]); the single-seed screen's 4.4M lead (+4.3) was a seed and window effect. [Details](#final-selection-recipe3-head-scale-20261111)
 - **Kev-style selectors work on all three benchmarks and match the GPT-5.5 decoder.** Over 3 runs against one SFT sample in the same windows, Kev-A is +8.7 [+6.7, +10.8] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.9, +9.1]. In a same-window run with the Recipe 3 GPT-5.5 K = 3 decoder, Kev-A − decoder is +0.7 [−2.9, +4.3] and Kev-B − decoder −0.9 [−4.6, +2.9]. [Details](#final-selection-recipe3-kev-3bench-20261110)
 - **The selector gain survives stealth browsers.** US-residential stealth browsers add about +13.5 pp mean overall to both SFT 4B and SFT 4B + the LoRA decoder (Online-Mind2Web and WebVoyager only); the decoder's gain is +7.2 [+3.5, +10.9] under stealth vs +7.6 [+5.4, +9.7] locally (1 stealth run). [Details](#final-selection-recipe3-stealth-20261109)
+- **The gain comes from judging the candidates, not from having five.** Rules over the same five proposals: random = one SFT sample (+0.1 pp), majority vote +2.7 [+0.6, +4.8] (DeepShop only), a state-blind action-type prior −1.7; every ADM head size beats majority by 5.2–8.0 pp (November 16–17, 3 runs; SFT and heads from November 14–15). [Details](#selection-rule-baselines-20261117)
 
 <a id="final-selection-recipe3"></a>
 
@@ -1798,6 +1799,60 @@ It narrows the earlier-minus-later SFT gap from 4.9 to 3.2 percentage points, bu
 | November 14–15 | 595 | 549 | 32.2 | 39.6 | 42.9 | 33.1 | 35.0 | 36.1 |
 
 The later SFT has 46 Wolfram Alpha reset failures in each run. Removing the site improves its rate while reducing the earlier baseline, where the site contributed successes. The residual gap is mainly DeepShop. The actor path, task manifests, decoding and declared protocol match between windows, but evaluation-source digests differ; the residual cannot be assigned solely to live-site drift. This sensitivity does not establish cross-window exchangeability. Interpret label effects within the contemporaneous window. All restricted counts are verified from saved records against the original full-population success and validity totals before filtering; no outcomes are inferred or relabeled.
+
+</details>
+
+<a id="selection-rule-baselines-20261117"></a>**Rule-based selectors vs the ADM heads (November 16–17).** *The ADM heads' gain comes from judging the candidates, not from having five of them: picking one of the five proposals at random equals one SFT sample (+0.1 [−1.9, +2.3] pp mean overall), majority vote over the five is the best rule (+2.7 [+0.6, +4.8], almost all on DeepShop), and a state-blind action-type prior is slightly worse than one sample (−1.7 [−3.8, +0.4]). Every ADM head size beats every rule; the four-size mean is +6.4 [+4.6, +8.2] pp over majority vote and +9.0 [+7.2, +10.8] over random.* Same SFT 4B actor, N = 5 proposals per step, T 1.0 / top-p 0.9, 30 steps, 3 runs each on all 1,045 tasks; the rules replace only the selector.
+
+| Selector | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] | ADM (mean of 4 sizes) − this, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***Baseline*** | | | | | | | |
+| SFT 4B alone (1 sample) | 35.6% | 43.4% | 33.1% | 35.2% | 37.4% | — | +9.1 [+7.4, +10.8] |
+| ***Rules over the 5 proposals (November 16–17)*** | | | | | | | |
+| Random | 33.5% | 43.7% | 35.2% | 35.3% | 37.5% | +0.1 [−1.9, +2.3] | +9.0 [+7.2, +10.8] |
+| Majority vote | 34.7% | 44.0% | 41.7% | 37.9% | 40.1% | +2.7 [+0.6, +4.8] | +6.4 [+4.6, +8.2] |
+| Teacher action-type prior | 29.7% | 43.4% | 33.8% | 33.5% | 35.6% | −1.7 [−3.8, +0.4] | +10.8 [+9.2, +12.5] |
+| ***ADM heads, GPT-5.5 H = 4 labels (November 14–15)*** | | | | | | | |
+| 23K linear probe | 41.8% | 52.6% | 48.4% | 44.8% | 47.6% | +9.6 [+7.5, +11.7] | — |
+| 4.4M (d128-L2) | **42.6%** | **56.1%** | 47.4% | **45.9%** | **48.7%** | **+10.7 [+8.5, +12.9]** | — |
+| 22.6M (d512-L2) | 39.1% | 50.0% | 47.8% | 43.1% | 45.6% | +7.9 [+5.8, +10.1] | — |
+| 1.8B (d4096-L8) | 37.0% | 52.1% | **48.9%** | 43.3% | 46.0% | +8.2 [+6.1, +10.2] | — |
+
+*Benchmark columns are valid-only success (successes / valid episodes). Mean overall is the equal-weight mean over the three benchmarks of overall success, with invalid episodes counted as failures; mean valid-only is the equal-weight mean of the benchmark columns. Differences are on mean overall. Each ADM head is one training seed (the 4.4M head is the lucky seed 0; over three seeds 4.4M and 22.6M are level). Numbers are after one rerun of every invalid episode in all eight conditions (below); before the rerun every difference was within 0.6 pp of these ([pre-rerun data](arm_results/rl_integration/selection-rule-baselines-original-20261117.json)). [Data](arm_results/rl_integration/selection-rule-baselines-20261117.json) · [analysis](arm_results/rl_integration/selection-rule-baselines-20261117.py) · [rules](arm_results/rl_integration/selection-rule-baselines-rules-20261117.py).*
+
+- **Cross-window caveat.** SFT and the ADM heads come from the November 14–15 [head-size window](#final-selection-recipe3-head-pre-vs-lookahead-20261115); the rules ran November 16–17. Random over five samples has the same distribution as one sample, so random − SFT measures the drift between windows: 0.0 pp mean overall, but −2.0 (Online-Mind2Web) and +2.0 (DeepShop) per benchmark. Treat single-benchmark differences under about 3 pp as noise.
+- **Majority vote helps only on DeepShop.** Majority − SFT is +8.4 pp on DeepShop, +0.5 on WebVoyager and −0.9 on Online-Mind2Web. The heads beat majority on every benchmark (four-size mean: +4.8 Online-Mind2Web, +8.0 WebVoyager, +6.4 DeepShop).
+- **The type prior hurts on Online-Mind2Web** (−5.8 pp vs SFT; −4.4 [−6.5, −2.4] mean overall vs majority). It ignores the state and favours the types the teacher picked most (navigation and new tabs), which are rarely right on open-web tasks.
+- **ADM-4B as the agent cannot act.** Running the default ADM LoRA (R3+WA, merged) as the actor itself was cancelled after its first episodes: only 56% of its actions parsed (≈ 98% for the SFT actor) because it often emits its selection format (`{"selection": 369, 402}`) instead of tool calls; 93 of 171 episodes ended in format errors and 4 completed the task. Selector training removes the actor's output format.
+
+<details><summary>Rule definitions, evaluation protocol and invalid-episode rerun accounting</summary>
+
+**Rules** (no model and no features; the score vector replaces the head's in the cached-head path, argmax over the five proposals):
+
+- **Random:** every candidate scores U(0, 1), a uniform pick among the five proposals.
+- **Majority vote:** candidates are grouped as the same action when they call the same tool with the same non-coordinate arguments (strings stripped and lower-cased) and every coordinate argument lies within 30 units of the group's first member on the actor's 0–1000 grid; unparseable actions are singletons. Score = group size + U(0, 0.5): the largest group wins, ties are broken uniformly.
+- **Teacher action-type prior:** score = the GPT-5.5 H = 4 teacher's pick rate for the candidate's action type on the Recipe 3 training panels, smoothed with 50 pseudo-counts toward 0.2, + U(0, 10⁻³). Rates: goto_url 0.31, new_tab 0.27, press_keys 0.27, go_back 0.21, click 0.20, scroll 0.18, write 0.17, done 0.16, wait 0.16.
+
+**Protocol.** SFT 4B actor (OpenWebRL-4B-SFT), N = 5 proposals per step, T 1.0 / top-p 0.9, 30 steps, local browsers, 3 runs on all 1,045 tasks (Online-Mind2Web 300, WebVoyager 595, DeepShop 150), rolled out judge-deferred and judged afterwards with each benchmark's standard judge (as in the November 14–15 window). Two random-selector jobs lost their actor server to a CUDA illegal-memory-access error and resumed from their saved records.
+
+**Statistics.** Paired bootstrap over tasks common to every condition: 10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over the three runs. Records still marked DEFERRED or carrying a dead-key judge reply are refused.
+
+**Invalid-episode rerun (November 17).** Every invalid episode of all eight conditions was re-run once with the same protocol on the local browser and judged; the original records and attempts are kept in quarantine. Most invalid episodes are start pages that fail to load (for example `ERR_HTTP2_PROTOCOL_ERROR` on jcpenney.com); about 25 Online-Mind2Web and 45 WebVoyager tasks fail in every run of every condition, so the rerun recovers only 38–73 episodes per condition. Episodes per condition: 3,135.
+
+| Condition | Valid before | Valid after | Recovered | Still invalid |
+| --- | ---: | ---: | ---: | ---: |
+| SFT 4B alone | 2,877 | 2,915 | 38 | 220 |
+| Random | 2,881 | 2,919 | 38 | 216 |
+| Majority vote | 2,864 | 2,911 | 47 | 224 |
+| Teacher action-type prior | 2,838 | 2,903 | 65 | 232 |
+| ADM 23K probe | 2,863 | 2,907 | 44 | 228 |
+| ADM 4.4M | 2,853 | 2,908 | 55 | 227 |
+| ADM 22.6M | 2,853 | 2,910 | 57 | 225 |
+| ADM 1.8B | 2,829 | 2,902 | 73 | 233 |
+
+Before the rerun: random − SFT 0.0 [−2.1, +2.1], majority − SFT +2.7 [+0.6, +4.9], type prior − SFT −1.8 [−3.9, +0.3], ADM − majority +6.2 [+4.4, +8.0], ADM − random +8.9 [+7.1, +10.7] pp mean overall.
+
+**Cost.** Rollouts: 27 jobs of 1 H200 (two resumed), mostly on urgent QoS; reruns 8 jobs, 9.9 H200-hours on urgent; judging about $70 of API in total.
 
 </details>
 
