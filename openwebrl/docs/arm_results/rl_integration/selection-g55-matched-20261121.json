@@ -1,0 +1,578 @@
+{
+ "conditions": {
+  "k3m": {
+   "source": [
+    "eval-g55m-1120",
+    "arm5-73e75c310fd9"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 799,
+    "successes": 328,
+    "overall": 0.3644444444444444,
+    "valid_only": 0.41051314142678336
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1755,
+    "successes": 955,
+    "overall": 0.5350140056022409,
+    "valid_only": 0.5441595441595442
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 226,
+    "overall": 0.5022222222222222,
+    "valid_only": 0.5078651685393258
+   },
+   "mean_overall": 0.46722689075630247,
+   "mean_valid_only": 0.48751261804188445
+  },
+  "pre": {
+   "source": [
+    "eval-g55m-1120",
+    "arm5-9fa0d4b0c0d3"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 783,
+    "successes": 330,
+    "overall": 0.36666666666666664,
+    "valid_only": 0.421455938697318
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1752,
+    "successes": 973,
+    "overall": 0.5450980392156862,
+    "valid_only": 0.555365296803653
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 220,
+    "overall": 0.4888888888888889,
+    "valid_only": 0.49438202247191015
+   },
+   "mean_overall": 0.46688453159041393,
+   "mean_valid_only": 0.4904010859909604
+  },
+  "sft": {
+   "source": [
+    "eval-pre",
+    "sft1"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 821,
+    "successes": 292,
+    "overall": 0.3244444444444444,
+    "valid_only": 0.3556638246041413
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1644,
+    "successes": 714,
+    "overall": 0.4,
+    "valid_only": 0.4343065693430657
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 450,
+    "successes": 149,
+    "overall": 0.33111111111111113,
+    "valid_only": 0.33111111111111113
+   },
+   "mean_overall": 0.35185185185185186,
+   "mean_valid_only": 0.37369383501943937
+  },
+  "sft-sameday": {
+   "source": [
+    "eval-g55m-1120",
+    "sft1"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 806,
+    "successes": 257,
+    "overall": 0.28555555555555556,
+    "valid_only": 0.3188585607940447
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1770,
+    "successes": 871,
+    "overall": 0.4879551820728292,
+    "valid_only": 0.49209039548022604
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 446,
+    "successes": 162,
+    "overall": 0.35999999999999993,
+    "valid_only": 0.3632286995515694
+   },
+   "mean_overall": 0.3778369125427949,
+   "mean_valid_only": 0.3913925519419467
+  },
+  "k3m-4M": {
+   "source": [
+    "eval-g55m-1120",
+    "head5-0b07409ba903"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 792,
+    "successes": 303,
+    "overall": 0.33666666666666667,
+    "valid_only": 0.38257575757575757
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1754,
+    "successes": 888,
+    "overall": 0.49747899159663866,
+    "valid_only": 0.5062713797035349
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 447,
+    "successes": 226,
+    "overall": 0.5022222222222222,
+    "valid_only": 0.505592841163311
+   },
+   "mean_overall": 0.4454559601618426,
+   "mean_valid_only": 0.4648133261475345
+  },
+  "k3m-23M": {
+   "source": [
+    "eval-g55m-1120",
+    "head5-d7f5169f30e5"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 784,
+    "successes": 291,
+    "overall": 0.3233333333333333,
+    "valid_only": 0.37117346938775514
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1754,
+    "successes": 869,
+    "overall": 0.48683473389355736,
+    "valid_only": 0.4954389965792474
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 443,
+    "successes": 207,
+    "overall": 0.46,
+    "valid_only": 0.46726862302483074
+   },
+   "mean_overall": 0.4233893557422969,
+   "mean_valid_only": 0.44462702966394446
+  },
+  "pre-4M": {
+   "source": [
+    "eval-g55m-1120",
+    "head5-2fac14e09dce"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 783,
+    "successes": 293,
+    "overall": 0.32555555555555554,
+    "valid_only": 0.3742017879948914
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1748,
+    "successes": 805,
+    "overall": 0.4509803921568628,
+    "valid_only": 0.4605263157894737
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 443,
+    "successes": 153,
+    "overall": 0.34,
+    "valid_only": 0.345372460496614
+   },
+   "mean_overall": 0.3721786492374728,
+   "mean_valid_only": 0.39336685476032635
+  },
+  "pre-23M": {
+   "source": [
+    "eval-g55m-1120",
+    "head5-a29c62a28980"
+   ],
+   "runs": 3,
+   "online_mind2web": {
+    "tasks": 300,
+    "episodes": 900,
+    "valid": 783,
+    "successes": 296,
+    "overall": 0.32888888888888884,
+    "valid_only": 0.3780332056194125
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "episodes": 1785,
+    "valid": 1755,
+    "successes": 802,
+    "overall": 0.44929971988795525,
+    "valid_only": 0.45698005698005706
+   },
+   "deepshop": {
+    "tasks": 150,
+    "episodes": 450,
+    "valid": 445,
+    "successes": 175,
+    "overall": 0.3888888888888889,
+    "valid_only": 0.3932584269662922
+   },
+   "mean_overall": 0.3890258325552443,
+   "mean_valid_only": 0.40942389652192057
+  }
+ },
+ "contrasts": {
+  "k3m - pre": {
+   "mean_overall_pp": [
+    0.034235916588859494,
+    -1.924712107065042,
+    1.9607920946156296
+   ],
+   "mean_valid_only_pp": [
+    -0.28884679490759346,
+    -2.332563229377504,
+    1.7410840948102435
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": -0.22222222222222365,
+    "webvoyager": -1.0084033613445342,
+    "deepshop": 1.3333333333333364
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": -1.0942797270534654,
+    "webvoyager": -1.1205752644108835,
+    "deepshop": 1.3483146067415686
+   }
+  },
+  "k3m - sft": {
+   "mean_overall_pp": [
+    11.537503890445064,
+    9.302824463118581,
+    13.822393401805163
+   ],
+   "mean_valid_only_pp": [
+    11.381878302244507,
+    9.105604831655086,
+    13.685843472115362
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 3.9999999999999982,
+    "webvoyager": 13.501400560224086,
+    "deepshop": 17.11111111111111
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 5.484931682264205,
+    "webvoyager": 10.985297481647843,
+    "deepshop": 17.67540574282147
+   }
+  },
+  "pre - sft": {
+   "mean_overall_pp": [
+    11.503267973856206,
+    9.186079987550574,
+    13.858138811079987
+   ],
+   "mean_valid_only_pp": [
+    11.6707250971521,
+    9.301648428558824,
+    14.041816194558209
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 4.222222222222221,
+    "webvoyager": 14.50980392156862,
+    "deepshop": 15.777777777777773
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 6.57921140931767,
+    "webvoyager": 12.105872746058727,
+    "deepshop": 16.3270911360799
+   }
+  },
+  "k3m-4M - pre-4M": {
+   "mean_overall_pp": [
+    7.327731092436974,
+    5.251128229069401,
+    9.440157173980701
+   ],
+   "mean_valid_only_pp": [
+    7.144647138720813,
+    4.96331538168843,
+    9.366438180737509
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 1.1111111111111127,
+    "webvoyager": 4.649859943977585,
+    "deepshop": 16.22222222222222
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 0.837396958086617,
+    "webvoyager": 4.5745063914061195,
+    "deepshop": 16.0220380666697
+   }
+  },
+  "k3m-23M - pre-23M": {
+   "mean_overall_pp": [
+    3.4363523187052567,
+    1.3647525676937486,
+    5.548755057578582
+   ],
+   "mean_valid_only_pp": [
+    3.5203133142023835,
+    1.3517349026416454,
+    5.725807408524786
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": -0.5555555555555536,
+    "webvoyager": 3.7535014005602108,
+    "deepshop": 7.1111111111111125
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": -0.6859736231657365,
+    "webvoyager": 3.8458939599190334,
+    "deepshop": 7.401019605853854
+   }
+  },
+  "k3m-4M - sft-sameday": {
+   "mean_overall_pp": [
+    6.761904761904764,
+    4.630835667600374,
+    8.855913476501717
+   ],
+   "mean_valid_only_pp": [
+    7.342077420558779,
+    5.148183023729558,
+    9.514040869651762
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 5.111111111111111,
+    "webvoyager": 0.952380952380949,
+    "deepshop": 14.22222222222223
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 6.3717196781712895,
+    "webvoyager": 1.4180984223308823,
+    "deepshop": 14.236414161174165
+   }
+  },
+  "pre-4M - sft-sameday": {
+   "mean_overall_pp": [
+    -0.5658263305322098,
+    -2.6629007158418885,
+    1.5275443510737594
+   ],
+   "mean_valid_only_pp": [
+    0.1974302818379662,
+    -1.9849904049753375,
+    2.4092833295975886
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 3.9999999999999982,
+    "webvoyager": -3.6974789915966366,
+    "deepshop": -1.9999999999999907
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 5.534322720084672,
+    "webvoyager": -3.1564079690752367,
+    "deepshop": -1.785623905495537
+   }
+  },
+  "k3m-23M - sft-sameday": {
+   "mean_overall_pp": [
+    4.555244319950201,
+    2.477723311546839,
+    6.629022720199186
+   ],
+   "mean_valid_only_pp": [
+    5.323447772199772,
+    3.1418254247250057,
+    7.48653091491075
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 3.777777777777774,
+    "webvoyager": -0.11204481792718157,
+    "deepshop": 10.000000000000009
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 5.231490859371046,
+    "webvoyager": 0.33486010990213533,
+    "deepshop": 10.403992347326135
+   }
+  },
+  "pre-23M - sft-sameday": {
+   "mean_overall_pp": [
+    1.1188920012449441,
+    -1.0957205104263925,
+    3.323700591347653
+   ],
+   "mean_valid_only_pp": [
+    1.803134457997389,
+    -0.48912782807239774,
+    4.0791215513006005
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 4.333333333333328,
+    "webvoyager": -3.8655462184873923,
+    "deepshop": 2.8888888888888964
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 5.917464482536783,
+    "webvoyager": -3.511033850016898,
+    "deepshop": 3.0029727414722815
+   }
+  },
+  "k3m - k3m-23M": {
+   "mean_overall_pp": [
+    4.3837535014005615,
+    2.3074852163087454,
+    6.479007158418923
+   ],
+   "mean_valid_only_pp": [
+    4.288558837794002,
+    2.1536033881404855,
+    6.463208848310325
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 4.11111111111111,
+    "webvoyager": 4.817927170868352,
+    "deepshop": 4.222222222222221
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 3.9339672039028217,
+    "webvoyager": 4.872054758029676,
+    "deepshop": 4.05965455144951
+   }
+  },
+  "pre - pre-23M": {
+   "mean_overall_pp": [
+    7.785869903516958,
+    5.708629007158416,
+    9.880812324929968
+   ],
+   "mean_valid_only_pp": [
+    8.09771894690398,
+    5.9141747464485555,
+    10.313814907391963
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 3.77777777777778,
+    "webvoyager": 9.579831932773097,
+    "deepshop": 9.999999999999998
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 4.342273307790551,
+    "webvoyager": 9.838523982359593,
+    "deepshop": 10.112359550561795
+   }
+  },
+  "k3m - sft-sameday": {
+   "mean_overall_pp": [
+    8.938997821350762,
+    6.843432928727046,
+    11.162464985994399
+   ],
+   "mean_valid_only_pp": [
+    9.612006609993774,
+    7.4273777380709936,
+    11.879497853156446
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 7.888888888888884,
+    "webvoyager": 4.70588235294117,
+    "deepshop": 14.22222222222223
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 9.165458063273867,
+    "webvoyager": 5.206914867931811,
+    "deepshop": 14.463646898775645
+   }
+  },
+  "pre - sft-sameday": {
+   "mean_overall_pp": [
+    8.904761904761903,
+    6.6665732959850645,
+    11.114768129474012
+   ],
+   "mean_valid_only_pp": [
+    9.900853404901367,
+    7.594567129975866,
+    12.202754840994048
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": 8.111111111111107,
+    "webvoyager": 5.714285714285705,
+    "deepshop": 12.888888888888895
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": 10.259737790327334,
+    "webvoyager": 6.327490132342694,
+    "deepshop": 13.115332292034076
+   }
+  },
+  "sft-sameday - sft": {
+   "mean_overall_pp": [
+    2.598506069094303,
+    0.39364301276066027,
+    4.805166511048862
+   ],
+   "mean_valid_only_pp": [
+    1.7698716922507314,
+    -0.499216275351439,
+    4.004738193737447
+   ],
+   "per_benchmark_overall_pp": {
+    "online_mind2web": -3.888888888888886,
+    "webvoyager": 8.795518207282916,
+    "deepshop": 2.8888888888888795
+   },
+   "per_benchmark_valid_only_pp": {
+    "online_mind2web": -3.6805263810096633,
+    "webvoyager": 5.778382613716032,
+    "deepshop": 3.211758844045826
+   }
+  }
+ }
+}

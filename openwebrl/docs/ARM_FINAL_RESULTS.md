@@ -1327,12 +1327,13 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 - **Kev-style selectors work on all three benchmarks and match the GPT-5.5 decoder.** Over 3 runs against one SFT sample in the same windows, Kev-A is +8.7 [+6.7, +10.8] pp mean overall and Kev-B (no LoRA on prompt tokens, so the actor's cache could be reused) +7.0 [+4.9, +9.1]. In a same-window run with the Recipe 3 GPT-5.5 K = 3 decoder, Kev-A − decoder is +0.7 [−2.9, +4.3] and Kev-B − decoder −0.9 [−4.6, +2.9]. [Details](#final-selection-recipe3-kev-3bench-20261110)
 - **The selector gain survives stealth browsers.** US-residential stealth browsers add about +13.5 pp mean overall to both SFT 4B and SFT 4B + the LoRA decoder (Online-Mind2Web and WebVoyager only); the decoder's gain is +7.2 [+3.5, +10.9] under stealth vs +7.6 [+5.4, +9.7] locally (1 stealth run). [Details](#final-selection-recipe3-stealth-20261109)
 - **The gain comes from judging the candidates, not from having five.** Rules over the same five proposals: random = one SFT sample (+0.1 pp), majority vote +2.7 [+0.6, +4.8] (DeepShop only), a state-blind action-type prior −1.7; every ADM head size beats majority by 5.2–8.0 pp (November 16–17, 3 runs; SFT and heads from November 14–15). [Details](#selection-rule-baselines-20261117)
+- **With matched GPT-5.5 label formats, lookahead labels still help heads but not the decoder.** On the same 8,802 panels, lookahead − pre-execution is +7.3 [+5.3, +9.4] pp (4M head), +3.4 [+1.4, +5.5] (23M head) and 0.0 [−1.9, +2.0] (4B decoder); pre-execution heads are level with one SFT sample, the decoder gains +8.9 from either label set (November 19–21, 3 runs, same-window SFT). [Details](#selection-g55-matched-labels-20261121)
 
 <a id="final-selection-recipe3"></a>
 
 ### Recipe 3: lookahead-labelled Piotr-style panels at scale (November 2–4)
 
-**With the same 18.8–20.5K panels, every Recipe 3 selector beats one SFT sample (+2.8 to +5.1 pp); H = 4 lookahead labels beat pre-execution labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for LoRAs (Luna +0.3 [−1.8, +2.4]; GPT-5.5 pre − H = 4 +1.5 [−0.6, +3.6], same day). The GPT-5.5 LoRAs are level with SelectionARM on the same day (H = 4 −0.5 [−2.4, +1.4], pre +1.0 [−1.0, +3.1]), and the GPT-5.5 H = 4 head is level with it too (−1.2 [−3.3, +0.9]).** Results table: [Recipe 3 headline](#selection-head-headline-results). Label comparison and per-benchmark H = 4 − pre differences: [ARM_TEACHER_PRE_VS_LOOKAHEAD.md](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-live-20261103).
+**With the same 18.8–20.5K panels, every Recipe 3 selector beats one SFT sample (+2.8 to +5.1 pp); H = 4 lookahead labels beat pre-execution labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for LoRAs (Luna +0.3 [−1.8, +2.4]; GPT-5.5 pre − H = 4 +1.5 [−0.6, +3.6], same day). The GPT-5.5 LoRAs are level with SelectionARM on the same day (H = 4 −0.5 [−2.4, +1.4], pre +1.0 [−1.0, +3.1]), and the GPT-5.5 H = 4 head is level with it too (−1.2 [−3.3, +0.9]).** Results table: [Recipe 3 headline](#selection-head-headline-results). Label comparison and per-benchmark H = 4 − pre differences: [ARM_TEACHER_PRE_VS_LOOKAHEAD.md](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-live-20261103). *Caveat (November 21): the GPT-5.5 H = 4 labels here used a different prompt, high effort and no rationale, unlike the GPT-5.5 pre-execution labels; with [matched formats](#selection-g55-matched-labels-20261121) the head advantage of lookahead labels holds and the decoders stay level.*
 
 | | Recipe 3 |
 | --- | --- |
@@ -1753,7 +1754,7 @@ All four attention × scorer × loss combinations plus causal attention, one run
 
 *Per-benchmark columns are valid-only success; difference on mean overall success (equal-weight 3-benchmark mean), paired bootstrap over tasks (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs). Per benchmark, valid-only, probe − default: −0.9 [−5.6, +3.9] / +2.4 [−0.7, +5.5] / −0.7 [−7.2, +5.8] (Online-Mind2Web / WebVoyager / DeepShop). The default scores 43.4% here, within its usual range. The main-tree head loader cannot load the probe, so evals ran through `deferjudge/xbench_defer_probe.py` (head-lock launcher plus a LinearProbeHead loader; the default loads unchanged); trainer copy `source-probe/` (`openwebrl/linear_probe.py`, `--linear-probe`). 4 jobs ran on vlm/normal and 8 were moved to urgent; judges Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o; all 4,180 episodes judged, none refused. Evidence: [rates and contrasts](arm_results/rl_integration/selection-head-probe-20261113.json) · [script](arm_results/rl_integration/selection-head-probe-20261113.py). Runtime: `recipe3-ablations-20261104/` (probe `heads-scale/linear-probe/`, evals `eval-probe/run<k>/`, job log `eval-probe/jobs.txt`).*
 
-<a id="final-selection-recipe3-head-pre-vs-lookahead-20261115"></a>**Pre-execution vs lookahead labels across sizes (November 14–15).** *Lookahead labels beat pre-execution labels at every size: pre − lookahead −2.7 (23K probe), −5.7 (4.4M), −4.4 (22.6M) and −2.7 (1.8B) pp mean overall, all intervals below 0; −3.9 [−5.0, −2.8] pooled.* Eight heads (4 sizes × 2 GPT-5.5 label types on the same 18,781 panels) and SFT 4B alone in one window, 3 runs each; every head beats SFT (lookahead +7.6 to +10.7, pre +3.3 to +6.9). Pre labels are easier to imitate (58–60% held-out agreement against 43–46%) but pick worse actions. Tables, counts and plot: [ARM_HEAD_SIZE_ABLATIONS](ARM_HEAD_SIZE_ABLATIONS.md#head-labels-pre-vs-lookahead-20261115).
+<a id="final-selection-recipe3-head-pre-vs-lookahead-20261115"></a>**Pre-execution vs lookahead labels across sizes (November 14–15).** *Lookahead labels beat pre-execution labels at every size: pre − lookahead −2.7 (23K probe), −5.7 (4.4M), −4.4 (22.6M) and −2.7 (1.8B) pp mean overall, all intervals below 0; −3.9 [−5.0, −2.8] pooled.* Eight heads (4 sizes × 2 GPT-5.5 label types on the same 18,781 panels) and SFT 4B alone in one window, 3 runs each; every head beats SFT (lookahead +7.6 to +10.7, pre +3.3 to +6.9). Pre labels are easier to imitate (58–60% held-out agreement against 43–46%) but pick worse actions. Tables, counts and plot: [ARM_HEAD_SIZE_ABLATIONS](ARM_HEAD_SIZE_ABLATIONS.md#head-labels-pre-vs-lookahead-20261115). These GPT-5.5 lookahead labels differ from the pre-execution labels in prompt, effort and rationale as well as evidence; with [matched formats](#selection-g55-matched-labels-20261121) lookahead still beats pre-execution for the 4M and 23M heads (+7.3 and +3.4 pp).
 
 ![Lookahead minus pre-execution labels: paired difference in mean overall success at each selection-head size and pooled](arm_results/rl_integration/selection-head-lookahead-minus-pre-20261115.png)
 
@@ -1799,6 +1800,83 @@ It narrows the earlier-minus-later SFT gap from 4.9 to 3.2 percentage points, bu
 | November 14–15 | 595 | 549 | 32.2 | 39.6 | 42.9 | 33.1 | 35.0 | 36.1 |
 
 The later SFT has 46 Wolfram Alpha reset failures in each run. Removing the site improves its rate while reducing the earlier baseline, where the site contributed successes. The residual gap is mainly DeepShop. The actor path, task manifests, decoding and declared protocol match between windows, but evaluation-source digests differ; the residual cannot be assigned solely to live-site drift. This sensitivity does not establish cross-window exchangeability. Interpret label effects within the contemporaneous window. All restricted counts are verified from saved records against the original full-population success and validity totals before filtering; no outcomes are inferred or relabeled.
+
+</details>
+
+<a id="selection-g55-matched-labels-20261121"></a>**GPT-5.5 lookahead vs pre-execution labels with matched label formats (November 19–21).** *With both label sets made in the same prompt format and settings, lookahead labels still beat pre-execution labels for the ADM heads (+7.3 [+5.3, +9.4] pp mean overall at 4M, +3.4 [+1.4, +5.5] at 23M), but not for the 4B decoder (0.0 [−1.9, +2.0]). Heads trained on pre-execution labels are no better than one SFT sample (−0.6 and +1.1 pp), while the decoder gains +8.9 pp from either label set.* The earlier GPT-5.5 lookahead labels differed from the pre-execution labels in more than the evidence (high reasoning effort, an index-form prompt, no written rationale), so we relabelled 8,853 panels with lookahead labels in exactly the pre-execution prompt and settings and trained every model on the same 8,802 panels (2,311 states, 896 tasks) with each label set. SFT 4B actor, N = 5, T 1.0 / top-p 0.9, 3 runs each on all 1,045 tasks; the SFT control ran in the same window.
+
+| Selector | Labels | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT, mean overall (pp) | − SFT, mean valid-only (pp) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| *SFT 4B, 1 sample* | — | 31.9% | 49.2% | 36.3% | 37.8% | 39.1% | — | — |
+| ADM-4M head (d128-L2) | Lookahead | 38.3% | 50.6% | 50.6% | 44.5% | 46.5% | **+6.8 [+4.6, +8.9]** | **+7.3 [+5.1, +9.5]** |
+| ADM-4M head (d128-L2) | Pre-execution | 37.4% | 46.1% | 34.5% | 37.2% | 39.3% | −0.6 [−2.7, +1.5] | +0.2 [−2.0, +2.4] |
+| ADM-23M head (d512-L2) | Lookahead | 37.1% | 49.5% | 46.7% | 42.3% | 44.5% | **+4.6 [+2.5, +6.6]** | **+5.3 [+3.1, +7.5]** |
+| ADM-23M head (d512-L2) | Pre-execution | 37.8% | 45.7% | 39.3% | 38.9% | 40.9% | +1.1 [−1.1, +3.3] | +1.8 [−0.5, +4.1] |
+| ADM-decoder-4B (LoRA) | Lookahead | 41.1% | 54.4% | 50.8% | 46.7% | 48.8% | **+8.9 [+6.8, +11.2]** | **+9.6 [+7.4, +11.9]** |
+| ADM-decoder-4B (LoRA) | Pre-execution | 42.1% | 55.5% | 49.4% | 46.7% | 49.0% | **+8.9 [+6.7, +11.1]** | **+9.9 [+7.6, +12.2]** |
+
+*Benchmark columns are valid-only success (successes / valid episodes). Mean overall is the equal-weight mean over the three benchmarks of overall success (invalid episodes count as failures); mean valid-only is the equal-weight mean of the benchmark columns. Intervals: 95% paired bootstrap over tasks. Each head is one training seed; the 4M − 23M ordering is within the training-seed spread seen before (4.4M and 22.6M are level over three seeds), so it is not a size effect.*
+
+**Lookahead − pre-execution, same model, same panels** (pp, 95% paired bootstrap; per-benchmark columns are valid-only differences):
+
+| Model | Mean overall | Mean valid-only | Online-Mind2Web | WebVoyager | DeepShop |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| ADM-4M head | **+7.3 [+5.3, +9.4]** | **+7.1 [+5.0, +9.4]** | +0.8 | +4.6 | +16.0 |
+| ADM-23M head | **+3.4 [+1.4, +5.5]** | **+3.5 [+1.4, +5.7]** | −0.7 | +3.8 | +7.4 |
+| ADM-decoder-4B | 0.0 [−1.9, +2.0] | −0.3 [−2.3, +1.7] | −1.1 | −1.1 | +1.3 |
+
+- **The earlier head result holds; the decoder shows no lookahead advantage.** The [full-data GPT-5.5 heads](#final-selection-recipe3-head-pre-vs-lookahead-20261115) favoured lookahead labels by +2.7 to +5.7 pp; with matched formats the heads still do. The earlier GPT-5.5 decoders compared unmatched labels (pre − H = 4 +1.5 [−0.6, +3.6]); with matched labels the decoders are level, as the matched [Luna](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-live-20261103) LoRAs were (+0.3).
+- **The decoder beats a head trained on the same labels:** decoder − 23M head +4.4 [+2.3, +6.5] pp mean overall (+4.3 [+2.2, +6.5] valid-only) with lookahead labels and +7.8 [+5.7, +9.9] (+8.1 [+5.9, +10.3] valid-only) with pre-execution labels.
+- **Use the same-window SFT control.** SFT 4B alone was +2.6 [+0.4, +4.8] pp higher on November 20 than in the [November 14–15 window](#final-selection-recipe3-head-pre-vs-lookahead-20261115) (+1.8 [−0.5, +4.0] valid-only), mostly because far fewer WebVoyager episodes were blocked (1,770 vs 1,644 of 1,785 valid); against the November 14 control the decoder gains would read +11.5 pp.
+
+**Valid episodes / episodes** (3 runs × tasks):
+
+| Selector | Labels | Online-Mind2Web | WebVoyager | DeepShop |
+| --- | --- | ---: | ---: | ---: |
+| SFT 4B, 1 sample | — | 806 / 900 | 1,770 / 1,785 | 446 / 450 |
+| ADM-4M head | Lookahead | 792 / 900 | 1,754 / 1,785 | 447 / 450 |
+| ADM-4M head | Pre-execution | 783 / 900 | 1,748 / 1,785 | 443 / 450 |
+| ADM-23M head | Lookahead | 784 / 900 | 1,754 / 1,785 | 443 / 450 |
+| ADM-23M head | Pre-execution | 783 / 900 | 1,755 / 1,785 | 445 / 450 |
+| ADM-decoder-4B | Lookahead | 799 / 900 | 1,755 / 1,785 | 445 / 450 |
+| ADM-decoder-4B | Pre-execution | 783 / 900 | 1,752 / 1,785 | 445 / 450 |
+
+<details>
+<summary>Label setups, pilot agreement, data, training, protocol and cost</summary>
+
+**Label setups (all gpt-5.5, same panels of five candidates).**
+
+| Label set | Prompt | Evidence | Settings | Output |
+| --- | --- | --- | --- | --- |
+| Pre-execution (existing) | Piotr's SelectionARM prompt | screenshot, history, five candidates | 2,048 output tokens, default effort | 2–4 sentence rationale, then `{"selection": N}` |
+| Lookahead, old (existing, used for all earlier GPT-5.5 H = 4 results) | index-form schema prompt | + each candidate executed and followed for 3 actor steps (screenshots only) | high effort | selection only, no rationale |
+| Lookahead, matched (new) | the pre-execution prompt with the lookahead evidence block inserted between the candidates and the instructions (as the matched Luna labels) | same lookahead evidence as old | 2,048 output tokens, default effort | 2–4 sentence rationale, then `{"selection": N}` |
+
+**Pilot: how much does the format change the labels?** 800 seeded panels (639 states), 200 of them labelled twice. Agreement = share of panels where two label sets pick the same executed action; chance = expected agreement of two uniform picks over the panel's distinct actions (41.8%); 95% intervals bootstrap over states.
+
+| Pair | Panels | Agreement | 95% CI |
+| --- | ---: | ---: | ---: |
+| Matched lookahead, repeat call (test-retest) | 200 | 91.0% | [86.8, 94.8] |
+| Matched vs old lookahead | 800 | 79.6% | [76.6, 82.6] |
+| Matched lookahead vs pre-execution | 800 | 67.8% | [64.2, 71.2] |
+| Old lookahead vs pre-execution | 800 | 61.5% | [57.8, 65.1] |
+| Matched lookahead vs Luna matched lookahead | 800 | 76.6% | [73.7, 79.6] |
+| Old lookahead vs Luna matched lookahead | 800 | 74.4% | [71.3, 77.4] |
+| Luna matched lookahead vs Luna pre-execution | 800 | 61.6% | [58.0, 65.1] |
+
+Matching the format alone changes about one label in nine beyond test-retest noise (the old labels' own test-retest was not measured), and moves the lookahead labels toward the pre-execution labels (61.5% → 67.8%). The picked action-type mix is the same in every set (click 56–58%, scroll 18–21%).
+
+**Data.** State-first relabel: round k gives every state its k-th panel (uniform among its unlabelled panels, seed 20261120) before any state gets a (k+1)-th, stopped at the USD 1,000 cap. 8,853 matched labels in total (800 pilot + 8,053), covering all 2,314 states: 205 / 183 / 135 / 1,078 / 713 states with 1 / 2 / 3 / 4 / 5 labels (states with fewer labels have fewer panels). Models use the 8,802 labelled panels with ≥ 2 distinct actions (51 dropped), 2,311 states, 896 tasks; the pre-execution arm uses the existing GPT-5.5 pre-execution labels of exactly these panels (identical targets on 64.3% of panels).
+
+**Training.** Decoders: Piotr's SelectionARM LoRA recipe (rank 32, alpha 64, 2 epochs, effective batch 16, lr 1e-4) on all 8,802 panels; tied best candidates each give one example, 16,030 (lookahead) and 16,798 (pre-execution) examples; final train loss 0.129 / 0.123. Heads: joint transformer, soft CE, d128-L2 (4.4M) and d512-L2 (22.6M), 20 epochs, epoch chosen on held-out tasks; 8,791 panels with cached actor features, 8,044 train (2,108 states) / 747 validation (90 tasks). One training seed each.
+
+**Protocol.** Decoders and the SFT control ran November 20, heads November 20–21, all rolled out judge-deferred and graded afterwards with the standard judges. Paired bootstrap over tasks common to every condition (10,000 resamples, seed 20261029, benchmarks resampled independently, per-task success averaged over runs); records still judge-deferred or with dead-key verdicts are refused.
+
+**Cost.** Labels USD 1,121 (pilot 121.37 + state-first run 999.77). Judge about USD 120 for the 54 evaluation runs.
+
+**Checkpoints.** Decoders public on HF: [`decoder-4b-lora-gpt55-k3-p4`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p4) and [`decoder-4b-lora-gpt55-pre-p4`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p4) (README commit `fd34073`). Runtime: labels `rl-actor-recollect-20261016/p16-k3-20261031/labels-g55-matched-pilot-20261119/`, LoRAs `lora-g55m-{k3m,pre}/`, head data `train/data-g55m/`, heads `recipe3-ablations-20261104/heads-scale/g55m-*`, evaluations `recipe3-ablations-20261104/eval-g55m-1120/`.
+
+[Data](arm_results/rl_integration/selection-g55-matched-20261121.json) · [analysis](arm_results/rl_integration/selection-g55-matched-20261121.py) · [pilot agreement](arm_results/rl_integration/selection-g55-matched-pilot-agreement-20261119.json) ([script](arm_results/rl_integration/selection-g55-matched-pilot-agreement-20261119.py))
 
 </details>
 

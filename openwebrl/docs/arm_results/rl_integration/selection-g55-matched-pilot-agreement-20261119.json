@@ -1,0 +1,119 @@
+{
+ "n_panels": 800,
+ "n_states": 639,
+ "pairs": {
+  "test-retest: new vs new (same panel, 2nd call)": {
+   "n": 200,
+   "agree": 91.0,
+   "ci": [
+    86.8421052631579,
+    94.76196709050112
+   ],
+   "chance": 41.425
+  },
+  "new (matched) vs old K=3": {
+   "n": 800,
+   "agree": 79.625,
+   "ci": [
+    76.64596273291926,
+    82.6086956521739
+   ],
+   "chance": 41.84791666666666
+  },
+  "new K=3 vs GPT-5.5 pre": {
+   "n": 800,
+   "agree": 67.75,
+   "ci": [
+    64.24165760318829,
+    71.15874913914281
+   ],
+   "chance": 41.84791666666666
+  },
+  "old K=3 vs GPT-5.5 pre": {
+   "n": 800,
+   "agree": 61.5,
+   "ci": [
+    57.848101265822784,
+    65.11934206398996
+   ],
+   "chance": 41.84791666666666
+  },
+  "new vs Luna K=3 (matched)": {
+   "n": 800,
+   "agree": 76.625,
+   "ci": [
+    73.73599914250126,
+    79.55405964306496
+   ],
+   "chance": 41.84791666666666
+  },
+  "old vs Luna K=3 (matched)": {
+   "n": 800,
+   "agree": 74.375,
+   "ci": [
+    71.30325814536342,
+    77.42758881484812
+   ],
+   "chance": 41.84791666666666
+  },
+  "Luna K=3 vs Luna pre": {
+   "n": 800,
+   "agree": 61.625,
+   "ci": [
+    58.0230717058615,
+    65.05579750877408
+   ],
+   "chance": 41.84791666666666
+  }
+ },
+ "type_mix": {
+  "new0": {
+   "click": 56.5,
+   "scroll": 19.6,
+   "done": 7.1,
+   "go_back": 5.0,
+   "new_tab": 4.0,
+   "goto_url": 3.8
+  },
+  "old": {
+   "click": 56.5,
+   "scroll": 18.2,
+   "done": 6.4,
+   "go_back": 5.4,
+   "new_tab": 5.2,
+   "goto_url": 2.9
+  },
+  "pre": {
+   "click": 58.2,
+   "scroll": 19.6,
+   "done": 6.2,
+   "goto_url": 4.6,
+   "new_tab": 3.9,
+   "go_back": 3.5
+  },
+  "lk3p": {
+   "click": 56.1,
+   "scroll": 19.8,
+   "go_back": 5.8,
+   "done": 5.4,
+   "new_tab": 5.1,
+   "goto_url": 2.6
+  },
+  "lpre": {
+   "click": 57.4,
+   "scroll": 21.0,
+   "done": 4.6,
+   "goto_url": 4.2,
+   "new_tab": 4.2,
+   "go_back": 4.1
+  }
+ },
+ "ledger": {
+  "calls": 1003,
+  "charged_usd": 121.37398499999692,
+  "failed": 0,
+  "no_lookahead": 0,
+  "approval": "2026-11-19 chat: user chose \"Pilot first (~$150) (Recommended)\" for matched GPT-5.5 K=3 relabel",
+  "cap_usd": 150.0
+ }
+}
