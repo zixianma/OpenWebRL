@@ -1,0 +1,7 @@
+{
+  "name": "jev-text",
+  "description": "Zero-shot TypeSafe Jev over the text option list (no screenshot); the served SFT actor is the typing model.",
+  "decider": {"type": "systemone", "endpoint": "https://api.typesafe.ai/v1/systemone", "model": "jev-1.13.0", "api_key_env": "TYPESAFE_API_KEY"},
+  "typing": {"max_new_tokens": 160, "temperature": 0.0},
+  "harness": {"max_elements": 100}
+}

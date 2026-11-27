@@ -1,0 +1,7 @@
+{
+  "name": "kev27b-text",
+  "description": "Zero-shot local Kev-27B (System One server started separately on this port) over the text option list.",
+  "decider": {"type": "systemone", "endpoint": "http://127.0.0.1:8009/v1/systemone", "model": "kev-latest"},
+  "typing": {"max_new_tokens": 160, "temperature": 0.0},
+  "harness": {"max_elements": 100}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "projected-sft-strict",
+  "description": "Strict closed-set ceiling: like projected-sft, but an unrepresentable action becomes 'wait' instead of escaping.",
+  "decider": {"type": "projected_actor", "radius": 0.03, "max_resamples": 2, "on_unmapped": "wait"},
+  "harness": {}
+}

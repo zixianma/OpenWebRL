@@ -1,0 +1,6 @@
+{
+  "name": "projected-sft",
+  "description": "Harness ceiling: OpenWebRL-4B-SFT acts as usual; each action is snapped to the closed option set and the option's canonical action is executed. Writes and final answers pass through from the actor. Up to two resamples when an action is not representable, then the original action executes and is counted as a fallback (escape rate).",
+  "decider": {"type": "projected_actor", "radius": 0.03, "max_resamples": 2, "on_unmapped": "original"},
+  "harness": {}
+}
