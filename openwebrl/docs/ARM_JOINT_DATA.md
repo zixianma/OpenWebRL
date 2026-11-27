@@ -4,11 +4,113 @@ The reviewed C2/Piotr data mixture, filtering rules, full-history examples, trai
 
 ## Contents
 
+- [Public action data for an ADM that also acts: survey (November 27)](#arm-public-action-data-survey-20261127)
 - [Critic training source inventory: 24 sources and derived views](#arm-critic-source-inventory-20261004)
 - [Piotr immediate-result audit and next experiments](#piotr-post-execution-audit-20261006)
 - [Joint C2 and Piotr teacher-data training proposal](#arm-joint-data-training-plan)
 - [Combined ARM data: prepared for review](#arm-joint-data-review)
 - [Retained SFT example: two previous turns](#arm-joint-sft-history-example)
+
+---
+
+<a id="arm-public-action-data-survey-20261127"></a>
+## Public action data for an ADM that also acts: survey — November 27
+
+**Question:** what released web and computer-use action data can train one model that both proposes actions and chooses among candidates?
+
+**Main finding:** no public dataset other than Piotr's release has the ADM's exact format: K ≥ 4 on-policy candidates per state, screenshots, coordinate actions and a selection label. None at all has executed-branch outcomes for every candidate. Our own branch states and Recipe 3 panels remain the only outcome- or lookahead-labelled panels. Public data instead adds (1) large screenshot trajectories with reasoning for the acting side, and (2) step-scored, preference or success/failure data for pretraining the judging side.
+
+The catalog lists every source below with license, contamination and download flags: [machine-readable catalog](arm_results/rl_integration/public-action-data-catalog-20261127.json). [`scripts/download_public_action_data.py`](../../scripts/download_public_action_data.py) downloads the flagged sources, skips the eval-seeded subsets, refuses excluded sources and records each resolved HF commit. "Verified" means the dataset card, HF API metadata or paper was read on 2026-11-27. Counts are as published, not re-counted locally.
+
+### Data each training role needs
+
+| Role in the combined model | Objective | Best existing source | Best public addition |
+| --- | --- | --- | --- |
+| Act (propose) | SFT on reasoning + tool call | OpenWebRL-SFT; C2 / joint chosen responses | MolmoWeb Human/Synthetic, WebChain, WebSTAR steps with score ≥ 8, Aguvis web subsets |
+| Act better than the SFT actor | Chosen-response SFT or DPO/RPO on same-state pairs | Joint C2 + Piotr pairs (J1); action-count-matched pairs | WebPRM Collection (element-ID actions); WebSTAR cross-state pairs |
+| Choose among K candidates | `{"selection": N}` SFT or head over candidate features | Branch outcome labels (1,380 states); Recipe 3 H = 4 panels (2,309 states / 20,508 panels); Piotr P1 | None in the same format |
+| Judge pretraining | Pointwise step score, pairwise or outcome verdicts | ARM RL label archives (A-*) | WebSTAR scores, UI-Genie-RM, OS-Shepherd-100K, WebArbiter-Data |
+| Coordinate precision (mid-training) | Grounding | — | OS-Atlas, ScaleCUA grounding; UGround if non-commercial use is acceptable |
+
+### Tier 1: same format as our actor
+
+| Source | States or rows | Labels | Coordinates | License | Status |
+| --- | ---: | --- | --- | --- | --- |
+| [OpenWebRL/OpenWebRL-SFT-Trajectories](https://huggingface.co/datasets/OpenWebRL/OpenWebRL-SFT-Trajectories) | 3,085 turns / 412 tasks | Successes only | Native tool calls | Apache-2.0 | In use |
+| [PTeterwak/action-reward-models-data](https://huggingface.co/datasets/PTeterwak/action-reward-models-data) `openwebrl_actor` | 3,085 states; 49,536 five-candidate draws; 39,997 picks | GPT-5.5, pre-execution | Normalized 0–1000 | Not stated | In use (P1/J1) |
+| same, `molmoweb_actor` | ? (per-task files) | Arbiter picks, PRM scores; actor-distillation SFT files | Yes | Not stated | Not yet used; screenshots not included |
+| [PTeterwak/openwebrl-arm-matched-pairs](https://huggingface.co/datasets/PTeterwak/openwebrl-arm-matched-pairs) | 4,078 train / 658 validation pairs | ARM pick in a successful episode, or GPT-5.5 | Yes | Other | **Derived from our J1**, filtered to equal tool-call counts; not a new source |
+
+The matched-pairs card reports RPO (DPO + NLL) at 40.0% on OM2W against 31–33% for OpenWebRL-4B-SFT. On unfiltered pairs, the same recipe drifts toward more actions per turn. This is a direct precedent for training the actor on ADM choices, and a warning to control action count in any pair data.
+
+### Tier 2: screenshot web trajectories for the acting side
+
+| Source | Trajectories | Steps | Reasoning | Labels | License | Contamination | Status |
+| --- | ---: | ---: | --- | --- | --- | --- | --- |
+| [allenai/MolmoWeb-HumanTrajs](https://huggingface.co/datasets/allenai/MolmoWeb-HumanTrajs) | 35,971 | ? | `thought` field | Successes | ODC-BY 1.0, research/educational | Unknown | Verified |
+| [allenai/MolmoWeb-SyntheticTrajs](https://huggingface.co/datasets/allenai/MolmoWeb-SyntheticTrajs) | 108,254 rows | ? | Yes | No failure labels | ODC-BY 1.0 | **Drop `task_seeded_om2w`, `task_seeded_wv`** | Verified |
+| [webagentlab/webchain](https://huggingface.co/datasets/webagentlab/webchain) | 31,675 | 317,682 | `<gui_think>` | Human-verified | CC-BY-4.0 | Unknown | Verified |
+| [microsoft/WebSTAR](https://huggingface.co/datasets/microsoft/WebSTAR) | 13.3K | 267K | Yes | o4-mini step score 1–10, low scores kept | CDLA-Permissive-2.0 | WebVoyager-style; audit task overlap | Verified |
+| [cua-lite/WebGym](https://huggingface.co/datasets/cua-lite/WebGym) | 4,110 rows | ? | ? | Judged | Other (check) | Low | Verified |
+| [xlangai/aguvis-stage2](https://huggingface.co/datasets/xlangai/aguvis-stage2) web subsets | ? | ? | Inner monologue | Demonstrations | Apache-2.0 + source licenses | Mind2Web part: dedup against OM2W | Verified |
+
+Aguvis already converts Mind2Web, GUIAct-web and MiniWoB from element IDs to normalized coordinates, which avoids bbox recovery. [microsoft/Orchard](https://huggingface.co/datasets/microsoft/Orchard) `gui` (3,070 rows) nearly duplicates OpenWebRL-SFT.
+
+### Tier 3: cross-platform data for mid-training
+
+| Source | Size | Web share | Labels | License |
+| --- | --- | --- | --- | --- |
+| [xlangai/AgentNet](https://huggingface.co/datasets/xlangai/AgentNet) | 22.6K human tasks | Browsers among 200+ apps/sites | Task completion, per-step correctness; incomplete tasks kept | MIT |
+| [OpenGVLab/ScaleCUA-Data](https://huggingface.co/datasets/OpenGVLab/ScaleCUA-Data) | >19K trajectories; 17.1M grounding | Dedicated web subsets | ? | Card none; repo Apache-2.0 |
+| [OS-Copilot/OS-Atlas-data](https://huggingface.co/datasets/OS-Copilot/OS-Atlas-data) | 2.3M screenshots / 13.58M elements | 1.9M web screenshots | Grounding | Apache-2.0 |
+| [osunlp/UGround-V1-Data](https://huggingface.co/datasets/osunlp/UGround-V1-Data) | 10M elements / 1.3M screenshots | ~95% web | Grounding | CC-BY-NC-SA-4.0, gated |
+
+ProCUA reports that naive SFT of UI-TARS-7B on AgentNet lowered OSWorld. Mix desktop data in; do not fine-tune on it alone.
+
+### Tier 4: judging-side pretraining
+
+| Source | Size | Signal | Actions | Platform | License |
+| --- | --- | --- | --- | --- | --- |
+| WebSTAR (above) | 267K steps | Pointwise 1–10 + justification | Coordinates | Web | CDLA-P-2.0 |
+| [LangAGI-Lab/WebPRMCollection_preference_pair](https://huggingface.co/datasets/LangAGI-Lab/WebPRMCollection_preference_pair) | 9,460 states on HF (paper: 40K pairs) | 1 chosen vs several rejected + checklist | Element ID | Web (Mind2Web) | ? |
+| [ZYao720/WebArbiter-Data](https://huggingface.co/datasets/ZYao720/WebArbiter-Data) | 9,642 SFT + 18,921 RL pairs | Generative pairwise (o3) | Element ID | Web | MIT |
+| [HanXiao1999/UI-Genie-RM-517k](https://huggingface.co/datasets/HanXiao1999/UI-Genie-RM-517k) | 472,769 rows | Action-level +/− with hard negatives | Coordinates | Mobile | MIT |
+| [OS-Copilot/OS-Shepherd-100K](https://huggingface.co/datasets/OS-Copilot/OS-Shepherd-100K) | 108,742 (63,757 success / 44,985 failure) | Trajectory verdict + reasoning | Normalized | Cross-platform | Not specified |
+| [xlangai/computer-agent-arena](https://huggingface.co/datasets/xlangai/computer-agent-arena) | 4,641 trajectories | Human correctness | Coordinates | Desktop incl. web | CC-BY-4.0 |
+
+Held-out judge evaluation: [WebPRMBench](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH) (already in [WebPRM baselines](WEBPRM_BASELINES.md)) and [AgentRewardBench](https://huggingface.co/datasets/McGill-NLP/agent-reward-bench).
+
+### Decision models: Kev, Jev, Visual/Omni Jev
+
+**None publishes web or GUI action-choice training data.**
+- **Kev** ([README](https://github.com/jaredpalmer/kev), [Kev-27B card](https://github.com/jaredpalmer/kev/blob/main/docs/model-cards/kev-27b.md), read 2026-11-27): Kev-0.8B/4B/9B train on `decision-v7`, built from ten public text classification datasets plus generated policy and rule examples. Kev-27B trains on a private 145,840-record corpus, of which only the manifest is public. It includes 4,875 questions about code-generated agent session logs and generated tool-routing records, all text-only. `jaredpalmer/kev-suites` contains frozen evaluation suites, not training data.
+- **Jev** (TypeSafe): training data unpublished. Image input exists since jev-1.13.0.
+- **"Visual Jev"** (arXiv 2609.25845) post-trains on GQA and SNLI-VE.
+- **OmniJev/OneJev**: `OmniJev/OneJev-Data` releases 94,707 multimodal decision questions (images in the state, text candidates). No evidence was found that it contains web or GUI actions; its card was not read.
+
+The reusable part is the recipe, not the data: Kev's pointer readout over packed candidates is already our [Kev-style pass](ARM_SELECTION_HEAD.md#selection-head-architecture).
+
+### Excluded: built on the evaluation benchmarks
+
+These must not enter training: the [lukakuma/web-trajectories](https://huggingface.co/datasets/lukakuma/web-trajectories-sft) family (OM2W, WebVoyager, WebBench and Mind2Web-2 tasks, despite containing the richest public fail/DPO/recovery splits); WebVoyager-Trajectories-GPT-4V and Qwen3.5-Omni WebVoyager trajectories; CUAVerifierBench's OM2W split; `PTeterwak/om2w-reward-data`; and MolmoWeb's two task-seeded subsets. Deduplicate all retained sources against OM2W, WebVoyager, DeepShop and WebTailBench by normalized task text and start URL, following the existing [split rules](#training-order-and-split-rules).
+
+### Recommended order
+
+1. **Acting side:** mix OpenWebRL-SFT with MolmoWeb (non-seeded), WebChain, WebSTAR (score ≥ 8) and Aguvis web, converted to the native tool schema. Measure against OpenWebRL-4B-SFT before adding desktop or grounding data.
+2. **Judging side:** add the selection objective on the same model using Piotr P1 and Recipe 3 panels, with the branch outcome states held out. Optionally warm-start the judge on WebSTAR scores or UI-Genie pairs.
+3. **Self-improvement:** convert ADM picks into chosen-SFT or action-count-matched RPO pairs (J1 precedent), so the actor alone improves without a selection call.
+4. **Gap to close by collection:** outcome-labelled K-candidate panels exist only in our branch and Recipe 3 collections. Scaling them remains the only route to selector labels beyond teacher picks.
+
+<details>
+<summary>Also checked: not released, element-ID only, or not action data</summary>
+
+- **Element-ID or text-only:** Mind2Web and Multimodal-Mind2Web (use Aguvis' converted versions instead), WebLINX (CC-BY-NC-SA, has bbox files), AgentTrek HF release (AX tree only), NNetNav, Go-Browse, InSTA, Synatra, WebSynthesis, WebEvolver, OS-Genesis web. Replaying their tasks with our actor, or re-rendering pages to recover bboxes, is more practical than direct SFT.
+- **Not released, or data not found:** Explorer, FaraGen (Fara-7B), UI-TARS data, BrowserForge (unconfirmed), OS-Oracle training data, PRO-CUA data, GUI-Shepherd, CUARewardBench, WebArbiter-Trajectories (empty).
+- **Not GUI actions:** WebDancer, WebSailor, WebShaper (text search agents); Qwen/WebWorldData (world-model transitions).
+- **Desktop-heavy, lower web value:** ProCUA-SFT (93,566 Kimi-K2.5 OSWorld trajectories, CC-BY-4.0), GUI-360° (Windows Office, includes failures), OSWorld-Verified trajectories, VideoCUA, WildGUI (CC-BY-NC), GUI-Net-1M.
+- **Mobile:** AndroidControl, AITW/AITZ, GUI-Odyssey, AMEX; touch action spaces transfer poorly beyond reasoning style.
+- **Do not train:** rmems/browser-tool-use-trajectories (card blocks training), CaptchaArena (CC-BY-NC, CAPTCHA only).
+</details>
 
 ---
 

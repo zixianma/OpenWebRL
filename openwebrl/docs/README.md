@@ -158,6 +158,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Original early-state readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
+[Public action data for an ADM that also acts (November 27): released web/CUA trajectories, judge data, Kev/Jev data status and benchmark exclusions](ARM_JOINT_DATA.md#arm-public-action-data-survey-20261127) · [catalog](arm_results/rl_integration/public-action-data-catalog-20261127.json).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr execution-evidence audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
